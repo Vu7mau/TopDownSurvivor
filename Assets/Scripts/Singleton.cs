@@ -29,4 +29,7 @@ public class Singleton<T> : VuMonoBehaviour where T : VuMonoBehaviour
         else
             _instance = this.GetComponent<T>();
     }
+    
+
+
 }

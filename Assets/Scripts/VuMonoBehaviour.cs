@@ -27,4 +27,9 @@ public class VuMonoBehaviour : MonoBehaviour
         this.LoadComponent();
     }
 
+    protected virtual void OnDisable()
+    {
+        
+    }
+
 }

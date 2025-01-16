@@ -7,6 +7,7 @@ public class ObjectMovement : VuMonoBehaviour
     [Header("Object Movement")]
     [SerializeField] protected Rigidbody _rb;
     [SerializeField] protected Vector3 _targetPosition;
+    [SerializeField] protected bool _isMoving;
     [SerializeField] protected float _speed = 3f;
     [SerializeField] protected float _distance = 1f;
     [SerializeField] protected float _minDistance = 1f;
