@@ -7,7 +7,7 @@ public class VuMonoBehaviour : MonoBehaviour
 {
    protected virtual void Awake()
     {
-        this.LoadComponent();
+        this.LoadComponents();
     }
 
     protected virtual void OnEnable()
@@ -18,13 +18,13 @@ public class VuMonoBehaviour : MonoBehaviour
     {
 
     }
-    protected virtual void LoadComponent()
+    protected virtual void LoadComponents()
     {
 
     }
     protected virtual void Reset()
     {
-        this.LoadComponent();
+        this.LoadComponents();
     }
 
     protected virtual void OnDisable()

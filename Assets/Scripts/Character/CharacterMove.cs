@@ -7,9 +7,9 @@ public class CharacterMove : ObjectMovement
     [Header("CharacterJoystickCtrl")]
     [SerializeField] protected CharacterCtrl _characterCtrl;
     protected Vector3 _moveDir;
-    protected override void LoadComponent()
+    protected override void LoadComponents()
     {
-        base.LoadComponent();
+        base.LoadComponents();
         this.LoadCharacterJoystickCtrl();
         this.LoadRigidbody();
     }

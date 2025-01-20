@@ -8,9 +8,9 @@ public class CharacterAnimHandle : CharacterCtrlAbstract
     [Header("Character AnimHandle")]
     [SerializeField] protected Animator _animator;
 
-    protected override void LoadComponent()
+    protected override void LoadComponents()
     {
-        base.LoadComponent();
+        base.LoadComponents();
        this.LoadCharacterAnimator();
     }
     protected virtual void LoadCharacterAnimator()

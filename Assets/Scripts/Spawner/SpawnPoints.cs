@@ -7,7 +7,7 @@ public class SpawnPoints : VuMonoBehaviour
     [Header("SpawnPoints")]
     [SerializeField] protected List<Transform> points;
 
-    protected override void LoadComponent()
+    protected override void LoadComponents()
     {
 
         this.LoadSpawnPoint();

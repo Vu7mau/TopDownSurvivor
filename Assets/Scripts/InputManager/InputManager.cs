@@ -25,16 +25,20 @@ public class InputManager : VuMonoBehaviour
     private RaycastHit lastKnowMouseHit; 
 
     [SerializeField] private LayerMask aimLayerMask;
-    protected override void LoadComponent()
+
+    [SerializeField] protected bool _isShooting=false;
+   // public bool IsShooting=> _isShooting;   
+    protected override void LoadComponents()
     {
-        base.LoadComponent();
+        base.LoadComponents();
         playerControls = new PlayerControls();
        if (playerControls != null) Debug.Log("Success");
     }
     protected override void Start()
     {
         base.Start();
-        this.AssignInputEvents();
+        this.AssignMoveInputEvents();
+        this.AssignMouseInputEvents();
     }
     protected override void OnEnable()
     {
@@ -56,7 +60,7 @@ public class InputManager : VuMonoBehaviour
 
         return lastKnowMouseHit;
     }
-    protected virtual void AssignInputEvents()
+    protected virtual void AssignMoveInputEvents()
     {
         //controls = player.controls;
         // Key Input
@@ -68,13 +72,19 @@ public class InputManager : VuMonoBehaviour
         //    isRunning = true;
         //};
         //playerControls.Character.Run.canceled += context => { speed = walkSpeed; isRunning = false; };
-
-
-
+   
+    }
+    protected virtual void AssignMouseInputEvents()
+    {
         // Mouse Input
         playerControls.Character.Aim.performed += context => _mouseInput = context.ReadValue<Vector2>();
         playerControls.Character.Aim.canceled += context => _mouseInput = Vector2.zero;
+
+        //Fire
+        playerControls.Character.Fire.performed += context => _isShooting = true;
+        playerControls.Character.Fire.canceled += context => _isShooting = false;
     }
+    public virtual bool IsFiring()=>_isShooting;
   
     protected override void OnDisable()
     {
@@ -82,6 +92,26 @@ public class InputManager : VuMonoBehaviour
         playerControls.Disable();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //protected virtual void LoadMoveJoystick()
 //{
 //    if (this._moveJoystick != null) return;

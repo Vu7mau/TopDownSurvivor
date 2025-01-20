@@ -12,10 +12,10 @@ public class SpawnerCtrl : VuMonoBehaviour
     [SerializeField] protected SpawnPoints _spawnPoints;
     public SpawnPoints SpawnPoints => _spawnPoints;
 
-    protected override void LoadComponent()
+    protected override void LoadComponents()
     {
         this.LoadSpawner();
-        this.LoadSpawnPoint();
+       // this.LoadSpawnPoint();
         
     }
 

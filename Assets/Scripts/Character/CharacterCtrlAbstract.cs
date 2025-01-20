@@ -7,9 +7,9 @@ public class CharacterCtrlAbstract : VuMonoBehaviour
     [Header("CharacterCtrl Abstract")]
     [SerializeField] protected CharacterCtrl _characterCtrl;
 
-    protected override void LoadComponent()
+    protected override void LoadComponents()
     {
-        base.LoadComponent();
+        base.LoadComponents();
         this.LoadCharacterCtrlAbstract();
     }
     protected virtual void LoadCharacterCtrlAbstract()

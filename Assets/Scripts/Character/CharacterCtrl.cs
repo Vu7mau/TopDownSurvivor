@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterCtrl : VuMonoBehaviour
+public class CharacterCtrl : Singleton<CharacterCtrl>
 {
   
  
@@ -13,12 +13,20 @@ public class CharacterCtrl : VuMonoBehaviour
 
     [SerializeField] protected CharacterMove _characterMove;
     public CharacterMove CharacterMove => _characterMove;
+
+    [SerializeField] protected CharacterAim _characterAim;
+    public CharacterAim CharacterAim => _characterAim;
+
+      [SerializeField] protected CharacterShooting _characterShooting;
+    public CharacterShooting CharacterShooting => _characterShooting;
   
-    protected override void LoadComponent()
+    protected override void LoadComponents()
     {
-        base.LoadComponent();
+        base.LoadComponents();
        this.LoadInputManager();
         this.LoadCharacterMove();
+        this.LoadCharacterAim();
+        this.LoadCharacterShooting();
     }
  
     protected virtual void LoadInputManager()
@@ -34,6 +42,21 @@ public class CharacterCtrl : VuMonoBehaviour
 
         this._characterMove = this.transform.GetComponentInChildren<CharacterMove>();
         Debug.Log(" Load InputManager Success " + this._characterMove.transform.name);
+    }
+    protected virtual void LoadCharacterAim()
+    {
+        if (this._characterAim != null) return;
+
+        this._characterAim = this.transform.GetComponentInChildren<CharacterAim>();
+        Debug.Log(" Load InputManager Success " + this._characterAim.transform.name);
+    }
+
+    protected virtual void LoadCharacterShooting()
+    {
+        if (this._characterShooting != null) return;
+
+        this._characterShooting = this.transform.GetComponentInChildren<CharacterShooting>();
+        Debug.Log(" Load CharacterShooting Success " + this._characterShooting.transform.name);
     }
 }
 

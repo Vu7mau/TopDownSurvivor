@@ -13,7 +13,7 @@ public abstract class Spawner : VuMonoBehaviour
     [SerializeField] protected List<Transform> _objPrefabs;
     [SerializeField] protected List<Transform> _poolObj;
 
-    protected override void LoadComponent()
+    protected override void LoadComponents()
     {
         this.LoadHoder();
         this.LoadPrefab();
@@ -34,6 +34,7 @@ public abstract class Spawner : VuMonoBehaviour
         foreach (Transform obj in objTransform)
         {
             this._objPrefabs.Add(obj);
+            obj.gameObject.SetActive(false);
         }
 
         Debug.Log("Load Prefab Success at " + this.transform.name);
@@ -42,6 +43,7 @@ public abstract class Spawner : VuMonoBehaviour
 
     public virtual Transform Spawn(string prefabName, Vector3 spawnPosition, Quaternion rota)
     {
+     
         Transform prefab= this.GetPrefabByName(prefabName);
         if (prefab == null) { Debug.Log("Prefab not found " + prefabName); return null; }
         return this.Spawn(prefab, spawnPosition, rota);
@@ -75,11 +77,11 @@ public abstract class Spawner : VuMonoBehaviour
 
     protected virtual Transform GetPrefabByName(string prefabName)
     {
+      
         foreach (Transform obj in this._objPrefabs)
         {
-           
-            if (obj.name == prefabName) return obj;
-           
+            if (obj.name != prefabName) continue;
+             return obj;       
         }
         return null;
     }

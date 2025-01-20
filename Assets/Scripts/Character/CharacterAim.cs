@@ -30,28 +30,37 @@ public class CharacterAim : CharacterCtrlAbstract
 
     protected virtual void Update()
     {
-       this.UpdateAimVisual();
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            isAimingPrecisly = !isAimingPrecisly;
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            isLockingToTarget = !isLockingToTarget;
+        }
+
+        this.UpdateAimVisual();
         this.UpdateCameraPosition();
         this.UpdateAimPosition();
     }
 
     protected virtual void UpdateAimVisual()
     {
-        Transform gun =this.transform;
-        Vector3 laserDirection= this.transform.forward;
+        Transform gunPoint =this._characterCtrl.CharacterShooting.GetGunPoint();
+        Vector3 laserDirection= (_aim.position-gunPoint.position).normalized;
 
         float laserTipLength = .5f;
-        float gunDistance = 4f;
+        float gunDistance = 5f;
 
-        Vector3 endPoint = gun.position + laserDirection * gunDistance;
+        Vector3 endPoint = gunPoint.position + laserDirection * gunDistance;
 
-        if(Physics.Raycast(gun.position,laserDirection,out RaycastHit hit,gunDistance))
+        if(Physics.Raycast(gunPoint.position,laserDirection,out RaycastHit hit,gunDistance))
         {
             endPoint = hit.point;
             laserTipLength = 0;
         }
 
-        _aimLaser.SetPosition(0,gun.position);
+        _aimLaser.SetPosition(0,gunPoint.position);
         _aimLaser.SetPosition(1,endPoint);
        _aimLaser.SetPosition(2,endPoint+laserDirection*laserTipLength);
     }
@@ -79,7 +88,7 @@ public class CharacterAim : CharacterCtrlAbstract
         }
     }
 
-
+    public bool CanAimPrecisly() => isAimingPrecisly;
     public Transform GetAim() => _aim;
     public Transform GetTarget()
     {
