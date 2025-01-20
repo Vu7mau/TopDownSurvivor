@@ -1,0 +1,69 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Animations.Rigging;
+
+public class CharacterShooting : ObjectShooting
+{
+    [Space]
+    [Header("Character Shooting")]
+    [SerializeField] protected Transform _gunPoint;
+
+    [SerializeField] protected CharacterCtrl _characterCtrl;
+
+    [SerializeField] protected RayCastWeapon _weapon;
+    [SerializeField] protected Rig _aim;
+    [SerializeField] protected float _aimDuration;
+
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadCharacterCtrlAbstract();
+        this.LoadRayCastWeapon();
+    }
+    protected virtual void LoadCharacterCtrlAbstract()
+    {
+        if (this._characterCtrl != null) return;
+        _characterCtrl = this.transform.parent.GetComponent<CharacterCtrl>();
+        Debug.Log("Load CharacterCtrl Abstract Success at " + this.transform.name);
+    }
+    protected virtual void LoadRayCastWeapon()
+    {
+        if (this._weapon != null) return;
+        this._weapon = GameObject.FindObjectOfType<RayCastWeapon>();
+        Debug.Log("Load CharacterCtrl Abstract Success at " + this._weapon.name);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        this.Aiming(this.IsShooting());
+    }
+    protected override bool IsShooting()
+    {  
+        _isShooting= _characterCtrl.InputManager.IsFiring();
+        return _isShooting ;
+    }
+
+    protected override void Shoot()
+    {
+        
+        Transform newBullet = BulletSpawner.Instance.Spawn(BulletSpawner.bulletOne, this._gunPoint.position, Quaternion.LookRotation(this._gunPoint.forward));  
+        if (newBullet == null) return;
+        newBullet.gameObject.SetActive(true);
+        this._weapon.FireMuzzelFlash();
+        //BulletCtrl bulletCtrl = newBullet.GetComponent<BulletCtrl>();
+       // bulletCtrl.SetShotter(transform.parent);
+    }
+
+    public Transform GetGunPoint()=>this._gunPoint;
+
+    protected virtual void Aiming(bool isAim)
+    {
+        if (isAim)
+            _aim.weight += Time.deltaTime / _aimDuration;
+        else
+            _aim.weight -= Time.deltaTime / _aimDuration;
+
+    }
+}
