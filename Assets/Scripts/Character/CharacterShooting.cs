@@ -52,7 +52,7 @@ public class CharacterShooting : ObjectShooting
         if (newBullet == null) return;
         newBullet.gameObject.SetActive(true);
         this._weapon.FireMuzzelFlash();
-        Debug.Log("do here");
+        Debug.Log("do here");   
         //BulletCtrl bulletCtrl = newBullet.GetComponent<BulletCtrl>();
        // bulletCtrl.SetShotter(transform.parent);
     }
