@@ -6,7 +6,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
 {
     [Header("Object Shooting")]
     [SerializeField] protected bool _isShooting = false;
-    public bool IsFire=> _isShooting;
+//    public bool IsFire=> _isShooting;
     [SerializeField] protected float _shootDelay = .2f;
     [SerializeField] protected float _shootTimer = 0f;
     [SerializeField] protected int _MaxBulletCount = 30;

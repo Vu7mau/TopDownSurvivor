@@ -44,7 +44,7 @@ public class BulletImpact : BulletAbstract
         _hitEffect.Play();
         Invoke(nameof(Despawn),.2f);
         //this._bulletCtrl.BulletDespawn.DespawnObject();
-        Debug.Log("Do her");
+       // Debug.Log("Do her");
     }
     protected virtual void Despawn()
     {

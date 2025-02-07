@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class CharacterShooting : ObjectShooting
+public class CharacterShooting : VuMonoBehaviour
 {
     [Space]
     [Header("Character Shooting")]
-    [SerializeField] protected Transform _gunPoint;
+ //   [SerializeField] protected Transform _gunPoint;
 
     [SerializeField] protected CharacterCtrl _characterCtrl;
 
@@ -19,7 +19,14 @@ public class CharacterShooting : ObjectShooting
     {
         base.LoadComponents();
         this.LoadCharacterCtrlAbstract();
-        this.LoadRayCastWeapon();
+        this.LoadWeapon();
+    }
+    protected virtual void LoadWeapon()
+    {
+        if (this._weapon != null) return;
+
+        this._weapon = GetComponentInChildren<RayCastWeapon>();
+        Debug.Log(" Load_weapon Success " + this._weapon.transform.name);
     }
     protected virtual void LoadCharacterCtrlAbstract()
     {
@@ -27,37 +34,28 @@ public class CharacterShooting : ObjectShooting
         _characterCtrl = this.transform.parent.GetComponent<CharacterCtrl>();
         Debug.Log("Load CharacterCtrl Abstract Success at " + this.transform.name);
     }
-    protected virtual void LoadRayCastWeapon()
-    {
-        if (this._weapon != null) return;
-        this._weapon = GameObject.FindObjectOfType<RayCastWeapon>();
-        Debug.Log("Load CharacterCtrl Abstract Success at " + this._weapon.name);
-    }
+  
 
-    protected override void Update()
+    protected  void Update()
     {
-        base.Update();
         this.Aiming(this.IsShooting());
     }
-    protected override bool IsShooting()
-    {  
-        _isShooting= _characterCtrl.InputManager.IsFiring();
-        return _isShooting ;
-    }
-
-    protected override void Shoot()
+    public virtual bool IsShooting()
     {
-        
-        Transform newBullet = BulletSpawner.Instance.Spawn(BulletSpawner.bulletOne, this._gunPoint.position, Quaternion.LookRotation(this._gunPoint.forward));  
-        if (newBullet == null) return;
-        newBullet.gameObject.SetActive(true);
-        this._weapon.FireMuzzelFlash();
-        Debug.Log("do here");   
-        //BulletCtrl bulletCtrl = newBullet.GetComponent<BulletCtrl>();
-       // bulletCtrl.SetShotter(transform.parent);
+        return _characterCtrl.InputManager.IsFiring();
     }
 
-    public Transform GetGunPoint()=>this._gunPoint;
+    //protected override void Shoot()
+    //{
+
+    //    //Transform newBullet = BulletSpawner.Instance.Spawn(BulletSpawner.bulletOne, this._gunPoint.position, Quaternion.LookRotation(this._gunPoint.forward));  
+    //    //if (newBullet == null) return;
+    //    //newBullet.gameObject.SetActive(true);
+    //    //this._weapon.FireMuzzelFlash();
+    //    //Debug.Log("do here");          
+    //}
+
+    public Transform GetGunPoint()=>this._weapon.gunPoint;
 
     protected virtual void Aiming(bool isAim)
     {
@@ -67,4 +65,6 @@ public class CharacterShooting : ObjectShooting
             _aim.weight -= Time.deltaTime / _aimDuration;
 
     }
+
+
 }
