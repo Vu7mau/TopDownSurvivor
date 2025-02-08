@@ -8,13 +8,13 @@ public class PatrollState : StateMachineBehaviour
     float timer;
     List<Transform> wayPoints = new List<Transform>();
     NavMeshAgent agent;
-    float chaseRange = 8;
+    [SerializeField] private EnemySO enemySO;
     Transform player;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        agent.speed = 1.5f;
+        agent.speed = enemySO.Speed;
         timer = 0;
         GameObject go = GameObject.FindGameObjectWithTag("WayPoints");
         foreach(Transform t in go.transform)
@@ -33,7 +33,7 @@ public class PatrollState : StateMachineBehaviour
             animator.SetBool("isPatrolling", false);
         }
         float distance = Vector3.Distance(player.position, animator.transform.position);
-        if (distance < chaseRange)
+        if (distance < enemySO.ChaseRange)
             animator.SetBool("isChasing", true);
     }
 

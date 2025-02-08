@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyHealth : MonoBehaviour,IEnemy
 {
     [SerializeField] private EnemySO enemySO;
     private float _health;
     private Animator _animator;
-    private bool _canTakeDamage = true;
+    [SerializeField] private bool _canTakeDamage = true;
+    private Rigidbody rb;
+    private bool hasState;
     public float Health
     {
         get { return _health; }
@@ -16,11 +20,13 @@ public class EnemyHealth : MonoBehaviour,IEnemy
     }
     private void Awake()
     {
+        rb= GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
     }
     private void Start()
     {
         Health = enemySO.Health;
+        rb.isKinematic = false;
     }
     public void TakeDamage(float damage)
     {
@@ -32,31 +38,43 @@ public class EnemyHealth : MonoBehaviour,IEnemy
         }
         else
         {
-            Debug.Log("Máu quái còn: " + Health);
-            _animator.SetTrigger("damage");
+            Hurt();
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        CharacterCtrl characterCtrl = collision.gameObject.GetComponent<CharacterCtrl>();
-        if(characterCtrl != null)
-        {
-            TakeDamage(50f);
-        }
+        //ThirdPersonController player = other.GetComponent<ThirdPersonController>();
+        //if (player != null)
+        //{
+        //    TakeDamage(50);
+        //}
     }
     public void Die()
     {
+       rb.isKinematic= true;
         _canTakeDamage = false;
         Debug.Log("Quái đã chết");
         _animator.SetTrigger("die");
-
-
-        //Sau khi quái chết thì 2 giây sau quái sẽ biến mất
-        StartCoroutine(DeleteEnemyRoutine());
     }
-    private IEnumerator DeleteEnemyRoutine()
+    public void Hurt()
     {
-        yield return new WaitForSeconds(2f);
+        if (_animator != null)
+        {
+            hasState = _animator.HasState(0, Animator.StringToHash("getHit"));
+            Debug.Log($"State tồn tại: {hasState}");
+            if (hasState)
+            {
+                Debug.Log("Máu quái còn: " + Health);
+                _animator.SetTrigger("damage");
+            }
+        }
+    }
+    public void RewardPlayerAfterEnemyDead()
+    {
+        Rewards.Instance.RewardGemsPlayerWhenKillEnemy(enemySO.amount_Gems, transform);
+    }
+    public void DeleteEnemyRoutine()
+    {
         gameObject.SetActive(false);
     }
 }

@@ -4,10 +4,23 @@ using UnityEngine;
 
 public class CreateHitEnemy : MonoBehaviour
 {
+    [SerializeField] private bool CanTakeDamage = false;
+    private void OnEnable()
+    {
+        CanTakeDamage = false;
+    }
+    private void OnDisable()
+    {
+        CanTakeDamage = false;
+    }
     [SerializeField] private EnemySO enemySO;
     private void OnTriggerEnter(Collider other)
     {
-        //Nếu va chạm với người chơi thì người chơi bị trừ máu
-        Debug.Log(other.gameObject.name + " đã dính đòn Attack!");
+        ThirdPersonController player = other.GetComponent<ThirdPersonController>();
+        if (player != null && !CanTakeDamage)
+        {
+            Debug.Log("Đã va chạm với Player");
+            CanTakeDamage=true;
+        }
     }
 }
