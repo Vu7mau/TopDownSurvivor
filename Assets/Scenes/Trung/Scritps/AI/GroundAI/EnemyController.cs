@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour,INpc
 
     [Header("AI States")]
     [SerializeField] private AIState currentState;
+    [SerializeField] private bool canMove = true;
 
     [Header("Chasing")]
     [SerializeField] private float chaseRange;
@@ -36,24 +37,38 @@ public class EnemyController : MonoBehaviour,INpc
     private float timeToAttack;
 
     private GameObject player;
-
+    private Collider e_collider;
     private float distanceToPlayer;
     private Animator _anim;
 
     private void Awake()
     {
         _anim = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        e_collider = GetComponent<Collider>();
+        player = FindAnyObjectByType<ThirdPersonController>().gameObject;
+    }
+    private void OnEnable()
+    {
+        canMove = true;
+        e_collider.enabled = true;
+    }
+    private void OnDisable()
+    {
+        canMove = false;
+        e_collider.enabled = false;
     }
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindAnyObjectByType<CharacterCtrl>().gameObject;
         waitCounter = waitAtPoint;
         timeSinceLastSawPlayer = suspiciousTime;
         timeToAttack = attackTime;
     }
     private void Update()
     {
+        if (!canMove) {
+            e_collider.enabled=false;
+            return; }
         distanceToPlayer = Vector3.Distance(transform.position,player.transform.position);
         switch (currentState)
         {
@@ -135,6 +150,7 @@ public class EnemyController : MonoBehaviour,INpc
             //thực hiện animation tấn công
             _anim.SetBool("isAttacking", true);
             timeToAttack = attackTime;
+            agent.isStopped = true;
         }
         if (distanceToPlayer > attackRange)
         {
@@ -142,5 +158,9 @@ public class EnemyController : MonoBehaviour,INpc
             currentState = AIState.Chasing;
             agent.isStopped = false;
         }
+    }
+    public void EnemyIsDead(bool _canMove)
+    {
+        canMove = _canMove;
     }
 }
