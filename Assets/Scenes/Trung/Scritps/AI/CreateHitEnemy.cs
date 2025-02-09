@@ -17,7 +17,8 @@ public class CreateHitEnemy : MonoBehaviour
     [SerializeField] private EnemySO enemySO;
     private void OnTriggerEnter(Collider other)
     {
-        CharacterCtrl player = other.GetComponent<CharacterCtrl>();
+        //CharacterCtrl player = other.GetComponent<CharacterCtrl>();
+        ThirdPersonController player = other.GetComponent<ThirdPersonController>();
         if (player != null && !CanTakeDamage)
         {
             dem++;

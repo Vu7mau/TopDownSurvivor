@@ -1411,7 +1411,6 @@ GameObject:
   - component: {fileID: 8632828178613212604}
   - component: {fileID: 3401684406284628848}
   - component: {fileID: 7339622069306635162}
-  - component: {fileID: 270214950430637623}
   - component: {fileID: 7621861621866716201}
   - component: {fileID: 1028959603655476696}
   m_Layer: 0
@@ -1482,19 +1481,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &270214950430637623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6643458183532715960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ea8bc0012f89f3468f41907cdb85731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemySO: {fileID: 11400000, guid: ffe97e1170d08e0408d7624a2ef610be, type: 2}
 --- !u!54 &7621861621866716201
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1503,9 +1489,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6643458183532715960}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 100000
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1519,9 +1505,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &1028959603655476696
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1971,7 +1957,7 @@ Transform:
   m_GameObject: {fileID: 7946218155235421426}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0025990654, y: 1.68, z: -0.37}
+  m_LocalPosition: {x: -0.21, y: 1.68, z: -0.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1996,8 +1982,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 1.91, z: 3.23}
+  m_Size: {x: 3.306153, y: 3.9698625, z: 1.0772351}
+  m_Center: {x: 0.1391398, y: 0.4958166, z: 3.2686167}
 --- !u!114 &3356451520258966143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2010,7 +1996,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc52bc96f7dd29d44b90aaf706d1319d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySO: {fileID: 11400000, guid: ffe97e1170d08e0408d7624a2ef610be, type: 2}
+  CanTakeDamage: 0
+  enemySO: {fileID: 11400000, guid: 235a235568c47f6479f2bf58511e66fb, type: 2}
 --- !u!1 &8039782248810207212
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class AttackState : StateMachineBehaviour
     NavMeshAgent navMeshAgent;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = CharacterCtrl.Instance/*GameObject.FindGameObjectWithTag("Player")*/.transform;
+        player = /*CharacterCtrl.Instance*/GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = animator.GetComponent<NavMeshAgent>();
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

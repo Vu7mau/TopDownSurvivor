@@ -10,7 +10,7 @@ public class IdleState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         timer = 0;
-        player = /*GameObject.FindGameObjectWithTag("Player")*/ CharacterCtrl.Instance.transform;
+        player = GameObject.FindGameObjectWithTag("Player") /*CharacterCtrl.Instance*/.transform;
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

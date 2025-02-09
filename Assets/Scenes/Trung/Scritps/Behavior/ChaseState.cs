@@ -11,7 +11,7 @@ public class ChaseState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
-        player = /*GameObject.FindGameObjectWithTag("Player")*/CharacterCtrl.Instance.transform;
+        player = GameObject.FindGameObjectWithTag("Player")/*CharacterCtrl.Instance*/.transform;
         agent.speed = enemySO.ChaseSpeed;
         agent.stoppingDistance = enemySO.AttackRange;
     }
