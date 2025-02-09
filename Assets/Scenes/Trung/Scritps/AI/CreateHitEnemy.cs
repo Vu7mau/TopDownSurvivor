@@ -17,8 +17,9 @@ public class CreateHitEnemy : MonoBehaviour
     [SerializeField] private EnemySO enemySO;
     private void OnTriggerEnter(Collider other)
     {
+        //Nếu va chạm với Player thì Player sẽ bị mất máu
         //CharacterCtrl player = other.GetComponent<CharacterCtrl>();
-        ThirdPersonController player = other.GetComponent<ThirdPersonController>();
+        CharacterCtrl player = other.GetComponent<CharacterCtrl>();
         if (player != null && !CanTakeDamage)
         {
             dem++;
