@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float lifeTime = 5f;
-    private void Start()
+    [SerializeField] private float lifeTime;
+    private void OnEnable()
+    {
+        Delete();
+    }
+    public void Delete()
     {
         StartCoroutine(ProjectileLifeTime(lifeTime));
-    }
-    private void OnCollisionEnter(Collision other)
-    {
-        gameObject.SetActive(false);
     }
     private IEnumerator ProjectileLifeTime(float time)
     {
