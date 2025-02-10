@@ -1,80 +1,63 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class save : MonoBehaviour
 {
-    private Material _material;
-    private Color Color;
-    private string currentColor;
-    public GameObject pn_home;
+    private SkinnedMeshRenderer CurrentMaterial;
+    public Material[] skinPlayer;
+    private string currentSkin;
+    private static save Instance;
+    private GameObject Player;
+    private void Awake()
+    {
+        Player = GameObject.FindWithTag("Skin");
+    }
     private void Start()
     {
-        _material = GetComponentInChildren<Renderer>().material;
-        if (PlayerPrefs.HasKey("currentColor"))
+        if (Player != null)
         {
-            currentColor = PlayerPrefs.GetString("currentColor");
-            if (currentColor == "red")
+            CurrentMaterial = Player.GetComponent<SkinnedMeshRenderer>();
+            if (PlayerPrefs.HasKey("sk"))
             {
-                Color = _material.color;
-                Color.b = PlayerPrefs.GetFloat("red");
-                _material.color = Color;
+                string savedMaterial = PlayerPrefs.GetString("sk").Replace("(Instance)", "").Trim();
+                for (int i = 0; i < 2; i++)
+                {
+                    string MaterialName = skinPlayer[i].name.Trim();
+                    Debug.Log($"🔍 Comparing:\n- Saved: '{savedMaterial}'\n- Material: '{skinPlayer[i].name}'");
+                    if (MaterialName == savedMaterial)
+                    {
+                        Debug.Log("MaterialCurrent");
+                        CurrentMaterial.material = skinPlayer[i];
+                        break;
+                    }
+                }
             }
-            if (currentColor == "yellow")
-            {
-                Color = _material.color;
-                Color.a = PlayerPrefs.GetFloat("yellow");
-                _material.color = Color;
-            }
         }
     }
-    public void vemenu()
+    private void SwapMaterial()
     {
-        SceneManager.LoadScene(0);
-    }
-    public void Pause()
-    {
-        Time.timeScale = 0;
-    }
-    public void pnhome()
-    {
-        pn_home.SetActive(true);
-        Time.timeScale = 0;
-    }
-    public void tieptuc()
-    {
-        Time.timeScale = 1.0f;
-        pn_home.SetActive(false);
-    }
-    public void choilai()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-    public void red()
-    {        
-        _material.color = Color.red;
-        currentColor = "red";
-        Debug.Log("red"+Color.red);
-        
-    }
-    public void yellow()
-    {
-        _material.color = Color.yellow;
-        currentColor = "yellow";
-        Debug.Log("yellow" + Color.yellow);
-    }
-    public void saveColor()
-    {
-        PlayerPrefs.SetString("currentColor",currentColor);
-        if (currentColor == "red")
+        if (CurrentMaterial != null)
         {
-            PlayerPrefs.SetFloat("red",_material.color.b);            
+            Material Temp = skinPlayer[0];
+            skinPlayer[0] = skinPlayer[1];
+            skinPlayer[1] = Temp;
         }
-        if (currentColor == "yellow")
-        {
-            PlayerPrefs.SetFloat("yellow",_material.color.b);           
-        }
+
+        CurrentMaterial.material = skinPlayer[0];
+    }
+    public void skin1()
+    {
+        SwapMaterial();
+        CurrentSkin(CurrentMaterial.material.name);
+        Debug.Log("Current ; " + CurrentMaterial.material.name);
+    }
+    public void skin2()
+    {
+        SwapMaterial();
+        CurrentSkin(CurrentMaterial.material.name);
+    }
+    private void CurrentSkin(string Current)
+    {
+        PlayerPrefs.SetString("sk", Current);
+        PlayerPrefs.Save();
     }
 }

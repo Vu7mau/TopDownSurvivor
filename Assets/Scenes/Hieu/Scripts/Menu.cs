@@ -6,48 +6,51 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-//    public GameObject ProfilePlayer;    
-    private Material _Material;
-    private Color color;
-    public GameObject player;
-    private string currentColor;
-    private void Start()
+    public GameObject pn_home;
+    private save savemenu;
+    private void Awake()
     {
-         //Debug.Log("color : " + Color.red);
-        _Material = player.GetComponent<Renderer>().material;
-        if (PlayerPrefs.HasKey("currentColor"))
+        savemenu = FindObjectOfType<save>();
+    }
+    public void ChangeSkin()
+    {
+        if (savemenu != null)
         {
-            currentColor =PlayerPrefs.GetString("currentColor");
-            if (currentColor=="red")
-            {
-                color = _Material.color;
-                color.b = PlayerPrefs.GetFloat("red");
-                _Material.color = color;                
-            }
-            if (currentColor == "yellow")
-            {
-                color = _Material.color;    
-                color.a = PlayerPrefs.GetFloat("yellow");
-                _Material.color = color;                
-            }
+            savemenu.skin1();
         }
     }
     public void ButtonStart()
     {
         SceneManager.LoadScene(1);        
-    }
-    //public void ButtonProfile()
-    //{
-    //    ProfilePlayer.SetActive(true);
-    //}
-    //public void ExitProfile()
-    //{
-    //    ProfilePlayer.SetActive(false);
-    //}       
+    }           
     public void ButtonExit()
     {
         UnityEditor.EditorApplication.isPlaying = false;
         //Application.Quit();
+    }
+    public void vemenu()
+    {
+        SceneManager.LoadScene(0);
+        Time.timeScale = 1.0f;
+    }
+    public void Pause()
+    {
+        Time.timeScale = 0;
+    }
+    public void pnhome()
+    {
+        pn_home.SetActive(true);
+        Time.timeScale = 0;
+    }
+    public void tieptuc()
+    {
+        Time.timeScale = 1.0f;
+        pn_home.SetActive(false);
+    }
+    public void choilai()
+    {
+        Time.timeScale = 1.0f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 }
