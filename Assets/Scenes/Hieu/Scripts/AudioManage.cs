@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour
+public class AudioManage : MonoBehaviour
 {
     [SerializeField] private AudioSource music_source;
     [SerializeField] private AudioSource SFX_Source;
     public AudioClip BackGround;
     public AudioClip Click;
-    public static AudioManager Instance;
+    public static AudioManage Instance;
     private void Awake()
     {
         if (Instance == null)

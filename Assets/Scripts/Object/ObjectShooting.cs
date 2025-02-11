@@ -13,6 +13,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
     [SerializeField] protected int _bulletsCount = 0;
     [SerializeField] protected float _reloadAmmoTime = 2f;
     [SerializeField] protected float _reloadAmmoTimer = 0f;
+   
 
 
     protected virtual void Update()

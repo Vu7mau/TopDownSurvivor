@@ -39,7 +39,7 @@ public class CharacterAim : CharacterCtrlAbstract
             isLockingToTarget = !isLockingToTarget;
         }
 
-        this.UpdateAimVisual();
+        //this.UpdateAimVisual();
         this.UpdateCameraPosition();
         this.UpdateAimPosition();
     }
@@ -67,7 +67,7 @@ public class CharacterAim : CharacterCtrlAbstract
     protected void UpdateAimPosition()
     {
         Transform target = GetTarget();
-
+      
         if (target != null && isLockingToTarget)
         {
             if (target.GetComponent<Renderer>() != null)
@@ -92,13 +92,13 @@ public class CharacterAim : CharacterCtrlAbstract
     public Transform GetAim() => _aim;
     public Transform GetTarget()
     {
-        Transform target = null;
+        Transform target=null;
 
-        if (_characterCtrl.InputManager.GetMouseHitInfo().transform.GetComponent<Target>() != null)
+        if(_characterCtrl.InputManager.GetMouseHitInfo().transform.GetComponent<Target>() != null)
         {
             target = _characterCtrl.InputManager.GetMouseHitInfo().transform;
+           
         }
-
         return target;
     }
 

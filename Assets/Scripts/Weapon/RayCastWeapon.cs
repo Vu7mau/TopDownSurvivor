@@ -4,29 +4,40 @@ using UnityEngine;
 
 public class RayCastWeapon : ObjectShooting
 {
-    [SerializeField] protected bool _isFiring=>CharacterCtrl.Instance.CharacterShooting.IsShooting();
+
+
+    [Space]
+    [Header("RayCastWeapon")]
     [SerializeField] protected ParticleSystem _muzzelFlash;
-    [SerializeField] protected Transform _rayCastOrigin;
+   // [SerializeField] protected Transform _rayCastOrigin;
     [SerializeField] public Transform gunPoint;
+    [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsShooting();
 
-    Ray _ray;
-    RaycastHit _hit;
+    [SerializeField] public AnimationClip weaponAnimation;
+    //[SerializeField] Cinemachine.CinemachineImpulseSource source;
 
+
+  
     protected override void Awake()
     {
         base.Awake();
-        this._muzzelFlash=GetComponentInChildren<ParticleSystem>();
-      
-    }
+        this._muzzelFlash = GetComponentInChildren<ParticleSystem>();
 
-    public virtual void FireMuzzelFlash()
+    }
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        
+    }
+  
+    protected virtual void ShooterEffect()
     {
         if (this._muzzelFlash == null) return;
 
-        _ray.origin=_rayCastOrigin.position;
-        _ray.direction=_rayCastOrigin.forward;
+        //_ray.origin = _rayCastOrigin.position;
+        //_ray.direction = _rayCastOrigin.forward;
         this._muzzelFlash.Play();
-      
+
     }
 
     protected override void Shoot()
@@ -34,12 +45,13 @@ public class RayCastWeapon : ObjectShooting
         Transform newBullet = BulletSpawner.Instance.Spawn(BulletSpawner.bulletOne, this.gunPoint.position, Quaternion.LookRotation(this.gunPoint.forward));
         if (newBullet == null) return;
         newBullet.gameObject.SetActive(true);
-        this.FireMuzzelFlash();
-       // Debug.Log("do here");
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.gunPoint);
+        this.ShooterEffect();    
+        // Debug.Log("do here");
     }
 
     protected override bool IsShooting()
     {
-     return _isFiring;
+        return _isFiring;
     }
 }

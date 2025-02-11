@@ -21,7 +21,7 @@ public class BulletImpact : BulletAbstract
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadCollider();
+        //this.LoadCollider();
 
     }
 

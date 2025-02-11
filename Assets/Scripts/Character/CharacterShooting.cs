@@ -25,8 +25,8 @@ public class CharacterShooting : VuMonoBehaviour
     {
         if (this._weapon != null) return;
 
-        this._weapon = GetComponentInChildren<RayCastWeapon>();
-        Debug.Log(" Load_weapon Success " + this._weapon.transform.name);
+        this._weapon = GameObject.FindObjectOfType<RayCastWeapon>();
+       // Debug.Log(" Load_weapon Success " + this._weapon.transform.name);
     }
     protected virtual void LoadCharacterCtrlAbstract()
     {
@@ -55,7 +55,13 @@ public class CharacterShooting : VuMonoBehaviour
     //    //Debug.Log("do here");          
     //}
 
-    public Transform GetGunPoint()=>this._weapon.gunPoint;
+    public Transform GetGunPoint()
+    {
+        if (!this._weapon) this.LoadWeapon();
+
+        return  this._weapon.gunPoint;
+
+    }
 
     protected virtual void Aiming(bool isAim)
     {

@@ -32,7 +32,7 @@ public class InputManager : VuMonoBehaviour
     {
         base.LoadComponents();
         playerControls = new PlayerControls();
-       if (playerControls != null) Debug.Log("Success");
+      // if (playerControls != null) Debug.Log("Success");
     }
     protected override void Start()
     {

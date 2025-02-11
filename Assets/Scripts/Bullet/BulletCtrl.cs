@@ -8,15 +8,20 @@ public class BulletCtrl : VuMonoBehaviour
     [SerializeField] protected BulletDespawn _bulletDespawn;
     public BulletDespawn BulletDespawn=> _bulletDespawn;
 
-    [SerializeField] protected CharacterCtrl _characterCtrl;
     public CharacterCtrl CharacterCtrl => _characterCtrl;
+    [SerializeField] protected CharacterCtrl _characterCtrl;
+
     [SerializeField] protected BulletImpact _bulletImpact;
+
+    [SerializeField] protected DamageSender _damageSender;
+    public DamageSender DamageSender => _damageSender;
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadBulletDespawn();
         this.LoadCharacterCtrl();
         this.LoadBulletImpact();
+        this.LoadDamageSender();
     }
     protected virtual void LoadBulletDespawn()
     {
@@ -43,11 +48,21 @@ public class BulletCtrl : VuMonoBehaviour
 
 
     }
+    protected virtual void LoadDamageSender()
+    {
+        if(this._damageSender != null) return;
+
+        this._damageSender = GetComponentInChildren<DamageSender>();
+        Debug.Log("Load CharacterCtrl Success " + this._damageSender.transform.name);
+
+
+    }
     private Rigidbody rb => GetComponent<Rigidbody>();
     private void OnCollisionEnter(Collision collision)
     {
         _bulletImpact.CreateParticleFX(collision);
         rb.velocity=Vector3.zero;
+        _damageSender.Send(collision.transform);
 
     }
 }
