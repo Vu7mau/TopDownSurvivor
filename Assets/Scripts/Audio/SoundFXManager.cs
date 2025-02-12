@@ -8,6 +8,9 @@ public class SoundFXManager : AudioManager
     [Space]
     [Header("SoundFXManager")]
     [SerializeField] public  AudioClip rifleShoot;
+    [SerializeField] public AudioClip beastAttack;
+    [SerializeField] public AudioClip beastDeath;
+    [SerializeField] public AudioClip beastStep;
 
     protected override void Awake()
     {

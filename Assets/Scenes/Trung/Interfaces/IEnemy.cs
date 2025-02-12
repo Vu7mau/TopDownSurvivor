@@ -4,8 +4,8 @@ using UnityEngine;
 
 interface IEnemy
 {
-    public void TakeDamage(float damage);
-    public void Die();
+    public void TakeDamage(int damage);
+    public void OnDead();
 }
 interface INpc
 {

@@ -49,8 +49,8 @@ public abstract class DamageReceiver : VuMonoBehaviour
     }
     public virtual void Deduct(int Deduct)
     {
-        if(this._isDead) return; 
-
+        if(this._isDead) return;
+        Debug.Log("Hurt!");
         this._hp -= Deduct;    
         if (this._hp <= 0) this._hp= 0;
 

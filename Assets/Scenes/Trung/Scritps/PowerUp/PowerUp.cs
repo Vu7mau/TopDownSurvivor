@@ -28,7 +28,7 @@ public class PowerUp : MonoBehaviour
         if(player != null)
         {
             Destroy(gameObject);
-            Debug.Log("Bạn vừa tăng kinh nghiệm");
+            Debug.Log("Bạn đã thu thập được kim cương!");
         }
     }
 }

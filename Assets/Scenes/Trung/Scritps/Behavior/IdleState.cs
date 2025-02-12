@@ -1,22 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class IdleState : StateMachineBehaviour
 {
-    float timer;
     [SerializeField] private EnemySO enemySO;
     Transform player;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        timer = 0;
         player = /*GameObject.FindGameObjectWithTag("Player") */CharacterCtrl.Instance.transform;
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        timer += Time.deltaTime;
-        if(timer > 5)
-            animator.SetBool("isPatrolling", true);
         float distance = Vector3.Distance(player.position,animator.transform.position);
         if (distance < enemySO.ChaseRange)
             animator.SetBool("isChasing", true);
