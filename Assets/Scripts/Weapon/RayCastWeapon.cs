@@ -13,10 +13,10 @@ public class RayCastWeapon : ObjectShooting
     [SerializeField] public Transform gunPoint;
     [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsShooting();
 
-    [SerializeField] public AnimationClip weaponAnimation;
+    [SerializeField] public string weaponName;
     //[SerializeField] Cinemachine.CinemachineImpulseSource source;
 
-
+    public ActiveWeapon.WeaponSlot weaponSlot;
   
     protected override void Awake()
     {
@@ -29,15 +29,17 @@ public class RayCastWeapon : ObjectShooting
         base.LoadComponents();
         
     }
-  
+
+    protected override void Update()
+    {
+        CinemachineCtrl.Instance.CinemachineZoom.SetIsZoom(this.IsShooting());
+    }
     protected virtual void ShooterEffect()
     {
         if (this._muzzelFlash == null) return;
 
-        //_ray.origin = _rayCastOrigin.position;
-        //_ray.direction = _rayCastOrigin.forward;
+    
         this._muzzelFlash.Play();
-
     }
 
     protected override void Shoot()
@@ -47,7 +49,7 @@ public class RayCastWeapon : ObjectShooting
         newBullet.gameObject.SetActive(true);
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.gunPoint);
         this.ShooterEffect();    
-        // Debug.Log("do here");
+    
     }
 
     protected override bool IsShooting()

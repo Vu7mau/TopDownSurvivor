@@ -107,7 +107,7 @@ public class CharacterAim : CharacterCtrlAbstract
         _cameraTarget.position = Vector3.Lerp(
                     _cameraTarget.position,
                     DesiredCameraPosition(),
-                    _cameraSensitivity * Time.deltaTime);
+                    _cameraSensitivity*4f * Time.deltaTime);
     }
     private Vector3 DesiredCameraPosition()
     {

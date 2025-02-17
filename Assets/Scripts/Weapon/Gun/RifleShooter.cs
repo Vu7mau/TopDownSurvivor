@@ -7,6 +7,6 @@ public class RifleShooter : RayCastWeapon
     protected override void ShooterEffect()
     {
         base.ShooterEffect();
-        CinemachineShake.Instance.ShakeCamera(1f, .1f);
+        CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(2f, .1f);
     }
 }

@@ -4,31 +4,26 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CinemachineShake : VuMonoBehaviour
+public class CinemachineShake : CinemachineAbstract
 {
-    public static CinemachineShake Instance { get; private set; }
-    [SerializeField] protected CinemachineVirtualCamera cinemachineVirtualCamera;
+
+    [Space]
+    [Header("CinemachineShake")]
     private float shakeTimer = 0;
 
-
+    CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
     protected override void Awake()
     {
-        if (Instance == null)
-            Instance = this;
+        
     }
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadCamera();
-    }
-    protected virtual void LoadCamera()
-    {
-        if (cinemachineVirtualCamera == null) cinemachineVirtualCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
    public virtual void ShakeCamera(float intensity , float time)
     {
-        CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin= cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        cinemachineBasicMultiChannelPerlin = _cinemachineCtrl._cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
         shakeTimer=time;
     }
@@ -40,8 +35,7 @@ public class CinemachineShake : VuMonoBehaviour
             shakeTimer -= Time.deltaTime;
             if (shakeTimer <= 0)
             {
-
-                CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+              
                 cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0;
             }
         }

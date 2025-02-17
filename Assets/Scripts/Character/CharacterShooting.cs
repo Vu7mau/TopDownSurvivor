@@ -12,7 +12,7 @@ public class CharacterShooting : VuMonoBehaviour
     [SerializeField] protected CharacterCtrl _characterCtrl;
 
     [SerializeField] protected RayCastWeapon _weapon;
-    [SerializeField] protected Rig _aim;
+   [SerializeField] protected Rig _aim;
     [SerializeField] protected float _aimDuration;
 
     protected override void LoadComponents()
@@ -36,9 +36,9 @@ public class CharacterShooting : VuMonoBehaviour
     }
   
 
-    protected  void Update()
+    protected  void LateUpdate()
     {
-        this.Aiming(this.IsShooting());
+       // this.Aiming(this.IsShooting());
     }
     public virtual bool IsShooting()
     {

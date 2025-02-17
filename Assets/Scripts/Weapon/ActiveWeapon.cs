@@ -1,26 +1,27 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 
 public class ActiveWeapon : VuMonoBehaviour
 {
-    [SerializeField] RayCastWeapon _weapon;
-    [SerializeField] protected UnityEngine.Animations.Rigging.Rig handLK;
-    [SerializeField] protected Transform _weaponParent;
-    [SerializeField] protected Transform _weaponLeftGrip;
-    [SerializeField] protected Transform _weaponRightGrip;
+    public enum WeaponSlot { Primary, Secondary };
+
+    //  [SerializeField] RayCastWeapon _weapon;
+    [SerializeField] protected Transform[] weaponSlot;
+    [SerializeField] protected Animator _rigController;
 
 
-    Animator anim;
-    AnimatorOverrideController animOverride;
     Transform animTransform;
+    RayCastWeapon[] equipped_Weapons = new RayCastWeapon[2];
+    int activateWeaponIndex;
+
     protected override void Start()
     {
         base.Start();
-        anim = GetComponentInChildren<Animator>();
-        if (anim == null) Debug.LogWarning("Null anim");
-        animOverride = anim.runtimeAnimatorController as AnimatorOverrideController;
+
+        // _rigController = GetComponentInChildren<Animator>();
+        if (_rigController == null) Debug.LogWarning("Null anim");
         this.LoadRayCastWeapon();
     }
 
@@ -30,69 +31,116 @@ public class ActiveWeapon : VuMonoBehaviour
         if (animTransform == null) Debug.LogError("Null");
         // this.LoadRayCastWeapon();
     }
-    protected virtual void Update()
-    {
-        if (_weapon!=null)
-        {
-            handLK.weight = 1.0f;
-          
 
-        }
-        else
-        {
-            handLK.weight = 0.0f;
-            anim.SetLayerWeight(1, 0.0f);
-        }
-    }
 
     protected virtual void LoadRayCastWeapon()
     {
         RayCastWeapon existingWeapon = GameObject.FindObjectOfType<RayCastWeapon>();
         if (existingWeapon != null) { this.Equip(existingWeapon); return; };
 
+    }
 
-      //   this._weapon = GameObject.FindObjectOfType<RayCastWeapon>();
-       // this.Equip(this._weapon);
-       // Debug.Log("Load CharacterCtrl Abstract Success at " + this._weapon.name);
+    protected virtual void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.X))
+        {
+            this.ToggelActivateWeapon();
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            this.SetActivateWeapon(WeaponSlot.Primary);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            this.SetActivateWeapon(WeaponSlot.Secondary );
+        }
+    }
+    protected virtual void ToggelActivateWeapon()
+    {
+        bool isHolster = this._rigController.GetBool("holster_weapon");
+        if(isHolster) StartCoroutine(this.HolsterWeapon(activateWeaponIndex));
+        else StartCoroutine(this.ActivateWeapon(activateWeaponIndex));
+    }
+    protected virtual RayCastWeapon GetWeapon(int index)
+    {
+        if (index < 0 || index >= equipped_Weapons.Length) return null;
+        return this.equipped_Weapons[index];
     }
     public virtual void Equip(RayCastWeapon newWeapon)
     {
+        int weaponSlotIndex = (int)newWeapon.weaponSlot;
+        var _weapon = this.GetWeapon(weaponSlotIndex);
         if (_weapon)
         {
-            Destroy(this._weapon.gameObject);
+            Destroy(_weapon.gameObject);
         }
         _weapon = newWeapon;
-      //  if (_weapon == null) return;
-        this._weapon.transform.parent = this._weaponParent;
-        _weapon.transform.localScale = _weapon.transform.localScale * 100;
-        _weapon.transform.localPosition = newWeapon.transform.position;
-        _weapon.transform.localRotation = newWeapon.transform.rotation;
-        anim.SetLayerWeight(1, 1.0f);
-        Invoke(nameof(SetAnimationDelay), 0.01f);
+        //  if (_weapon == null) return;
+
+        _weapon.transform.SetParent(weaponSlot[weaponSlotIndex], false);
+        // _weapon.transform.localScale = _weapon.transform.localScale * 100;
+        //_weapon.transform.localPosition = newWeapon.transform.position;
+        //_weapon.transform.localRotation = newWeapon.transform.rotation;
+
+
+        this.equipped_Weapons[weaponSlotIndex] = _weapon;
+        this.activateWeaponIndex = weaponSlotIndex;
+
+        this.SetActivateWeapon(newWeapon.weaponSlot);
+    }
+    protected virtual void SetActivateWeapon(WeaponSlot weaponSlot)
+    {
+        int holsterIndex = activateWeaponIndex;
+        int activateIndex = (int)weaponSlot;
+        this.StartCoroutine(SwitchWeapon(holsterIndex, activateIndex));
+    }
+    IEnumerator SwitchWeapon(int holsterIndex, int activateIndex)
+    {
+        yield return StartCoroutine(this.HolsterWeapon(holsterIndex));
+        yield return StartCoroutine(this.ActivateWeapon(activateIndex));
+        activateWeaponIndex = activateIndex;
+    }
+    IEnumerator HolsterWeapon(int index)
+    {
+        var weapon = this.GetWeapon(index);
+        if (weapon)
+        {
+            this._rigController.SetBool("holster_weapon", true);
+            do
+            {
+                yield return new WaitForEndOfFrame();
+            } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+
+        }
+
 
     }
-    protected virtual void SetAnimationDelay()
+    IEnumerator ActivateWeapon(int index)
     {
-        animOverride["weapon_anim_empty"] = _weapon.weaponAnimation;           
-    }
-    [ContextMenu("Save WeaponPose")]
-    void SaveWeaponPose()
-    {
-        GameObjectRecorder recorder = new GameObjectRecorder(animTransform.gameObject);
-        recorder.BindComponentsOfType<Transform>(_weaponParent.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(_weaponRightGrip.gameObject,   false);
-        recorder.BindComponentsOfType<Transform>(_weaponLeftGrip.gameObject, false   );
-        recorder.TakeSnapshot(0.0f);
-        recorder.SaveToClip(_weapon.weaponAnimation);
+        var weapon = this.GetWeapon(index);
+        if (weapon)
+        {
+            this._rigController.SetBool("holster_weapon", false);
+            _rigController.Play("equip_" + weapon.weaponName);
+            do
+            {
+                yield return new WaitForEndOfFrame();
+            } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
 
-        if (recorder.isRecording)
-        {
-            Debug.Log("Recording successful, saving clip...");
-            recorder.SaveToClip(_weapon.weaponAnimation);
-        }
-        else
-        {
-            Debug.LogError("Recording failed, no data saved!");
         }
     }
+    //[ContextMenu("Save WeaponPose")]
+    //void SaveWeaponPose()
+    //{
+    //    GameObjectRecorder recorder = new GameObjectRecorder(animTransform.gameObject);
+    //    recorder.BindComponentsOfType<Transform>(_weaponParent.gameObject, false);
+    //    recorder.BindComponentsOfType<Transform>(_weaponRightGrip.gameObject,   false);
+    //    recorder.BindComponentsOfType<Transform>(_weaponLeftGrip.gameObject, false   );
+    //    recorder.TakeSnapshot(0.0f);
+    //   // recorder.SaveToClip(_weapon.weaponAnimation);
+
+
+    //}
 }

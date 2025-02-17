@@ -43,7 +43,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
 
     protected virtual bool IsReloadingAmmo()
     {
-        if (this._bulletsCount <= this._MaxBulletCount) return true;
+        if (this._bulletsCount < this._MaxBulletCount) return true;
 
 
         this._reloadAmmoTimer += Time.fixedDeltaTime;
