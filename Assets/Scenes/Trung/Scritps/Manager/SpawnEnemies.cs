@@ -3,136 +3,117 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpawnEnemies : MonoBehaviour
+public class SpawnEnemies : Singleton<SpawnEnemies>
 {
     [SerializeField] private GameObject obj;
     [SerializeField] private EnemiesManageSO _spawn;
     [SerializeField] private Transform position;
+    [SerializeField] private SpawnEnemiesSO _waves;
 
-    [Header("Amount enemies each fight")]
-    [SerializeField] private int amountEnemiesEachTypeInEachFight;
-    [SerializeField] private int amountEnemiesMixed;
-    [SerializeField] private float timeEachEnemyAppear;
-    public int waveNumber = 1;        // Số thứ tự của đợt
-    private int enemiesLeft;          // Số lượng quái còn lại
-    private int enemiesPerWave;  // Số quái mỗi đợt
+    [SerializeField] private Transform spawnMinWavePosition;
+    [SerializeField] private Transform spawnMaxWavePosition;
+    [SerializeField] private Camera mainCamera;
 
+
+    private int amountEnemiesMixed;
+
+    [Header("Wave")]
+    [SerializeField] private int waveNumber = 1;
+
+    [Header("Change the time each wave (calculator by minutes)")]
+    private int enemiesLeft = 0;
+    private int enemiesPerWave;
 
     private List<GameObject> listParentGameObject = new List<GameObject>();
     private List<GameObject> selectedChildren = new List<GameObject>();
-    private void Start()
+    protected override void Awake()
     {
-        enemiesPerWave = amountEnemiesEachTypeInEachFight;
+        base.Awake();
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+    }
+    protected override void Start()
+    {
+        base.Start();
+        UIManager.Instance.UpdateWaveUI(waveNumber,enemiesLeft);
         CreateManageEnemiesParent();
         CreateEnemiesEachType();
         //SpawnRandomEnemies();
         StartCoroutine(SpawnWave());
     }
 
-    //Sinh ra đợt quái trộn
-    //private IEnumerator SpawnMixed()
-    //{
-    //    yield return new WaitForSeconds(10f);
-    //    SpawnRandomEnemies();
-    //}
-    ////Sinh ra quái theo từng đợt
-    //private IEnumerator SpawnRoutine()
-    //{
-    //    yield return new WaitForSeconds(5f);
-    //    StartCoroutine(SpawnEnemy());
-    //}
-
     IEnumerator SpawnWave()
     {
         while (waveNumber < 11)
         {
-            SpawnEnemiesFight(); // Sinh quái theo đợt
-
-            // Chờ 3 giây trước khi đợt mới xuất hiện
-            yield return new WaitForSeconds(3f);
-
-            // Tăng số thứ tự đợt
-            waveNumber++;
-
-            // Nếu đợt từ 5 trở đi, tăng số quái lên 30 và trộn loại quái
-            if (waveNumber > _spawn.listEnemies.Count && waveNumber <= 10)
+            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
             {
-                enemiesPerWave = amountEnemiesMixed;
-                StartCoroutine(SpawnRandomEnemy());
+                SpawnEnemiesFight(waveNumber);
             }
-
-            // Reset số quái và tiếp tục vòng lặp
+            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.Mixed)
+            {
+                amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].Amount;
+                SpawnRandomEnemy(waveNumber, amountEnemiesMixed);
+            }
+            UIManager.Instance.UpdateTimeToNextWave(CalculatorSeconds(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave));
+            yield return new WaitForSeconds(CalculatorSeconds(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave));
+            waveNumber++;
         }
     }
-    public void SpawnEnemiesFight()
+    public void SpawnEnemiesFight(int wave)
     {
-
-        //for (int i = 0; i < enemiesPerWave; i++)
-        //{
-        //    // Chọn điểm spawn ngẫu nhiên
-        //    Transform spawnPoint = position;
-
-        //    // Chọn loại quái xuất hiện:
-        //    GameObject enemyPrefab;
-        //    if (waveNumber < 5)
-        //    {
-        //        enemyPrefab = transform.GetChild(waveNumber-1).gameObject.transform.GetChild(i).gameObject; // Chỉ sinh một loại
-        //    }
-        //    else
-        //    {
-        //        enemyPrefab = selectedChildren[Random.Range(0, selectedChildren.Count)]; // Trộn ngẫu nhiên
-        //    }
-
-        //    // Tạo quái
-        //    GameObject enemy = enemyPrefab;
-        //    enemy.gameObject.SetActive(true);
-
-        //    // Khi quái bị tiêu diệt, gọi sự kiện để giảm enemiesLeft
-        //    enemy.GetComponent<EnemyHealth>().onDeath += EnemyDefeated;
-        //}
-        if(waveNumber <= _spawn.listEnemies.Count)
+        if(wave > 0 && wave <= _spawn.listEnemies.Count)
         {
-            enemiesLeft = enemiesPerWave;
-            StartCoroutine(SpawnEnemy());
+            enemiesPerWave = _waves.listWaves[_waves.WaveElement(wave)].Amount;
+            enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
+            UIManager.Instance.UpdateWaveUI(waveNumber, enemiesLeft);
+            StartCoroutine(SpawnEnemy(wave,enemiesPerWave));
         }
     }
 
-    private void EnemyDefeated()
+    public void EnemyDefeated(int amount)
     {
-        enemiesLeft--;
+        enemiesLeft-= amount;
+        if(enemiesLeft < 0) enemiesLeft = 0;
+        UIManager.Instance.UpdateWaveUI(waveNumber, enemiesLeft);
     }
-    private IEnumerator SpawnEnemy()
+    private IEnumerator SpawnEnemy(int wave,int amountEachWave)
     {
-        for(int dem = 0; dem < enemiesPerWave; dem++)
+        if(wave < 1) { yield return null; }
+        for(int dem = 0; dem < amountEachWave; dem++)
         {
-            yield return new WaitForSeconds(timeEachEnemyAppear);
-            GameObject enemy = transform.GetChild(waveNumber - 1).gameObject.transform.GetChild(dem).gameObject;
+            Vector3 spawnPosition = RandomPositionSpawn();
+            GameObject enemy = transform.GetChild(_waves.listWaves[_waves.WaveElement(wave)].EnemyTypeIndex - 1).gameObject.transform.GetChild(dem).gameObject;
             enemy.SetActive(true);
-            enemy.transform.position = new Vector3(position.position.x, position.position.y, position.position.z);
-            enemy.GetComponent<EnemyHealth>().onDeath += EnemyDefeated;
+            enemy.transform.position = spawnPosition;
         }
     }
-    private IEnumerator SpawnRandomEnemy()
+    private void SpawnRandomEnemy(int wave, int amountEachWave)
     {
+        enemiesPerWave = _waves.listWaves[_waves.WaveElement(wave)].Amount;
+        enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
+        UIManager.Instance.UpdateWaveUI(wave, enemiesLeft);
         SpawnRandomEnemies();
         GameObject spawnMixed = GameObject.Find("SpawnEnemiesMixed");
         int dem = 0;
-        while (dem < 30)
+        while (dem < amountEachWave)
         {
-            yield return new WaitForSeconds(timeEachEnemyAppear);
             GameObject enemy = spawnMixed.transform.GetChild(dem).gameObject;
             enemy.SetActive(true);
-            enemy.transform.position = new Vector3(position.position.x, position.position.y, position.position.z);
-            enemy.GetComponent<EnemyHealth>().onDeath += EnemyDefeated;
+            enemy.transform.position = RandomPositionSpawn();
             dem++;
         }
+        Debug.Log("Đây là đợt quái trộn!");
     }
 
+    private int CalculatorEnemiesLeft(int _amount)
+    {
+        return enemiesLeft + _amount;
+    }
     private void CreateEnemiesEachType()
     {
         for(int j= 0;j< _spawn.listEnemies.Count;j++)
         {
-            for (int i = 0; i < amountEnemiesEachTypeInEachFight; i++)
+            for (int i = 0; i < _waves.MaxAmountEachEnemyType(j + 1); i++)
             {
                 GameObject enemy = Instantiate(_spawn.listEnemies[j]);
                 enemy.SetActive(false);
@@ -151,7 +132,6 @@ public class SpawnEnemies : MonoBehaviour
         {
             selectedChildren[i].transform.parent = spawnMixed.transform;
         }
-        Debug.Log($"Đã chọn {selectedChildren.Count} gameobject con.");
     }
     private List<GameObject> SelectRandomChildren(List<GameObject> parentObjects, int totalToSelect)
     {
@@ -199,5 +179,23 @@ public class SpawnEnemies : MonoBehaviour
             e.gameObject.name = _spawn.listEnemies[i].name;
             listParentGameObject.Add(e);
         }
+    }
+
+    private float CalculatorSeconds(float _minutes)
+    {
+        return _minutes * 60;
+    }
+    private Vector3 RandomPositionSpawn()
+    {
+        Vector3 spawnPointPosition = Vector3.zero;
+        bool IsVisible = true;
+        while (IsVisible)
+        {
+            spawnPointPosition = new Vector3(Random.Range(spawnMinWavePosition.position.x, spawnMaxWavePosition.position.x), 0, Random.Range(spawnMaxWavePosition.position.z, spawnMinWavePosition.position.z));
+            Vector3 screenSpawnPoint = mainCamera.WorldToViewportPoint(spawnPointPosition);
+            IsVisible = screenSpawnPoint.x > 0 && screenSpawnPoint.x < 1 && screenSpawnPoint.y > 0 && screenSpawnPoint.y < 1 && screenSpawnPoint.z > 0;
+            if (!IsVisible) break;
+        }
+        return spawnPointPosition;
     }
 }

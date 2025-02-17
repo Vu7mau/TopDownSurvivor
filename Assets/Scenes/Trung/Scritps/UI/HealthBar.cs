@@ -10,31 +10,42 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private float maxHealth;
     private float health;
     [SerializeField] private float timeEaseLerp = 0.05f;
-    private void Start()
+    private void OnDisable()
     {
-        healthEaseSlider.maxValue = maxHealth;
-        healthEaseSlider.value = maxHealth;
-        healthSlider.maxValue = maxHealth;
-        health = maxHealth;
-        healthSlider.value = health;
+        LoadHealthBar((int)maxHealth);
     }
     private void Update()
     {
-        if(healthSlider.value != health)
-        {
-            healthSlider.value = health;
-        }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(30);
-        }
-        if(healthEaseSlider.value != healthSlider.value)
-        {
-            healthEaseSlider.value = Mathf.Lerp(healthEaseSlider.value,health, timeEaseLerp);
-        }
+        if (healthSlider.value != health) healthSlider.value = health;
+        if (healthEaseSlider.value != healthSlider.value)
+            healthEaseSlider.value = Mathf.Lerp(healthEaseSlider.value, health, timeEaseLerp);
     }
-    private void TakeDamage(float damage)
+    public void LoadHealthBar(int currentHealth)
     {
-        health-=damage;
+        health = currentHealth;
+        UpdateHealthBar();
+    }
+    private void UpdateHealthBar()
+    {
+        if(health <= 0) { gameObject.SetActive(false); return; }
+        if (this.healthSlider == null || this.healthEaseSlider == null) { this.LoadSlider(); }
+    }
+    private void SetUpValueForSliders()
+    {
+        if (this.healthSlider == null || this.healthEaseSlider == null) { this.LoadSlider(); }
+        this.healthEaseSlider.maxValue = health;
+        this.healthSlider.maxValue = health;
+        this.healthSlider.value = health;
+    }
+    public void LoadMaxHealth(int _maxHealth)
+    {
+        this.maxHealth = _maxHealth;
+        this.health = maxHealth;
+        SetUpValueForSliders();
+    }
+    private void LoadSlider()
+    {
+        this.healthSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
+        this.healthEaseSlider = GameObject.Find("HealthEaseBar").GetComponent<Slider>();
     }
 }
