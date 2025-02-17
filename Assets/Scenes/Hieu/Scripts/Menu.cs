@@ -19,6 +19,15 @@ public class Menu : MonoBehaviour
             savemenu.skin1();
         }
     }
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            pn_home.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        return;
+    }
     public void ButtonStart()
     {
         SceneManager.LoadScene(1);        
@@ -36,12 +45,7 @@ public class Menu : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0;
-    }
-    public void pnhome()
-    {
-        pn_home.SetActive(true);
-        Time.timeScale = 0;
-    }
+    }    
     public void tieptuc()
     {
         Time.timeScale = 1.0f;

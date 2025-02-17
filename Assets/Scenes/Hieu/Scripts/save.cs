@@ -9,7 +9,7 @@ public class save : MonoBehaviour
     private GameObject Player;
     private void Awake()
     {
-        Player = GameObject.FindWithTag("Skin");
+        Player = GameObject.Find("Character_Bandit_Male_011");
     }
     private void Start()
     {

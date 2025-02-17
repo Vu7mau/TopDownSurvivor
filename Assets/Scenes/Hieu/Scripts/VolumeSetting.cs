@@ -1,27 +1,33 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class VolumeSetting : MonoBehaviour
 {
+
     [SerializeField] private AudioMixer MyMixer;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider SFX_Slider;
-    AudioManage _audioManager;
+    AudioManager _audioManager;
     
     private void Start()
     {
-        _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManage>();
-        if (PlayerPrefs.HasKey("_BackGroundVolume"))
+        _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
+        if (_audioManager != null)
         {
-            LoadVolume();
-        }
-        else
-        {
-            SetMusicVolume();
-            SetSFXVolume();
+            if (PlayerPrefs.HasKey("_BackGroundVolume"))
+            {
+                LoadVolume();
+            }
+            else
+            {
+                SetMusicVolume();
+                SetSFXVolume();
+            }
         }
     }
     public void SetMusicVolume()
@@ -41,10 +47,6 @@ public class VolumeSetting : MonoBehaviour
         musicSlider.value = PlayerPrefs.GetFloat("_BackGroundVolume");
         SFX_Slider.value = PlayerPrefs.GetFloat("SFX_Volume");
         SetMusicVolume();
-        SetSFXVolume();
-    }
-    public void musicClick()
-    {
-        _audioManager.PlaySFX(_audioManager.Click);
-    }
+        SetSFXVolume();       
+    }      
 }
