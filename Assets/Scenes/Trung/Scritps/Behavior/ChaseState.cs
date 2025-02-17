@@ -8,23 +8,47 @@ public class ChaseState : StateMachineBehaviour
     [SerializeField] private EnemySO enemySO;
     NavMeshAgent agent;
     Transform player;
+    //public int randomIndexAttack;
+    private float distance;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
-        player = /*GameObject.FindGameObjectWithTag("Player")*/CharacterCtrl.Instance.transform;
+        player =CharacterCtrl.Instance.transform;
         agent.speed = enemySO.ChaseSpeed;
         agent.stoppingDistance = enemySO.AttackRange;
+        //randomIndexAttack = 2;
+        //randomIndexAttack = Random.Range(0, 5);
+        //if (distance >= enemySO.AttackRange)
+        //{
+        //    randomIndexAttack = Random.Range(0, 5);
+        //}
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
-        float distance = Vector3.Distance(player.position, animator.transform.position);
-        //if (distance > 15)
-        //    animator.SetBool("isChasing", false);
-        if(distance < enemySO.AttackRange)
+        distance = Vector3.Distance(player.position, animator.transform.position);
+        //if (distance >= enemySO.AttackRange2 && randomIndexAttack == 2)
+        //{
+        //    animator.SetBool("isAttacking", true);
+        //    animator.SetBool("Attack2", true);
+        //    animator.SetBool("Attack1", false);
+        //    animator.SetBool("Attack3", false);
+        //    return;
+        //}
+        //if (distance >= enemySO.AttackRange3 && randomIndexAttack == 3)
+        //{
+        //    animator.SetBool("isAttacking", true);
+        //    animator.SetBool("Attack3", true);
+        //    animator.SetBool("Attack1", false);
+        //    animator.SetBool("Attack2", false);
+        //    return;
+        //}
+        if (distance < enemySO.AttackRange)
         {
             animator.SetBool("isAttacking", true);
+            //animator.SetBool("Attack1", true);
+            //animator.SetBool("Attack2", false);
+            //animator.SetBool("Attack3", false);
             return;
         }
         agent.SetDestination(player.position);

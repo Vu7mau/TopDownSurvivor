@@ -19,7 +19,7 @@ public class PowerUp : MonoBehaviour
         //Nếu va chạm với mặt đất thì nằm trên mặt đất
         if (((1 << other.gameObject.layer) & groundMask) != 0)
         {
-            rb.isKinematic = true;
+            gameObject.isStatic = true;
             Debug.Log("Đã va chạm với ground!");
         }
 
