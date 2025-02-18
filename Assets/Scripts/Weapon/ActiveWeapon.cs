@@ -15,6 +15,7 @@ public class ActiveWeapon : VuMonoBehaviour
     Transform animTransform;
     RayCastWeapon[] equipped_Weapons = new RayCastWeapon[2];
     int activateWeaponIndex;
+    bool isHolstered = false;
 
     protected override void Start()
     {
@@ -54,13 +55,13 @@ public class ActiveWeapon : VuMonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Alpha2))
         {
-            this.SetActivateWeapon(WeaponSlot.Secondary );
+            this.SetActivateWeapon(WeaponSlot.Secondary);
         }
     }
     protected virtual void ToggelActivateWeapon()
     {
         bool isHolster = this._rigController.GetBool("holster_weapon");
-        if(isHolster) StartCoroutine(this.HolsterWeapon(activateWeaponIndex));
+        if (isHolster) StartCoroutine(this.HolsterWeapon(activateWeaponIndex));
         else StartCoroutine(this.ActivateWeapon(activateWeaponIndex));
     }
     protected virtual RayCastWeapon GetWeapon(int index)
@@ -77,13 +78,11 @@ public class ActiveWeapon : VuMonoBehaviour
             Destroy(_weapon.gameObject);
         }
         _weapon = newWeapon;
-        //  if (_weapon == null) return;
 
         _weapon.transform.SetParent(weaponSlot[weaponSlotIndex], false);
         // _weapon.transform.localScale = _weapon.transform.localScale * 100;
         //_weapon.transform.localPosition = newWeapon.transform.position;
         //_weapon.transform.localRotation = newWeapon.transform.rotation;
-
 
         this.equipped_Weapons[weaponSlotIndex] = _weapon;
         this.activateWeaponIndex = weaponSlotIndex;
@@ -94,6 +93,11 @@ public class ActiveWeapon : VuMonoBehaviour
     {
         int holsterIndex = activateWeaponIndex;
         int activateIndex = (int)weaponSlot;
+
+        if (holsterIndex == activateIndex)
+        {
+            holsterIndex = -1;
+        }
         this.StartCoroutine(SwitchWeapon(holsterIndex, activateIndex));
     }
     IEnumerator SwitchWeapon(int holsterIndex, int activateIndex)
@@ -104,6 +108,7 @@ public class ActiveWeapon : VuMonoBehaviour
     }
     IEnumerator HolsterWeapon(int index)
     {
+        this.isHolstered = true;
         var weapon = this.GetWeapon(index);
         if (weapon)
         {
@@ -112,6 +117,7 @@ public class ActiveWeapon : VuMonoBehaviour
             {
                 yield return new WaitForEndOfFrame();
             } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            weapon.SetIsWeaponActivate(!this.isHolstered);
 
         }
 
@@ -123,12 +129,13 @@ public class ActiveWeapon : VuMonoBehaviour
         if (weapon)
         {
             this._rigController.SetBool("holster_weapon", false);
-            _rigController.Play("equip_" + weapon.weaponName);
+            _rigController.Play("equip_" + weapon.WeaponName);
             do
             {
                 yield return new WaitForEndOfFrame();
             } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
-
+            this.isHolstered = false;
+            weapon.SetIsWeaponActivate(!this.isHolstered);
         }
     }
     //[ContextMenu("Save WeaponPose")]

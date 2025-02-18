@@ -1,23 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class RayCastWeapon : ObjectShooting
 {
 
 
+    [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsShooting();
     [Space]
     [Header("RayCastWeapon")]
     [SerializeField] protected ParticleSystem _muzzelFlash;
-   // [SerializeField] protected Transform _rayCastOrigin;
-    [SerializeField] public Transform gunPoint;
-    [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsShooting();
+    [SerializeField] protected Transform _gunPoint;
+    [SerializeField] protected string _weaponName;
+    [SerializeField] protected bool _isWeaponActivate = false;
 
-    [SerializeField] public string weaponName;
-    //[SerializeField] Cinemachine.CinemachineImpulseSource source;
+
+    public Transform GunPoint => _gunPoint;
+    public string WeaponName => _weaponName;
+    public bool IsWeaponActivate => _isWeaponActivate;
+
 
     public ActiveWeapon.WeaponSlot weaponSlot;
-  
+
     protected override void Awake()
     {
         base.Awake();
@@ -27,7 +32,7 @@ public class RayCastWeapon : ObjectShooting
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        
+
     }
 
     protected override void Update()
@@ -38,22 +43,28 @@ public class RayCastWeapon : ObjectShooting
     {
         if (this._muzzelFlash == null) return;
 
-    
+
         this._muzzelFlash.Play();
     }
 
     protected override void Shoot()
     {
-        Transform newBullet = BulletSpawner.Instance.Spawn(BulletSpawner.bulletOne, this.gunPoint.position, Quaternion.LookRotation(this.gunPoint.forward));
+        Transform newBullet = BulletSpawner.Instance.Spawn(BulletSpawner.bulletOne, this.GunPoint.position, Quaternion.LookRotation(this.GunPoint.forward));
         if (newBullet == null) return;
         newBullet.gameObject.SetActive(true);
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.gunPoint);
-        this.ShooterEffect();    
-    
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.GunPoint);
+        this.ShooterEffect();
     }
 
     protected override bool IsShooting()
     {
-        return _isFiring;
+        if (this._isWeaponActivate)
+            return _isFiring;
+        else return false;
+    }
+
+    public virtual void SetIsWeaponActivate(bool isWeaponActivate)
+    {
+        _isWeaponActivate = isWeaponActivate;
     }
 }

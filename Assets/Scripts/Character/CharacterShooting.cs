@@ -59,7 +59,7 @@ public class CharacterShooting : VuMonoBehaviour
     {
         if (!this._weapon) this.LoadWeapon();
 
-        return  this._weapon.gunPoint;
+        return  this._weapon.GunPoint;
 
     }
 
