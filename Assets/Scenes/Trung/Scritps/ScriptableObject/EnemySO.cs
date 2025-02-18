@@ -15,12 +15,6 @@ public class EnemySO : ScriptableObject
     public float AttackRange;
     public float Damage;
 
-    public float AttackRange2;
-    public float DamageAtack2;
-
-    public float AttackRange3;
-    public float DamageAtack3;
-
 
     [Header("Health")]
     public float Health;

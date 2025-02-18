@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float lifeTime;
+    [SerializeField] protected float lifeTime;
+    [SerializeField] protected float damage;
     private void OnEnable()
     {
         Delete();

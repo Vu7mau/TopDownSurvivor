@@ -19,7 +19,7 @@ public class CreateHitEnemy : DamageSender
     protected override void Start()
     {
         base.Start();
-        _damage = (int)enemySO.Damage;
+        //_damage = (int)enemySO.Damage;
     }
     [SerializeField] private EnemySO enemySO;
     private void OnTriggerEnter(Collider other)
@@ -31,7 +31,7 @@ public class CreateHitEnemy : DamageSender
         CharacterDamageReceiver player = other.GetComponent<CharacterDamageReceiver>();
         if (player != null && !CanTakeDamage)
         {
-            Send(other.transform);
+            //Send(other.transform);
             dem++;
             Debug.Log($"Đã va chạm với Player {dem} lần");
             CanTakeDamage = true;
