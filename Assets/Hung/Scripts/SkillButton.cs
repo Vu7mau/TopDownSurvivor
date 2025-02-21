@@ -20,6 +20,10 @@ public class SkillButton : MonoBehaviour
         skillImage.sprite = SkillManager2.instance.skills[skillButtonId].skillSprite;
         skillNameText.text = SkillManager2.instance.skills[skillButtonId].skillName;
         skillDesText.text = SkillManager2.instance.skills[skillButtonId].skillDes;
+
+        PlayerPrefs.SetInt("ActiveSkillID", skillButtonId);
+        PlayerPrefs.Save();
     }
+
 
 }
