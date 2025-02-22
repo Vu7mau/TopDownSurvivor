@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -9,18 +10,20 @@ public class ActiveWeapon : VuMonoBehaviour
 
     //  [SerializeField] RayCastWeapon _weapon;
     [SerializeField] protected Transform[] weaponSlot;
-    [SerializeField] protected Animator _rigController;
+    [SerializeField] public Animator _rigController;
 
 
     Transform animTransform;
-    RayCastWeapon[] equipped_Weapons = new RayCastWeapon[2];
-    int activateWeaponIndex;
-    bool isHolstered = false;
+    [SerializeField] RayCastWeapon[] equipped_Weapons = new RayCastWeapon[2];
+    [SerializeField] int activateWeaponIndex;
+    [SerializeField] bool isHolstered = false;
 
+
+    public RayCastWeapon activeGun;
+   // public Animator RigController=>_rigController;
     protected override void Start()
     {
         base.Start();
-
         // _rigController = GetComponentInChildren<Animator>();
         if (_rigController == null) Debug.LogWarning("Null anim");
         this.LoadRayCastWeapon();
@@ -75,10 +78,14 @@ public class ActiveWeapon : VuMonoBehaviour
         var _weapon = this.GetWeapon(weaponSlotIndex);
         if (_weapon)
         {
-            Destroy(_weapon.gameObject);
+          //  Destroy(_weapon.gameObject);
+          return;
+        }
+        if (equipped_Weapons[activateWeaponIndex]!=null)
+        {
+            this.equipped_Weapons[activateWeaponIndex].SetIsWeaponActivate(false);
         }
         _weapon = newWeapon;
-
         _weapon.transform.SetParent(weaponSlot[weaponSlotIndex], false);
         // _weapon.transform.localScale = _weapon.transform.localScale * 100;
         //_weapon.transform.localPosition = newWeapon.transform.position;
@@ -86,14 +93,13 @@ public class ActiveWeapon : VuMonoBehaviour
 
         this.equipped_Weapons[weaponSlotIndex] = _weapon;
         this.activateWeaponIndex = weaponSlotIndex;
-
+        this.activeGun = this.equipped_Weapons[weaponSlotIndex];
         this.SetActivateWeapon(newWeapon.weaponSlot);
     }
     protected virtual void SetActivateWeapon(WeaponSlot weaponSlot)
     {
         int holsterIndex = activateWeaponIndex;
         int activateIndex = (int)weaponSlot;
-
         if (holsterIndex == activateIndex)
         {
             holsterIndex = -1;
@@ -113,11 +119,11 @@ public class ActiveWeapon : VuMonoBehaviour
         if (weapon)
         {
             this._rigController.SetBool("holster_weapon", true);
+            weapon.SetIsWeaponActivate(!this.isHolstered);
             do
             {
                 yield return new WaitForEndOfFrame();
             } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
-            weapon.SetIsWeaponActivate(!this.isHolstered);
 
         }
 

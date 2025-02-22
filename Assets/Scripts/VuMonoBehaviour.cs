@@ -25,8 +25,12 @@ public class VuMonoBehaviour : MonoBehaviour
     protected virtual void Reset()
     {
         this.LoadComponents();
+        this.ResetValue();
     }
-
+    protected virtual void ResetValue()
+    {
+        //For override
+    }
     protected virtual void OnDisable()
     {
         

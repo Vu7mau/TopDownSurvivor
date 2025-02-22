@@ -20,6 +20,9 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
       [SerializeField] protected CharacterShooting _characterShooting;
     public CharacterShooting CharacterShooting => _characterShooting;
   
+      [SerializeField] protected ActiveWeapon _activeWeapon;
+    public ActiveWeapon ActiveWeapon => _activeWeapon;
+  
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -27,6 +30,7 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         this.LoadCharacterMove();
         this.LoadCharacterAim();
         this.LoadCharacterShooting();
+        this.LoadActiveWeapon();
     }
  
     protected virtual void LoadInputManager()
@@ -57,6 +61,13 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
 
         this._characterShooting = this.transform.GetComponentInChildren<CharacterShooting>();
         Debug.Log(" Load CharacterShooting Success " + this._characterShooting.transform.name);
+    }  
+    protected virtual void LoadActiveWeapon()
+    {
+        if (this._activeWeapon != null) return;
+
+        this._activeWeapon = GetComponent<ActiveWeapon>();
+        Debug.Log(" Load CharacterShooting Success " + this._activeWeapon.transform.name);
     }
 }
 
