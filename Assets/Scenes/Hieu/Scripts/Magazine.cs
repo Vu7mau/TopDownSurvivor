@@ -2,45 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Magazine : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI AmmoText;   
-    private MagazineData magazineData;
-    private Coin coin;
-    int a = 0;
-    public void SetAmountAmmo(int magazine)
+    private TextMeshProUGUI AmmoText;
+    // private MagazineData magazineData;
+    protected int _currentAmmour;
+    protected int _maxAmmour;
+    private RawImage ImageMagazine;
+    public Texture[] ImageMagazines;
+    private void Awake()
     {
-        magazineData = new MagazineData(magazine);
+        ImageMagazine = GetComponent<RawImage>();
+        AmmoText = GetComponent<TextMeshProUGUI>();
     }
-    private void Start()
+    public void SetAmountAmmo(int current,int max)
     {
-        SetAmountAmmo(600);
-        coin = FindObjectOfType<Coin>();
-    }
-    public void fire(int amount)
-    {        
-        if (magazineData.UseAmmo(amount))
-        {
-            UpdateUI();
-        }
-        else
-        {
-            Debug.Log("Het dan");
-        }                
-    }
+        this._currentAmmour = current;
+        this._maxAmmour = max;
+    }     
     public void reload()
-    {
-        magazineData.reload();
+    {      
         UpdateUI();
     }
+    //private void LateUpdate()
+    //{
+    //    UpdateUI();
+    //}
     private void UpdateUI()
     {
-        AmmoText.text = $"{magazineData.CurrentAmmo}/{magazineData.MaxAmmo}";
-    }
-    private void Update()
+        AmmoText.text = $"{_currentAmmour}/{_maxAmmour}";
+    }  
+    public void ChangeImageGun(int number)
     {
-         fire(1);        
-        coin.amountCoin(a++);
+        for (int i = 0; i < ImageMagazines.Length; i++)
+        {
+            if (i == number)
+            {
+                ImageMagazine.texture = ImageMagazines[i];
+                break;
+            }
+        }
     }
 }

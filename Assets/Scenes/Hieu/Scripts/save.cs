@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using UnityEditor.Experimental.RestService;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class save : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class save : MonoBehaviour
     private string currentSkin;
     private static save Instance;
     private GameObject Player;
+    public Button[] buttons;
     private void Awake()
     {
         Player = GameObject.Find("Character_Bandit_Male_011");
@@ -18,11 +21,10 @@ public class save : MonoBehaviour
             CurrentMaterial = Player.GetComponent<SkinnedMeshRenderer>();
             if (PlayerPrefs.HasKey("sk"))
             {
-                string savedMaterial = PlayerPrefs.GetString("sk").Replace("(Instance)", "").Trim();
-                for (int i = 0; i < 2; i++)
+                string savedMaterial = PlayerPrefs.GetString("sk").Replace("(Instance)", "").Trim();                
+                for (int i = 0; i <skinPlayer.Length; i++)
                 {
-                    string MaterialName = skinPlayer[i].name.Trim();
-                    Debug.Log($"🔍 Comparing:\n- Saved: '{savedMaterial}'\n- Material: '{skinPlayer[i].name}'");
+                    string MaterialName = skinPlayer[i].name.Trim();                    
                     if (MaterialName == savedMaterial)
                     {
                         Debug.Log("MaterialCurrent");
@@ -32,32 +34,30 @@ public class save : MonoBehaviour
                 }
             }
         }
+        for (int i = 0; i < skinPlayer.Length; i++)
+        {
+            int index = i;
+            buttons[i].onClick.AddListener(() => changSkin(index));
+        }
     }
     private void SwapMaterial()
     {
-        if (CurrentMaterial != null)
-        {
-            Material Temp = skinPlayer[0];
-            skinPlayer[0] = skinPlayer[1];
-            skinPlayer[1] = Temp;
-        }
-
-        CurrentMaterial.material = skinPlayer[0];
+        //if (CurrentMaterial != null)
+        //{
+        //    Material Temp = skinPlayer[0];
+        //    skinPlayer[0] = skinPlayer[1];
+        //    skinPlayer[1] = Temp;
+        //}             
+        //CurrentMaterial.material = skinPlayer[0];
     }
-    public void skin1()
+    private void changSkin(int indext)
     {
-        SwapMaterial();
-        CurrentSkin(CurrentMaterial.material.name);
-        Debug.Log("Current ; " + CurrentMaterial.material.name);
+        CurrentMaterial.material = skinPlayer[indext];
+        SaveSkin(CurrentMaterial.material.name);
     }
-    public void skin2()
+    private void SaveSkin(string name)
     {
-        SwapMaterial();
-        CurrentSkin(CurrentMaterial.material.name);
-    }
-    private void CurrentSkin(string Current)
-    {
-        PlayerPrefs.SetString("sk", Current);
+        PlayerPrefs.SetString("sk",name);
         PlayerPrefs.Save();
     }
 }

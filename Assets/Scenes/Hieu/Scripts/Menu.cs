@@ -6,40 +6,32 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-    public GameObject pn_home;
-    private save savemenu;
-    private void Awake()
+    public GameObject pn_Setting;    
+    public GameObject pn_die;
+    public GameObject pn_win;  
+    public void Win()
     {
-        savemenu = FindObjectOfType<save>();
+        Time.timeScale = 0;
+        pn_win.SetActive(true);
     }
-    public void ChangeSkin()
+    public void die()
     {
-        if (savemenu != null)
-        {
-            savemenu.skin1();
-        }
+        Time.timeScale = 0;
+        pn_die.SetActive(true);
     }
+    
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            pn_home.SetActive(true);
+            pn_Setting.SetActive(true);
             Time.timeScale = 0f;
         }
         return;
-    }
-    public void ButtonStart()
-    {
-        SceneManager.LoadScene(1);        
-    }           
-    public void ButtonExit()
-    {
-        UnityEditor.EditorApplication.isPlaying = false;
-        //Application.Quit();
-    }
+    }                  
     public void vemenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
         Time.timeScale = 1.0f;
     }
     public void Pause()
@@ -49,12 +41,12 @@ public class Menu : MonoBehaviour
     public void tieptuc()
     {
         Time.timeScale = 1.0f;
-        pn_home.SetActive(false);
+        pn_Setting.SetActive(false);
     }
     public void choilai()
     {
         Time.timeScale = 1.0f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
+    
 }

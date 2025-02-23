@@ -11,14 +11,10 @@ public class VolumeSetting : MonoBehaviour
 
     [SerializeField] private AudioMixer MyMixer;
     [SerializeField] private Slider musicSlider;
-    [SerializeField] private Slider SFX_Slider;
-    AudioManager _audioManager;
+    [SerializeField] private Slider SFX_Slider;    
     
     private void Start()
-    {
-        _audioManager = GameObject.FindGameObjectWithTag("AudioManager").GetComponent<AudioManager>();
-        if (_audioManager != null)
-        {
+    {                 
             if (PlayerPrefs.HasKey("_BackGroundVolume"))
             {
                 LoadVolume();
@@ -27,8 +23,7 @@ public class VolumeSetting : MonoBehaviour
             {
                 SetMusicVolume();
                 SetSFXVolume();
-            }
-        }
+            }        
     }
     public void SetMusicVolume()
     {

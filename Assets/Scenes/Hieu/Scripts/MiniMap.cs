@@ -5,16 +5,14 @@ using UnityEngine;
 public class MiniMap : MonoBehaviour
 {
     private Transform Player;
-    [SerializeField] private Transform MiniIconPlayer;
-    [SerializeField] private Transform MiniIconEnemy;
-    private GameObject[] Enemy;
+    private Transform MiniIconPlayer;        
     private void Awake()
     {
+        MiniIconPlayer = GameObject.Find("MiniIconPlayer").transform;
         Player = GameObject.Find("Character").transform;
     }
     private void LateUpdate()
-    {
-        Enemy = GameObject.FindGameObjectsWithTag("Enemy");
+    {        
         MiniIconPlayer.position = new Vector3(Player.position.x, 20, Player.position.z);
         transform.position = new Vector3(Player.position.x, transform.position.y, Player.position.z);
     }
