@@ -363,7 +363,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5401307332465317591}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -502,7 +502,7 @@ GameObject:
   - component: {fileID: 6067077060560142266}
   - component: {fileID: 6892014029742870928}
   - component: {fileID: 4201272073104157497}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DragonNightmare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -589,7 +589,7 @@ MonoBehaviour:
   enemySO: {fileID: 11400000, guid: 0a9c6c47fe43679429e51c64292dd4df, type: 2}
   _canTakeDamage: 1
   _healthBar: {fileID: 706778268754126146}
-  _characterGetDamage: {fileID: 1758733672126047474}
+  _bossHealthBar: {fileID: 0}
 --- !u!54 &232748470373552744
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -614,7 +614,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!65 &8513385119481013588
@@ -636,8 +636,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.328964, y: 10.373938, z: 12.292356}
-  m_Center: {x: -0.036087036, y: 5.1769695, z: -0.42882383}
+  m_Size: {x: 9.424591, y: 23.538143, z: 9.149189}
+  m_Center: {x: 0.021209717, y: 11.759072, z: -0.09795189}
 --- !u!114 &6067077060560142266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1232,7 +1232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5436191501469655164}
   - component: {fileID: 3156819552465686599}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: NightMareDragon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

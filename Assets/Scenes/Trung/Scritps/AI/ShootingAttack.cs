@@ -9,13 +9,11 @@ public class ShootingAttack : MonoBehaviour
     GameObject projectileObj;
     private void Start()
     {
-        projectileObj = Instantiate(projectilePrefab);
-        projectileObj.transform.parent = transform;
-        projectileObj.gameObject.SetActive(false);
+        projectilePrefab.SetActive(false);
     }
     public void ShootAttack()
     {
-        projectileObj.gameObject.transform.position = appearPosition.position;
-        projectileObj.SetActive(true);
+        projectilePrefab.gameObject.transform.position = appearPosition.position;
+        projectilePrefab.SetActive(true);
     }
 }

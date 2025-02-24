@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,8 +11,7 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
     [SerializeField] private Transform position;
     [SerializeField] private SpawnEnemiesSO _waves;
 
-    [SerializeField] private Transform spawnMinWavePosition;
-    [SerializeField] private Transform spawnMaxWavePosition;
+    [SerializeField] private List<Transform> spawnPositionWaveEnemiesList;
     [SerializeField] private Camera mainCamera;
 
 
@@ -25,7 +25,7 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
     private int enemiesPerWave;
 
     private List<GameObject> listParentGameObject = new List<GameObject>();
-    private List<GameObject> selectedChildren = new List<GameObject>();
+    [SerializeField] private List<GameObject> selectedChildren;
     protected override void Awake()
     {
         base.Awake();
@@ -43,7 +43,7 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
 
     IEnumerator SpawnWave()
     {
-        while (waveNumber < 11)
+        while (waveNumber <= _waves.listWaves.Count)
         {
             if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
             {
@@ -72,7 +72,7 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
 
     public void EnemyDefeated(int amount)
     {
-        enemiesLeft-= amount;
+        enemiesLeft -= amount;
         if(enemiesLeft < 0) enemiesLeft = 0;
         UIManager.Instance.UpdateWaveUI(waveNumber, enemiesLeft);
     }
@@ -81,28 +81,43 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
         if(wave < 1) { yield return null; }
         for(int dem = 0; dem < amountEachWave; dem++)
         {
-            Vector3 spawnPosition = RandomPositionSpawn();
+            int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
+            Debug.Log("Spawn Position: "+randomPositionSpawnWave);
+            Vector3 spawnPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
             GameObject enemy = transform.GetChild(_waves.listWaves[_waves.WaveElement(wave)].EnemyTypeIndex - 1).gameObject.transform.GetChild(dem).gameObject;
             enemy.SetActive(true);
             enemy.transform.position = spawnPosition;
+            yield return new WaitForSeconds(2f);
         }
     }
     private void SpawnRandomEnemy(int wave, int amountEachWave)
     {
-        enemiesPerWave = _waves.listWaves[_waves.WaveElement(wave)].Amount;
+        enemiesPerWave = amountEachWave;
         enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
+        SpawnRandomEnemies(amountEachWave);
         UIManager.Instance.UpdateWaveUI(wave, enemiesLeft);
-        SpawnRandomEnemies();
-        GameObject spawnMixed = GameObject.Find("SpawnEnemiesMixed");
-        int dem = 0;
-        while (dem < amountEachWave)
-        {
-            GameObject enemy = spawnMixed.transform.GetChild(dem).gameObject;
-            enemy.SetActive(true);
-            enemy.transform.position = RandomPositionSpawn();
-            dem++;
-        }
+        StartCoroutine(SpawnRandomEnemiesRoutine());
+        //GameObject spawnMixed = GameObject.Find("SpawnEnemiesMixed");
+        
+        
         Debug.Log("Đây là đợt quái trộn!");
+    }
+    private IEnumerator SpawnRandomEnemiesRoutine()
+    {
+        yield return new WaitForSeconds(2f);
+        listEnemiesRandom = listEnemiesRandom.Where(e => e != null).ToList();
+        int dem = 0;
+        while (dem < listEnemiesRandom.Count)
+        {
+            GameObject enemy = listEnemiesRandom[dem];
+            if (enemy != null)
+            {
+                enemy.SetActive(true);
+                enemy.transform.position = RandomPositionSpawn();
+            }
+            dem++;
+            listEnemiesRandom = listEnemiesRandom.Where(e => e != null).ToList();
+        }
     }
 
     private int CalculatorEnemiesLeft(int _amount)
@@ -121,17 +136,15 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
             }
         }
     }
-
-
     //Trộn quái
-    private void SpawnRandomEnemies()
+    private List<GameObject> listEnemiesRandom = new List<GameObject>();
+    private void SpawnRandomEnemies(int _amountEnemiesMixed)
     {
-        selectedChildren = SelectRandomChildren(listParentGameObject, amountEnemiesMixed);
-        GameObject spawnMixed = GameObject.Find("SpawnEnemiesMixed");
-        for(int i = 0;i < selectedChildren.Count;i++)
-        {
-            selectedChildren[i].transform.parent = spawnMixed.transform;
-        }
+        listEnemiesRandom.Clear();
+        selectedChildren.Clear();
+        selectedChildren = SelectRandomChildren(listParentGameObject, _amountEnemiesMixed);
+        listEnemiesRandom = selectedChildren;
+        //GameObject spawnMixed = GameObject.Find("SpawnEnemiesMixed");
     }
     private List<GameObject> SelectRandomChildren(List<GameObject> parentObjects, int totalToSelect)
     {
@@ -150,11 +163,8 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
                 allChildren.AddRange(children);
             }
         }
-
-        // Đảm bảo không chọn nhiều hơn tổng số con có sẵn
         totalToSelect = Mathf.Min(totalToSelect, allChildren.Count);
 
-        // Trộn danh sách và lấy ngẫu nhiên 30 gameobject con
         List<GameObject> selectedChildren = new List<GameObject>();
         while (selectedChildren.Count < totalToSelect)
         {
@@ -191,11 +201,15 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
         bool IsVisible = true;
         while (IsVisible)
         {
-            spawnPointPosition = new Vector3(Random.Range(spawnMinWavePosition.position.x, spawnMaxWavePosition.position.x), 0, Random.Range(spawnMaxWavePosition.position.z, spawnMinWavePosition.position.z));
+            int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
+            spawnPointPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
             Vector3 screenSpawnPoint = mainCamera.WorldToViewportPoint(spawnPointPosition);
             IsVisible = screenSpawnPoint.x > 0 && screenSpawnPoint.x < 1 && screenSpawnPoint.y > 0 && screenSpawnPoint.y < 1 && screenSpawnPoint.z > 0;
-            if (!IsVisible) break;
+            if (!IsVisible)
+            {
+                return spawnPointPosition;
+            }
         }
-        return spawnPointPosition;
+        return transform.position;
     }
 }

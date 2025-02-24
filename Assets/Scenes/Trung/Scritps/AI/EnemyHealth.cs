@@ -36,7 +36,7 @@ public class EnemyHealth : EnemyDamageReceiver
         rb.isKinematic = false;
         _healthBar?.gameObject.SetActive(true);
         _bossHealthBar?.gameObject.SetActive(true);
-        gameObject.GetComponent<BoxCollider>().enabled = true;
+        gameObject.GetComponent<Collider>().enabled = true;
     }
     //protected override void OnEnable()
     //{
@@ -56,7 +56,7 @@ public class EnemyHealth : EnemyDamageReceiver
     protected override void OnDead()
     {
         base.OnDead();
-        gameObject.GetComponent<BoxCollider>().enabled = false;
+        gameObject.GetComponent<Collider>().enabled = false;
         rb.isKinematic= true;
         _canTakeDamage = false;
         hasState = _animator.HasState(0, Animator.StringToHash("die"));
@@ -93,7 +93,7 @@ public class EnemyHealth : EnemyDamageReceiver
     }
     public void DeleteEnemyWhileHpEqual0()
     {
-        if (!GetComponent<BoxCollider>().enabled && gameObject.activeInHierarchy)
+        if (!GetComponent<Collider>().enabled && gameObject.activeInHierarchy)
         {
             DeleteEnemyRoutine();
             RewardPlayerAfterEnemyDead();

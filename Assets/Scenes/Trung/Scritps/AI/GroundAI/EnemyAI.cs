@@ -5,20 +5,28 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    private NavMeshAgent agent;
-    private Transform _player;
-    [SerializeField] private EnemySO enemySO;
-    private void Awake()
+    protected NavMeshAgent agent;
+    protected Transform _player;
+    [SerializeField] protected EnemySO enemySO;
+    [SerializeField] protected float _timeDelete;
+    private BoxCollider _collider;
+    protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         _player = FindAnyObjectByType<CharacterCtrl>().transform;
+        _collider = GetComponent<BoxCollider>();
     }
-    private void Start()
+    private void OnEnable()
+    {
+        _collider.enabled = true;
+    }
+    protected virtual void ChasePlayer()
     {
         agent.speed = enemySO.ChaseSpeed;
-    }
-    private void Update()
-    {
         agent.SetDestination(_player.position);
+    }
+    public void OnDelete()
+    {
+        gameObject.SetActive(false);
     }
 }
