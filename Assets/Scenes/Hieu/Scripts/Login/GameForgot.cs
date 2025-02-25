@@ -10,8 +10,7 @@ public class GameForgot : MonoBehaviour
 {
     public TMP_InputField inputemail;   
     private string email;
-    public GameObject pn_OTP;
-    public GameObject pn_Login;
+    public GameObject pn_OTP;    
     public void OnclickForgot()
     {
         StartCoroutine(Forgotpassword());

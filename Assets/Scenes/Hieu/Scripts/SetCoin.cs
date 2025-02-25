@@ -13,7 +13,7 @@ public class SetCoin : MonoBehaviour
     private void Start()
     {
         currentcoint = 0;
-        Text_coin = GetComponent<TextMeshProUGUI>();
+        Text_coin = GetComponent<TextMeshProUGUI>();        
     }
     public void setCoin(int amount)
     {                
@@ -22,7 +22,7 @@ public class SetCoin : MonoBehaviour
     }    
     public void savecoin()
     {                
-        PlayerPrefs.SetInt("LastGameCoin", currentcoint);
+        PlayerPrefs.SetInt("LastGameCoin", currentcoint);        
         PlayerPrefs.Save();        
     }
 }

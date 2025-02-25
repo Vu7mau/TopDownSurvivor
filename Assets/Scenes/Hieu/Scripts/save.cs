@@ -39,17 +39,7 @@ public class save : MonoBehaviour
             int index = i;
             buttons[i].onClick.AddListener(() => changSkin(index));
         }
-    }
-    private void SwapMaterial()
-    {
-        //if (CurrentMaterial != null)
-        //{
-        //    Material Temp = skinPlayer[0];
-        //    skinPlayer[0] = skinPlayer[1];
-        //    skinPlayer[1] = Temp;
-        //}             
-        //CurrentMaterial.material = skinPlayer[0];
-    }
+    }    
     private void changSkin(int indext)
     {
         CurrentMaterial.material = skinPlayer[indext];

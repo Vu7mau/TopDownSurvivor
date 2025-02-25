@@ -24,12 +24,12 @@ public class Notification : MonoBehaviour
         if (notificationText != null)
         {
             notificationText.text = message;
-
+            StartCoroutine(destroyText());
         }
     }
     IEnumerator destroyText()
     {
-        yield return new WaitForSeconds(1);
-        notificationText.text = "";
+        yield return new WaitForSeconds(2.5f);
+        notificationText.text = string.Empty;
     }
 }

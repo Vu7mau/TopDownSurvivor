@@ -11,8 +11,7 @@ public class GameRegister : MonoBehaviour
 {
     public TMP_InputField emailInput;
     public TMP_InputField nameInput;
-    public TMP_InputField passwordInput;    
-    public GameObject pn_Login;
+    public TMP_InputField passwordInput;        
     public void OnclickButton()
     {
         StartCoroutine(Register());
@@ -51,9 +50,7 @@ public class GameRegister : MonoBehaviour
                 var data = response.data;
                 if (response.isSuccess==true)
                 {
-                    Notification.noti_instance.Shownotification(response.notification);
-                    pn_Login.SetActive(true);
-                    gameObject.SetActive(false);
+                    Notification.noti_instance.Shownotification(response.notification);                    
                 }
                 else
                 {

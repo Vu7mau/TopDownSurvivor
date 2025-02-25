@@ -85,15 +85,16 @@ public class HightScoreTable : MonoBehaviour
         if (existingEntry != null)
         {
             existingEntry.score += score;
+            PlayerPrefs.SetInt("SaveCoin", existingEntry.score);
         }
         else
         {
             HightScoreEntry hightScoreEntry = new HightScoreEntry { score = score, name = name };
-            highscores.hightScoreEntryList.Add(hightScoreEntry);
+            highscores.hightScoreEntryList.Add(hightScoreEntry);            
         }
         //add new entry to highscore              
         // save upload
-        string json = JsonUtility.ToJson(highscores);
+        string json = JsonUtility.ToJson(highscores);        
         PlayerPrefs.SetString("highscoreTable", json);
         PlayerPrefs.Save();
     }

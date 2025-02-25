@@ -21,7 +21,7 @@ public class SkillCard : MonoBehaviour
         TilteText.text = $"{skillTree.SkillLevels[id]} / {skillTree.SkillCaps[id]} \n{skillTree.SkillNames[id]}";
         DescriptionText.text = $"{skillTree.SkillDescriptions[id]}\nCost{skillTree.Skillpoint}/1 SP";
 
-        GetComponent<Image>().color = skillTree.SkillLevels[id] >= skillTree.SkillCaps[id] ? Color.yellow : skillTree.Skillpoint > 0 ? Color.green : Color.white ;
+        GetComponent<RawImage>().color = skillTree.SkillLevels[id] >= skillTree.SkillCaps[id] ? Color.yellow : skillTree.Skillpoint > 0 ? Color.green : Color.white ;
 
         foreach (var connectedSkill in ConnectedSkills)
         {
