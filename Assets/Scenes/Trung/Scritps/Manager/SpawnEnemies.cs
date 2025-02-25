@@ -8,7 +8,6 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
 {
     [SerializeField] private GameObject obj;
     [SerializeField] private EnemiesManageSO _spawn;
-    [SerializeField] private Transform position;
     [SerializeField] private SpawnEnemiesSO _waves;
 
     [SerializeField] private List<Transform> spawnPositionWaveEnemiesList;
@@ -83,11 +82,10 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
         for(int dem = 0; dem < amountEachWave; dem++)
         {
             int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
-            Debug.Log("Spawn Position: "+randomPositionSpawnWave);
             Vector3 spawnPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
             GameObject enemy = transform.GetChild(_waves.listWaves[_waves.WaveElement(wave)].EnemyTypeIndex - 1).gameObject.transform.GetChild(dem).gameObject;
-            enemy.SetActive(true);
             enemy.transform.position = spawnPosition;
+            enemy.SetActive(true);
             yield return new WaitForSeconds(2f);
         }
     }
@@ -113,8 +111,10 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
             GameObject enemy = listEnemiesRandom[dem];
             if (enemy != null)
             {
+                int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
+                Vector3 spawnPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
+                enemy.transform.position = spawnPosition;
                 enemy.SetActive(true);
-                enemy.transform.position = RandomPositionSpawn();
             }
             dem++;
             listEnemiesRandom = listEnemiesRandom.Where(e => e != null).ToList();
@@ -195,22 +195,5 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
     private float CalculatorSeconds(float _minutes)
     {
         return _minutes * 60;
-    }
-    private Vector3 RandomPositionSpawn()
-    {
-        Vector3 spawnPointPosition = Vector3.zero;
-        bool IsVisible = true;
-        while (IsVisible)
-        {
-            int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
-            spawnPointPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
-            Vector3 screenSpawnPoint = mainCamera.WorldToViewportPoint(spawnPointPosition);
-            IsVisible = screenSpawnPoint.x > 0 && screenSpawnPoint.x < 1 && screenSpawnPoint.y > 0 && screenSpawnPoint.y < 1 && screenSpawnPoint.z > 0;
-            if (!IsVisible)
-            {
-                return spawnPointPosition;
-            }
-        }
-        return transform.position;
     }
 }
