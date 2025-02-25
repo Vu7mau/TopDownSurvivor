@@ -6,39 +6,62 @@ using UnityEngine.UI;
 
 public class HpBar : MonoBehaviour
 {
-    private Slider SLider_Hpbar;
-    private Coroutine currentCoroutine; 
+    public static HpBar Instance;
+ [SerializeField]  private Slider SLider_Hpbar;
+    private Coroutine currentCoroutine;
     private Menu Menu;
+    bool isDead=false;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+
+
+        SLider_Hpbar = GetComponent<Slider>();
+    }
     private void Start()
     {
-        SLider_Hpbar = GetComponent<Slider>();
+      
         Menu = FindObjectOfType<Menu>();
+
     }
-    public void SetHealth(float hp)
-    {        
-        if (currentCoroutine != null )
+    protected virtual void LateUpdate()
+    {
+        if (0 >= SLider_Hpbar.value&&!isDead)
         {
-            StopCoroutine( currentCoroutine );
+            Menu.die();
+            isDead = true;
+        }
+    }
+    public void SetHealth(float deductHp, float currentHp)
+    {
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
 
         }
-        currentCoroutine = StartCoroutine(smoothHealth(hp));
-    }       
-    private IEnumerator smoothHealth(float targetHp)
+        float tarGetHp=currentHp-deductHp;
+        currentCoroutine = StartCoroutine(smoothHealth(tarGetHp, currentHp));
+    }
+    private IEnumerator smoothHealth(float deductHp, float currentHp)
     {
-        float duration = 0.5f; 
-        float elapsed = 0f; 
-        float startHp = SLider_Hpbar.value; 
+        float duration = 0.5f;
+        float elapsed = 0f;
+        float startHp = currentHp;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            SLider_Hpbar.value = Mathf.Lerp(startHp, targetHp, elapsed / duration); 
+            SLider_Hpbar.value = Mathf.Lerp(startHp, deductHp, elapsed / duration);
             yield return null;
         }
-        SLider_Hpbar.value = targetHp; 
-        if (targetHp <= 0)
-        {
-            Menu.die();
-        }
-    }    
+        //SLider_Hpbar.value = deductHp; 
+        
+    }
+    public virtual void SetHealthMaxBarVolume(float maxVolume)
+    {
+        SLider_Hpbar.maxValue = maxVolume;
+        SLider_Hpbar.value = maxVolume;
+    }
 }

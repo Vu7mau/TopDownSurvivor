@@ -31,8 +31,9 @@ public class RifleShooter : RayCastWeapon
     {
         return BulletSpawner.bulletOne;
     }
-    private void LateUpdate()
+    protected override void Update()
     {
+        base.Update();
         this.ShootLaser();
     }
     protected override void ShootLaser()

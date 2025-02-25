@@ -4,10 +4,50 @@ using UnityEngine;
 
 public class CharacterDamageReceiver : DamageReceiver
 {
+    [SerializeField] protected CharacterCtrl characterCtrl;
+    protected override void Start()
+    {
+        base.Start();
+        this.SetMaxHealth();
+        HpBar.Instance.SetHealthMaxBarVolume(this._hpMax);
+    
+    }
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadCharacterCtrl();
+    }
+
+    protected virtual void LoadCharacterCtrl()
+    {
+        if (characterCtrl != null) return;
+
+        this.characterCtrl = GetComponent<CharacterCtrl>();
+        Debug.Log("LoadCharacterCtrl");
+    }
+    protected override void HurtEffect()
+    {
+        CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(5f, .1f);
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.maleHit, this.transform);
+        characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsHit");
+    }
     protected override void OnDead()
     {
         Debug.Log("PLayer Death");
     }
+    protected virtual void SetMaxHealth()
+    {
+        this._hpMax = this.characterCtrl.GetHealthFromStats();
+        this.Reborn();
+    }
+    public override void Deduct(int Deduct)
+    {
+        base.Deduct(Deduct);
+        HpBar.Instance.SetHealth((float)Deduct,(float)_hp);
+       
+    }
+    public int GetMaxHealth()
+    { return this._hpMax; 
+    }
 
-    
 }

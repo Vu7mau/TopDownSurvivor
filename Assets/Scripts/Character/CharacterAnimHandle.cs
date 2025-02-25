@@ -7,6 +7,7 @@ public class CharacterAnimHandle : CharacterCtrlAbstract
     [Space]
     [Header("Character AnimHandle")]
     [SerializeField] protected Animator _animator;
+    public Animator ChracterAnimator=>_animator;
 
     protected override void LoadComponents()
     {

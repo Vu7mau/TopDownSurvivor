@@ -51,6 +51,7 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
             }
             if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.Mixed)
             {
+
                 amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].Amount;
                 SpawnRandomEnemy(waveNumber, amountEnemiesMixed);
             }

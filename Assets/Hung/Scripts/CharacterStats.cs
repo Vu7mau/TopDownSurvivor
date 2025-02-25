@@ -136,9 +136,10 @@ public class CharacterStats : MonoBehaviour
         levelUpUI.ShowSkillChoices();
     }
 
-    public void AttackEnemy()
+    public int AttackEnemy()
     {
         int damage = DamageCalculator.CalculateDamage(currentAtk, currentCritRate, currentCritDamage);
         Debug.Log($"Gây {damage} sát thương lên quái!");
+        return damage;
     }
 }

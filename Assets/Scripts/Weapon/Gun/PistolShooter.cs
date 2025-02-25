@@ -10,10 +10,10 @@ public class PistolShooter : RayCastWeapon
     //[Header("PistolShooter")]
 
   
-    private void LateUpdate()
+    protected override void Update()
     {
-
-      this.ShootLaser();
+        base.Update();
+        this.ShootLaser();
     }
     protected override void ShooterEffect()
     {
@@ -29,4 +29,6 @@ public class PistolShooter : RayCastWeapon
     {
         base.ShootLaser();
     }
+
+   
 }

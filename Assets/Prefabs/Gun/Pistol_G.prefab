@@ -10204,11 +10204,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isShooting: 0
+  _isReloadAmmour: 0
   _shootDelay: 0.3
   _shootTimer: 0
-  _MaxBulletCount: 6
+  _MaxBulletCount: 7
   _bulletsCount: 0
-  _reloadAmmoTime: 5
+  _reloadAmmoTime: 1.5
   _reloadAmmoTimer: 0
   _muzzelFlash: {fileID: 4734290738370032469}
   lineRenderer: {fileID: 7648551858583991975}
@@ -10216,6 +10217,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _gunPoint: {fileID: 869973567719323036}
+  _gunTexture: {fileID: 2800000, guid: 6de785751d44f9645b0ccdc5ad98547b, type: 3}
   _weaponName: pistol
   _isWeaponActivate: 0
   weaponSlot: 1

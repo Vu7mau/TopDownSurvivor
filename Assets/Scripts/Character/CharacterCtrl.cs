@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterCtrl : Singleton<CharacterCtrl>
 {
   
- 
+ public static CharacterCtrl Instance { get; private set; }
     [Header("Character Ctrl")]
     [SerializeField] protected InputManager _inputManager;
     public PlayerControls playerControls { get; private set; }
@@ -22,7 +22,20 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
   
       [SerializeField] protected ActiveWeapon _activeWeapon;
     public ActiveWeapon ActiveWeapon => _activeWeapon;
-  
+
+    [SerializeField] protected CharacterStats _characterStats;
+    public CharacterStats CharacterStats => _characterStats; 
+    [SerializeField] protected CharacterAnimHandle _characterAnimHandle;
+    public CharacterAnimHandle CharacterAnimHandle => _characterAnimHandle; 
+    [SerializeField] protected CharacterDamageReceiver _characterDamageReceiver;
+    public CharacterDamageReceiver CharacterDamageReceiver => _characterDamageReceiver;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        if(Instance==null)
+            Instance = this;
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -31,6 +44,9 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         this.LoadCharacterAim();
         this.LoadCharacterShooting();
         this.LoadActiveWeapon();
+        this.LoadCharacterStats();
+        this.LoadCharacterAnimHandle();
+        this.LoadCharacterDamageReceiver();
     }
  
     protected virtual void LoadInputManager()
@@ -69,6 +85,40 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         this._activeWeapon = GetComponent<ActiveWeapon>();
         Debug.Log(" Load CharacterShooting Success " + this._activeWeapon.transform.name);
     }
+
+    protected virtual void LoadCharacterStats()
+    {
+        if (this._characterStats != null) return;
+
+        this._characterStats = GameObject.FindObjectOfType<CharacterStats>();
+        Debug.Log("LoadCharacterStats success " + this._characterStats.transform.name);
+    } 
+    protected virtual void LoadCharacterAnimHandle()
+    {
+        if (this._characterAnimHandle != null) return;
+
+        this._characterAnimHandle = transform.GetComponentInChildren<CharacterAnimHandle>();
+        Debug.Log("LoadCharacterAnimHandle success " + this._characterStats.transform.name);
+    } 
+    protected virtual void LoadCharacterDamageReceiver()
+    {
+        if (this._characterDamageReceiver != null) return;
+
+        this._characterDamageReceiver = GetComponent<CharacterDamageReceiver>();
+        Debug.Log("LoadCharacterAnimHandle success " + this._characterDamageReceiver.transform.name);
+    }
+
+
+    public int GetHealthFromStats()
+    {
+        return this._characterStats.currentHP;
+    }
+
+    public int GetDamageFromStats()
+    {
+        return this._characterStats.AttackEnemy();
+    }
+   
 }
 
 

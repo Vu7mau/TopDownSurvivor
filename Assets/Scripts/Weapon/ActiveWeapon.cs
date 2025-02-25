@@ -18,7 +18,7 @@ public class ActiveWeapon : VuMonoBehaviour
     [SerializeField] int activateWeaponIndex;
     [SerializeField] bool isHolstered = false;
 
-
+    public bool IsHolstered=> isHolstered;
     public RayCastWeapon activeGun;
    // public Animator RigController=>_rigController;
     protected override void Start()
@@ -87,13 +87,10 @@ public class ActiveWeapon : VuMonoBehaviour
         }
         _weapon = newWeapon;
         _weapon.transform.SetParent(weaponSlot[weaponSlotIndex], false);
-        // _weapon.transform.localScale = _weapon.transform.localScale * 100;
-        //_weapon.transform.localPosition = newWeapon.transform.position;
-        //_weapon.transform.localRotation = newWeapon.transform.rotation;
 
         this.equipped_Weapons[weaponSlotIndex] = _weapon;
         this.activateWeaponIndex = weaponSlotIndex;
-        this.activeGun = this.equipped_Weapons[weaponSlotIndex];
+       
         this.SetActivateWeapon(newWeapon.weaponSlot);
     }
     protected virtual void SetActivateWeapon(WeaponSlot weaponSlot)
@@ -142,6 +139,7 @@ public class ActiveWeapon : VuMonoBehaviour
             } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
             this.isHolstered = false;
             weapon.SetIsWeaponActivate(!this.isHolstered);
+            this.activeGun = weapon;
         }
     }
     //[ContextMenu("Save WeaponPose")]

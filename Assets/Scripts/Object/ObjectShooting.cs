@@ -49,7 +49,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
 
     protected virtual bool IsReloadingAmmo()
     {
-        if (this._bulletsCount >=0) return false ;
+        if (this._bulletsCount >0) return false ;
 
       
         if (this._reloadAmmoTimer < this._reloadAmmoTime)

@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class DamageSender : VuMonoBehaviour
 {
-    [SerializeField] protected int _damage = 1;
+    [Space]
+    [Header("DamageSender")]
+    [SerializeField] protected int _basedDamage = 1;
 
-    // Update is called once per frame
-   
+ 
     public virtual void Send(Transform obj)
     {
+
         DamageReceiver damageReceiver = obj.GetComponentInChildren<DamageReceiver>();
+
         if (damageReceiver == null ) return;
         Debug.Log("Truyen damage!");
         this.Send(damageReceiver);
@@ -36,12 +39,16 @@ public class DamageSender : VuMonoBehaviour
     //}
     public virtual void Send(DamageReceiver damageReceiver)
     {
-        damageReceiver.Deduct(_damage);
+        damageReceiver.Deduct(_basedDamage);
       //  this.CreateImpactVFX();
         //this.DestroyObject();
     }
     protected virtual void DestroyObject()
     {
         Destroy(transform.parent.gameObject);
+    }
+    protected virtual void SetDamage(int damage)
+    {
+       this. _basedDamage = damage;
     }
 }

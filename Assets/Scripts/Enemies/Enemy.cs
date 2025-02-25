@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] protected DamageSender damage;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        damage=GetComponent<DamageSender>();
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (damage)
+            {
+                damage.Send(collision.transform);
+                Debug.Log("do");
+            }
+        }
     }
 }

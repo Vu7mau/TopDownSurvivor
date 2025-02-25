@@ -15,11 +15,12 @@ public class RayCastWeapon : ObjectShooting
     [SerializeField] protected LineRenderer lineRenderer;
     [SerializeField] protected LayerMask _enemyLayer;
     [SerializeField] protected Transform _gunPoint;
+    [SerializeField] protected Texture _gunTexture;
     [SerializeField] protected string _weaponName;
     [SerializeField] protected bool _isWeaponActivate = false;
 
     protected RaycastHit _targetEnemy;
-    bool isReload => IsReloadingAmmo();
+  //  bool isReload => IsReloadingAmmo();
 
     public Transform GunPoint => _gunPoint;
     public RaycastHit TargetEnemy => _targetEnemy;
@@ -42,6 +43,7 @@ public class RayCastWeapon : ObjectShooting
 
     protected override void Update()
     {
+        base.Update();
         CinemachineCtrl.Instance.CinemachineZoom.SetIsZoom(this.IsShooting());
     }
   
@@ -103,5 +105,18 @@ public class RayCastWeapon : ObjectShooting
     public virtual bool GetIsReloadingAmmo()
     {
         return _isReloadAmmour;
+    }
+    public virtual int GetCurrentAmmour()
+    {
+        return this._bulletsCount;
+    }
+    public virtual int GetMaxBullets()
+    {
+        return this._MaxBulletCount;
+    }
+    public virtual Texture GunTexture()
+    { 
+        if(_gunTexture == null) return null;
+        return _gunTexture;
     }
 }
