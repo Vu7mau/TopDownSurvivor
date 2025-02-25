@@ -13,7 +13,7 @@ public class EnemySO : ScriptableObject
 
     [Header("Attack")]
     public float AttackRange;
-    public float Damage;
+    public int Damage;
 
 
     [Header("Health")]

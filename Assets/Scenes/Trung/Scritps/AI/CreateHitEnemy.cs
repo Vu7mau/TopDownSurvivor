@@ -5,7 +5,8 @@ using UnityEngine;
 public class CreateHitEnemy : DamageSender
 {
     [SerializeField] private bool CanTakeDamage = false;
-    private int _damage;
+    [SerializeField] private EnemySO enemySO;
+    private int _damage1;
      int dem;
     protected override void OnEnable()
     {
@@ -20,10 +21,9 @@ public class CreateHitEnemy : DamageSender
     protected override void Start()
     {
         base.Start();
-        _damage = (int)enemySO.Damage;
-        this.SetDamage(this._damage);
+        _damage1 = enemySO.Damage;
+        this.SetDamage(_damage1);
     }
-    [SerializeField] private EnemySO enemySO;
     private void OnTriggerEnter(Collider other)
     {
 
