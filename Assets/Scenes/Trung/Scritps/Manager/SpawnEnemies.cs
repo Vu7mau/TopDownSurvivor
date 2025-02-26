@@ -4,14 +4,15 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpawnEnemies : Singleton<SpawnEnemies>
+public class SpawnEnemies :MonoBehaviour
 {
     [SerializeField] private GameObject obj;
     [SerializeField] private EnemiesManageSO _spawn;
+    [SerializeField] private EnemiesManageSO _spawnBosses;
     [SerializeField] private SpawnEnemiesSO _waves;
+    [SerializeField] private GameObject panelBossFight;
 
     [SerializeField] private List<Transform> spawnPositionWaveEnemiesList;
-    [SerializeField] private Camera mainCamera;
 
 
     private int amountEnemiesMixed;
@@ -24,22 +25,14 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
     private int enemiesPerWave;
 
     private List<GameObject> listParentGameObject = new List<GameObject>();
+    private List<GameObject> listParentBossesGameObject = new List<GameObject>();
     [SerializeField] private List<GameObject> selectedChildren;
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-    }
-    protected override void Start()
-    {
-        base.Start();
         UIManager.Instance.UpdateWaveUI(waveNumber,enemiesLeft);
-        CreateManageEnemiesParent();
-        CreateEnemiesEachType();
-        //SpawnRandomEnemies();
+        CreateAllEnemiesFirst();
         StartCoroutine(SpawnWave());
     }
-
     IEnumerator SpawnWave()
     {
         while (waveNumber <= _waves.listWaves.Count)
@@ -50,12 +43,16 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
             }
             if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.Mixed)
             {
-
                 amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].Amount;
                 SpawnRandomEnemy(waveNumber, amountEnemiesMixed);
             }
-            UIManager.Instance.UpdateTimeToNextWave(CalculatorSeconds(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave));
-            yield return new WaitForSeconds(CalculatorSeconds(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave));
+            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.BossFight)
+            {
+                amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].bossLists[0].Amount;
+                StartCoroutine(SpawnBosses(waveNumber, amountEnemiesMixed));
+            }
+            UIManager.Instance.UpdateTimeToNextWave(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave);
+            yield return new WaitForSeconds(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave);
             waveNumber++;
         }
     }
@@ -78,22 +75,51 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
     }
     private IEnumerator SpawnEnemy(int wave,int amountEachWave)
     {
-        if(wave < 1) { yield return null; }
+        if (wave < 1) { yield return null; }
         for(int dem = 0; dem < amountEachWave; dem++)
         {
             int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
             Vector3 spawnPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
             GameObject enemy = transform.GetChild(_waves.listWaves[_waves.WaveElement(wave)].EnemyTypeIndex - 1).gameObject.transform.GetChild(dem).gameObject;
-            enemy.transform.position = spawnPosition;
-            enemy.SetActive(true);
-            yield return new WaitForSeconds(2f);
+            if(enemy != null)
+            {
+                enemy.transform.position = spawnPosition;
+                enemy.SetActive(true);
+            }
         }
+    }
+    private static bool IsBossFight = false;
+    public static void StartFightBossRightNow(bool _isFight)
+    {
+        IsBossFight= _isFight;
+    }
+    private IEnumerator SpawnBosses(int wave, int amountEachWave)
+    {
+        Transform obj = GameObject.Find("SpawnBosses").transform;
+        if (wave < 1) { yield return null; }
+        enemiesPerWave = amountEachWave;
+        enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
+        UIManager.Instance.UpdateWaveUI(wave, enemiesLeft);
+        panelBossFight.SetActive(true);
+        yield return new WaitUntil(() => IsBossFight);
+        for (int dem = 0; dem < amountEachWave; dem++)
+        {
+            int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
+            Vector3 spawnPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
+            GameObject enemy = obj.GetChild(_waves.listWaves[_waves.WaveElement(wave)].bossLists[0].BossType - 1).gameObject.transform.GetChild(dem).gameObject;
+            if (enemy != null)
+            {
+                enemy.transform.position = spawnPosition;
+                enemy.SetActive(true);
+            }
+        }
+        IsBossFight = false;
     }
     private void SpawnRandomEnemy(int wave, int amountEachWave)
     {
+        SpawnRandomEnemies(amountEachWave);
         enemiesPerWave = amountEachWave;
         enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
-        SpawnRandomEnemies(amountEachWave);
         UIManager.Instance.UpdateWaveUI(wave, enemiesLeft);
         StartCoroutine(SpawnRandomEnemiesRoutine());
         //GameObject spawnMixed = GameObject.Find("SpawnEnemiesMixed");
@@ -134,6 +160,19 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
                 GameObject enemy = Instantiate(_spawn.listEnemies[j]);
                 enemy.SetActive(false);
                 enemy.transform.parent = gameObject.transform.GetChild(j);
+            }
+        }
+    }
+    private void CreateBossesEachType()
+    {
+        Transform obj = GameObject.Find("SpawnBosses").transform;
+        for (int j = 0; j < _spawnBosses.listEnemies.Count; j++)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                GameObject enemy = Instantiate(_spawnBosses.listEnemies[j]);
+                enemy.SetActive(false);
+                enemy.transform.parent = obj.GetChild(j);
             }
         }
     }
@@ -191,9 +230,28 @@ public class SpawnEnemies : Singleton<SpawnEnemies>
             listParentGameObject.Add(e);
         }
     }
+    //Tạo các GameObject cha lưu trữ các gameobject con (quái) theo từng loại
+    private void CreateManageBossesParent()
+    {
+        Transform bossesManagementObj = GameObject.FindGameObjectWithTag("BossesManager").transform;
+        for (int i = 0; i < _spawnBosses.listEnemies.Count; i++)
+        {
+            GameObject e = Instantiate(obj);
+            e.transform.parent = bossesManagementObj;
+            e.gameObject.name = _spawnBosses.listEnemies[i].name;
+            listParentBossesGameObject.Add(e);
+        }
+    }
 
     private float CalculatorSeconds(float _minutes)
     {
         return _minutes * 60;
+    }
+    private void CreateAllEnemiesFirst()
+    {
+        CreateManageEnemiesParent();
+        CreateEnemiesEachType();
+        CreateManageBossesParent();
+        CreateBossesEachType();
     }
 }

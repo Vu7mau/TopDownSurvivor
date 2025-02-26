@@ -51,4 +51,6 @@ public class Wave
 public struct Boss
 {
     public int BossType;
+    public int Amount;
 }
+

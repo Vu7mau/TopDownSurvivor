@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolingObjectList : Singleton<PoolingObjectList>
+public class PoolingObjectList : MonoBehaviour
 {
     [SerializeField] private GameObject obj;
     [SerializeField] private GameObject poolingList;
     [SerializeField] private float amount;
-    protected override void Awake()
+    public static PoolingObjectList instance;
+    private void Awake()
     {
-        base.Awake();
+        if(instance == null)
+        {
+            instance = this;
+        }
     }
-    protected override void Start()
+    private void Start()
     {
         CreateNewPooling();
     }
@@ -29,6 +33,13 @@ public class PoolingObjectList : Singleton<PoolingObjectList>
                     return _newObj;
                 }
             }
+        }
+        else
+        {
+            GameObject e = Instantiate(obj);
+            e.SetActive(false);
+            e.transform.parent = poolingList.transform;
+            return e;
         }
         return null;
     }

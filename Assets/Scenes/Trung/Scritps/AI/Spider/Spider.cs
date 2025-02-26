@@ -6,6 +6,21 @@ public class Spider : MonoBehaviour
 {
     [SerializeField] private PoolingObjectList pool;
     [SerializeField] private List<Transform> listPosition;
+    [SerializeField] private List<AudioClip> clipSpiderSFX;
+
+    private void Start()
+    {
+        AppearSFX();
+    }
+    private void AppearSFX()
+    {
+        AudioSource t = gameObject.AddComponent<AudioSource>();
+        t.clip = clipSpiderSFX[0];
+        t.playOnAwake = false;
+        t.loop = false;
+        t.Play();
+        t.volume = 2f;
+    }
     public void Attack2()
     {
         GameObject tinySpider = pool.GetPoolingObject();

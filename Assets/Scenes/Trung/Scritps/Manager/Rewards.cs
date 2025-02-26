@@ -13,11 +13,13 @@ public class Rewards : Singleton<Rewards>
     {
         for(int i = 0; i < amount; i++)
         {
+            Transform gems = CreateParentObj.instance.GetGem().transform;
             float x = Random.Range(enemy.position.x - 3f, enemy.position.x + 3f);
             float y = enemy.position.y + 5;
             float z = Random.Range(enemy.position.z - 3f, enemy.position.z + 3f);
             Vector3 position = new Vector3(x, y, z);
-            Instantiate(listPowerUp.listPowerUps[0], position, Quaternion.identity);
+            gems.position = position;
+            gems.gameObject.SetActive(true);
         }
     }
 }

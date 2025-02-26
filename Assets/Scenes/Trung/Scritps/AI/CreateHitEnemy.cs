@@ -6,7 +6,6 @@ public class CreateHitEnemy : DamageSender
 {
     [SerializeField] private bool CanTakeDamage = false;
     [SerializeField] private EnemySO enemySO;
-    private int _damage1;
      int dem;
     protected override void OnEnable()
     {
@@ -21,8 +20,11 @@ public class CreateHitEnemy : DamageSender
     protected override void Start()
     {
         base.Start();
-        _damage1 = enemySO.Damage;
-        this.SetDamage(_damage1);
+        if(enemySO != null)
+        {
+            _basedDamage = enemySO.Damage;
+        }
+        this.SetDamage(_basedDamage);
     }
     private void OnTriggerEnter(Collider other)
     {

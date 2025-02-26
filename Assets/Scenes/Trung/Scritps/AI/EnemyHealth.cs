@@ -13,8 +13,10 @@ public class EnemyHealth : EnemyDamageReceiver
     private bool hasState;
     private float _health;
     private Animator _animator;
+    private SpawnEnemies _spawnEnemies;
     [SerializeField] private HealthBar _healthBar;
     [SerializeField] private BossHealthBar _bossHealthBar;
+    [SerializeField] private bool EnemyIsDead = false;
     public float Health
     {
         get { return _health; }
@@ -25,29 +27,26 @@ public class EnemyHealth : EnemyDamageReceiver
         base.Awake();
         rb= GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+        _spawnEnemies =FindAnyObjectByType<SpawnEnemies>();
     }
     protected override void Start()
     {
+        base.Start();
+        base.Reborn();
+    }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        EnemyIsDead = false;
+        rb.isKinematic = false;
         this._hpMax = (int)enemySO.Health;
         _healthBar?.LoadMaxHealth(this._hpMax);
         _bossHealthBar?.SetUpBar(this._hpMax);
-        base.Start();
-        base.Reborn();
         rb.isKinematic = false;
         _healthBar?.gameObject.SetActive(true);
         _bossHealthBar?.gameObject.SetActive(true);
         gameObject.GetComponent<Collider>().enabled = true;
     }
-    //protected override void OnEnable()
-    //{
-    //    base.OnEnable();
-
-    //}
-    //protected override void OnDisable()
-    //{
-    //    base.OnDisable();
-
-    //}
     public void TakeDamage(int damage)
     {
         if (!_canTakeDamage) { return; }
@@ -63,7 +62,11 @@ public class EnemyHealth : EnemyDamageReceiver
         if (hasState)
             _animator.SetTrigger("die");
         //_animator.SetTrigger("die");
-        SpawnEnemies.Instance.EnemyDefeated(1);
+        if (!EnemyIsDead)
+        {
+            _spawnEnemies.EnemyDefeated(1);
+            EnemyIsDead=true;
+        }
     }
     public override void Deduct(int damage)
     {
