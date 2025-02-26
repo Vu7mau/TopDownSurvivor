@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterCtrl : Singleton<CharacterCtrl>
 {
   
- public static CharacterCtrl Instance { get; private set; }
+
     [Header("Character Ctrl")]
     [SerializeField] protected InputManager _inputManager;
     public PlayerControls playerControls { get; private set; }
@@ -28,18 +28,17 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     [SerializeField] protected CharacterAnimHandle _characterAnimHandle;
     public CharacterAnimHandle CharacterAnimHandle => _characterAnimHandle; 
     [SerializeField] protected CharacterDamageReceiver _characterDamageReceiver;
-    public CharacterDamageReceiver CharacterDamageReceiver => _characterDamageReceiver;
+    public CharacterDamageReceiver CharacterDamageReceiver => _characterDamageReceiver;  
+    [SerializeField] protected CharacterLeveUp _characterLeveUp;
+    public CharacterLeveUp CharacterLeveUp => _characterLeveUp;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        if(Instance==null)
-            Instance = this;
-    }
+
+
+
     protected override void LoadComponents()
     {
-        base.LoadComponents();
-       this.LoadInputManager();
+
+        this.LoadInputManager();
         this.LoadCharacterMove();
         this.LoadCharacterAim();
         this.LoadCharacterShooting();
@@ -47,6 +46,8 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         this.LoadCharacterStats();
         this.LoadCharacterAnimHandle();
         this.LoadCharacterDamageReceiver();
+        this.LoadCharacterLeveUp();
+       
     }
  
     protected virtual void LoadInputManager()
@@ -106,6 +107,13 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
 
         this._characterDamageReceiver = GetComponent<CharacterDamageReceiver>();
         Debug.Log("LoadCharacterAnimHandle success " + this._characterDamageReceiver.transform.name);
+    }
+    protected virtual void LoadCharacterLeveUp()
+    {
+        if (this._characterLeveUp != null) return;
+
+        this._characterLeveUp = GetComponentInChildren<CharacterLeveUp>();
+        Debug.Log("LoadCharacterAnimHandle success " + this._characterLeveUp.transform.name);
     }
 
 

@@ -34,28 +34,33 @@ public class HpBar : MonoBehaviour
             isDead = true;
         }
     }
-    public void SetHealth(float deductHp, float currentHp)
+    public void SetHealth(float deductHp, float currentHp,float newMaxValue)
     {
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
 
         }
-        float tarGetHp=currentHp-deductHp;
-        currentCoroutine = StartCoroutine(smoothHealth(tarGetHp, currentHp));
+        float tarGetHp = currentHp-deductHp;
+ 
+        currentCoroutine = StartCoroutine(smoothHealth(tarGetHp, currentHp, newMaxValue));
     }
-    private IEnumerator smoothHealth(float deductHp, float currentHp)
+    private IEnumerator smoothHealth(float targetHp, float currentHp,float newMaxValue)
     {
-        float duration = 0.5f;
+        float duration = 0.75f;
         float elapsed = 0f;
         float startHp = currentHp;
 
+       SLider_Hpbar.maxValue = newMaxValue;
         while (elapsed < duration)
         {
+            
             elapsed += Time.deltaTime;
-            SLider_Hpbar.value = Mathf.Lerp(startHp, deductHp, elapsed / duration);
+            float value = Mathf.Lerp(startHp, targetHp, elapsed / duration);
+            SLider_Hpbar.value = value / 1;
             yield return null;
         }
+
         //SLider_Hpbar.value = deductHp; 
         
     }

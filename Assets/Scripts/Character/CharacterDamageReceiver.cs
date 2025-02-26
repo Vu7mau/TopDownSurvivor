@@ -9,7 +9,7 @@ public class CharacterDamageReceiver : DamageReceiver
     {
         base.Start();
         this.SetMaxHealth();
-        HpBar.Instance.SetHealthMaxBarVolume(this._hpMax);
+      //  HpBar.Instance.SetHealthMaxBarVolume(this._hpMax);
     
     }
     protected override void LoadComponents()
@@ -42,12 +42,16 @@ public class CharacterDamageReceiver : DamageReceiver
     }
     public override void Deduct(int Deduct)
     {
+        HpBar.Instance.SetHealth((float)Deduct,(float)_hp,this._hpMax);
         base.Deduct(Deduct);
-        HpBar.Instance.SetHealth((float)Deduct,(float)_hp);
-       
+   
     }
-    public int GetMaxHealth()
-    { return this._hpMax; 
+    public override void Add(int add)
+    {
+        this._hpMax += add;
+        HpBar.Instance.SetHealth(-(float)add, (float)this._hp, this._hpMax);
+        base.Add(add);
+
     }
 
 }

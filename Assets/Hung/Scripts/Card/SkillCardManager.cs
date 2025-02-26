@@ -20,7 +20,7 @@ public class SkillCardManager : MonoBehaviour
 
         foreach (var skill in skillPool)
         {
-            if (CharacterStats.instance.GetSkillLevel(skill.skillName) < 4)
+            if (CharacterStats.Instance.GetSkillLevel(skill.skillName) < 4)
             {
                 availableSkills.Add(skill);
             }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStats : MonoBehaviour
+public class CharacterStats : Singleton<CharacterStats>
 {
-    public static CharacterStats instance;
+  
     public LevelUpUI levelUpUI;
 
 
@@ -31,28 +31,24 @@ public class CharacterStats : MonoBehaviour
 
     private Dictionary<string, int> skillLevels = new Dictionary<string, int>(); // Lưu level của từng skill
 
-    private void Awake()
-    {
-        instance = this;
-    }
-
-    private void Start()
+   
+    protected override void Start()
     {
         LoadPassiveSkillBonuses();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L)) // Nhấn L để lên level
-        {
-            LevelUpTest();
-            levelUpUI.ShowSkillChoices();
-        }
+        //if (Input.GetKeyDown(KeyCode.L)) // Nhấn L để lên level
+        //{
+        //    LevelUpTest();
+        //    levelUpUI.ShowSkillChoices();
+        //}
     }
 
     public void LoadPassiveSkillBonuses()
     {
-        currentHP = baseHP + PlayerPrefs.GetInt("BonusHP", 0);
+        currentHP =baseHP+ PlayerPrefs.GetInt("BonusHP", 0);
         currentAtk = baseAtk + PlayerPrefs.GetInt("BonusAtk", 0);
         currentDef = baseDef + PlayerPrefs.GetInt("BonusDef", 0);
         currentCritRate = baseCritRate + PlayerPrefs.GetFloat("BonusCritRate", 0);
@@ -95,6 +91,7 @@ public class CharacterStats : MonoBehaviour
                 break;
             case "BonusHp":
                 bonusFromSkillsHP += effectValue;
+                CharacterCtrl.Instance.CharacterDamageReceiver.Add(effectValue);
                 break;
             case "BonusCrit":
                 bonusFromSkillsCritRate += effectValue;
@@ -103,7 +100,7 @@ public class CharacterStats : MonoBehaviour
 
         // Cập nhật chỉ số dựa trên cả Passive Skill + Skill từ thẻ
         UpdateCharacterStats();
-
+    
         Debug.Log($"Skill {skill.skillName} Lv.{skillLevel} → New Stats: Def: {currentDef}, Atk: {currentAtk}, HP: {currentHP}, CritRate: {currentCritRate}%");
     }
     public void UpdateCharacterStats()
@@ -116,12 +113,14 @@ public class CharacterStats : MonoBehaviour
 
         // Cộng chỉ số từ Passive Skill + Skill thẻ
         currentHP = baseHP + bonusHP + bonusFromSkillsHP;
-        currentAtk = baseAtk + bonusAtk + bonusFromSkillsAtk;
+        currentAtk = bonusAtk + bonusFromSkillsAtk;
         currentDef = baseDef + bonusDef + bonusFromSkillsDef;
         currentCritRate = baseCritRate + bonusCritRate + bonusFromSkillsCritRate;
         currentCritDamage = baseCritDamage + bonusCritDamage;
 
         Debug.Log($"🔹 Cập nhật chỉ số: HP: {currentHP}, Atk: {currentAtk}, Def: {currentDef}, CritRate: {currentCritRate}%");
+
+        
     }
 
     public void ApplyBackupSkill()
@@ -142,4 +141,5 @@ public class CharacterStats : MonoBehaviour
         Debug.Log($"Gây {damage} sát thương lên quái!");
         return damage;
     }
+
 }

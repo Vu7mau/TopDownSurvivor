@@ -22,8 +22,6 @@ public abstract class DamageReceiver : VuMonoBehaviour
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        //this.LoadCollider();
-        this.Reborn();
     }
     //protected virtual void LoadCollider()
     //{
@@ -47,6 +45,11 @@ public abstract class DamageReceiver : VuMonoBehaviour
         if (this._hp > this._hpMax) this._hp = this._hpMax;
 
     }
+    public virtual void GetMaxHealth(int health)
+    {
+        this._hpMax = health;
+    }    
+
     public virtual void Deduct(int Deduct)
     {
         if(this._isDead) return;

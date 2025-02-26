@@ -37,7 +37,7 @@ public class LevelUpUI : MonoBehaviour
             else
             {
                 skillDescriptions[i].text = skillChoices[i].levelDescriptions[
-                    CharacterStats.instance.GetSkillLevel(skillChoices[i].skillName)
+                    CharacterStats.Instance.GetSkillLevel(skillChoices[i].skillName)
                 ];
             }
 
@@ -52,14 +52,14 @@ public class LevelUpUI : MonoBehaviour
     {
         if (skill == SkillCardManager.instance.backupSkill)
         {
-            CharacterStats.instance.ApplyBackupSkill();
+            CharacterStats.Instance.ApplyBackupSkill();
         }
         else
         {
-            CharacterStats.instance.ApplySkill(skill);
+            CharacterStats.Instance.ApplySkill(skill);
         }
 
-        CharacterStats.instance.UpdateCharacterStats();
+        CharacterStats.Instance.UpdateCharacterStats();
 
         levelUpPanel.SetActive(false);
     }
