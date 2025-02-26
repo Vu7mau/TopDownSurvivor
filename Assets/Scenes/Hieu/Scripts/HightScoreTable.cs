@@ -90,7 +90,8 @@ public class HightScoreTable : MonoBehaviour
         else
         {
             HightScoreEntry hightScoreEntry = new HightScoreEntry { score = score, name = name };
-            highscores.hightScoreEntryList.Add(hightScoreEntry);            
+            highscores.hightScoreEntryList.Add(hightScoreEntry);
+            PlayerPrefs.SetInt("SaveCoin", 0);
         }
         //add new entry to highscore              
         // save upload
