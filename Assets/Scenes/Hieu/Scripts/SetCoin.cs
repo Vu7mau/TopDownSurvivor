@@ -6,11 +6,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
 
-public class SetCoin : MonoBehaviour
+public class SetCoin : Singleton<SetCoin>
 {    
     private TextMeshProUGUI Text_coin;      
     private int currentcoint;
-    private void Start()
+    protected override  void Start()
     {
         currentcoint = 0;
         Text_coin = GetComponent<TextMeshProUGUI>();        

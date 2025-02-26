@@ -65,6 +65,9 @@ public class CharacterLeveUp : ObjectLeveUp
     protected override void ProcessLevelUp()
     {
         CharacterStats.Instance.levelUpUI.ShowSkillChoices();
+
         this._expSlider.value = 0;
+
+        Time.timeScale = 0;
     }
 }

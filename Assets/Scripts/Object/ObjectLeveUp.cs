@@ -30,7 +30,7 @@ public class ObjectLeveUp : VuMonoBehaviour
     {
         this._currentExp -= this._expToNextLevel;
         this._level++;
-        this._expToNextLevel *= 1.2f;
+        this._expToNextLevel *= 2f;
         this.ProcessLevelUp();
     }
 

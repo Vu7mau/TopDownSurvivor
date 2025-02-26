@@ -24,7 +24,7 @@ public class CreateHitEnemy : DamageSender
         {
             _basedDamage = enemySO.Damage;
         }
-        this.SetDamage(_basedDamage);
+      //  this.SetDamage(_basedDamage);
     }
     private void OnTriggerEnter(Collider other)
     {

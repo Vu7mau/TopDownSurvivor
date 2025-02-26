@@ -39,7 +39,7 @@ public class DamageSender : VuMonoBehaviour
     //}
     public virtual void Send(DamageReceiver damageReceiver)
     {
-        damageReceiver.Deduct(_basedDamage);
+        damageReceiver.Deduct(this.SetDamage());
       //  this.CreateImpactVFX();
         //this.DestroyObject();
     }
@@ -47,8 +47,9 @@ public class DamageSender : VuMonoBehaviour
     {
         Destroy(transform.parent.gameObject);
     }
-    protected virtual void SetDamage(int damage)
+    protected virtual int SetDamage()
     {
-       this. _basedDamage = damage;
+      return _basedDamage;
     }
+   
 }

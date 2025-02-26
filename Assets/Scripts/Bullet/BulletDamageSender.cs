@@ -19,7 +19,7 @@ public class BulletDamageSender : DamageSender
     {
         base.LoadComponents();
         this.LoadBulletCtrl();  
-        this.UpdateDamage();
+       // this.UpdateDamage();
        
     }
     
@@ -32,9 +32,14 @@ public class BulletDamageSender : DamageSender
         Debug.Log("LoadBulletCtrl success " + this._bulletCtrl.transform.name);
     }
 
-    protected virtual void UpdateDamage()
+    //protected virtual void UpdateDamage()
+    //{
+    //   int damage=this._basedDamage+this.DamageBonus;
+    //    this.SetDamage(damage);
+    //}
+    protected override int SetDamage()
     {
-       int damage=this._basedDamage+this.DamageBonus;
-        this.SetDamage(damage);
+        int damage = this._basedDamage + this.DamageBonus;
+        return damage;
     }
 }

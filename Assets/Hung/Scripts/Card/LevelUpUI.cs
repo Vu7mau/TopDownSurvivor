@@ -60,7 +60,7 @@ public class LevelUpUI : MonoBehaviour
         }
 
         CharacterStats.Instance.UpdateCharacterStats();
-
+        Time.timeScale = 1; 
         levelUpPanel.SetActive(false);
     }
 }
