@@ -12,7 +12,7 @@ public class TextImformation : MonoBehaviour
     {              
         nameCharacter.text ="NAME : "+PlayerPrefs.GetString("Name");
         idCharacter.text = "ID : "+PlayerPrefs.GetString("Id");
-        coinText.text = "Coin : " + PlayerPrefs.GetInt("SaveCoin").ToString();
+        coinText.text = "Coin : " + PlayerPrefs.GetInt("LastGameCoin").ToString();
     }    
 }
     

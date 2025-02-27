@@ -15,14 +15,19 @@ public class SetCoin : Singleton<SetCoin>
         currentcoint = 0;
         Text_coin = GetComponent<TextMeshProUGUI>();        
     }
-    public void setCoin(int amount)
+    public void SetCoinToUI(int amount)
     {                
         currentcoint += amount;
         Text_coin.text = "x " + currentcoint.ToString();
     }    
-    public void savecoin()
+    public void Savecoin()
     {                
         PlayerPrefs.SetInt("LastGameCoin", currentcoint);        
         PlayerPrefs.Save();        
+    }
+
+    protected override void OnDisable()
+    {
+        this.Savecoin();
     }
 }

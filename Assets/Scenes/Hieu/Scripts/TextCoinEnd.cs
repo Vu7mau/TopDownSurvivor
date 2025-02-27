@@ -11,7 +11,7 @@ public class TextCoinEnd : MonoBehaviour
     private void OnEnable()
     {
         TextCoin = GetComponent<TextMeshProUGUI>();         
-        SetCoin.savecoin();
+        SetCoin.Savecoin();
         TextCoin.text = PlayerPrefs.GetInt("LastGameCoin").ToString();
     }    
 }
