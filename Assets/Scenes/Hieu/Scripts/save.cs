@@ -8,12 +8,13 @@ public class save : MonoBehaviour
     public Material[] skinPlayer;        
     //private GameObject Player;
     public Button[] buttons;
+    private string name;
     private void Awake()
-    {
+    {                
         CurrentMaterial = GameObject.Find("Character_Bandit_Male_011").GetComponent<SkinnedMeshRenderer>();               
     }
     private void Start()
-    {
+    {        
         if (CurrentMaterial != null)
         {            
             if (PlayerPrefs.HasKey("sk"))

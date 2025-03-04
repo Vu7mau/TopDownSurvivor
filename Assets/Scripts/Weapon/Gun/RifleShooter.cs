@@ -26,6 +26,7 @@ public class RifleShooter : RayCastWeapon
     {
         base.ShooterEffect();
         CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(2f, .1f);
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.GunPoint);
     }
     protected override string SetBulletType()
     {

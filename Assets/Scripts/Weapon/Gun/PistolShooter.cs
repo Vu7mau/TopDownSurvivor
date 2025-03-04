@@ -18,8 +18,8 @@ public class PistolShooter : RayCastWeapon
     protected override void ShooterEffect()
     {
         base.ShooterEffect();
-
         CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(5f, .1f);
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pistloShoot, this.GunPoint);
     }
     protected override string SetBulletType()
     {

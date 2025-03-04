@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
+
+    public static Timer Instance;
     [SerializeField] private TextMeshProUGUI txtTime;
     [SerializeField] private float time;
 
@@ -12,6 +14,10 @@ public class Timer : MonoBehaviour
     [SerializeField] private bool isCountDown;
     [SerializeField] private bool isCountUp;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Update()
     {
         SwitchStateCount();
@@ -61,7 +67,13 @@ public class Timer : MonoBehaviour
         if(time > 0)
             time -= Time.deltaTime;
         else
+        {
             time = 0;
+            if (SpawnEnemies.Instance.WaveNumber > SpawnEnemies.Instance.AmountWave)
+            {
+                SpawnEnemies.Instance.FinishTheBattle(true);
+            }
+        }
     }
     public void CountUp(bool _isStartCountTime, bool _isCountUp)
     {

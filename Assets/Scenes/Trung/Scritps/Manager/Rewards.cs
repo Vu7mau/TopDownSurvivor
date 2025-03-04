@@ -14,9 +14,9 @@ public class Rewards : Singleton<Rewards>
         for(int i = 0; i < amount; i++)
         {
             Transform gems = CreateParentObj.instance.GetGem().transform;
-            float x = Random.Range(enemy.position.x - 3f, enemy.position.x + 3f);
+            float x = Random.Range(enemy.position.x - 5f, enemy.position.x + 5f);
             float y = enemy.position.y + 5;
-            float z = Random.Range(enemy.position.z - 3f, enemy.position.z + 3f);
+            float z = Random.Range(enemy.position.z - 5f, enemy.position.z + 5f);
             Vector3 position = new Vector3(x, y, z);
             gems.position = position;
             gems.gameObject.SetActive(true);

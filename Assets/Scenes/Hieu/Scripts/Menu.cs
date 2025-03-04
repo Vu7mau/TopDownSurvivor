@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Menu : MonoBehaviour
+public class Menu : Singleton<Menu>
 {
     public GameObject pn_Setting;    
     public GameObject pn_die;
@@ -31,11 +31,12 @@ public class Menu : MonoBehaviour
     }                  
     public void vemenu()
     {
+        PlayerPrefs.DeleteKey("LastGameCoin");
         SceneManager.LoadScene(1);
         Time.timeScale = 1.0f;
     }
     public void Pause()
-    {
+    {   
         Time.timeScale = 0;
     }    
     public void tieptuc()

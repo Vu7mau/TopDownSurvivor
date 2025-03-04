@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Rendering.HighDefinition;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class CharacterLeveUp : ObjectLeveUp
     [Space]
     [Header("CharacterLeveUp")]
     [SerializeField] protected Slider _expSlider;
+    [SerializeField] protected TMP_Text levelText;
 
 
 
@@ -23,11 +25,11 @@ public class CharacterLeveUp : ObjectLeveUp
 
     public override void AddExp(float amount)
     {
-     
+
         base.AddExp(amount);
         if (expCoroutine == null)
             StartCoroutine(this.UpdateExpBar(amount));
-   
+
     }
 
 
@@ -47,13 +49,20 @@ public class CharacterLeveUp : ObjectLeveUp
             this._expSlider.value = value;
             yield return null;
         }
-        
-        expCoroutine=null;
+
+        expCoroutine = null;
     }
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadExpSlider();
+    }
+    protected override void Start()
+    {
+        base.Start();
+        this.SetLevelUI(this._level);
+
+
     }
     protected virtual void LoadExpSlider()
     {
@@ -61,13 +70,24 @@ public class CharacterLeveUp : ObjectLeveUp
 
         this._expSlider = GameObject.Find("ExpSlider").GetComponent<Slider>();
         Debug.Log("LoadExpSlider success " + this._expSlider.transform.name);
+        this.levelText = this._expSlider.GetComponentInChildren<TMP_Text>();
+        Debug.Log("LoadExpSlider success " + this.levelText.transform.name);
+
+
     }
+    protected virtual void SetLevelUI(int level)
+    {
+        this.levelText.text = "Level " + this._level.ToString();
+    }
+
     protected override void ProcessLevelUp()
     {
+        DamagerScreen.Instance.SetLeveUpScreen();
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.leveUp, this.transform);
         CharacterStats.Instance.levelUpUI.ShowSkillChoices();
-
         this._expSlider.value = 0;
-
+        this.SetLevelUI(this._level);
         Time.timeScale = 0;
+        
     }
 }

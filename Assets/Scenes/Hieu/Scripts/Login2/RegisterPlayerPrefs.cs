@@ -28,7 +28,15 @@ public class RegisterPlayerPrefs : MonoBehaviour
         {
             Notification.noti_instance.Shownotification("Email không đúng định dạng");
             return;
-        }             
+        }
+        string jsonstring = PlayerPrefs.GetString("Register");
+        data datas = JsonUtility.FromJson<data>(jsonstring);
+        dataEntry dataEntrys = datas.listdata.FirstOrDefault(x => x.name == NameInput.text || x.email == EmailInput.text);
+        if (dataEntrys != null)
+        {
+            Notification.noti_instance.Shownotification("email hoặc tên tài khoản đã tồn tại");
+            return;
+        }
         addInput(NameInput.text,EmailInput.text,PassWordInput.text);
     }        
     public void addInput(string name,string email,string password)
@@ -39,13 +47,7 @@ public class RegisterPlayerPrefs : MonoBehaviour
         {
             datas = new data();
         }                        
-        dataEntry entry = new dataEntry { name = name, email = email, password = password };
-        dataEntry dataEntrys = datas.listdata.FirstOrDefault(x => x.name == name && x.email == email);
-        if (dataEntrys != null)
-        {
-            Notification.noti_instance.Shownotification("email hoặc tên tài khoản đã tồn tại");
-            return;
-        }
+        dataEntry entry = new dataEntry { name = name, email = email, password = password };                
         datas.listdata.Add(entry);        
         string json = JsonUtility.ToJson(datas);
         PlayerPrefs.SetString("Register", json);

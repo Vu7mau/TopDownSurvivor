@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PoolingObjectList : MonoBehaviour
 {
-    [SerializeField] private GameObject obj;
-    [SerializeField] private GameObject poolingList;
-    [SerializeField] private float amount;
     public static PoolingObjectList instance;
+    [SerializeField] private Transform obj;
+    [SerializeField] private float amount;
+    [SerializeField] private float maxAmountPoolingObj;
+
+    [SerializeField] private List<Transform> listPooling;
     private void Awake()
     {
         if(instance == null)
@@ -17,39 +19,48 @@ public class PoolingObjectList : MonoBehaviour
     }
     private void Start()
     {
-        CreateNewPooling();
+        
     }
 
     public GameObject GetPoolingObject()
     {
-        GameObject _newObj;
-        if (poolingList.transform.childCount > 0)
+        if(listPooling.Count <= maxAmountPoolingObj)
         {
-            for (int i = 0; i < poolingList.transform.childCount; i++)
+            GameObject _newObj;
+            if (listPooling.Count > 0)
             {
-                if (!poolingList.transform.GetChild(i).gameObject.activeInHierarchy)
+                for (int i = 0; i < listPooling.Count; i++)
                 {
-                    _newObj = poolingList.transform.GetChild(i).gameObject;
-                    return _newObj;
+                    if (!listPooling[i].gameObject.activeInHierarchy)
+                    {
+                        _newObj = listPooling[i].gameObject;
+                        listPooling.Remove(listPooling[i]);
+                        return _newObj;
+                    }
                 }
             }
-        }
-        else
-        {
-            GameObject e = Instantiate(obj);
-            e.SetActive(false);
-            e.transform.parent = poolingList.transform;
-            return e;
+            else
+            {
+                _newObj = Instantiate(obj.gameObject);
+                _newObj.transform.parent = transform;
+                return _newObj;
+            }
         }
         return null;
     }
-    private void CreateNewPooling()
+    //private void CreateNewPooling()
+    //{
+    //    for(int i = 0; i< amount; i++)
+    //    {
+    //        GameObject newObj = Instantiate(obj.gameObject);
+    //        newObj.transform.parent = transform;
+    //        listPooling.Add(newObj.transform);
+    //        newObj.SetActive(false);
+    //    }
+    //}
+    public void ReturnToPool(Transform obj)
     {
-        for(int i = 0; i< amount; i++)
-        {
-            GameObject newObj = Instantiate(obj);
-            newObj.transform.parent = poolingList.transform;
-            newObj.SetActive(false);
-        }
+        obj.gameObject.SetActive(false);
+        listPooling.Add(obj);
     }
 }

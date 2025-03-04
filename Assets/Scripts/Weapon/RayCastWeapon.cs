@@ -22,13 +22,14 @@ public class RayCastWeapon : ObjectShooting
     protected RaycastHit _targetEnemy;
   //  bool isReload => IsReloadingAmmo();
 
+    public ActiveWeapon.WeaponSlot weaponSlot;
     public Transform GunPoint => _gunPoint;
     public RaycastHit TargetEnemy => _targetEnemy;
     public string WeaponName => _weaponName;
     public bool IsWeaponActivate => _isWeaponActivate;
 
+    public float ReloadAmmorTime=>this._reloadAmmoTime;
 
-    public ActiveWeapon.WeaponSlot weaponSlot;
 
     protected override void Awake()
     {
@@ -58,7 +59,7 @@ public class RayCastWeapon : ObjectShooting
         Transform newBullet = BulletSpawner.Instance.Spawn(this.SetBulletType(), this.GunPoint.position, Quaternion.LookRotation(this.GunPoint.forward));
         if (newBullet == null) return;
         newBullet.gameObject.SetActive(true);
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.GunPoint);
+       
         this.ShooterEffect();
     }
 

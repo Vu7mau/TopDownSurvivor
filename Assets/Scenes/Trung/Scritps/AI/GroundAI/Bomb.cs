@@ -2,25 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Bomb : DamageSender
 {
     [SerializeField] private float timeToDelete;
     private bool _canTakeDamage= false;
-    private void OnDisable()
+    [SerializeField] private int _damage;
+    protected override void OnDisable()
     {
+        base.OnDisable();
         _canTakeDamage = false;
     }
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         _canTakeDamage = false;
         StartCoroutine(DeleteExplosion());
     }
+    protected override void Start()
+    {
+        base.Start();
+        _basedDamage = _damage;
+    }
     private void OnTriggerEnter(Collider other)
     {
-        CharacterCtrl player = other.gameObject.GetComponent<CharacterCtrl>();
+        CharacterDamageReceiver player = other.GetComponent<CharacterDamageReceiver>();
         if (player != null && !_canTakeDamage)
         {
             Rigidbody rb = player.gameObject.GetComponent<Rigidbody>();
+            Send(other.transform);
             _canTakeDamage = true;
             AddForceToTarget(rb);
             Debug.Log("Đã chạm Player!");

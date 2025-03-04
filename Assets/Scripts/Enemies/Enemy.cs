@@ -14,11 +14,11 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            //if (damage)
-            //{
-            //    damage.Send(collision.transform);
-            //}
-            CharacterCtrl.Instance.CharacterLeveUp.AddExp(2);
+            if (damage)
+            {
+                damage.Send(collision.transform);
+            }
+            //CharacterCtrl.Instance.CharacterLeveUp.AddExp(2);
         }
     }
 }

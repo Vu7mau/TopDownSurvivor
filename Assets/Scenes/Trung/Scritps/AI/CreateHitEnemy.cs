@@ -7,6 +7,7 @@ public class CreateHitEnemy : DamageSender
     [SerializeField] private bool CanTakeDamage = false;
     [SerializeField] private EnemySO enemySO;
      int dem;
+    private int _amountDamagePercent;
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -22,9 +23,19 @@ public class CreateHitEnemy : DamageSender
         base.Start();
         if(enemySO != null)
         {
-            _basedDamage = enemySO.Damage;
+            this._basedDamage = enemySO.Damage;
+            UpdateDamage(this._amountDamagePercent);
         }
       //  this.SetDamage(_basedDamage);
+    }
+    public void UpdateDamage(int _amount)
+    {
+        this._basedDamage = enemySO.Damage;
+        this._basedDamage = this._basedDamage + (int)((float)(this._basedDamage * _amount) / 100);
+    }
+    public void IncreaseDamageAmount(int _amount)
+    {
+        this._amountDamagePercent = _amount;
     }
     private void OnTriggerEnter(Collider other)
     {

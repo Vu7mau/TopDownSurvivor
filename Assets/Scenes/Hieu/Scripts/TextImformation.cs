@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TextImformation : MonoBehaviour
+public class TextImformation : Singleton<TextImformation>
 {
     public TextMeshProUGUI nameCharacter;
-    public TextMeshProUGUI idCharacter;
+    //public TextMeshProUGUI idCharacter;
     public TextMeshProUGUI coinText;
-    private void Start()
+    public void Text()
     {              
         nameCharacter.text ="NAME : "+PlayerPrefs.GetString("Name");
-        idCharacter.text = "ID : "+PlayerPrefs.GetString("Id");
-        coinText.text = "Coin : " + PlayerPrefs.GetInt("LastGameCoin").ToString();
+        //idCharacter.text = "ID : "+PlayerPrefs.GetString("Id");
+        coinText.text = "x " +PlayerPrefs.GetInt("SaveCoin").ToString();
     }    
 }
     

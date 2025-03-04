@@ -31,6 +31,10 @@ public class Spider : MonoBehaviour
             tinySpider.transform.position = listPosition[randomPosition].position;
         }
     }
+    public void Attack3SFX()
+    {
+        SoundFXManager.Instance.PlaySoundFXClip(clipSpiderSFX[1],transform);
+    }
     public void Update()
     {
         transform.localScale = new Vector3(1, 1, -1);

@@ -629,7 +629,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.9966886, y: -1.0899997, z: -5.9723516}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.13734, y: 1.13734, z: 1.13734}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8672050312807926659}
@@ -748,6 +748,9 @@ MonoBehaviour:
   _canTakeDamage: 1
   _healthBar: {fileID: 2325585798077139469}
   _bossHealthBar: {fileID: 0}
+  EnemyIsDead: 0
+  beastHurtSFX: {fileID: 0}
+  hurtScale: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!114 &7982818450485809119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,8 +763,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56db89750a5593f4c9e2f3b54a34f19f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StepSFX: {fileID: 8300000, guid: 2b233e397ddfdff4f8fcaa1f47dde02d, type: 3}
+  StepSFX: {fileID: 0}
   beastAttackSFX: {fileID: 8300000, guid: 34381eeb4bc7d5541a5a364c54b3d454, type: 3}
+  beastHurtSFX: {fileID: 8300000, guid: 0c8d9612b61a51f4cb3c20051a17df41, type: 3}
   beastDeathSFX: {fileID: 8300000, guid: e6fd08b649911364ab72deafaf6e51f6, type: 3}
 --- !u!1 &2335956682276586925
 GameObject:
@@ -790,8 +794,8 @@ Transform:
   m_GameObject: {fileID: 2335956682276586925}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.13, z: 0}
-  m_LocalScale: {x: 0.00201537, y: 0.00201537, z: 0.00201537}
+  m_LocalPosition: {x: 0, y: 2.36, z: 0}
+  m_LocalScale: {x: 0.0034919134, y: 0.0034919134, z: 0.0034919134}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2478525296383532454}
@@ -1891,7 +1895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.92549026, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.009077454, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

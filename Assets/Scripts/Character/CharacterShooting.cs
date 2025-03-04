@@ -4,20 +4,20 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Rendering;
 
-public class CharacterShooting :CharacterCtrlAbstract
+public class CharacterShooting : CharacterCtrlAbstract
 {
     [SerializeField] protected RayCastWeapon _weapon => this._characterCtrl.ActiveWeapon.activeGun;
     [Space]
     [Header("Character Shooting")]
     [SerializeField] protected Rig _aim;
     [SerializeField] protected float _aimDuration;
-   // [SerializeField] protected ActiveWeapon _activeWeapon;
+    // [SerializeField] protected ActiveWeapon _activeWeapon;
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadCharacterCtrlAbstract();
-      //  this.LoadWeaponActivate();
-      //  this.LoadWeapon();
+        //  this.LoadWeaponActivate();
+        //  this.LoadWeapon();
     }
     //protected virtual void LoadWeapon()
     //{
@@ -32,16 +32,25 @@ public class CharacterShooting :CharacterCtrlAbstract
     //    _characterCtrl = this.transform.parent.GetComponent<CharacterCtrl>();
     //    Debug.Log("Load CharacterCtrl Abstract Success at " + this.transform.name);
     //}
-  
 
-    protected  void LateUpdate()
+
+    protected void Update()
     {
-      this.Aiming(/*this.IsShooting()*/);
+        this.Aiming(/*this.IsShooting()*/);
+        if (this._weapon != null)
+            if (this._weapon.GetIsReloadingAmmo())
+            {
+                ReloadAmmor.Instance.AmmoReload(this._weapon.ReloadAmmorTime, this._characterCtrl.CharacterAim.GetAim().position);
+            }
     }
+
     public virtual bool IsShooting()
     {
         if (this._weapon != null)
-            if (this._weapon.GetIsReloadingAmmo()) return false;
+            if (this._weapon.GetIsReloadingAmmo())
+            {
+                return false;
+            }
         return _characterCtrl.InputManager.IsFiring();
     }
 
@@ -65,7 +74,7 @@ public class CharacterShooting :CharacterCtrlAbstract
     public Transform? GetGunPoint()
     {
         if (!this._weapon) return null;
-        return  this._weapon.GunPoint;
+        return this._weapon.GunPoint;
     }
     public RaycastHit GetTargetEnemy()
     {
@@ -75,11 +84,11 @@ public class CharacterShooting :CharacterCtrlAbstract
 
     protected virtual void Aiming()
     {
-        if (this._characterCtrl.ActiveWeapon != null&&this._weapon!=null)
+        if (this._characterCtrl.ActiveWeapon != null && this._weapon != null)
         {
             // if(this._weapon.WeaponName != this._weapon.WeaponName)
 
-            this._characterCtrl.ActiveWeapon._rigController.SetBool("isShooting",IsShooting());
+            this._characterCtrl.ActiveWeapon._rigController.SetBool("isShooting", IsShooting());
         }
         //if (isAim)
         //    _aim.weight += Time.deltaTime / _aimDuration;

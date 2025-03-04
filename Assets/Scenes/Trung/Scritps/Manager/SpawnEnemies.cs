@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class SpawnEnemies :MonoBehaviour
 {
+    public static SpawnEnemies Instance;
+
+
     [SerializeField] private GameObject obj;
     [SerializeField] private EnemiesManageSO _spawn;
     [SerializeField] private EnemiesManageSO _spawnBosses;
-    [SerializeField] private SpawnEnemiesSO _waves;
+    [SerializeField] private WaveManager _waves;
     [SerializeField] private GameObject panelBossFight;
 
     [SerializeField] private List<Transform> spawnPositionWaveEnemiesList;
@@ -19,22 +23,72 @@ public class SpawnEnemies :MonoBehaviour
 
     [Header("Wave")]
     [SerializeField] private int waveNumber = 1;
+    [SerializeField] public int WaveNumber { get => waveNumber; }
+
+    private int amountWave;
+    public int AmountWave { get => amountWave; }
 
     [Header("Change the time each wave (calculator by minutes)")]
     private int enemiesLeft = 0;
     private int enemiesPerWave;
+    private bool isStartFight = false;
 
     private List<GameObject> listParentGameObject = new List<GameObject>();
     private List<GameObject> listParentBossesGameObject = new List<GameObject>();
     [SerializeField] private List<GameObject> selectedChildren;
+
+    private void Awake()
+    {
+        Instance = this;
+        amountWave = _waves.listWaves.Count;
+    }
     private void Start()
     {
         UIManager.Instance.UpdateWaveUI(waveNumber,enemiesLeft);
         CreateAllEnemiesFirst();
         StartCoroutine(SpawnWave());
+            
+    }
+    private void Update()
+    {
+        this.CheckFinish();
+    }
+    [SerializeField] private  bool timeIsUp = false;
+    public void FinishTheBattle(bool _finish)
+    {
+        timeIsUp = _finish;
+    }
+    private void CheckFinish()
+    {
+        if (!isStartFight) return;
+        if (waveNumber < _waves.listWaves.Count) return;
+        GameObject panelFinish = GameObject.Find("PanelWhenFinishTheBattle");
+        if (timeIsUp) 
+        {
+            panelFinish.transform.GetChild(1).gameObject.SetActive(true);
+            isStartFight = false;
+                Menu.Instance.die();
+            return;
+        }
+        else
+        {
+            if(enemiesLeft == 0)
+            {
+                panelFinish.transform.GetChild(0).gameObject.SetActive(true);
+                isStartFight = false;
+                Timer.Instance.StopCountDown(false, false);
+                Menu.Instance.Win();
+
+                return;
+            }
+        }
+
     }
     IEnumerator SpawnWave()
     {
+        isStartFight = true;
+        if (waveNumber > _waves.listWaves.Count)
+            waveNumber = _waves.listWaves.Count;
         while (waveNumber <= _waves.listWaves.Count)
         {
             if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
@@ -52,13 +106,14 @@ public class SpawnEnemies :MonoBehaviour
                 StartCoroutine(SpawnBosses(waveNumber, amountEnemiesMixed));
             }
             UIManager.Instance.UpdateTimeToNextWave(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave);
+            timeIsUp = false;
             yield return new WaitForSeconds(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave);
-            waveNumber++;
+            ++waveNumber;
         }
     }
     public void SpawnEnemiesFight(int wave)
     {
-        if(wave > 0 && wave <= _spawn.listEnemies.Count)
+        if (wave > 0 && wave <= _waves.listWaves.Count)
         {
             enemiesPerWave = _waves.listWaves[_waves.WaveElement(wave)].Amount;
             enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
@@ -85,7 +140,9 @@ public class SpawnEnemies :MonoBehaviour
             {
                 enemy.transform.position = spawnPosition;
                 enemy.SetActive(true);
+                enemy.gameObject.GetComponent<EnemyHealth>().CheckAmountIncreaseHealth(_waves.listWaves[_waves.WaveElement(wave)].amountHealthIncreasePercent);
             }
+            yield return new WaitForSeconds(1f);
         }
     }
     private static bool IsBossFight = false;
@@ -111,7 +168,9 @@ public class SpawnEnemies :MonoBehaviour
             {
                 enemy.transform.position = spawnPosition;
                 enemy.SetActive(true);
+                enemy.gameObject.GetComponentInChildren<EnemyHealth>().CheckAmountIncreaseHealth(_waves.listWaves[_waves.WaveElement(wave)].amountHealthIncreasePercent);
             }
+            yield return new WaitForSeconds(1f);
         }
         IsBossFight = false;
     }
@@ -121,13 +180,12 @@ public class SpawnEnemies :MonoBehaviour
         enemiesPerWave = amountEachWave;
         enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
         UIManager.Instance.UpdateWaveUI(wave, enemiesLeft);
-        StartCoroutine(SpawnRandomEnemiesRoutine());
+        StartCoroutine(SpawnRandomEnemiesRoutine(wave));
         //GameObject spawnMixed = GameObject.Find("SpawnEnemiesMixed");
-        
         
         Debug.Log("Đây là đợt quái trộn!");
     }
-    private IEnumerator SpawnRandomEnemiesRoutine()
+    private IEnumerator SpawnRandomEnemiesRoutine(int wave)
     {
         yield return new WaitForSeconds(2f);
         listEnemiesRandom = listEnemiesRandom.Where(e => e != null).ToList();
@@ -138,12 +196,14 @@ public class SpawnEnemies :MonoBehaviour
             if (enemy != null)
             {
                 int randomPositionSpawnWave = Random.Range(0, spawnPositionWaveEnemiesList.Count);
-                Vector3 spawnPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position;
+                Vector3 spawnPosition = spawnPositionWaveEnemiesList[randomPositionSpawnWave].position + new Vector3(Random.Range(-10, 10),0, Random.Range(-10, 10));
                 enemy.transform.position = spawnPosition;
                 enemy.SetActive(true);
+                enemy.gameObject.GetComponent<EnemyHealth>().CheckAmountIncreaseHealth(_waves.listWaves[_waves.WaveElement(wave)].amountHealthIncreasePercent);
             }
             dem++;
             listEnemiesRandom = listEnemiesRandom.Where(e => e != null).ToList();
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -151,6 +211,7 @@ public class SpawnEnemies :MonoBehaviour
     {
         return enemiesLeft + _amount;
     }
+
     private void CreateEnemiesEachType()
     {
         for(int j= 0;j< _spawn.listEnemies.Count;j++)
@@ -166,6 +227,7 @@ public class SpawnEnemies :MonoBehaviour
     private void CreateBossesEachType()
     {
         Transform obj = GameObject.Find("SpawnBosses").transform;
+        if (obj == null) return;
         for (int j = 0; j < _spawnBosses.listEnemies.Count; j++)
         {
             for (int i = 0; i < 20; i++)
@@ -234,6 +296,7 @@ public class SpawnEnemies :MonoBehaviour
     private void CreateManageBossesParent()
     {
         Transform bossesManagementObj = GameObject.FindGameObjectWithTag("BossesManager").transform;
+        if (bossesManagementObj == null) return;
         for (int i = 0; i < _spawnBosses.listEnemies.Count; i++)
         {
             GameObject e = Instantiate(obj);
@@ -241,11 +304,6 @@ public class SpawnEnemies :MonoBehaviour
             e.gameObject.name = _spawnBosses.listEnemies[i].name;
             listParentBossesGameObject.Add(e);
         }
-    }
-
-    private float CalculatorSeconds(float _minutes)
-    {
-        return _minutes * 60;
     }
     private void CreateAllEnemiesFirst()
     {

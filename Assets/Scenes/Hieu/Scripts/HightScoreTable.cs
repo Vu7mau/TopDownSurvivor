@@ -10,42 +10,62 @@ using UnityEngine.UI;
 
 public class HightScoreTable : MonoBehaviour
 {      
-    private GameObject entryContainer;
-    private GameObject entryTemple;    
-    private List<Transform> HighscoreEntryTransformList;
+    [SerializeField] private GameObject entryContainer;
+    [SerializeField] private GameObject entryTemple; 
+    [SerializeField] private GameObject CurrentRank;
+    
+    private List<Transform> HighscoreEntryTransformList;     
     private void Awake()
     {
-        if (PlayerPrefs.HasKey("LastGameCoin"))
-        {
-            AddHighscoreEntry(PlayerPrefs.GetInt("LastGameCoin"), PlayerPrefs.GetString("Name"));
-            PlayerPrefs.DeleteKey("LastGameCoin");
-            PlayerPrefs.Save();
-        }
-        entryContainer = GameObject.Find("HighsScoreEntryContainer");        
-        entryTemple = GameObject.Find("HighsScoreEntryTemplate");
+    }
+    private void Start()
+    {
+        updateHightScore();
+        
+    }
+    public void updateHightScore ()
+    {
+        AddHighscoreEntry(PlayerPrefs.GetInt("LastGameCoin"), PlayerPrefs.GetString("Name"));
+         PlayerPrefs.DeleteKey("LastGameCoin");
+         PlayerPrefs.Save();    
+         Singleton<TextImformation>.Instance.Text();
+        //entryContainer = GameObject.Find("HighsScoreEntryContainer");        
+        //entryTemple = GameObject.Find("HighsScoreEntryTemplate");
         entryTemple.gameObject.SetActive(false);
         string jsonstring = PlayerPrefs.GetString("highscoreTable", "{}");
-        Debug.Log(jsonstring);        
+        Debug.Log(jsonstring);
         Highscore highscoreData = JsonUtility.FromJson<Highscore>(jsonstring);
         if (highscoreData == null || highscoreData.hightScoreEntryList == null)
         {
             highscoreData = new Highscore { hightScoreEntryList = new List<HightScoreEntry>() };
         }
         highscoreData.hightScoreEntryList.Sort((a, b) => b.score.CompareTo(a.score));
-        List<HightScoreEntry> topEntries = highscoreData.hightScoreEntryList.GetRange(0, Mathf.Min(10, highscoreData.hightScoreEntryList.Count));
-
+        List<HightScoreEntry> topEntries = highscoreData.hightScoreEntryList.GetRange(0, Mathf.Min(5, highscoreData.hightScoreEntryList.Count));        
         HighscoreEntryTransformList = new List<Transform>();
         foreach (HightScoreEntry t in topEntries)
         {
             CreateHighscoreEntryTransform(t, entryContainer.transform, HighscoreEntryTransformList);
-        }               
+        }
+        int playerrank = highscoreData.hightScoreEntryList.FindIndex(x => x.name == PlayerPrefs.GetString("Name"))+1;
+        if (playerrank > 0)
+        {
+            HightScoreEntry hightScoreEntry = highscoreData.hightScoreEntryList[playerrank-1];      
+            CurrentRank.transform.Find("Postext").GetComponent<TextMeshProUGUI>().text = playerrank.ToString();
+            CurrentRank.transform.Find("ScoreText").GetComponent<TextMeshProUGUI>().text = hightScoreEntry.score.ToString();
+            CurrentRank.transform.Find("NameText").GetComponent<TextMeshProUGUI>().text = hightScoreEntry.name;
+            switch (playerrank)
+            {
+                default: CurrentRank.transform.Find("trophy").gameObject.SetActive(false); break;
+                case 1: CurrentRank.transform.Find("trophy").gameObject.SetActive(true); break;
+            }
+        }
     }
     private void CreateHighscoreEntryTransform(HightScoreEntry hightScoreEntry,Transform container,List<Transform> transformsList)
     {
-        float templateHeight = 90;
+        float templateHeight = 110;
         Transform entryTransform = Instantiate(entryTemple.transform, container.transform);
         RectTransform rectTransform = entryTransform.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformsList.Count);
+        rectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformsList.Count);        
         entryTransform.gameObject.SetActive(true);
         int rank = transformsList.Count + 1;
         string rankString;
@@ -67,7 +87,8 @@ public class HightScoreTable : MonoBehaviour
             entryTransform.Find("Postext").GetComponent<TextMeshProUGUI>().color = Color.yellow;
             entryTransform.Find("ScoreText").GetComponent<TextMeshProUGUI>().color = Color.yellow;
             entryTransform.Find("NameText").GetComponent<TextMeshProUGUI>().color = Color.yellow;
-        }
+        }        
+        Transform entry = entryTransform.Find("trophy");
         switch (rank)
         {
             default: entryTransform.Find("trophy").gameObject.SetActive(false); break;
@@ -79,7 +100,7 @@ public class HightScoreTable : MonoBehaviour
     {
         //createHighscoreEntry        
         //LoadSave Highscore
-        string jsonstring = PlayerPrefs.GetString("highscoreTable");
+        string jsonstring = PlayerPrefs.GetString("highscoreTable","{}");
         Highscore highscores = JsonUtility.FromJson<Highscore>(jsonstring);                
         HightScoreEntry existingEntry = highscores.hightScoreEntryList.FirstOrDefault(entry =>entry.name == name);
         if (existingEntry != null)

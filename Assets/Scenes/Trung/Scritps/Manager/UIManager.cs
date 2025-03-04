@@ -27,6 +27,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject ExpTextPrefab;
 
     [SerializeField] private Canvas _myCanvas;
+    [SerializeField] private Canvas _DamageTextCanvas;
     [SerializeField] private GameObject panel1;
 
     protected override void OnEnable()
@@ -84,7 +85,7 @@ public class UIManager : Singleton<UIManager>
     public void CharacterTookDamage(GameObject character, float damageReceived)
     {
         Vector3 spamPosition = Camera.main.WorldToScreenPoint(character.transform.position);
-        TMP_Text tmp_text = Instantiate(damageTextPrefab, spamPosition, Quaternion.identity, _myCanvas.transform)
+        TMP_Text tmp_text = Instantiate(damageTextPrefab, spamPosition, Quaternion.identity, _DamageTextCanvas.transform)
             .GetComponent<TMP_Text>();
         tmp_text.text = damageReceived.ToString();
         Debug.Log("Text damage đã hiện!");
