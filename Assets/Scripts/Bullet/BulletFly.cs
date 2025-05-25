@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,12 +24,11 @@ public class BulletFly : BulletAbstract
     {
         base.OnEnable();
 
-        this.transform.parent.rotation = Quaternion.Euler(0, this.transform.parent.forward.y, 0);
+        //  this.transform.parent.rotation = Quaternion.Euler(0, this.transform.parent.forward.y, 0);
         this._rb.velocity = BulletDirection() * _speed;
     }
     protected virtual Vector3 BulletDirection()
-    {
-
+    {      
         Vector3 direction = (/*this.AimPos().position*/this.GetAimPos() - this.GunPos().position).normalized;
 
         if (_bulletCtrl.CharacterCtrl.CharacterAim.CanAimPrecisly() == false &&
@@ -38,7 +37,8 @@ public class BulletFly : BulletAbstract
             direction.y = 0;
         }
 
-        return direction;
+     
+        return( direction).normalized;
 
     }
     protected virtual Vector3 GetAimPos()

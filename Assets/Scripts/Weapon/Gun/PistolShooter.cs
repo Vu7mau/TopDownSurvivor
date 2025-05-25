@@ -9,11 +9,14 @@ public class PistolShooter : RayCastWeapon
     //[Space]
     //[Header("PistolShooter")]
 
-  
+
     protected override void Update()
     {
         base.Update();
-        this.ShootLaser();
+        if (_isFiring)
+            this.ShootLaser();
+        else
+            lineRenderer.enabled = false;
     }
     protected override void ShooterEffect()
     {
@@ -23,12 +26,11 @@ public class PistolShooter : RayCastWeapon
     }
     protected override string SetBulletType()
     {
-        return BulletSpawner.bulletTwo;
+        return BulletSpawner.PistolBullet;
     }
     protected override void ShootLaser()
     {
         base.ShootLaser();
     }
-
-   
+  
 }

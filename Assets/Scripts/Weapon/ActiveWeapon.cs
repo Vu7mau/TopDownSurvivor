@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ActiveWeapon : VuMonoBehaviour
 {
-    public enum WeaponSlot { Primary, Secondary };
+    public enum WeaponSlot { Primary, Secondary, Tertiary };
 
     //  [SerializeField] RayCastWeapon _weapon;
     [SerializeField] protected Transform[] weaponSlot;
@@ -59,6 +59,10 @@ public class ActiveWeapon : VuMonoBehaviour
         if (Input.GetKeyUp(KeyCode.Alpha2))
         {
             this.SetActivateWeapon(WeaponSlot.Secondary);
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha3))
+        {
+            this.SetActivateWeapon(WeaponSlot.Tertiary);
         }
     }
     protected virtual void ToggelActivateWeapon()
@@ -133,11 +137,11 @@ public class ActiveWeapon : VuMonoBehaviour
         {
             SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pickUp, this.transform);
             this._rigController.SetBool("holster_weapon", false);
-            _rigController.Play("equip_" + weapon.WeaponName);
             do
             {
                 yield return new WaitForEndOfFrame();
             } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            _rigController.Play("equip_" + weapon.WeaponName);
             this.isHolstered = false;
             weapon.SetIsWeaponActivate(!this.isHolstered);
             this.activeGun = weapon;

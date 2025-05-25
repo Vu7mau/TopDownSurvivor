@@ -5,8 +5,9 @@ using UnityEngine;
 public class BulletSpawner : Spawner
 {
     public static BulletSpawner Instance { get; private set; }
-    public static string bulletOne = "Bullet_1";
-    public static string bulletTwo = "Bullet_2";
+    public static string RifleBullet = "Rifle_Bullet";
+    public static string PistolBullet = "Pistol_Bullet";
+    public static string ShotGunBullet = "ShotGun_Bullet";
 
     protected override void Awake()
     {

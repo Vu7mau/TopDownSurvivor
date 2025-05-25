@@ -7,19 +7,19 @@ public class CinemachineZoom : CinemachineAbstract
     [SerializeField] private float _defaultFOV;
     [SerializeField] protected float _zoomInFOV;
     [SerializeField] protected float _zoomSpeed;
-    [SerializeField] protected bool _isZoom;
+  //  [SerializeField] protected bool _isZoom;
     
-    private void LateUpdate()
+    //private void LateUpdate()
+    //{
+    //    this.ToggleZoom();
+    //}
+    //public void SetIsZoom(bool isZoom)
+    //{
+    //    this._isZoom = isZoom;
+    //}
+    public virtual void ToggleZoom(bool isZoom)
     {
-        this.ToggleZoom();
-    }
-    public void SetIsZoom(bool isZoom)
-    {
-        this._isZoom = isZoom;
-    }
-    protected virtual void ToggleZoom()
-    {
-        if (_isZoom)
+        if (isZoom)
             this.ZoomIn();
         else
             this.ZoomOut();

@@ -8,7 +8,7 @@ public class RayCastWeapon : ObjectShooting
 {
 
 
-    [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsShooting();
+    [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsPressShooting();
     [Space]
     [Header("RayCastWeapon")]
     [SerializeField] protected ParticleSystem _muzzelFlash;
@@ -18,6 +18,7 @@ public class RayCastWeapon : ObjectShooting
     [SerializeField] protected Texture _gunTexture;
     [SerializeField] protected string _weaponName;
     [SerializeField] protected bool _isWeaponActivate = false;
+ //   [SerializeField] protected bool _isBusrtLocked = false;
 
     protected RaycastHit _targetEnemy;
   //  bool isReload => IsReloadingAmmo();
@@ -45,7 +46,7 @@ public class RayCastWeapon : ObjectShooting
     protected override void Update()
     {
         base.Update();
-        CinemachineCtrl.Instance.CinemachineZoom.SetIsZoom(this.IsShooting());
+        CinemachineCtrl.Instance.CinemachineZoom.ToggleZoom(IsShooting());
     }
   
     protected virtual void ShooterEffect()
@@ -75,16 +76,19 @@ public class RayCastWeapon : ObjectShooting
 
         RaycastHit hit;
         Vector3 endPosition;
+        lineRenderer.enabled = true;
 
-        if (Physics.Raycast(_gunPoint.position, _gunPoint.forward, out hit, 20, this._enemyLayer))
+        if (Physics.Raycast(_gunPoint.position, _gunPoint.forward, out hit,10, this._enemyLayer))
         {
-            endPosition = hit.point;
+            // endPosition = hit.point;
+            float distance = Vector3.Distance(this._gunPoint.position, hit.point);
+            endPosition = _gunPoint.position + _gunPoint.forward * distance;
             //this.SetTarget(hit);
             this._targetEnemy = hit;
         }
         else
         {
-            endPosition = _gunPoint.position + _gunPoint.forward * 100;
+            endPosition = _gunPoint.position + _gunPoint.forward * 10;
             this._targetEnemy = hit;
         }
         lineRenderer.SetPosition(0, _gunPoint.position);
@@ -114,6 +118,10 @@ public class RayCastWeapon : ObjectShooting
     public virtual int GetMaxBullets()
     {
         return this._MaxBulletCount;
+    }
+    public virtual bool GetBurstLocked()
+    {
+        return _isBursting;
     }
     public virtual Texture GunTexture()
     { 

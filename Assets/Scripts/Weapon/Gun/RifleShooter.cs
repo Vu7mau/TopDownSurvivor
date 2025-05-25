@@ -30,16 +30,22 @@ public class RifleShooter : RayCastWeapon
     }
     protected override string SetBulletType()
     {
-        return BulletSpawner.bulletOne;
+        return BulletSpawner.RifleBullet;
     }
     protected override void Update()
     {
         base.Update();
+        if(_isFiring) 
         this.ShootLaser();
+        else
+            lineRenderer.enabled = false;
     }
     protected override void ShootLaser()
     {
         base.ShootLaser();
     }
-
+    public override bool GetBurstLocked()
+    {
+        return false;
+    }
 }

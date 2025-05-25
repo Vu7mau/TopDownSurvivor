@@ -44,10 +44,10 @@ public class CharacterShooting : CharacterCtrlAbstract
             }
     }
 
-    public virtual bool IsShooting()
+    public virtual bool IsPressShooting()
     {
         if (this._weapon != null)
-            if (this._weapon.GetIsReloadingAmmo())
+            if (this._weapon.GetIsReloadingAmmo()/*||this._weapon.GetBurstLocked()*/)
             {
                 return false;
             }
@@ -88,7 +88,7 @@ public class CharacterShooting : CharacterCtrlAbstract
         {
             // if(this._weapon.WeaponName != this._weapon.WeaponName)
 
-            this._characterCtrl.ActiveWeapon._rigController.SetBool("isShooting", IsShooting());
+            this._characterCtrl.ActiveWeapon._rigController.SetBool("isShooting", IsPressShooting());
         }
         //if (isAim)
         //    _aim.weight += Time.deltaTime / _aimDuration;

@@ -18,20 +18,16 @@ public class ObjectMovement : VuMonoBehaviour
     }
     protected virtual void Moving()
     {
-        //this._distance = Vector3.Distance(this.transform.position, this._targetPosition);
-        //if (_distance > _minDistance) return;
-
-        //float lerpValue = Mathf.Clamp(Time.fixedDeltaTime * _speed, 0f, 1f);
-        //Vector3 newPos = Vector3.Lerp(this.transform.position, this._targetPosition, lerpValue);
-        //this.transform.parent.position = newPos;
-        // this.transform.parent.Translate(_targetPosition * _speed * Time.fixedDeltaTime);
-
-        _rb.MovePosition(_rb.position+_targetPosition * _speed * Time.fixedDeltaTime);
+        if (_targetPosition != Vector3.zero)
+            _rb.MovePosition(_rb.position + _targetPosition * _speed * Time.fixedDeltaTime);
+        else
+            _rb.velocity = Vector3.zero;
+        //  _rb.transform.position = new Vector3(_rb.position.x + _targetPosition.x * _speed * Time.fixedDeltaTime, 0, _rb.position.z + _targetPosition.z * _speed * Time.fixedDeltaTime);
     }
     public virtual void SetMoveSpeed(float speed)
     {
         this._speed = speed;
     }
 
-  
+
 }
