@@ -10,7 +10,7 @@ public class TextImformation : Singleton<TextImformation>
     public TextMeshProUGUI coinText;
     public void Text()
     {              
-        nameCharacter.text ="NAME : "+PlayerPrefs.GetString("Name");
+        //nameCharacter.text ="NAME : "+PlayerPrefs.GetString("Name");
         //idCharacter.text = "ID : "+PlayerPrefs.GetString("Id");
         coinText.text = "x " +PlayerPrefs.GetInt("SaveCoin").ToString();
     }    
