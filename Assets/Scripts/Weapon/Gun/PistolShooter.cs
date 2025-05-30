@@ -6,10 +6,7 @@ using UnityEngine.Animations.Rigging;
 
 public class PistolShooter : RayCastWeapon
 {
-    //[Space]
-    //[Header("PistolShooter")]
-
-
+   
     protected override void Update()
     {
         base.Update();

@@ -28,6 +28,9 @@ public class ObjectMovement : VuMonoBehaviour
     {
         this._speed = speed;
     }
-
+    public virtual void DeductMoveSpped(float deduct)
+    {
+        this._speed -= deduct;
+    }
 
 }

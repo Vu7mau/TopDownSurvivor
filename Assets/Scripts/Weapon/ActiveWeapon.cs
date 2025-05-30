@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ActiveWeapon : VuMonoBehaviour
 {
-    public enum WeaponSlot { Primary, Secondary, Tertiary };
+    public enum WeaponSlot { Primary, Secondary, Tertiary, Quaternary, Quinary };
 
     //  [SerializeField] RayCastWeapon _weapon;
     [SerializeField] protected Transform[] weaponSlot;
@@ -63,6 +63,14 @@ public class ActiveWeapon : VuMonoBehaviour
         if (Input.GetKeyUp(KeyCode.Alpha3))
         {
             this.SetActivateWeapon(WeaponSlot.Tertiary);
+        } 
+        if (Input.GetKeyUp(KeyCode.Alpha4))
+        {
+            this.SetActivateWeapon(WeaponSlot.Quaternary);
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha5))
+        {
+            this.SetActivateWeapon(WeaponSlot.Quinary);
         }
     }
     protected virtual void ToggelActivateWeapon()
