@@ -17,7 +17,7 @@ public class TriggerZone : MonoBehaviour
         {
 
             triggered = true;
-            Debug.Log("trigger");
+            
 
             switch (triggerType)
             {
