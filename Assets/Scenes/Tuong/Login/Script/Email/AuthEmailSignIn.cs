@@ -2,7 +2,6 @@
 using PlayFab;
 using UnityEngine.SceneManagement;
 using UnityEngine;
-
 public class AuthEmailSignIn : AuthManager
 {
     public void SignInGame()
