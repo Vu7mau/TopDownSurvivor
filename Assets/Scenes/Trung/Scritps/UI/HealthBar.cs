@@ -3,49 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : MonoBehaviour
+public class HealthBar : VuMonoBehaviour
 {
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider healthEaseSlider;
-    [SerializeField] private float maxHealth;
-    private float health;
+    [SerializeField] protected EnemyHealth enemyHealth;
     [SerializeField] private float timeEaseLerp = 0.05f;
-    private void OnDisable()
+    protected override void OnEnable()
     {
-        LoadHealthBar((int)maxHealth);
+        base.OnEnable();
     }
-    private void Update()
+    protected override void OnDisable()
     {
-        if (healthSlider.value != health) healthSlider.value = health;
-        if (healthEaseSlider.value != healthSlider.value)
-            healthEaseSlider.value = Mathf.Lerp(healthEaseSlider.value, health, timeEaseLerp);
+        base.OnDisable();
     }
-    public void LoadHealthBar(int currentHealth)
+    protected override void LoadComponents()
     {
-        health = currentHealth;
-        UpdateHealthBar();
+        base.LoadComponents();
+        this.LoadEnemyHealth();
+        this.LoadSlider();
     }
-    private void UpdateHealthBar()
+    protected void Update()
     {
-        if(health <= 0) { gameObject.SetActive(false); return; }
+        this.SetUpValueForSliders();
+        if (this.healthEaseSlider.value != this.healthSlider.value)
+            this.healthEaseSlider.value = Mathf.Lerp(this.healthEaseSlider.value, this.enemyHealth.Health, this.timeEaseLerp);
+    }
+    protected virtual void UpdateHealthBar()
+    {
+        if(this.enemyHealth.Health <= 0) { this.gameObject.SetActive(false); return; }
         if (this.healthSlider == null || this.healthEaseSlider == null) { this.LoadSlider(); }
     }
-    private void SetUpValueForSliders()
+    protected virtual void SetUpValueForSliders()
     {
         if (this.healthSlider == null || this.healthEaseSlider == null) { this.LoadSlider(); }
-        this.healthEaseSlider.maxValue = health;
-        this.healthSlider.maxValue = health;
-        this.healthSlider.value = health;
+        this.healthSlider.value = this.enemyHealth.Health;
+        this.healthSlider.maxValue = this.enemyHealth.MaxHealth;
+        this.healthEaseSlider.maxValue = this.enemyHealth.MaxHealth;
+        this.UpdateHealthBar();
     }
-    public void LoadMaxHealth(int _maxHealth)
-    {
-        this.maxHealth = _maxHealth;
-        this.health = maxHealth;
-        SetUpValueForSliders();
-    }
-    private void LoadSlider()
+    protected virtual void LoadSlider()
     {
         this.healthSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
         this.healthEaseSlider = GameObject.Find("HealthEaseBar").GetComponent<Slider>();
+    }
+    protected virtual void LoadEnemyHealth()
+    {
+        if(this.enemyHealth != null) return;
+        this.enemyHealth = GetComponentInParent<EnemyHealth>();
+        Debug.Log(transform.name + ": Load EnemyHealth", gameObject);
     }
 }

@@ -1,28 +1,48 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class BulletArc : Projectile
+public abstract class BulletArc : PoolObj
 {
-    [SerializeField] private float height;
-    [SerializeField] private Vector3 offSet;
-    private float duration;
-    private Vector3 targetPosition;
-    private void OnEnable()
+    
+    [SerializeField] protected float curveHeight = 2f;
+    [SerializeField] protected float duration = 1f;
+
+
+    [SerializeField] protected float damage;
+    protected Tween moveTween;
+
+    protected override void OnEnable()
     {
-        Move();
+        base.OnEnable();
     }
-    private void Move()
+    protected override void LoadComponents()
     {
-        targetPosition = FindAnyObjectByType<CharacterCtrl>().transform.position;
-        Vector3 startPosition = transform.position;
-        Vector3 endPosition = targetPosition + offSet;
-        duration = lifeTime;
-        Vector3 midPoint = (startPosition + endPosition) / 2;
-        midPoint.y += height;
-        Vector3[] path = new Vector3[] { startPosition, midPoint, endPosition };
-        transform.DOPath(path, duration, PathType.CatmullRom).SetEase(Ease.Linear).OnComplete(() => DeleteBullet());
+        base.LoadComponents();
+    }
+    
+    public virtual void Shoot(Vector3 startPos, Vector3 endPos)
+    {
+        // Reset vị trí ban đầu
+        transform.position = startPos;
+
+        // Nếu tween cũ còn tồn tại, kill nó
+        moveTween?.Kill();
+
+        // Tạo đường bay cong với 3 điểm: start -> giữa -> end
+        Vector3 middle = Vector3.Lerp(startPos, endPos, 0.5f) + Vector3.up * curveHeight;
+        Vector3[] path = new Vector3[] { startPos, middle, endPos };
+
+        // Bắt đầu tween mới
+        moveTween = transform.DOPath(path, duration, PathType.CatmullRom)
+                             .SetEase(Ease.Linear)
+                             //.OnComplete(() =>
+                             //{
+                             //    // Tắt viên đạn sau khi bay xong (trả về pool)
+                             //    gameObject.SetActive(false);
+                             //})
+                             ;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -30,11 +50,6 @@ public class BulletArc : Projectile
         if (player != null)
         {
             player.Deduct((int)this.damage);
-            DeleteBullet();
         }
-    }
-    private void DeleteBullet()
-    {
-        gameObject.SetActive(false);
     }
 }

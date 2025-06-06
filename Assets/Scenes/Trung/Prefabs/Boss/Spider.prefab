@@ -1840,9 +1840,6 @@ MonoBehaviour:
   _isDead: 0
   enemySO: {fileID: 11400000, guid: c084c1643d098884e850d07f8b918914, type: 2}
   _canTakeDamage: 1
-  _healthBar: {fileID: 0}
-  _bossHealthBar: {fileID: 1846161356770656840}
-  EnemyIsDead: 0
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.5, y: 0.5, z: 0.5}
   hurtPositionOffset: {x: 0, y: 3, z: 0}
@@ -4566,6 +4563,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossHealthBar
       objectReference: {fileID: 0}
+    - target: {fileID: 7231323498107347745, guid: 4382618d130f2744f8ee2648907e94e0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7337556414614082581, guid: 4382618d130f2744f8ee2648907e94e0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4616,14 +4617,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7337556414614082581, guid: 4382618d130f2744f8ee2648907e94e0, type: 3}
   m_PrefabInstance: {fileID: 8616430184710551138}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1846161356770656840 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7930087294927533098, guid: 4382618d130f2744f8ee2648907e94e0, type: 3}
-  m_PrefabInstance: {fileID: 8616430184710551138}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3be5795b43690f14f83be7a833685617, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -46,7 +46,7 @@ public class EnemyController : MonoBehaviour,INpc
         _anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         e_collider = GetComponent<Collider>();
-        player = FindAnyObjectByType<ThirdPersonController>().gameObject;
+        //player = FindAnyObjectByType<ThirdPersonController>().gameObject;
     }
     private void OnEnable()
     {

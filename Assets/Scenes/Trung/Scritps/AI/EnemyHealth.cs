@@ -5,59 +5,71 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyHealth : EnemyDamageReceiver
+public class EnemyHealth : DamageReceiver,IEnemy
 {
     [SerializeField] private EnemySO enemySO;
     [SerializeField] private bool _canTakeDamage = true;
+    [SerializeField] private AudioClip beastHurtSFX;
+    //[SerializeField] protected EnemyDamageReceiver enemyDamageReceiver;
+
+
     private Rigidbody rb;
-    private bool hasState;
-    private float _health;
-    private float _amountIncrease = 0;
     private Animator _animator;
     private SpawnEnemies _spawnEnemies;
-    [SerializeField] private HealthBar _healthBar;
-    [SerializeField] private BossHealthBar _bossHealthBar;
-    [SerializeField] private bool EnemyIsDead = false;
-    [SerializeField] private AudioClip beastHurtSFX;
+
+
+    private float _amountIncrease = 0;
     public float Health
     {
-        get { return _health; }
-        set { _health = value; }
+        get { return _hp; }
     }
+    public float MaxHealth
+    {
+        get { return _hpMax; }
+    }
+
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        //this.LoadEnemyDamageReceiver();
+    }
+
     protected override void Awake()
     {
         base.Awake();
-        rb= GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
-        _spawnEnemies =FindAnyObjectByType<SpawnEnemies>();
+        this.rb = GetComponent<Rigidbody>();
+        this._animator = GetComponent<Animator>();
+        this._spawnEnemies =FindAnyObjectByType<SpawnEnemies>();
     }
     protected override void Start()
     {
         base.Start();
-        base.Reborn();
+        this.ResetStateEnemyDefault();
     }
     protected override void OnEnable()
     {
         base.OnEnable();
-        UpdateEnemy();
+        this.ResetStateEnemyDefault();
     }
     protected override void OnDisable()
     {
         base.OnDisable();
         this._amountIncrease = 0;
     }
-    public void UpdateEnemy()
+    protected virtual void ResetStateEnemyDefault()
     {
-        EnemyIsDead = false;
-        rb.isKinematic = false;
         this._hpMax = (int)enemySO.Health;
-        this._hp = this._hpMax;
-        _healthBar?.LoadMaxHealth(this._hpMax);
-        _bossHealthBar?.SetUpBar(this._hpMax);
-        _healthBar?.gameObject.SetActive(true);
-        _bossHealthBar?.gameObject.SetActive(true);
-        gameObject.GetComponent<Collider>().enabled = true;
+        base.Reborn();
+        this.rb.isKinematic = false;
+        this.gameObject.GetComponent<Collider>().enabled = true;
     }
+
+    //protected virtual void LoadEnemyDamageReceiver()
+    //{
+    //    if (this.enemyDamageReceiver != null) return;
+    //    this.enemyDamageReceiver = GetComponentInChildren<EnemyDamageReceiver>();
+    //    Debug.Log(transform.name + ":Load EnemyDamageReceiver!");
+    //}
     public void CheckAmountIncreaseHealth(int _amountIncrease)
     {
         this._amountIncrease = (float)_amountIncrease / 100;
@@ -68,8 +80,6 @@ public class EnemyHealth : EnemyDamageReceiver
     {
         this._hpMax = this._hpMax + (int)(this._hpMax * _amountIncrease);
         Debug.Log("Máu của quái là: "+this._hpMax);
-        _healthBar?.LoadMaxHealth(this._hpMax);
-        _bossHealthBar?.SetUpBar(this._hpMax);
     }
     public void TakeDamage(int damage)
     {
@@ -78,46 +88,40 @@ public class EnemyHealth : EnemyDamageReceiver
     }
     protected override void OnDead()
     {
-        base.OnDead();
-        gameObject.GetComponent<Collider>().enabled = false;
-        rb.isKinematic= true;
-        _canTakeDamage = false;
-        hasState = _animator.HasState(0, Animator.StringToHash("die"));
-        if (hasState)
-            _animator.SetTrigger("die");
-        //_animator.SetTrigger("die");
-        if (!EnemyIsDead)
+        this.gameObject.GetComponent<Collider>().enabled = false;
+        this.rb.isKinematic= true;
+        this._canTakeDamage = false;
+        if (HasDeadState())
+            this._animator.SetTrigger("die");
+        if (!this._isDead)
         {
-            _spawnEnemies.EnemyDefeated(1);
-            EnemyIsDead=true;
+            //_spawnEnemies.EnemyDefeated(1);
+            this._isDead = true;
         }
     }
     public override void Deduct(int damage)
     {
         if(this._isDead) { OnDead(); return; }
-        base.Deduct(damage);
-        if (beastHurtSFX != null)
-            
+        //base.Deduct(damage);
+        Debug.Log("Máu quái còn " + this._hp);    
         if (_animator != null)
         {
-            hasState = _animator.HasState(0, Animator.StringToHash("getHit"));
-            if (hasState && !this._isDead)
+            if (HasHurtState() && !this._isDead)
                 _animator.SetTrigger("damage");
-            CharacterEvents.characterDamaged?.Invoke(gameObject, damage);
+            CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
         }
     }
-    protected override void CheckIsDead()
-    {
-        _healthBar?.LoadHealthBar(this._hp);
-        _bossHealthBar?.UpdateCurrentHealthBoss(this._hp);
-        base.CheckIsDead();
-    }
+    public virtual bool HasHurtState() => _animator.HasState(0, Animator.StringToHash("getHit"));
+    public virtual bool HasDeadState() => _animator.HasState(0, Animator.StringToHash("die"));
     protected override void HurtEffect()
     {
         if(beastHurtSFX != null)
             SoundFXManager.Instance.PlaySoundFXClip(beastHurtSFX, transform);
         StartCoroutine(HurtFXRoutine());
     }
+
+
+
     [SerializeField] private Vector3 hurtScale;
     [SerializeField] private Vector3 hurtPositionOffset;
     private IEnumerator HurtFXRoutine()

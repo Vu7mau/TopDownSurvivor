@@ -7,7 +7,7 @@ public class SpiderTiny : EnemyAI
 {
     private enum TypeBomb { None, OneTouch, OnTime }
     [SerializeField] private TypeBomb type;
-    [SerializeField] private ShootingAttack shootingAttack;
+    [SerializeField] private DragonUsurper shootingAttack;
     private void Update()
     {
 

@@ -4,8 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName ="Enemy")]
 public class EnemySO : ScriptableObject
 {
-    [Header("Movement")]
-    public float Speed;
 
     [Header("Chase")]
     public float ChaseRange;

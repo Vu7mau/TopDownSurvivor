@@ -1433,7 +1433,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 32.6, y: 1.62, z: 73.16}
-  m_LocalScale: {x: 0.20809002, y: 0.20809002, z: 0.20809002}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6118832317435484306}
@@ -1550,11 +1550,9 @@ MonoBehaviour:
   _isDead: 0
   enemySO: {fileID: 11400000, guid: d90d601783b61bd44878c3df415a50b0, type: 2}
   _canTakeDamage: 1
-  _healthBar: {fileID: 2962625957659825899}
-  _bossHealthBar: {fileID: 0}
-  EnemyIsDead: 0
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.1, y: 0.1, z: 0.1}
+  hurtPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &3023640599947988060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2413,22 +2411,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIHp
       objectReference: {fileID: 0}
+    - target: {fileID: 8705884363662085360, guid: 15514f682717f6a4d889e51d01ef6aa6, type: 3}
+      propertyPath: offSet.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8705884363662085360, guid: 15514f682717f6a4d889e51d01ef6aa6, type: 3}
+      propertyPath: targetPosition
+      value: 
+      objectReference: {fileID: 8632828178613212604}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15514f682717f6a4d889e51d01ef6aa6, type: 3}
---- !u!114 &2962625957659825899 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8064950523830539635, guid: 15514f682717f6a4d889e51d01ef6aa6, type: 3}
-  m_PrefabInstance: {fileID: 5111912514819408792}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449b6853a9832db4b8c00150be5422b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &5078809676582007363 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 39027323585163739, guid: 15514f682717f6a4d889e51d01ef6aa6, type: 3}

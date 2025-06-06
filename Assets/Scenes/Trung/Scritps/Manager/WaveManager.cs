@@ -40,7 +40,7 @@ public class Wave
     public int EnemyTypeIndex;
     public int Amount;
     public float timeForNextWave;
-    public List<Boss> bossLists;
+    public List<BOSS> bossLists;
     public enum ModeWave { EachType, Mixed, BossFight }
     public ModeWave waveMode;
 
@@ -49,7 +49,7 @@ public class Wave
     public int amountDamageIncreasePercent;
 }
 [System.Serializable]
-public struct Boss
+public struct BOSS
 {
     public int BossType;
     public int Amount;

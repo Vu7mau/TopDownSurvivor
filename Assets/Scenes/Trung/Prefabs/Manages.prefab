@@ -919,6 +919,7 @@ MonoBehaviour:
   - {fileID: 8906794987096933695}
   waveNumber: 1
   selectedChildren: []
+  timeIsUp: 0
 --- !u!1 &3143721598112212476
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,6 +1416,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 311864779760079947}
+  - {fileID: 7046429361416884441}
   m_Father: {fileID: 2912854502670795606}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4545751539808459520
@@ -1722,6 +1724,52 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &4717606638335193096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7046429361416884441}
+  - component: {fileID: 3253976750580705536}
+  m_Layer: 0
+  m_Name: AbyssToxicSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7046429361416884441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4717606638335193096}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 112.98521, y: 0.6388117, z: 32.563705}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4135409583037356247}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3253976750580705536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4717606638335193096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 759900b321fe89044b4d825b8b645779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnCount: 0
+  inPoolObjs: []
 --- !u!1 &4772784221436428320
 GameObject:
   m_ObjectHideFlags: 0
@@ -2749,6 +2797,7 @@ MonoBehaviour:
   coinTextPrefab: {fileID: 0}
   ExpTextPrefab: {fileID: 0}
   _myCanvas: {fileID: 3304062259478469593}
+  _DamageTextCanvas: {fileID: 0}
   panel1: {fileID: 8787424989575864257}
 --- !u!1 &7934294903855780408
 GameObject:

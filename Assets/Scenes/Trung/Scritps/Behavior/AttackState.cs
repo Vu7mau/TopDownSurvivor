@@ -5,16 +5,16 @@ using UnityEngine.AI;
 
 public class AttackState : StateMachineBehaviour
 {
-    Transform player;
-    NavMeshAgent navMeshAgent;
+    private Transform player;
+    private NavMeshAgent navMeshAgent;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = FindAnyObjectByType<CharacterCtrl>().transform;/*GameObject.FindGameObjectWithTag("Player")*/;
-        navMeshAgent = animator.GetComponent<NavMeshAgent>();
+        this.player = FindAnyObjectByType<CharacterCtrl>().transform;/*GameObject.FindGameObjectWithTag("Player")*/;
+        this.navMeshAgent = animator.GetComponent<NavMeshAgent>();
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.transform.LookAt(player);
+        animator.transform.LookAt(this.player);
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

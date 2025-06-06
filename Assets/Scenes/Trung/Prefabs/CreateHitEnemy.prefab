@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1145350493920016496}
-  - component: {fileID: 6896690426282020888}
   - component: {fileID: 1234051776881407968}
+  - component: {fileID: 3059291028090726344}
   m_Layer: 0
   m_Name: CreateHitEnemy
   m_TagString: Untagged
@@ -33,7 +33,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6896690426282020888
+--- !u!114 &1234051776881407968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5904810777239263597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc52bc96f7dd29d44b90aaf706d1319d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _basedDamage: 1
+  CanTakeDamage: 0
+  enemySO: {fileID: 11400000, guid: 0a9c6c47fe43679429e51c64292dd4df, type: 2}
+--- !u!65 &3059291028090726344
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -52,20 +67,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 3.07}
-  m_Center: {x: 0, y: 1.91, z: 2.79}
---- !u!114 &1234051776881407968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5904810777239263597}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc52bc96f7dd29d44b90aaf706d1319d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _damage: 1
-  CanTakeDamage: 0
-  enemySO: {fileID: 11400000, guid: ffe97e1170d08e0408d7624a2ef610be, type: 2}
+  m_Size: {x: 3.2301712, y: 4.611788, z: 6.4068985}
+  m_Center: {x: -0.9232521, y: 2.1895785, z: 4.235592}

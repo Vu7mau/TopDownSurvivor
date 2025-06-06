@@ -29,7 +29,7 @@ public class Bomb : DamageSender
         if (player != null && !_canTakeDamage)
         {
             Rigidbody rb = player.gameObject.GetComponent<Rigidbody>();
-            Send(other.transform);
+            this.Send(other.transform);
             _canTakeDamage = true;
             AddForceToTarget(rb);
             Debug.Log("Đã chạm Player!");

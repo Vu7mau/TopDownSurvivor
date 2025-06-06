@@ -14,7 +14,7 @@ public class PatrollState : StateMachineBehaviour
     {
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        agent.speed = enemySO.Speed;
+        //agent.speed = enemySO.Speed;
         timer = 0;
         GameObject go = GameObject.FindGameObjectWithTag("WayPoints");
         foreach(Transform t in go.transform)

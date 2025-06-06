@@ -4,8 +4,8 @@ using UnityEngine;
 
 interface IEnemy
 {
-    public void TakeDamage(int damage);
-    public void OnDead();
+    public bool HasHurtState();
+    public bool HasDeadState();
 }
 interface INpc
 {
