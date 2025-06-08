@@ -2527,8 +2527,8 @@ GameObject:
   - component: {fileID: 6593809352031580511}
   - component: {fileID: 7669554188586364842}
   - component: {fileID: 1174526061678325029}
-  - component: {fileID: 8856683746598421497}
   - component: {fileID: 3263663517504054116}
+  - component: {fileID: 6269595595726266558}
   m_Layer: 0
   m_Name: Zombie_Suitman_1
   m_TagString: Untagged
@@ -2615,33 +2615,6 @@ NavMeshAgent:
   m_BaseOffset: 0.02
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &8856683746598421497
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7945127476044001139}
-  serializedVersion: 4
-  m_Mass: 100000
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 2
 --- !u!65 &3263663517504054116
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2663,6 +2636,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.74283165, y: 2.1139004, z: 0.4123132}
   m_Center: {x: -0.021263093, y: 1.0334052, z: 0.035627887}
+--- !u!114 &6269595595726266558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7945127476044001139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea8bc0012f89f3468f41907cdb85731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hp: 0
+  _hpMax: 0
+  _isDead: 0
+  enemySO: {fileID: 11400000, guid: 415d7367ca4c23c4f9d49a3ab3d6e397, type: 2}
+  _canTakeDamage: 1
+  beastHurtSFX: {fileID: 8300000, guid: 0c8d9612b61a51f4cb3c20051a17df41, type: 3}
+  hurtScale: {x: 0.25, y: 0.25, z: 0.25}
+  hurtPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &8260544194122784931
 GameObject:
   m_ObjectHideFlags: 0
