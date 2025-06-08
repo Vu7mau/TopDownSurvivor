@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Animations;
 using UnityEngine;
-
 public class ActiveWeapon : VuMonoBehaviour
 {
-    public enum WeaponSlot { Primary, Secondary, Tertiary, Quaternary, Quinary };
+   
 
     //  [SerializeField] RayCastWeapon _weapon;
     [SerializeField] protected Transform[] weaponSlot;
@@ -72,6 +71,10 @@ public class ActiveWeapon : VuMonoBehaviour
         {
             this.SetActivateWeapon(WeaponSlot.Quinary);
         }
+        if (Input.GetKeyUp(KeyCode.Alpha6))
+        {
+            this.SetActivateWeapon(WeaponSlot.Senary);
+        }
     }
     protected virtual void ToggelActivateWeapon()
     {
@@ -135,8 +138,6 @@ public class ActiveWeapon : VuMonoBehaviour
             } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
 
         }
-
-
     }
     IEnumerator ActivateWeapon(int index)
     {
@@ -155,6 +156,8 @@ public class ActiveWeapon : VuMonoBehaviour
             this.activeGun = weapon;
         }
     }
+  
+
     //[ContextMenu("Save WeaponPose")]
     //void SaveWeaponPose()
     //{
@@ -168,3 +171,4 @@ public class ActiveWeapon : VuMonoBehaviour
 
     //}
 }
+public enum WeaponSlot { Primary, Secondary, Tertiary, Quaternary, Quinary, Senary, Septenary };

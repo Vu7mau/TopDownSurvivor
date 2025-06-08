@@ -102,7 +102,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     public override void Deduct(int damage)
     {
         if(this._isDead) { OnDead(); return; }
-        //base.Deduct(damage);
+        base.Deduct(damage);
         Debug.Log("Máu quái còn " + this._hp);    
         if (_animator != null)
         {

@@ -4,10 +4,7 @@ using UnityEngine;
 
 public  class AudioManager : VuMonoBehaviour
 {
-   // public static SoundFXManager Instance {  get; set; }
-
-
-
+  
     [SerializeField] protected Transform holder;
     [SerializeField] protected List<Transform> poolSoundFX;
     [SerializeField] private AudioSource soundFXObject;
@@ -33,13 +30,11 @@ public  class AudioManager : VuMonoBehaviour
         float clipLenght = audi.clip.length;
         // Destroy(audi.gameObject, clipLenght);
         StartCoroutine(Despawn(audi.transform, clipLenght));
-
     }
     public virtual void PlaySoundFXClip(AudioClip clip, Transform transformSpawn/*, float volume*/)
     {
         this.PlaySoundFXClip(clip, transformSpawn,false);
     }
-
 
 
     protected  void LoadHolder()

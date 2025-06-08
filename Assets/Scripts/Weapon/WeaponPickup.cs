@@ -17,6 +17,7 @@ public class WeaponPickup : VuMonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.name);
         ActiveWeapon activeWeapon =other.GetComponent<ActiveWeapon>();
         if (activeWeapon != null )
         {

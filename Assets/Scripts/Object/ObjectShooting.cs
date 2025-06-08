@@ -6,14 +6,14 @@ using UnityEngine;
 public abstract class ObjectShooting : VuMonoBehaviour
 {
     [Header("Object Shooting")]
+    [SerializeField] protected WeponSO weaponInfo;
     [SerializeField] protected bool _isShooting = false;
     [SerializeField] protected bool _isReloadAmmour = false;
-    //    public bool IsFire=> _isShooting;
-    [SerializeField] protected float _shootDelay = .2f;
+    //[SerializeField] protected float _shootDelay = .2f;
     [SerializeField] protected float _shootTimer = 0f;
-    [SerializeField] protected int _MaxBulletCount = 30;
+    //[SerializeField] protected int _MaxBulletCount = 30;
     [SerializeField] protected int _bulletsCount = 0;
-    [SerializeField] protected float _reloadAmmoTime = 2f;
+    //[SerializeField] protected float _reloadAmmoTime = 2f;
     [SerializeField] protected float _reloadAmmoTimer = 0f;
 
 
@@ -24,7 +24,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
     {
         base.OnDisable();
 
-        this._bulletsCount = this._MaxBulletCount;
+        this._bulletsCount = weaponInfo._MaxBulletCount;
     }
 
     protected virtual void Update()
@@ -41,10 +41,10 @@ public abstract class ObjectShooting : VuMonoBehaviour
 
         this._shootTimer += Time.fixedDeltaTime;
 
-        if (this._shootTimer < this._shootDelay)
+        if (this._shootTimer < weaponInfo._shootDelay)
         {
             _isBursting = true;
-          //  Debug.Log("here 0" + _isBursting);
+
             return;
         }
         else
@@ -54,7 +54,6 @@ public abstract class ObjectShooting : VuMonoBehaviour
         this._shootTimer = 0;
         this.Shoot();
         this._bulletsCount--;
-        Debug.Log("here 1" + _isBursting);
 
 
     }
@@ -65,7 +64,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
         if (this._bulletsCount > 0) return false;
 
 
-        if (this._reloadAmmoTimer < this._reloadAmmoTime)
+        if (this._reloadAmmoTimer < weaponInfo._reloadAmmoTime)
         {
 
             //CursorManager.Instance.StartReloadAnimation(this._reloadAmmoTime);
@@ -75,7 +74,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
         }
 
         this._reloadAmmoTimer = 0;
-        this._bulletsCount = this._MaxBulletCount;
+        this._bulletsCount = weaponInfo._MaxBulletCount;
         _isReloadAmmour = false;
         return false;
     }
@@ -93,7 +92,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
                 return 3;
 
             case FireMode.Auto:
-                return _MaxBulletCount;
+                return weaponInfo._MaxBulletCount;
 
             default:
                 return 0;

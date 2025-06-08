@@ -1255,26 +1255,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cc6ad0477666e146a2938d8bac18bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponInfo: {fileID: 11400000, guid: 821b0e174b3694944aed8010a3c08685, type: 2}
   _isShooting: 0
   _isReloadAmmour: 0
-  _shootDelay: 0.2
   _shootTimer: 0
-  _MaxBulletCount: 30
   _bulletsCount: 0
-  _reloadAmmoTime: 2
   _reloadAmmoTimer: 0
   fireMode: 0
   _isBursting: 0
   _muzzelFlash: {fileID: 0}
   lineRenderer: {fileID: 721224379131902228}
-  _enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
   _gunPoint: {fileID: 6868071633385048282}
-  _gunTexture: {fileID: 0}
-  _weaponName: lazer
   _isWeaponActivate: 0
-  weaponSlot: 4
   trailRenderer: {fileID: 8170432223858780122}
 --- !u!96 &8170432223858780122
 TrailRenderer:
@@ -1284,7 +1276,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8646175318907004939}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1410,7 +1402,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 64823059b5e485b479ca488a461d01e1, type: 2}
+  - {fileID: 2100000, guid: 84d8559d2d5f6a845b7fda633924fb9b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1433,7 +1425,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 10}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -1441,14 +1433,23 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.015419006
-        value: 0.32367134
+        time: 0.0000013764948
+        value: 0.85023355
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0.96135265
+        inSlope: -0.17903948
+        outSlope: -0.17903948
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.10792968
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4

@@ -14,7 +14,7 @@ public class MachineGunShooter : RayCastWeapon
     protected override void ShooterEffect()
     {
         base.ShooterEffect();
-        CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(2f, .1f);
+        CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(weaponInfo.recoilSize, weaponInfo.recoilDuration);
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.GunPoint);
     }
 

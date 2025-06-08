@@ -17,7 +17,7 @@ public class BulletImpact : BulletAbstract
         base.OnDisable();
         _isActive = false;
     }
-    
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -34,28 +34,40 @@ public class BulletImpact : BulletAbstract
         Debug.Log(transform.name + ": LoadCollider", gameObject);
     }
 
-    public virtual void CreateParticleFX(Collision collision)
+    public void CreateParticleFX(Collision collision)
     {
         if (this._isActive) return;
         _isActive = true;
-        _hitEffect.transform.position = collision.contacts[0].point;
-        _hitEffect.transform.forward = collision.contacts[0].normal;
+        this.SetEffectPos(collision);
         this.ResetPlaybackTime();
-        _hitEffect.Play();
-        Invoke(nameof(Despawn),.2f);
+        this.HandleVisualEffect();
+        this.HandleSoundEffect();
+        Invoke(nameof(Despawn), .2f);
         //this._bulletCtrl.BulletDespawn.DespawnObject();
-       // Debug.Log("Do her");
+        // Debug.Log("Do her");
     }
     protected virtual void Despawn()
     {
         _bulletCtrl.BulletDespawn.DespawnObject();
     }
-    void ResetPlaybackTime()
+    protected virtual void SetEffectPos(Collision collision)
+    {
+        _hitEffect.transform.position = collision.contacts[0].point;
+        _hitEffect.transform.forward = collision.contacts[0].normal;
+    }
+    protected virtual void HandleVisualEffect()
+    {
+        _hitEffect.Play();
+    }
+    protected virtual void ResetPlaybackTime()
     {
         if (_hitEffect != null)
         {
             _hitEffect.Simulate(0, true, true);
         }
     }
+    protected virtual void HandleSoundEffect()
+    {
 
+    }
 }

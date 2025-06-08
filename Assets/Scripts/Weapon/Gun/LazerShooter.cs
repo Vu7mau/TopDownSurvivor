@@ -15,9 +15,9 @@ public class LazerShooter : RayCastWeapon
     {
         return BulletSpawner.LazerGunBullet;
     }
-    //protected override void Shoot()
-    //{
-    //    this.ShootLaser();
+    protected override void Shoot()
+    {
+        this.ShootLaser();
 
-    //}
+    }
 }

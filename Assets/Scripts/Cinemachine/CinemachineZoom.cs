@@ -6,7 +6,7 @@ public class CinemachineZoom : CinemachineAbstract
 {
     [SerializeField] private float _defaultFOV;
     [SerializeField] protected float _zoomInFOV;
-    [SerializeField] protected float _zoomSpeed;
+   // [SerializeField] protected float _zoomSpeed;
   //  [SerializeField] protected bool _isZoom;
     
     //private void LateUpdate()
@@ -17,23 +17,23 @@ public class CinemachineZoom : CinemachineAbstract
     //{
     //    this._isZoom = isZoom;
     //}
-    public virtual void ToggleZoom(bool isZoom)
+    public virtual void ToggleZoom(bool isZoom,float zoomSpeed)
     {
         if (isZoom)
-            this.ZoomIn();
+            this.ZoomIn(zoomSpeed);
         else
-            this.ZoomOut();
+            this.ZoomOut(zoomSpeed);
     }    
-    protected virtual void ZoomIn()
+    protected virtual void ZoomIn(float zoomSpeed)
     {
         var lensSettings = _cinemachineCtrl._cinemachineVirtualCamera.m_Lens;
-        lensSettings.OrthographicSize= Mathf.Lerp(lensSettings.OrthographicSize, _zoomInFOV, _zoomSpeed*Time.deltaTime);
+        lensSettings.OrthographicSize= Mathf.Lerp(lensSettings.OrthographicSize, _zoomInFOV, zoomSpeed * Time.deltaTime);
         _cinemachineCtrl._cinemachineVirtualCamera.m_Lens.OrthographicSize = lensSettings.OrthographicSize;
     }
-    protected virtual void ZoomOut()
+    protected virtual void ZoomOut(float zoomSpeed)
     {
         var lensSettings = _cinemachineCtrl._cinemachineVirtualCamera.m_Lens;
-        lensSettings.OrthographicSize = Mathf.Lerp(lensSettings.OrthographicSize, _defaultFOV, _zoomSpeed*Time.deltaTime);
+        lensSettings.OrthographicSize = Mathf.Lerp(lensSettings.OrthographicSize, _defaultFOV, zoomSpeed * Time.deltaTime);
         _cinemachineCtrl._cinemachineVirtualCamera.m_Lens.OrthographicSize = lensSettings.OrthographicSize;
     }
 }

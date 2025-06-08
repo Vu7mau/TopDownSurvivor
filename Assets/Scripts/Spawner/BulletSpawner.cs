@@ -10,6 +10,7 @@ public class BulletSpawner : Spawner
     public static string ShotGunBullet = "ShotGun_Bullet";
     public static string MachineGunBullet = "MachineGun_Bullet";
     public static string LazerGunBullet = "Lazer_Bullet ";
+    public static string RocketBullet = "Rocket_Bullet";
 
     protected override void Awake()
     {

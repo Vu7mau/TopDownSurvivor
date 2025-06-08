@@ -60,7 +60,7 @@ public class BulletCtrl : VuMonoBehaviour
     private Rigidbody rb => GetComponent<Rigidbody>();
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag("bullet"))
+        if (collision.transform.CompareTag("bullet")|| collision.transform.CompareTag("Player"))
             return;
         _bulletImpact.CreateParticleFX(collision);
         rb.velocity=Vector3.zero;

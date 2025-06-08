@@ -13,23 +13,23 @@ public class RayCastWeapon : ObjectShooting
     [Header("RayCastWeapon")]
     [SerializeField] protected ParticleSystem _muzzelFlash;
     [SerializeField] protected LineRenderer lineRenderer;
-    [SerializeField] protected LayerMask _enemyLayer;
+    //[SerializeField] protected LayerMask _enemyLayer;
     [SerializeField] protected Transform _gunPoint;
-    [SerializeField] protected Texture _gunTexture;
-    [SerializeField] protected string _weaponName;
+  //  [SerializeField] protected Texture _gunTexture;
+  //  [SerializeField] protected string _weaponName;
     [SerializeField] protected bool _isWeaponActivate = false;
  //   [SerializeField] protected bool _isBusrtLocked = false;
 
     protected RaycastHit _targetEnemy;
-  //  bool isReload => IsReloadingAmmo();
 
-    public ActiveWeapon.WeaponSlot weaponSlot;
+
+    public WeaponSlot weaponSlot=>weaponInfo.weaponSlot;
     public Transform GunPoint => _gunPoint;
     public RaycastHit TargetEnemy => _targetEnemy;
-    public string WeaponName => _weaponName;
+    public string WeaponName => weaponInfo.weaponName;
     public bool IsWeaponActivate => _isWeaponActivate;
 
-    public float ReloadAmmorTime=>this._reloadAmmoTime;
+    public float ReloadAmmorTime=> weaponInfo._reloadAmmoTime;
 
 
     protected override void Awake()
@@ -46,7 +46,9 @@ public class RayCastWeapon : ObjectShooting
     protected override void Update()
     {
         base.Update();
-        CinemachineCtrl.Instance.CinemachineZoom.ToggleZoom(IsShooting());
+        this.ActivateZoom();
+
+
     }
   
     protected virtual void ShooterEffect()
@@ -60,12 +62,11 @@ public class RayCastWeapon : ObjectShooting
         Transform newBullet = BulletSpawner.Instance.Spawn(this.SetBulletType(), this.GunPoint.position, Quaternion.LookRotation(this.GunPoint.forward));
         if (newBullet == null) return;
         newBullet.gameObject.SetActive(true);
-       
         this.ShooterEffect();
     }
 
     protected override bool IsShooting()
-    {
+    {   
         if (this._isWeaponActivate)
             return _isFiring;
         else return false;
@@ -78,7 +79,7 @@ public class RayCastWeapon : ObjectShooting
         Vector3 endPosition;
         lineRenderer.enabled = true;
 
-        if (Physics.Raycast(_gunPoint.position, _gunPoint.forward, out hit,10, this._enemyLayer))
+        if (Physics.Raycast(_gunPoint.position, _gunPoint.forward, out hit, 10, weaponInfo._enemyLayer))
         {
             // endPosition = hit.point;
             float distance = Vector3.Distance(this._gunPoint.position, hit.point);
@@ -94,6 +95,10 @@ public class RayCastWeapon : ObjectShooting
         lineRenderer.SetPosition(0, _gunPoint.position);
         lineRenderer.SetPosition(1, endPosition);
 
+    }
+    protected virtual void ActivateZoom()
+    {
+        CinemachineCtrl.Instance.CinemachineZoom.ToggleZoom(IsShooting(),weaponInfo.zoomSpeed);
     }
     //protected virtual void SetTarget(RaycastHit target)
     //{
@@ -117,7 +122,7 @@ public class RayCastWeapon : ObjectShooting
     }
     public virtual int GetMaxBullets()
     {
-        return this._MaxBulletCount;
+        return weaponInfo._MaxBulletCount;
     }
     public virtual bool GetBurstLocked()
     {
@@ -125,7 +130,7 @@ public class RayCastWeapon : ObjectShooting
     }
     public virtual Texture GunTexture()
     { 
-        if(_gunTexture == null) return null;
-        return _gunTexture;
+        if(weaponInfo._gunTexture == null) return null;
+        return weaponInfo._gunTexture;
     }
 }

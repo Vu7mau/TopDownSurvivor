@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 533489976574913804}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
@@ -53,26 +53,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5093d85e6a2d1e4f9f3c4affd6f26a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponInfo: {fileID: 11400000, guid: eefdacef6be6b7741be9be0a26aba519, type: 2}
   _isShooting: 0
   _isReloadAmmour: 0
-  _shootDelay: 1
   _shootTimer: 0
-  _MaxBulletCount: 7
   _bulletsCount: 0
-  _reloadAmmoTime: 1
   _reloadAmmoTimer: 0
   fireMode: 0
   _isBursting: 0
   _muzzelFlash: {fileID: 4442726648231410699}
   lineRenderer: {fileID: 1031594745318269030}
-  _enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
   _gunPoint: {fileID: 3843521506615196360}
-  _gunTexture: {fileID: 2800000, guid: 6de785751d44f9645b0ccdc5ad98547b, type: 3}
-  _weaponName: shotgun
   _isWeaponActivate: 0
-  weaponSlot: 2
   bulletsPerShot: 10
 --- !u!120 &1031594745318269030
 LineRenderer:
