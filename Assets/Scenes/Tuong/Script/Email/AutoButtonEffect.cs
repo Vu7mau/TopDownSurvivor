@@ -6,9 +6,8 @@ public class AutoButtonEffect : TuongMonobehaviour
     [SerializeField] private GameObject buttonParent;
     private string getButtonParent = "LoginGame";
     [SerializeField] private AudioSource audioSource; 
-    [SerializeField] private AudioClip buttonClickClip;
+    public AudioClip buttonClickClip;
     [SerializeField] private AudioClip buttonHoverClip;
-
     [SerializeField] private float cooldown = 0.1f;
     private float lastPlayTime;
     void Start()
@@ -33,7 +32,6 @@ public class AutoButtonEffect : TuongMonobehaviour
         Button[] buttons = buttonParent.GetComponentsInChildren<Button>(true);
         foreach (Button btn in buttons)
         {
-            if(btn.CompareTag("IgnoreButtonEffect")) continue;
             if (btn.GetComponent<ButtonClickEffectDOTween>() == null)
                 btn.gameObject.AddComponent<ButtonClickEffectDOTween>();
             btn.onClick.RemoveAllListeners();
@@ -41,6 +39,7 @@ public class AutoButtonEffect : TuongMonobehaviour
             {
                 PlayClickSound();
             });
+            if (btn.CompareTag("IgnoreButtonEffect")) continue;
             AddHoverSound(btn);
         }
     }
@@ -63,18 +62,20 @@ public class AutoButtonEffect : TuongMonobehaviour
         });
         eventTrigger.triggers.Add(entry);
     }
-    void PlayClickSound()
+    public void PlayClickSound()
     {
         if (buttonClickClip != null && audioSource != null)
         {
-            audioSource.PlayOneShot(buttonClickClip);
+            float sfxVolume = PlayerPrefs.GetFloat("ButtonVolume", 1f);
+            audioSource.PlayOneShot(buttonClickClip, sfxVolume);
         }
     }
     void PlayHoverSound()
     {
         if (buttonHoverClip != null && audioSource != null)
         {
-            audioSource.PlayOneShot(buttonHoverClip);
+            float sfxVolume = PlayerPrefs.GetFloat("ButtonVolume", 1f);
+            audioSource.PlayOneShot(buttonHoverClip, sfxVolume);
         }
     }
 }
