@@ -9,6 +9,8 @@ public class ChaseState : StateMachineBehaviour
     NavMeshAgent agent;
     Transform player;
     private float distance;
+
+    public float Distance => distance;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
