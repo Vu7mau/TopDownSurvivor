@@ -14,6 +14,7 @@ public class WeponSO : ScriptableObject
     [SerializeField] public float recoilSize;
     [SerializeField] public float recoilDuration;
 
+
     [Space]
     [Header("Cài đặt của súng")]
     [SerializeField] public LayerMask _enemyLayer;

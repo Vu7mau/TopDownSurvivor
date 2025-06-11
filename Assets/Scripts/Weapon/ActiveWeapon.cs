@@ -75,6 +75,10 @@ public class ActiveWeapon : VuMonoBehaviour
         {
             this.SetActivateWeapon(WeaponSlot.Senary);
         }
+        if (Input.GetKeyUp(KeyCode.Alpha7))
+        {
+            this.SetActivateWeapon(WeaponSlot.Septenary);
+        }
     }
     protected virtual void ToggelActivateWeapon()
     {

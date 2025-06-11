@@ -27,16 +27,22 @@ public class RifleShooter : RayCastWeapon
         base.ShooterEffect();
         CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(weaponInfo.recoilSize, weaponInfo.recoilDuration);
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.GunPoint);
+   
     }
     protected override string SetBulletType()
     {
         return BulletSpawner.RifleBullet;
     }
+    protected override string SetShellType()
+    {
+        return ShellSpawner.RifleShell;
+    }
+
     protected override void Update()
     {
         base.Update();
-        if(_isFiring) 
-        this.ShootLaser();
+        if (_isFiring)
+            this.ShootLaser();
         else
             lineRenderer.enabled = false;
     }
@@ -49,3 +55,4 @@ public class RifleShooter : RayCastWeapon
         return false;
     }
 }
+  

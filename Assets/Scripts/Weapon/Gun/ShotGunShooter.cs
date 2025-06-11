@@ -13,6 +13,10 @@ public class ShotGunShooter : RayCastWeapon
     {
         return BulletSpawner.ShotGunBullet;
     }
+    protected override string SetShellType()
+    {
+        return ShellSpawner.ShotGunShell;
+    }
     protected override void ShooterEffect()
     {
         base.ShooterEffect();
@@ -36,6 +40,7 @@ public class ShotGunShooter : RayCastWeapon
 
         }
         this.ShooterEffect();
+        this.SpawnShell();
       _isShooting = false;
     }
 }

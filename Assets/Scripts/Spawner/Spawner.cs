@@ -43,26 +43,28 @@ public abstract class Spawner : VuMonoBehaviour
 
     public virtual Transform Spawn(string prefabName, Vector3 spawnPosition, Quaternion rota)
     {
-     
-        Transform prefab= this.GetPrefabByName(prefabName);
+
+        Transform prefab = this.GetPrefabByName(prefabName);
         if (prefab == null) { Debug.Log("Prefab not found " + prefabName); return null; }
         return this.Spawn(prefab, spawnPosition, rota);
     }
 
     public virtual Transform Spawn(Transform prefab, Vector3 spawnPosition, Quaternion rota)
     {
-       Transform newPrefab= this.GetObjectFormPool(prefab);
+        Transform newPrefab = this.GetObjectFormPool(prefab);
         newPrefab.SetPositionAndRotation(spawnPosition, rota);
 
         newPrefab.transform.parent = this._holder;
+        newPrefab.gameObject.SetActive(true);
         this._spawnCount++;
         return newPrefab;
     }
-    protected virtual Transform GetObjectFormPool(Transform obj) {
+    protected virtual Transform GetObjectFormPool(Transform obj)
+    {
 
-        foreach ( Transform poolObj in _poolObj)
+        foreach (Transform poolObj in _poolObj)
         {
-            if(poolObj == null) continue;
+            if (poolObj == null) continue;
 
             if (poolObj.name == obj.name)
             {
@@ -71,17 +73,17 @@ public abstract class Spawner : VuMonoBehaviour
             }
         }
         Transform newPre = Instantiate(obj);
-        newPre.name=obj.name;
+        newPre.name = obj.name;
         return newPre;
     }
 
     protected virtual Transform GetPrefabByName(string prefabName)
     {
-      
+
         foreach (Transform obj in this._objPrefabs)
         {
             if (obj.name != prefabName) continue;
-             return obj;       
+            return obj;
         }
         return null;
     }

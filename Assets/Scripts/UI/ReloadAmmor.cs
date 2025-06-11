@@ -35,7 +35,7 @@ public class ReloadAmmor : Singleton<ReloadAmmor>
         }
         _reloadSlider.gameObject.SetActive(false);
         this._reloadSlider.value = 0;
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.reloadAmmor, this.transform);
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.reloadRiffle, this.transform);
         Invoke(nameof(this.ResetLoaded), .1f);
     }
    

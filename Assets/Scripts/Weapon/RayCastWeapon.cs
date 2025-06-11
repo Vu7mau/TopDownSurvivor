@@ -13,23 +13,21 @@ public class RayCastWeapon : ObjectShooting
     [Header("RayCastWeapon")]
     [SerializeField] protected ParticleSystem _muzzelFlash;
     [SerializeField] protected LineRenderer lineRenderer;
-    //[SerializeField] protected LayerMask _enemyLayer;
     [SerializeField] protected Transform _gunPoint;
-  //  [SerializeField] protected Texture _gunTexture;
-  //  [SerializeField] protected string _weaponName;
+    [SerializeField] protected Transform _shellSpawnPos;
     [SerializeField] protected bool _isWeaponActivate = false;
- //   [SerializeField] protected bool _isBusrtLocked = false;
+
 
     protected RaycastHit _targetEnemy;
 
 
-    public WeaponSlot weaponSlot=>weaponInfo.weaponSlot;
+    public WeaponSlot weaponSlot => weaponInfo.weaponSlot;
     public Transform GunPoint => _gunPoint;
     public RaycastHit TargetEnemy => _targetEnemy;
     public string WeaponName => weaponInfo.weaponName;
     public bool IsWeaponActivate => _isWeaponActivate;
 
-    public float ReloadAmmorTime=> weaponInfo._reloadAmmoTime;
+    public float ReloadAmmorTime => weaponInfo._reloadAmmoTime;
 
 
     protected override void Awake()
@@ -48,9 +46,8 @@ public class RayCastWeapon : ObjectShooting
         base.Update();
         this.ActivateZoom();
 
-
     }
-  
+
     protected virtual void ShooterEffect()
     {
         if (this._muzzelFlash == null) return;
@@ -59,17 +56,28 @@ public class RayCastWeapon : ObjectShooting
 
     protected override void Shoot()
     {
+        if (string.IsNullOrEmpty(this.SetBulletType())) return;
         Transform newBullet = BulletSpawner.Instance.Spawn(this.SetBulletType(), this.GunPoint.position, Quaternion.LookRotation(this.GunPoint.forward));
-        if (newBullet == null) return;
-        newBullet.gameObject.SetActive(true);
+        //  if (newBullet == null) return;
+        //  newBullet.gameObject.SetActive(true);
         this.ShooterEffect();
+        this.SpawnShell();
     }
-
-    protected override bool IsShooting()
-    {   
+    protected virtual void SpawnShell()
+    {
+        if (string.IsNullOrEmpty(this.SetShellType())) return;
+        Transform newBullet = ShellSpawner.Instance.Spawn(this.SetShellType(), this._shellSpawnPos.position, Quaternion.LookRotation(this._shellSpawnPos.forward));
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.handlingGun, this.transform);
+    }
+    protected override bool IsFireInputPresse()
+    {
         if (this._isWeaponActivate)
-            return _isFiring;
-        else return false;
+        {
+            _isShooting = _isFiring;
+            return _isShooting;
+        }
+        else
+            return false;
     }
     protected virtual void ShootLaser()
     {
@@ -98,7 +106,7 @@ public class RayCastWeapon : ObjectShooting
     }
     protected virtual void ActivateZoom()
     {
-        CinemachineCtrl.Instance.CinemachineZoom.ToggleZoom(IsShooting(),weaponInfo.zoomSpeed);
+        CinemachineCtrl.Instance.CinemachineZoom.ToggleZoom(IsShooting, weaponInfo.zoomSpeed);
     }
     //protected virtual void SetTarget(RaycastHit target)
     //{
@@ -110,7 +118,11 @@ public class RayCastWeapon : ObjectShooting
     }
     protected virtual string SetBulletType()
     {
-        return null;
+        return string.Empty;
+    }
+    protected virtual string SetShellType()
+    {
+        return string.Empty;
     }
     public virtual bool GetIsReloadingAmmo()
     {
@@ -129,8 +141,9 @@ public class RayCastWeapon : ObjectShooting
         return _isBursting;
     }
     public virtual Texture GunTexture()
-    { 
-        if(weaponInfo._gunTexture == null) return null;
+    {
+        if (weaponInfo._gunTexture == null) return null;
         return weaponInfo._gunTexture;
     }
+  
 }

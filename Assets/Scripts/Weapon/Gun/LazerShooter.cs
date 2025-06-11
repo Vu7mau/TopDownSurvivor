@@ -7,17 +7,25 @@ public class LazerShooter : RayCastWeapon
 
     [Space]
     [Header("LazerShooter")]
-    [SerializeField] private TrailRenderer trailRenderer;
+    [SerializeField] private TrailRenderer lazerTrailRenderer;
 
-    private RaycastHit hit;
-    private Vector3 endPosition;
+
     protected override string SetBulletType()
     {
         return BulletSpawner.LazerGunBullet;
     }
-    protected override void Shoot()
+    protected override void ShooterEffect()
     {
-        this.ShootLaser();
+        base.ShooterEffect();
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.lazerShoot, this.GunPoint);
+        if (!lazerTrailRenderer.enabled)
+            lazerTrailRenderer.enabled = true;
+    }
+    protected override void HoldFire()
+    {
+        if (lazerTrailRenderer.enabled)
+            lazerTrailRenderer.enabled = false;
 
     }
+
 }

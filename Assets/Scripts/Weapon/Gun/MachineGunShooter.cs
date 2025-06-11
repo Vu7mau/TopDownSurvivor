@@ -11,11 +11,16 @@ public class MachineGunShooter : RayCastWeapon
     {
         return BulletSpawner.MachineGunBullet;
     }
+    protected override string SetShellType()
+    {
+        return ShellSpawner.MachineShell;
+    }
     protected override void ShooterEffect()
     {
         base.ShooterEffect();
         CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(weaponInfo.recoilSize, weaponInfo.recoilDuration);
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.GunPoint);
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.machineShoot, this.GunPoint);
     }
+
 
 }

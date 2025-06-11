@@ -7,6 +7,10 @@ public class CharacterMove : ObjectMovement
     [Header("CharacterJoystickCtrl")]
     [SerializeField] protected CharacterCtrl _characterCtrl;
     protected Vector3 _moveDir;
+    protected bool isRightFoot = true;
+    [SerializeField] protected float stepDelay = .5f;
+    [SerializeField] protected float stepDelayCount = 0;
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -31,11 +35,17 @@ public class CharacterMove : ObjectMovement
         base.FixedUpdate();
         this.GetMoveDirect();
         this.GetTarget(_moveDir);
+   
     }
     protected virtual void GetTarget(Vector3 target)
     {
         this._targetPosition = target;
-        if (_targetPosition != Vector3.zero) { _isMoving = true; return; }
+        if (_targetPosition != Vector3.zero) 
+        { 
+            _isMoving = true;
+            this.FootStepAudi();
+            return;
+        }
         _isMoving = false;
     }
     protected virtual void GetMoveDirect()
@@ -45,6 +55,25 @@ public class CharacterMove : ObjectMovement
     public virtual bool GetIsMoving()
     {
         return _isMoving;
+    }
+
+    protected virtual void FootStepAudi()
+    {
+        stepDelayCount -= Time.deltaTime;
+        if (stepDelayCount >= 0) return;
+        int random=Random.Range(0, SoundFXManager.Instance.footStep.Length);
+        if (isRightFoot)
+        {
+            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform);
+            isRightFoot = false;
+            stepDelayCount = stepDelay;
+        }
+        else
+        {
+            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform);
+            isRightFoot = true;
+            stepDelayCount = stepDelay;
+        }
     }
 }
 //protected virtual Vector3 GetConvertInput(Vector2 input)
