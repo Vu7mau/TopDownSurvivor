@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
 public class SettingWindows : MonoBehaviour
 {
     private void Start()
@@ -10,10 +7,10 @@ public class SettingWindows : MonoBehaviour
     }
     public void Open()
     {
-        transform.LeanScale(Vector2.one, 0.8f);
+        transform.LeanScale(Vector2.one, 0.05f);
     }
     public void Close()
     {
-        transform.LeanScale(Vector2.zero, 1f).setEaseInBack();
+        transform.LeanScale(Vector2.zero, 0.05f).setEaseInBack();
     }
 }

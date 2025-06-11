@@ -2,8 +2,10 @@
 using PlayFab;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Text.RegularExpressions;
 public class AuthEmailSignIn : AuthManager
 {
+    public MainMenuTwo mainMenuTwo;
     public void SignInGame()
     {
         if (string.IsNullOrEmpty(signInEmail.text))
@@ -11,9 +13,9 @@ public class AuthEmailSignIn : AuthManager
             message.text = "Vui lòng nhập địa chỉ email";
             return;
         }
-        if (!signInEmail.text.Contains("@gmail.com"))
+        if (!Regex.IsMatch(signInEmail.text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
         {
-            message.text = "Email phải có đuôi @gmail.com";
+            message.text = "Email không hợp lệ";
             return;
         }
         if (string.IsNullOrEmpty(signInPassword.text))
@@ -31,6 +33,44 @@ public class AuthEmailSignIn : AuthManager
     private void OnSignInSuccess(LoginResult result)
     {
         message.text = "Đăng nhập thành công";
+        LinkDeviceAndProceed();
+    }
+    public void LinkDeviceAndProceed()
+    {
+        string deviceId = SystemInfo.deviceUniqueIdentifier;
+        var linkRequest = new LinkCustomIDRequest
+        {
+            CustomId = deviceId,
+            ForceLink = true
+        };
+        PlayFabClientAPI.LinkCustomID(linkRequest,
+            success =>
+            {
+                Debug.Log("Đã liên kết tài khoản với thiết bị");
+                OnLoginFinalized();
+            },
+            error =>
+            {
+                if (error.Error == PlayFabErrorCode.LinkedDeviceAlreadyClaimed)
+                {
+                    Debug.Log("Thiết bị đã liên kết, tiếp tục ");
+                    OnLoginFinalized();
+                }
+                else
+                {
+                    Debug.Log("Liên kết thiết bị thất bại: " + error.ErrorMessage);
+                }
+            });
+    }
+    private void OnLoginFinalized()
+    {
+        PlayerPrefs.SetInt("HasLoggedIn", 1);
+        PlayerPrefs.Save();
+        LeaderBoardManager leaderBoardManager = FindObjectOfType<LeaderBoardManager>();
+        if (leaderBoardManager != null)
+        {
+            leaderBoardManager.GetLeaderboard();
+        }
         SceneManager.LoadScene(levelIndex);
     }
     private void OnErrorSignIn(PlayFabError error)

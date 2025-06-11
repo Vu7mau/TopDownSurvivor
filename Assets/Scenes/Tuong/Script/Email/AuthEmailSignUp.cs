@@ -2,6 +2,7 @@
 using PlayFab;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Text.RegularExpressions;
 public class AuthEmailSignUp : AuthManager
 {
     public void SignUpWithEmail()
@@ -30,9 +31,9 @@ public class AuthEmailSignUp : AuthManager
             message.text = "Vui lòng nhập địa chỉ email";
             return;
         }
-        if (!signUpEmail.text.Contains("@gmail.com"))
+        if (!Regex.IsMatch(signUpEmail.text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
         {
-            message.text = "Email phải có đuôi @gmail.com";
+            message.text = "Email phải hợp lệ";
             return;
         }
         if (string.IsNullOrEmpty(signUpPassword.text))
@@ -65,6 +66,8 @@ public class AuthEmailSignUp : AuthManager
             Debug.LogError("Lỗi cập nhật tên người dùng: " + error.GenerateErrorReport());
         }
         );
+        AuthEmailSignIn authEmailSignIn = FindObjectOfType<AuthEmailSignIn>();
+        authEmailSignIn.LinkDeviceAndProceed();
         signInPanel.SetActive(false);
         signUpPanel.SetActive(false);
         otpPanel.SetActive(true);

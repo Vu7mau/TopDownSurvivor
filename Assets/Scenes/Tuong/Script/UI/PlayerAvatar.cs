@@ -115,7 +115,6 @@ public class PlayerAvatar : MonoBehaviour
             avatarDisplay.sprite = avatarSprites[currentAvatarIndex].sprite;
             PlayerPrefs.SetInt("SeletedAvtar", currentAvatarIndex);
             UpdateChangeButton(changeAvatarButton, true);
-            changeAvatarPanel.SetActive(false);
         }
     }
     public void ChangeAvatarFrame()
@@ -126,7 +125,6 @@ public class PlayerAvatar : MonoBehaviour
             avatarFrameDisplay.sprite = avatarFrameSprites[currentFrameIndex].sprite;
             PlayerPrefs.SetInt("SelectedAvatarFrame", currentFrameIndex);
             UpdateChangeButton(changeAvatarFrameButton, true);
-            changeAvatarPanel.SetActive(false);
         }
     }
     private void UpdateChangeButton(Button button, bool isDisabled)

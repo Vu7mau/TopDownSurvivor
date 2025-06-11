@@ -10,10 +10,20 @@ public class MainMenuTwo : MonoBehaviour
     [SerializeField] private GameObject highScoresPanel;
     [SerializeField] private GameObject creditsPanel;
     [SerializeField] private int sceneIndex = 1;
+    [SerializeField] private GameObject loginButton;
     private void Start()
     {
         mainMenuPanel.SetActive(true);
         loginPanel.SetActive(false);
+        bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
+        if (hasLoggedIn)
+        {
+            if (loginButton != null) loginButton.SetActive(false);
+            else
+            {
+                if (loginButton != null) loginButton.SetActive(true);
+            }
+        }
     }
     public void LoginButton()
     {
@@ -61,5 +71,12 @@ public class MainMenuTwo : MonoBehaviour
     {
         UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
+    }
+    public void SetLoginState(bool isLoggedIn)
+    {
+        if(loginButton != null)
+        {
+            loginButton.SetActive(!isLoggedIn);
+        }
     }
 }
