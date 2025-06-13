@@ -50,8 +50,18 @@ public class AuthEmailSignUp : AuthManager
     }
     private void OnSignUpSucces(RegisterPlayFabUserResult result)
     {
-        message.text = "Đăng ký người dùng mới thành công. Vui lòng kiểm tra email của bạn để xác minh tài khoản.";
-        EmailVerificationSender.Instance.SendOTPEmal(signUpEmail.text);
+        EmailVerificationSender.Instance.SendOTPEmal(signUpEmail.text,
+            onSuccess: () =>
+            {
+                message.text = "Đăng ký người dùng mới thành công. Vui lòng kiểm tra email của bạn để xác minh tài khoản.";
+                otpPanel.SetActive(true);
+                signUpPanel.SetActive(false);
+            },
+            onFailure: (error) =>
+            {
+                message.text = "Lỗi gửi email xác minh: " + error;
+            }
+            );
         PlayFabClientAPI.UpdateUserTitleDisplayName(
             new UpdateUserTitleDisplayNameRequest
             {
@@ -66,11 +76,6 @@ public class AuthEmailSignUp : AuthManager
             Debug.LogError("Lỗi cập nhật tên người dùng: " + error.GenerateErrorReport());
         }
         );
-        AuthEmailSignIn authEmailSignIn = FindObjectOfType<AuthEmailSignIn>();
-        authEmailSignIn.LinkDeviceAndProceed();
-        signInPanel.SetActive(false);
-        signUpPanel.SetActive(false);
-        otpPanel.SetActive(true);
     }
     private void OnErrorSignUp(PlayFabError error)
     {
@@ -108,7 +113,12 @@ public class AuthEmailSignUp : AuthManager
             return;
         }
         bool isVerified = EmailVerificationSender.Instance.VerifyOTP(otp.text);
-        if (isVerified) SceneManager.LoadScene(levelIndex);
+        if (isVerified)
+        {
+            AuthEmailSignIn authEmailSignIn = FindObjectOfType<AuthEmailSignIn>();
+            authEmailSignIn.LinkDeviceAndProceed();
+        }
+
         else message.text = "Mã OTP không chính xác";
     }
 }

@@ -1,3 +1,4 @@
+﻿using PlayFab;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -100,5 +101,15 @@ public class AuthManager : TuongMonobehaviour
     {
         otpPanel.SetActive(false);
         signUpPanel.SetActive(true);
+    }
+    public void LogOut()
+    {
+        PlayFabClientAPI.ForgetAllCredentials();
+        PlayerPrefs.SetInt("HasLoggedIn", 0);
+        PlayerPrefs.SetInt("AutoLoginDisable", 1);      
+        PlayerPrefs.Save();
+        MainMenuTwo mainMenuTwo = FindObjectOfType<MainMenuTwo>();
+        if (mainMenuTwo != null) mainMenuTwo.SetLoginState(false);
+        Debug.Log("Đăng xuất thành công.");
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 public class AuthEmailSignIn : AuthManager
 {
-    public MainMenuTwo mainMenuTwo;
     public void SignInGame()
     {
         if (string.IsNullOrEmpty(signInEmail.text))
@@ -65,6 +64,7 @@ public class AuthEmailSignIn : AuthManager
     private void OnLoginFinalized()
     {
         PlayerPrefs.SetInt("HasLoggedIn", 1);
+        PlayerPrefs.SetInt("AutoLoginDisable", 0);
         PlayerPrefs.Save();
         LeaderBoardManager leaderBoardManager = FindObjectOfType<LeaderBoardManager>();
         if (leaderBoardManager != null)

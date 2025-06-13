@@ -15,7 +15,6 @@ public class LevelManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
     public async void LoadLevel(int levelName)
@@ -40,10 +39,6 @@ public class LevelManager : MonoBehaviour
             await Task.Yield();
         }
         loaderCanvas.SetActive(false);
-    }
-    public void LoadLevel()
-    {
-        LoadLevel(2);
     }
     private void Update()
     {

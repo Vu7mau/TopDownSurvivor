@@ -20,7 +20,7 @@ public class CharacterInformation : MonoBehaviour
 
         if(!string.IsNullOrEmpty(savedName) || !string.IsNullOrEmpty(savedId))
         {
-            characterName.text = "Name: " + savedName;
+            characterName.text = savedName;
             characterId.text = "ID: " + savedId;
         }
         if(PlayFabClientAPI.IsClientLoggedIn())

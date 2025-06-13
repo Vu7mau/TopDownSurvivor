@@ -1,6 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
-using PlayFab;
+﻿using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine.UI;
 public class ResetPassword : AuthManager

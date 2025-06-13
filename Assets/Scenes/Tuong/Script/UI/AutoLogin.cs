@@ -8,7 +8,15 @@ public class AutoLogin : MonoBehaviour
     public MainMenuTwo mainMenuTwo;
     private void Start()
     {
-        LoginWithCustomID();
+        bool autoLoginDisable = PlayerPrefs.GetInt("AutoLoginDisable", 0) == 1;
+        if(!autoLoginDisable)
+        {
+            LoginWithCustomID();
+        }
+        else
+        {
+            mainMenuTwo.SetLoginState(false);
+        }
     }
     private void LoginWithCustomID()
     {

@@ -2,11 +2,15 @@
 using System.Net;
 using System.Net.Mail;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 public class EmailVerificationSender : AuthManager
 {
     public static EmailVerificationSender Instance;
     private string currentOTP;
     private DateTime otpCreatedTime;
+    private string senderEmail = "nguyenquoctuong007@gmail.com";
+    private string senderPassword = "ygku zmqm bcks zrif";
     public string GenerateOTP()
     {
         string otp = UnityEngine.Random.Range(0, 1000000).ToString("D6");
@@ -19,7 +23,7 @@ public class EmailVerificationSender : AuthManager
         if (Instance != null) Destroy(gameObject);
         else Instance = this;
     }
-    public void SendOTPEmal(string toEmail)
+    public void SendOTPEmal(string toEmail, Action onSuccess = null, Action<String> onFailure = null)
     {
         string otp = GenerateOTP();
         currentOTP = otp;
@@ -87,31 +91,30 @@ public class EmailVerificationSender : AuthManager
 </body>
 </html>
 ";
-        SendEmail(toEmail, subject, htmlMessage);
+        _ = SendEmailAsync(toEmail, subject, htmlMessage, onSuccess, onFailure); // _ là biến tôi k cần dùng, là cố ý k await
     }
-    public void SendEmail(string toEmail, string subject, string messageEmail)
+    public async Task SendEmailAsync(string toEmail, string subject, string messageEmail, Action onSuccess = null, Action<String> onFailure = null)
     {
-        string fromEmail = "nguyenquoctuong007@gmail.com";
-        string appPassword = "ygku zmqm bcks zrif";
-
         MailMessage mail = new MailMessage();
-        mail.From = new MailAddress(fromEmail);
+        mail.From = new MailAddress(senderEmail);
         mail.To.Add(toEmail);
         mail.Subject = subject;
         mail.IsBodyHtml = true;
         mail.Body = messageEmail;
 
-        SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-        smtpClient.Credentials = new NetworkCredential(fromEmail, appPassword);
-        smtpClient.EnableSsl = true;
-        try
+        using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
         {
-            smtpClient.Send(mail);
-            message.text = "Email đã được gửi thành công.";
-        }
-        catch (System.Exception ex)
-        {
-            message.text = "Gửi email thất bại: " + ex.Message;
+            smtpClient.Credentials = new NetworkCredential(senderEmail, senderPassword);
+            smtpClient.EnableSsl = true;
+            try
+            {
+                await smtpClient.SendMailAsync(mail);
+                onSuccess?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                onFailure?.Invoke("Gửi email thất bại: " + ex.Message);
+            }
         }
     }
     public bool VerifyOTP(string inputOTP)

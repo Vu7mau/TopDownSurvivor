@@ -16,14 +16,7 @@ public class MainMenuTwo : MonoBehaviour
         mainMenuPanel.SetActive(true);
         loginPanel.SetActive(false);
         bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
-        if (hasLoggedIn)
-        {
-            if (loginButton != null) loginButton.SetActive(false);
-            else
-            {
-                if (loginButton != null) loginButton.SetActive(true);
-            }
-        }
+        SetLoginState(hasLoggedIn);
     }
     public void LoginButton()
     {
