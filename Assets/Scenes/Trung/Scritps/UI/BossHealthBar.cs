@@ -3,41 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BossHealthBar : MonoBehaviour
+public class BossHealthBar : SliderHp
 {
-    [SerializeField] private Slider bossHealthBars;
-    [SerializeField] private float health;
+    [SerializeField] private EnemyHealth enemyHealth;
+    [SerializeField] private HpBarObj hpBarObj;
+    //[SerializeField] private float health;
     [SerializeField] private float ease;
     private float maxHealth;
 
-    private void Start()
+    protected override void LoadComponents()
     {
-        StartCoroutine(HideBarRoutine());
+        base.LoadComponents();
+        this.LoadEnemyHealth();
+        this.LoadHpBarObj();
     }
     private void Update()
     {
-        UpdateBossHealthBar(health);
+        this.HideTheHealthBar();
     }
-    private IEnumerator HideBarRoutine()
+    private void HideTheHealthBar()
     {
-        yield return new WaitUntil(() => health == 0);
-        Debug.Log("Boss đã chết!");
-        gameObject.SetActive(false);
-        yield return null;
+        if (this.enemyHealth.Health > 0) return;
+        this.hpBarObj.gameObject.SetActive(false);
     }
-    public void UpdateCurrentHealthBoss(float _currentHealthEachBar)
+
+    protected virtual void LoadEnemyHealth()
     {
-        health = _currentHealthEachBar;
+        if (this.enemyHealth != null) return;
+        this.enemyHealth = GetComponentInParent<EnemyHealth>();
     }
-    public void UpdateBossHealthBar(float _currentHealthEachBar)
+    protected virtual void LoadHpBarObj()
     {
-        if (bossHealthBars.value != _currentHealthEachBar)
-            bossHealthBars.value = Mathf.Lerp(bossHealthBars.value, _currentHealthEachBar, ease);
+        if (this.hpBarObj != null) return;
+        this.hpBarObj = GetComponentInParent<HpBarObj>();
     }
-    public void SetUpBar(float _maxHealth)
+
+    //private void Start()
+    //{
+    //    StartCoroutine(HideBarRoutine());
+    //}
+    //private void Update()
+    //{
+    //    UpdateBossHealthBar(health);
+    //}
+    //private IEnumerator HideBarRoutine()
+    //{
+    //    yield return new WaitUntil(() => health == 0);
+    //    Debug.Log("Boss đã chết!");
+    //    gameObject.SetActive(false);
+    //    yield return null;
+    //}
+    protected override float GetValue()
     {
-        health = _maxHealth;
-        bossHealthBars.maxValue = _maxHealth;
-        bossHealthBars.value = _maxHealth;
+        return (float)enemyHealth.Health / (float)enemyHealth.MaxHealth;
     }
+    
 }

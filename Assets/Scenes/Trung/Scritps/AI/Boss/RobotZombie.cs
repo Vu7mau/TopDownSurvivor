@@ -34,6 +34,8 @@ public class RobotZombie : Boss
         this.LoadLightBulletSpawn();
         this.LoadLightBullet();
         this.LoadMissile();
+        this.LoadExplosionSpawner();
+        this.LoadExplosion();
     }
     protected virtual void LoadMissileSpawn()
     {
@@ -60,9 +62,10 @@ public class RobotZombie : Boss
 
     protected override void Attack()
     {
-        StartCoroutine(AttackRoutine());
+        base.Attack();
+        this.AttackRoutine();
     }
-    protected virtual IEnumerator AttackRoutine()
+    protected virtual void AttackRoutine()
     {
         currentState = BossState.Idle; // Tạm dừng trước khi chuyển lại Chase
 
@@ -88,17 +91,17 @@ public class RobotZombie : Boss
         }
         else
             currentState = BossState.Attack;
-        yield return null;
     }
     protected virtual void AttackTypeA()
     {
+        this._agent.enabled = false;
         Debug.Log("Đòn đánh A");
-        StartCoroutine(this.RadialShootRoutine());
-        //StartCoroutine(ShootRoutine());
+        this._enemyAnimator.SetBool("isAttacking", true);
+        this._enemyAnimator.SetBool("Attack1", true);
+        StartCoroutine(RadialShootRoutine());
     }
     protected IEnumerator RadialShootRoutine()
     {
-        this._agent.enabled = false;
         for (int i = 0; i < lightBulletSpawnCount; i++)
         {
             float angle = i * Mathf.PI * 2f / lightBulletSpawnCount;
@@ -110,6 +113,8 @@ public class RobotZombie : Boss
             newLightBullet.SetDirection(dir);
         }
         yield return new WaitForSeconds(2f);
+        this._enemyAnimator.SetBool("isAttacking", false);
+        this._enemyAnimator.SetBool("Attack1", false);
     }
     //protected IEnumerator ShootRoutine()
     //{
@@ -120,27 +125,30 @@ public class RobotZombie : Boss
     //        yield return new WaitForSeconds(0.5f);
     //    }
     //}
+
+    [SerializeField] protected Transform missilePosition;
     protected virtual void AttackTypeB()
     {
         Debug.Log("Đòn đánh B");
-        StartCoroutine(this.MissileRobotZombieRoutine());
-        
-    }
-    protected IEnumerator MissileRobotZombieRoutine()
-    {
         this._agent.enabled = false;
-        Missile newMissile = this.missileSpawner.Spawn(this.missilePrefab, transform.position);
-        newMissile.transform.rotation = Quaternion.Euler(0, 0, 0);
-        newMissile.gameObject.GetComponent<Projectitle>().ShootAt(newMissile.transform.position + new Vector3(0,10000,0));
-        yield return new WaitForSeconds(1f);
-        newMissile.gameObject.SetActive(false);
-        yield return new WaitForSeconds(0.1f);
-        newMissile.gameObject.SetActive(true);
-        newMissile.transform.rotation = Quaternion.Euler(0, 180, 0);
-        newMissile.gameObject.GetComponent<Projectitle>().ShootAt(this.playerPosition.position);
+        this._enemyAnimator.SetBool("isAttacking", true);
+        this._enemyAnimator.SetBool("Attack2", true);
+        StartCoroutine(ShootMissile());
     }
 
-
+    private IEnumerator ShootMissile()
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            Missile newMissile = this.missileSpawner.Spawn(this.missilePrefab, missilePosition.position);
+            if (newMissile == null) yield break;
+            //newMissile.gameObject.transform.rotation = Quaternion.Euler(-90,0,0);
+            newMissile.gameObject.GetComponent<Missile>().ShootAt(this.playerPosition.position,30f);
+            yield return new WaitForSeconds(1f);
+        }
+        this._enemyAnimator.SetBool("isAttacking", false);
+        this._enemyAnimator.SetBool("Attack2", false);
+    }
     protected virtual void AttackTypeC()
     {
         Debug.Log("Đòn đánh C");
@@ -152,7 +160,7 @@ public class RobotZombie : Boss
         Vector3 targetPos = this.playerPosition.position;
         targetPos.y = transform.position.y;
         float jumpPower = this.heightJump;     
-        float duration = this.durationJump;      
+        float duration = this.durationJump;
 
         this.transform.DOJump(targetPos, jumpPower, this.jumpCount, duration).OnComplete(() => {
             Debug.Log("Boss đã nhảy tới Player");
@@ -161,5 +169,34 @@ public class RobotZombie : Boss
             jumpAttackZone.gameObject.SetActive(true);
         });
         jumpAttackZone.gameObject.SetActive(false);
+    }
+    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected Explosion explosion;
+    protected virtual void LoadExplosionSpawner()
+    {
+        if (this.explosionSpawner != null) return;
+        this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+    }
+    protected virtual void LoadExplosion()
+    {
+        if (this.explosion != null) return;
+        List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
+        this.explosion = allMyComponents[0];
+    }
+    protected override void Die()
+    {
+        StartCoroutine(DieExplosionRoutine());
+        // Trigger animation chết, disable collider, ...
+    }
+    private IEnumerator DieExplosionRoutine()
+    {
+        Explosion newExplosion = this.explosionSpawner.Spawn(explosion, transform.position);
+        yield return new WaitForSeconds(0.5f);
+        Explosion newExplosion1 = this.explosionSpawner.Spawn(explosion, transform.position+ new Vector3(-1,0,0));
+        yield return new WaitForSeconds(0.5f);
+        Explosion newExplosion2 = this.explosionSpawner.Spawn(explosion, transform.position + new Vector3(1, 0, 0));
+        yield return new WaitForSeconds(0.5f);
+        Explosion newExplosion3 = this.explosionSpawner.Spawn(explosion, transform.position);
+        this.gameObject.SetActive(false);
     }
 }

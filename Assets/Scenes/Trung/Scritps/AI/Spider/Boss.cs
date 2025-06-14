@@ -38,53 +38,59 @@ public abstract class Boss : EnemyAnimatorAbstract
     protected override void Start()
     {
         base.Start();
-        StartCoroutine(this.StateRoutine());
+        this.StateRoutine();
     }
     protected virtual void LoadPlayerPosition()
     {
         if (this.playerPosition != null) return;
-        this.playerPosition = FindAnyObjectByType<CharacterCtrl>().transform;
+        this.playerPosition = FindAnyObjectByType<CharacterAnimHandle>().transform;
     }
     protected void Update()
     {
         this.distanceToPlayer = Vector3.Distance(this.transform.position,this.playerPosition.position);
     }
-    protected IEnumerator StateRoutine()
+    protected void RandomState()
     {
-        while(true)
+        int randomStateIndex = Random.Range(1, 4);
+        if(randomStateIndex != 3)
         {
-            if (healthBase <= 0)
-            {
-                this.currentState = BossState.Death;
-            }
-            switch (currentState)
-            {
-                case BossState.Idle:
-                    this.CheckBossIsChasePlayer();
-                    break;
+            currentState = BossState.Chase;
+            return;
+        }
+        currentState = BossState.Attack;
+    }
+    protected void StateRoutine()
+    {
+        if (healthBase <= 0)
+        {
+            this.currentState = BossState.Death;
+        }
+        switch (currentState)
+        {
+            case BossState.Idle:
+                this.CheckBossIsChasePlayer();
+                break;
 
-                case BossState.Chase:
-                    this.ChasePlayer();
-                    this.CheckBossIsAttackPlayer();
-                    break;
+            case BossState.Chase:
+                this.ChasePlayer();
+                //this.CheckBossIsAttackPlayer();
+                break;
 
-                case BossState.Attack:
-                    this.Attack();
-                    break;
+            case BossState.Attack:
+                this.Attack();
+                break;
 
-                case BossState.Death:
-                    this.Die();
-                    break;
-            }
-            yield return new WaitForSeconds(timeToReturnSwitch);
+            case BossState.Death:
+                this.Die();
+                break;
         }
     }
     protected virtual void CheckBossIsChasePlayer()
     {
+        if (this.isAttackPlayer) return;
         if (Vector3.Distance(transform.position, this.playerPosition.position) < this.detectionBaseRange)
         {
             this.currentState = BossState.Chase;
-            this.isAttackPlayer = false;
         }
     }
     protected virtual void CheckBossIsAttackPlayer()

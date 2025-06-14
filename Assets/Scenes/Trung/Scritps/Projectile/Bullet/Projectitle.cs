@@ -37,7 +37,7 @@ public class Projectitle : PoolObj
         this._direction = direction;
         this.speed = speed;
     }
-    protected void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy")) return;
         this.Despawn.DoDespawn();
