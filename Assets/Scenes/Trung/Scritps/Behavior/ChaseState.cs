@@ -21,6 +21,7 @@ public class ChaseState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if(this.agent == null) return;
         distance = Vector3.Distance(player.position, animator.transform.position);
         if (distance < enemySO.AttackRange)
         {

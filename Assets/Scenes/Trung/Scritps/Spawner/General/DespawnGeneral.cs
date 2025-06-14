@@ -6,7 +6,7 @@ public abstract class DespawnGeneral<T> : DespawnBase where T: PoolObj
 {
     [SerializeField] protected T parent;
     [SerializeField] protected SpawnerGeneral<T> spawner;
-    [SerializeField] protected float timeLife;
+    [SerializeField] protected float timeLife = 5f;
     [SerializeField] protected float currentTime;
 
     protected void FixedUpdate()
@@ -30,7 +30,7 @@ public abstract class DespawnGeneral<T> : DespawnBase where T: PoolObj
     protected virtual void LoadSpawner()
     {
         if (this.spawner != null) return;
-        this.spawner = GameObject.FindAnyObjectByType<SpawnerGeneral<T>>();
+        this.spawner = FindAnyObjectByType<SpawnerGeneral<T>>();
         Debug.Log(transform.name + ":Load Spawner");
     }
 

@@ -7,13 +7,14 @@ using UnityEngine.AI;
 
 public class EnemyHealth : DamageReceiver,IEnemy
 {
-    [SerializeField] private EnemySO enemySO;
-    [SerializeField] private bool _canTakeDamage = true;
-    [SerializeField] private AudioClip beastHurtSFX;
+    [SerializeField] protected EnemySO enemySO;
+    [SerializeField] protected bool _canTakeDamage = true;
+    [SerializeField] protected AudioClip beastHurtSFX;
+    [SerializeField] protected HpBarObj healthBar;
     //[SerializeField] protected EnemyDamageReceiver enemyDamageReceiver;
 
 
-    private Rigidbody rb;
+    //private Rigidbody rb;
     private Animator _animator;
     private SpawnEnemies _spawnEnemies;
 
@@ -31,13 +32,20 @@ public class EnemyHealth : DamageReceiver,IEnemy
     protected override void LoadComponents()
     {
         base.LoadComponents();
+        this.LoadHealthBar();
         //this.LoadEnemyDamageReceiver();
     }
 
+    protected virtual void LoadHealthBar()
+    {
+        if (this.healthBar != null) return;
+        this.healthBar = GetComponentInChildren<HpBarObj>();
+        this.healthBar.gameObject.SetActive(true);
+    }
     protected override void Awake()
     {
         base.Awake();
-        this.rb = GetComponent<Rigidbody>();
+        //this.rb = GetComponent<Rigidbody>();
         this._animator = GetComponent<Animator>();
         this._spawnEnemies =FindAnyObjectByType<SpawnEnemies>();
     }
@@ -50,6 +58,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     {
         base.OnEnable();
         this.ResetStateEnemyDefault();
+        this.healthBar.gameObject.SetActive(true);
     }
     protected override void OnDisable()
     {
@@ -60,7 +69,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     {
         this._hpMax = (int)enemySO.Health;
         base.Reborn();
-        this.rb.isKinematic = false;
+        //this.rb.isKinematic = false;
         this.gameObject.GetComponent<Collider>().enabled = true;
     }
 
@@ -89,7 +98,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     protected override void OnDead()
     {
         this.gameObject.GetComponent<Collider>().enabled = false;
-        this.rb.isKinematic= true;
+        //this.rb.isKinematic= true;
         this._canTakeDamage = false;
         if (HasDeadState())
             this._animator.SetTrigger("die");

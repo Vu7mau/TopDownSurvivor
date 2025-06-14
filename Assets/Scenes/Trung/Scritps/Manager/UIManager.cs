@@ -18,31 +18,17 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI titleTimeToNextWave;
     [SerializeField] private TextMeshProUGUI txtTimeToNextWave;
 
-    [Header("Panel when player kill boss!")]
+    [Header("Panel when playerPosition kill boss!")]
     [SerializeField] private TextMeshProUGUI dlgPlayerKillBoss;
 
-    [Header("List of Text Aniamtion")]
-    [SerializeField] private GameObject damageTextPrefab;
-    [SerializeField] private GameObject coinTextPrefab;
-    [SerializeField] private GameObject ExpTextPrefab;
-
-    [SerializeField] private Canvas _myCanvas;
-    [SerializeField] private Canvas _DamageTextCanvas;
+    
     [SerializeField] private GameObject panel1;
 
     protected override void OnEnable()
     {
-        base.OnEnable();
-        CharacterEvents.characterDamaged += CharacterTookDamage;
-        //CharacterEvents.characterTookItem += CharacterTookItem;
-        //CharacterEvents.characterTookExp += CharacterTookExp;
     }
     protected override void OnDisable()
     {
-        base.OnDisable();
-        CharacterEvents.characterDamaged -= CharacterTookDamage;
-        //CharacterEvents.characterTookItem -= CharacterTookItem;
-        //CharacterEvents.characterTookExp -= CharacterTookExp;
     }
     protected override void Start()
     {
@@ -82,13 +68,6 @@ public class UIManager : Singleton<UIManager>
 
 
 
-    public void CharacterTookDamage(GameObject character, float damageReceived)
-    {
-        Vector3 spamPosition = Camera.main.WorldToScreenPoint(character.transform.position);
-        TMP_Text tmp_text = Instantiate(damageTextPrefab, spamPosition, Quaternion.identity, _DamageTextCanvas.transform)
-            .GetComponent<TMP_Text>();
-        tmp_text.text = damageReceived.ToString();
-        Debug.Log("Text damage đã hiện!");
-    }
+    
 
 }

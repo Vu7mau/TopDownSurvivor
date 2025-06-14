@@ -7,7 +7,13 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: isAttacking
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Attack
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7763188413573268286}
   m_Solo: 0
@@ -237,6 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c2e597281678a41a30af1a2e489257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemySO: {fileID: 11400000, guid: 82e816b70d8b0a24989c90bd19d97b57, type: 2}
 --- !u!1107 &1755932854194360320
 AnimatorStateMachine:
   serializedVersion: 6
@@ -248,7 +255,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 8988070233169830070}
-    m_Position: {x: 290, y: 180, z: 0}
+    m_Position: {x: 310, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7763188413573268286}
     m_Position: {x: 630, y: 150, z: 0}

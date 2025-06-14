@@ -1,125 +1,156 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json.Utilities;
 using UnityEditor.ShaderGraph.Drawing;
 using UnityEngine;
 
-public class Boss : EnemyAnimatorAbstract
+public abstract class Boss : EnemyAnimatorAbstract
 {
-    protected float distance;
-    protected Transform player;
-    //private Animator _myAnimator;
-
-    [SerializeField] protected float chaseDistance;
-    [SerializeField] protected float attackDistance;
-    [SerializeField] protected float moveSpeed;
-    [SerializeField] protected bool _canMove = true;
-
-    protected enum BossState { Idle, Chase, AttackMlee,AttackMissile, Death }
-    protected BossState currentState = BossState.Idle;
-    protected override void Awake()
+    protected enum BossState
     {
-        this.player = FindAnyObjectByType<CharacterMove>().transform;
-        //_myAnimator = GetComponent<Animator>();
+        Idle,
+        Chase,
+        Attack,
+        Death
     }
+    protected BossState currentState = BossState.Idle;
+
+    protected float distanceToPlayer;
+
+    [Header("Base Properties of Boss")]
+    [SerializeField] protected float detectionBaseRange = 100000f;
+    [SerializeField] protected float attackBaseRange = 5f;
+    [SerializeField] protected bool isAttackPlayer = false;
+    [SerializeField] protected float moveBaseSpeed = 3f;
+    [SerializeField] protected Transform playerPosition;
+    [SerializeField] protected int healthBase = 100;
+
+    [Header("Time to return swtich")]
+    [SerializeField] protected float timeToReturnSwitch = 3f;
+
+
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
+        this.LoadPlayerPosition();
     }
-
+    protected override void Start()
+    {
+        base.Start();
+        StartCoroutine(this.StateRoutine());
+    }
+    protected virtual void LoadPlayerPosition()
+    {
+        if (this.playerPosition != null) return;
+        this.playerPosition = FindAnyObjectByType<CharacterCtrl>().transform;
+    }
     protected void Update()
     {
-        this.FiniteStateMachine();
+        this.distanceToPlayer = Vector3.Distance(this.transform.position,this.playerPosition.position);
     }
-    protected virtual void FiniteStateMachine()
+    protected IEnumerator StateRoutine()
     {
-        this.LoadNavMeshAgentProperties();
-        this.distance = Vector3.Distance(this.transform.position, this.player.position);
-
-        if (currentState != BossState.Death)
+        while(true)
         {
-            if (distance <= this.attackDistance)
+            if (healthBase <= 0)
             {
-                this.ChangeState(BossState.AttackMlee);
+                this.currentState = BossState.Death;
             }
-            else if (distance <= this.chaseDistance)
+            switch (currentState)
             {
-                this.AttackMissile();
+                case BossState.Idle:
+                    this.CheckBossIsChasePlayer();
+                    break;
+
+                case BossState.Chase:
+                    this.ChasePlayer();
+                    this.CheckBossIsAttackPlayer();
+                    break;
+
+                case BossState.Attack:
+                    this.Attack();
+                    break;
+
+                case BossState.Death:
+                    this.Die();
+                    break;
             }
-            else
-            {
-                this.ChangeState(BossState.Idle);
-            }
+            yield return new WaitForSeconds(timeToReturnSwitch);
         }
-
-        this.HandleState();
     }
-
-    protected virtual void ChangeState(BossState newState)
+    protected virtual void CheckBossIsChasePlayer()
     {
-        if (currentState == newState) return;
-        currentState = newState;
-
-        switch (newState)
+        if (Vector3.Distance(transform.position, this.playerPosition.position) < this.detectionBaseRange)
         {
-            case BossState.Idle:
-                _enemyAnimator.SetBool("isChasing", false);
-                break;
-            case BossState.Chase:
-                _enemyAnimator.SetBool("isChasing", true);
-                break;
-            case BossState.AttackMissile:
-                _enemyAnimator.SetBool("isChasing", false);
-                this.AttackMissile();
-                break;
-            case BossState.AttackMlee:
-                _enemyAnimator.SetBool("isChasing", false);
-                this.AttackMlee();
-                break;
-            case BossState.Death:
-                _enemyAnimator.SetTrigger("Death");
-                break;
+            this.currentState = BossState.Chase;
+            this.isAttackPlayer = false;
         }
     }
-    protected virtual void AttackMlee()
+    protected virtual void CheckBossIsAttackPlayer()
     {
-        _enemyAnimator.SetInteger("AttackIndex", 0);
-        _enemyAnimator.SetTrigger("Attack");
-    }
-    protected virtual void AttackMissile()
-    {
-        int rand = Random.Range(0, this.amountAttacksAnimation);
-        if (rand == 0)
+        if (Vector3.Distance(transform.position, this.playerPosition.position) <= this.attackBaseRange)
         {
-            currentState = BossState.Chase;
-            this.ChangeState(currentState);
-            return;
+            this.currentState = BossState.Attack;
+            this.isAttackPlayer = true;
         }
-        _enemyAnimator.SetTrigger("Attack");
-        _enemyAnimator.SetInteger("AttackIndex", rand);
+        else if (Vector3.Distance(transform.position, this.playerPosition.position) > this.detectionBaseRange)
+        {
+            this.currentState = BossState.Idle;
+            this.isAttackPlayer = false;
+        }
+    }
+    protected virtual bool CheckDistanceFromPlayer(float minDistance,float maxDistance,float currentDistance)
+    {
+        return currentDistance >= minDistance && currentDistance <= maxDistance;
     }
 
-    protected virtual void HandleState()
+    protected virtual void ChasePlayer()
     {
-        if (!this._canMove) return;
-        if (currentState == BossState.Chase)
-        {
-            //Vector3 dir = (player.position - transform.position).normalized;
-            //transform.position += dir * moveSpeed * Time.deltaTime;
-            //transform.LookAt(player);
-            this._agent.SetDestination(player.position);
-        }
+        if (this._agent == null) return;
+        this._agent.enabled = true;
+        this._agent.speed = this.moveBaseSpeed;
+        this._agent.SetDestination(playerPosition.position);
     }
 
-    protected virtual void LoadNavMeshAgentProperties()
+    protected virtual void Attack()
     {
-        this._agent.speed = this.moveSpeed;
-        this._agent.stoppingDistance = this.attackDistance;
+        if (!this.isAttackPlayer) return;
+        //this._enemyAnimator.SetBool("isAttacking",this.isAttackPlayer);
     }
-    public virtual void Die()
+
+    //protected virtual IEnumerator AttackRoutine()
+    //{
+    //    currentState = BossState.Idle; // Tạm dừng trước khi chuyển lại Chase
+
+    //    int attackIndex = Random.Range(0, this.amountAttacksAnimation); // Giả sử có 3 đòn tấn công
+
+    //    switch (attackIndex)
+    //    {
+    //        case 0:
+    //            AttackTypeA();
+    //            break;
+    //        case 1:
+    //            AttackTypeB();
+    //            break;
+    //        case 2:
+    //            AttackTypeC();
+    //            break;
+    //    }
+
+    //    yield return new WaitForSeconds(2f); // Thời gian giữa các đòn đánh
+
+    //    if (Vector3.Distance(transform.position, playerPosition.position) > attackBaseRange)
+    //        currentState = BossState.Chase;
+    //    else
+    //        currentState = BossState.Attack; // Tấn công tiếp nếu vẫn còn gần
+    //}
+
+    
+
+    protected virtual void Die()
     {
-        ChangeState(BossState.Death);
-        // Disable further behavior
-        this.enabled = false;
+        Debug.Log("Boss chết");
+        // Trigger animation chết, disable collider, ...
     }
 }
