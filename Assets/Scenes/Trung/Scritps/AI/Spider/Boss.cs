@@ -13,7 +13,7 @@ public abstract class Boss : EnemyAnimatorAbstract
         Attack,
         Death
     }
-    protected BossState currentState = BossState.Idle;
+    protected BossState currentState = BossState.Chase;
 
     protected float distanceToPlayer;
 
@@ -51,8 +51,8 @@ public abstract class Boss : EnemyAnimatorAbstract
     }
     protected void RandomState()
     {
-        int randomStateIndex = Random.Range(1, 4);
-        if(randomStateIndex != 3)
+        int randomStateIndex = Random.Range(1, 3);
+        if(randomStateIndex != 2)
         {
             currentState = BossState.Chase;
             return;

@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1431993891423293900
 Transform:
   m_ObjectHideFlags: 0
@@ -1057,6 +1057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 2077433267273017004}
   enemyHealth: {fileID: 5659162661074863030}
+  hpBarObj: {fileID: 0}
   ease: 0.1
 --- !u!1 &5225987410976385291
 GameObject:
@@ -2313,6 +2314,8 @@ MonoBehaviour:
   jumpCount: 1
   jumpAttackZone: {fileID: 2876482438076206907}
   missilePosition: {fileID: 1198532688253229019}
+  explosionSpawner: {fileID: 0}
+  explosion: {fileID: 0}
 --- !u!114 &5659162661074863030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2330,8 +2333,13 @@ MonoBehaviour:
   _isDead: 0
   enemySO: {fileID: 11400000, guid: ed854a190438f564fa56fde4a48e63e1, type: 2}
   _canTakeDamage: 1
+  healthBarObj: {fileID: 0}
+  _animator: {fileID: 0}
+  _spawnEnemies: {fileID: 0}
+  hitDamageSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 0}
+  bloodSplash: {fileID: 0}
   beastHurtSFX: {fileID: 0}
-  healthBar: {fileID: 7936628913900905073}
   hurtScale: {x: 0, y: 0, z: 0}
   hurtPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!54 &2611920777311534175

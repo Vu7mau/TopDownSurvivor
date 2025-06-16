@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 5
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 11400000, guid: 0a9c6c47fe43679429e51c64292dd4df, type: 2}
 --- !u!135 &6621868272964531166
 SphereCollider:
@@ -301,5 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9f428f8452c6542aea3f05f297f6d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  despawn: {fileID: 0}
+  despawn: {fileID: 3738826446463078188}
   speed: 100
+  createHitEnemy: {fileID: 8110195712471004693}
+  bulletInvisbleDespawn: {fileID: 3738826446463078188}

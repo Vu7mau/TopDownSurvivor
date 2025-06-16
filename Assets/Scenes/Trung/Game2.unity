@@ -1296,11 +1296,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 801500306221698915, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 801500306221698915, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1819554131506263542, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1312,11 +1312,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3990972080600736628, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3990972080600736628, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6986040242600326363, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_Name
@@ -1324,7 +1324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6986040242600326363, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7639356215738742164, guid: 803634697f37067489f00a86e0aa6964, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7730,23 +7730,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5268815550804378480, guid: f39041c27e9feee41829500d5558db83, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5268815550804378480, guid: f39041c27e9feee41829500d5558db83, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8085040016616699974, guid: f39041c27e9feee41829500d5558db83, type: 3}
       propertyPath: m_Name
       value: Zombie_Police
       objectReference: {fileID: 0}
-    - target: {fileID: 8458833693979225959, guid: f39041c27e9feee41829500d5558db83, type: 3}
-      propertyPath: m_AnchorMax.x
+    - target: {fileID: 8085040016616699974, guid: f39041c27e9feee41829500d5558db83, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8458833693979225959, guid: f39041c27e9feee41829500d5558db83, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458833693979225959, guid: f39041c27e9feee41829500d5558db83, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -44346,6 +44350,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5370838602003550732, guid: fe101105fe6689b4cb092dccad97f32e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7724000034626570458, guid: fe101105fe6689b4cb092dccad97f32e, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -51794,19 +51802,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2134940767343792796, guid: a839bb1a10cc4314c8f2b076078d6c66, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2134940767343792796, guid: a839bb1a10cc4314c8f2b076078d6c66, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2440268130397044363, guid: a839bb1a10cc4314c8f2b076078d6c66, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2440268130397044363, guid: a839bb1a10cc4314c8f2b076078d6c66, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5198923941638415748, guid: a839bb1a10cc4314c8f2b076078d6c66, type: 3}
       propertyPath: m_LocalPosition.x
@@ -51851,6 +51859,10 @@ PrefabInstance:
     - target: {fileID: 7945127476044001139, guid: a839bb1a10cc4314c8f2b076078d6c66, type: 3}
       propertyPath: m_Name
       value: Zombie_Suitman_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945127476044001139, guid: a839bb1a10cc4314c8f2b076078d6c66, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -78878,6 +78890,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie_Minigun
       objectReference: {fileID: 0}
+    - target: {fileID: 1309567981146657082, guid: 5bb8ab07b923bc9478f589cbb5fd60f1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5040803798844591129, guid: 5bb8ab07b923bc9478f589cbb5fd60f1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5040803798844591129, guid: 5bb8ab07b923bc9478f589cbb5fd60f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5357058004746088795, guid: 5bb8ab07b923bc9478f589cbb5fd60f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 148.0226
@@ -78917,6 +78941,14 @@ PrefabInstance:
     - target: {fileID: 5357058004746088795, guid: 5bb8ab07b923bc9478f589cbb5fd60f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8757759543583252494, guid: 5bb8ab07b923bc9478f589cbb5fd60f1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8757759543583252494, guid: 5bb8ab07b923bc9478f589cbb5fd60f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -83661,11 +83693,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5667818828551280110, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5667818828551280110, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5921367157248738129, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
       propertyPath: m_Name
@@ -83673,7 +83705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5921367157248738129, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6442184458774354411, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
       propertyPath: m_LocalPosition.x
@@ -83717,11 +83749,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8274630458056292857, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8274630458056292857, guid: f94c577fdd00e594abc50fdff8f3ff17, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -90713,9 +90745,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2202043117270896034, guid: ffdc529e34e757a438174d29afae27b6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2202043117270896034, guid: ffdc529e34e757a438174d29afae27b6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2486318627693805016, guid: ffdc529e34e757a438174d29afae27b6, type: 3}
       propertyPath: m_Name
       value: SpiderTiny
+      objectReference: {fileID: 0}
+    - target: {fileID: 2486318627693805016, guid: ffdc529e34e757a438174d29afae27b6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2518212795926176181, guid: ffdc529e34e757a438174d29afae27b6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2518212795926176181, guid: ffdc529e34e757a438174d29afae27b6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4013822869813238042, guid: ffdc529e34e757a438174d29afae27b6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -120075,7 +120127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 10
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 0}
 --- !u!199 &1372102097983757767
 ParticleSystemRenderer:
@@ -131758,6 +131810,14 @@ PrefabInstance:
       propertyPath: explosionSpawner
       value: 
       objectReference: {fileID: 904881510}
+    - target: {fileID: 5616476334623278259, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616476334623278259, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8094463112659779399, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 152.60805
@@ -131798,9 +131858,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -6.878305
       objectReference: {fileID: 0}
+    - target: {fileID: 8182192552332011684, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182192552332011684, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9012152331269360993, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
       propertyPath: m_Name
       value: Zombie_FireFighter
+      objectReference: {fileID: 0}
+    - target: {fileID: 9012152331269360993, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -184111,9 +184183,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5130465870046701344, guid: 6edfe9b3b1ca8464a9127da57197fb6a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130465870046701344, guid: 6edfe9b3b1ca8464a9127da57197fb6a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8885131717554555703, guid: 6edfe9b3b1ca8464a9127da57197fb6a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8885131717554555703, guid: 6edfe9b3b1ca8464a9127da57197fb6a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8990054397899822950, guid: 6edfe9b3b1ca8464a9127da57197fb6a, type: 3}
       propertyPath: m_Name
       value: Zombie_HouseWife
+      objectReference: {fileID: 0}
+    - target: {fileID: 8990054397899822950, guid: 6edfe9b3b1ca8464a9127da57197fb6a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -221075,11 +221167,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 135965091875575691, guid: 67d939c972b8f6a48a030a5beff6ffe9, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 135965091875575691, guid: 67d939c972b8f6a48a030a5beff6ffe9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2033812336001365357, guid: 67d939c972b8f6a48a030a5beff6ffe9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -221125,13 +221217,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie_Army
       objectReference: {fileID: 0}
-    - target: {fileID: 4440070093016906652, guid: 67d939c972b8f6a48a030a5beff6ffe9, type: 3}
-      propertyPath: m_AnchorMax.x
+    - target: {fileID: 2836701863530952022, guid: 67d939c972b8f6a48a030a5beff6ffe9, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4440070093016906652, guid: 67d939c972b8f6a48a030a5beff6ffe9, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4440070093016906652, guid: 67d939c972b8f6a48a030a5beff6ffe9, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -227030,11 +227126,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 383990366733099726, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 383990366733099726, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2437561688250717634, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_LocalPosition.x
@@ -227086,11 +227182,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4118949272400891609, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4118949272400891609, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6179133440481359335, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_Name
@@ -227098,7 +227194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6179133440481359335, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7669455180442790814, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
       propertyPath: m_AnchorMax.x
@@ -306295,7 +306391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 1
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 11400000, guid: c084c1643d098884e850d07f8b918914, type: 2}
 --- !u!1 &6205646531421476974
 GameObject:
@@ -425543,7 +425639,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 1
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 11400000, guid: c084c1643d098884e850d07f8b918914, type: 2}
 --- !u!33 &8215594504593943861
 MeshFilter:

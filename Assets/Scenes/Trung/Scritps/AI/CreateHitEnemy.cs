@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class CreateHitEnemy : DamageSender
 {
-    [SerializeField] protected bool CanTakeDamage = false;
+    [SerializeField] protected bool canTakeDamage = false;
+    public bool CanTakeDamage { set { canTakeDamage = value; } }
     [SerializeField] protected EnemySO enemySO;
     protected int dem;
     protected int _amountDamagePercent;
     protected override void OnEnable()
     {
         base.OnEnable();
-        CanTakeDamage = false;
+        canTakeDamage = false;
     }
     protected override void OnDisable()
     {
         base.OnDisable();
-        CanTakeDamage = false;
+        canTakeDamage = false;
     }
     protected override void Start()
     {
@@ -44,12 +45,12 @@ public class CreateHitEnemy : DamageSender
         //Nếu va chạm với Player thì Player sẽ bị mất máu
         //CharacterCtrl player = other.GetComponent<CharacterCtrl>();
         CharacterDamageReceiver characterDamageReceiver = other.GetComponent<CharacterDamageReceiver>();
-        if (characterDamageReceiver != null && !CanTakeDamage)
+        if (characterDamageReceiver != null && !canTakeDamage)
         {
             this.Send(other.transform);
             dem++;
             Debug.Log($"Đã va chạm với CharacterDamageReceiver {dem} lần");
-            CanTakeDamage = true;
+            canTakeDamage = true;
         }
     }
 }

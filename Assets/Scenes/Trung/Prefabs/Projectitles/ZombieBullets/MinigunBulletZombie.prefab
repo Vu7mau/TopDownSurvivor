@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 5
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 0}
 --- !u!135 &7637112855867802852
 SphereCollider:
@@ -197,8 +197,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27890916b79598848873a96988108c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  despawn: {fileID: 0}
+  despawn: {fileID: 5582146365908530834}
   speed: 15
+  createHitEnemy: {fileID: 7598835723555921611}
+  minigunBulletZombieDespawn: {fileID: 5582146365908530834}
 --- !u!135 &2938664069221873749
 SphereCollider:
   m_ObjectHideFlags: 0

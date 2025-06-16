@@ -7,16 +7,35 @@ public class Missile : Projectitle
     public override string GetName() => "Missile";
     [SerializeField] protected ExplosionSpawner explosionSpawner;
     [SerializeField] protected Explosion explosion;
+    [SerializeField] protected MissileDespawn missileDespawn;
+
+    //[SerializeField] protected bool isTouchPlayer = false;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        //this.ResetProjectile();
+    }
+    //protected virtual void ResetProjectile()
+    //{
+    //    this.isTouchPlayer = false;
+    //}
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadExplosionSpawner();
         this.LoadExplosion();
+        this.LoadMissileDespawn();
     }
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
         this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+    }
+    protected virtual void LoadMissileDespawn()
+    {
+        if (this.missileDespawn != null) return;
+        this.missileDespawn = GetComponentInChildren<MissileDespawn>();
     }
     protected virtual void LoadExplosion()
     {
@@ -24,8 +43,16 @@ public class Missile : Projectitle
         List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
         this.explosion = allMyComponents[0];
     }
-    protected override void OnTriggerEnter(Collider collider)
+    protected void OnTriggerEnter(Collider other)
     {
-        Explosion newExplosion = this.explosionSpawner.Spawn(explosion, transform.position);
+        this.explosionSpawner.Spawn(explosion, transform.position);
+        this.missileDespawn.DoDespawn();
     }
+    //protected void OnTriggerStay(Collider other)
+    //{
+    //    if (other.GetComponentInChildren<EnemyCtrl>() != null && !this.isTouchPlayer)
+    //    {
+    //        this.isTouchPlayer = true;
+    //    }
+    //}
 }

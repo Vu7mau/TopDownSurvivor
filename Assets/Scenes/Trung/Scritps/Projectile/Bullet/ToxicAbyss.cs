@@ -5,16 +5,21 @@ using UnityEngine;
 public class ToxicAbyss : Projectitle
 {
     public override string GetName() => "ToxicAbyss";
+    [SerializeField] protected ToxicAbyssDespawn toxicAbyssDespawn;
 
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadToxicAbyssDespawn();
+    }
+    protected virtual void LoadToxicAbyssDespawn()
+    {
+        if (this.toxicAbyssDespawn != null) return;
+        this.toxicAbyssDespawn = GetComponentInChildren<ToxicAbyssDespawn>();
+    }
+    protected void OnTriggerEnter(Collider other)
+    {
+        this.toxicAbyssDespawn.DoDespawn();
+    }
 
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    CharacterDamageReceiver player = other.GetComponent<CharacterDamageReceiver>();
-    //    if (player != null)
-    //    {
-    //        player.Deduct((int)this.damage);
-
-    //    }
-    //}
 }

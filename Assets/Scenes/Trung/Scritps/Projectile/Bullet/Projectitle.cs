@@ -8,7 +8,7 @@ public class Projectitle : PoolObj
 {
     [SerializeField] protected float speed = 10f;
 
-
+    [SerializeField] protected CreateHitEnemy createHitEnemy;
     protected Vector3 _direction;
     public Vector3 Direction
     {
@@ -19,6 +19,33 @@ public class Projectitle : PoolObj
     {
         return "Projectitle";
     }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.ResetProjectile();
+    }
+
+
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadCreateHitEnemy();
+    }
+
+
+
+    protected virtual void LoadCreateHitEnemy()
+    {
+        if (this.createHitEnemy != null) return;
+        this.createHitEnemy = GetComponentInChildren<CreateHitEnemy>();
+    }
+
+
+    protected virtual void ResetProjectile()
+    {
+        this.createHitEnemy.CanTakeDamage = false;
+    }
+
     public virtual void ShootAt(Vector3 target)
     {
         _direction = (target - transform.position).normalized;
@@ -36,13 +63,6 @@ public class Projectitle : PoolObj
     {
         this._direction = direction;
         this.speed = speed;
-    }
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy")) return;
-        CharacterDamageReceiver characterDamageReceiver = other.GetComponentInChildren<CharacterDamageReceiver>();
-        if(characterDamageReceiver == null) return;
-        this.Despawn.DoDespawn();
     }
 
     protected void Update()
