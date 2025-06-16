@@ -41,6 +41,10 @@ public abstract class SpawnerGeneral<T> : VuMonoBehaviour where T : PoolObj
         if (this.holderParent != null) return;
         this.holderParent = this.transform;
     }
+    public virtual void SetHoldParent(Transform parent)
+    {
+        this.holderParent = parent;
+    }
     protected virtual bool ReachLimitObjsInPool() => this.holderParent.gameObject.transform.childCount >= limitObjsInPool;
     public virtual T Spawn(T prefab, Vector3 position)
     {

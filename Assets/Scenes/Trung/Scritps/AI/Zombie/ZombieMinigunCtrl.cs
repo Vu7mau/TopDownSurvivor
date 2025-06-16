@@ -28,14 +28,12 @@ public class ZombieMinigunCtrl : ZombieCtrl
     {
         if (this.minigunBulletZombieSpawner != null) return;
         this.minigunBulletZombieSpawner = FindAnyObjectByType<MinigunBulletZombieSpawner>();
-        Debug.Log(transform.name + ": LoadAbyssToxicSpawner");
     }
     protected virtual void LoadMinigunBulletZombie()
     {
         if (this.bulletMinigunPrefab != null) return;
         List<MinigunBulletZombie> allMyComponents = ComponentFinder.FindAllComponentsInScene<MinigunBulletZombie>();
         this.bulletMinigunPrefab = allMyComponents[0];
-        Debug.Log(transform.name + ": LoadToxicAbyss");
     }
     protected override void Shooting()
     {
@@ -48,7 +46,7 @@ public class ZombieMinigunCtrl : ZombieCtrl
             MinigunBulletZombie newBullet = this.minigunBulletZombieSpawner.Spawn(bulletMinigunPrefab, listPositions[i % listPositions.Count].position);
             if (newBullet == null) yield break;
             newBullet.gameObject.GetComponent<MinigunBulletZombie>().ShootAt(endPoint.position + offSet);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.7f);
         }
     }
 }

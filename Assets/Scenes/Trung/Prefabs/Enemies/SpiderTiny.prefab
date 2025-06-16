@@ -333,6 +333,7 @@ GameObject:
   - component: {fileID: 7471011117053646753}
   - component: {fileID: 2512060544070953057}
   - component: {fileID: 5389824625464824087}
+  - component: {fileID: -7327884987883717172}
   m_Layer: 7
   m_Name: SpiderTiny
   m_TagString: Untagged
@@ -348,15 +349,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2486318627693805016}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 153.03185, y: 0.1, z: 87.17986}
-  m_LocalScale: {x: 0.42017, y: 0.42017, z: 0.42017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8175474019284453918}
   - {fileID: 1858087435364583757}
   - {fileID: 7368779041454337389}
   - {fileID: 3424683969810242010}
+  - {fileID: 3127133544484785920}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7046057575563759380
@@ -458,8 +460,13 @@ MonoBehaviour:
   _isDead: 0
   enemySO: {fileID: 11400000, guid: c0673d2d53cf8734587f7ff185edc0ae, type: 2}
   _canTakeDamage: 1
+  healthBarObj: {fileID: 0}
+  _animator: {fileID: 0}
+  _spawnEnemies: {fileID: 0}
+  hitDamageSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 0}
+  bloodSplash: {fileID: 0}
   beastHurtSFX: {fileID: 0}
-  healthBar: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
   hurtPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &5389824625464824087
@@ -478,6 +485,20 @@ MonoBehaviour:
   beastAttackSFX: {fileID: 8300000, guid: aec9aff0f8cd26444a8b86aeb1070ee1, type: 3}
   beastHurtSFX: {fileID: 8300000, guid: 0c8d9612b61a51f4cb3c20051a17df41, type: 3}
   beastDeathSFX: {fileID: 8300000, guid: e6fd08b649911364ab72deafaf6e51f6, type: 3}
+--- !u!114 &-7327884987883717172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2486318627693805016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  despawn: {fileID: 6059239260207831010}
+  nameEnemy: SpiderTiny
 --- !u!1 &3564156401398065359
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +620,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4013822869813238042}
@@ -1265,7 +1286,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.32124767, z: 0.02338727}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2128122668195202975}
@@ -1303,6 +1324,79 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1818070917422141061}
   m_LocalEulerAnglesHint: {x: -0.21465597, y: 0.03067216, z: 89.54628}
+--- !u!1001 &4016753077373598184
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4013822869813238042}
+    m_Modifications:
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_Name
+      value: DespawnEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+--- !u!4 &3127133544484785920 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+  m_PrefabInstance: {fileID: 4016753077373598184}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6059239260207831010 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7181237706348211722, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+  m_PrefabInstance: {fileID: 4016753077373598184}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0f1ff3fbb40554f9bee80e9ab0c6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8759110691972300732
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1369,10 +1463,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422396490767872542, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7941444747644612472, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
-      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

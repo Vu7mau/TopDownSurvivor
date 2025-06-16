@@ -31,7 +31,7 @@ public class Explosion : PoolObj
         CharacterDamageReceiver player = other.GetComponent<CharacterDamageReceiver>();
         if (player != null && !_canTakeDamage)
         {
-            Rigidbody rb = player.gameObject.GetComponent<Rigidbody>();
+            Rigidbody rb = player.gameObject.GetComponentInChildren<Rigidbody>();
             _canTakeDamage = true;
             AddForceToTarget(rb);
             Debug.Log("Đã chạm Player!");
@@ -39,7 +39,8 @@ public class Explosion : PoolObj
     }
     private void AddForceToTarget(Rigidbody rb)
     {
-        rb.AddForce(new Vector3(0,10,0),ForceMode.Impulse);
+        if (rb.CompareTag("Enemy")) return;
+        rb.AddForce(new Vector3(0,15,0),ForceMode.Impulse);
     }
     private IEnumerator DeleteExplosion()
     {

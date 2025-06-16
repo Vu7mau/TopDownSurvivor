@@ -23,16 +23,19 @@ public class ChaseState : StateMachineBehaviour
     {
         if(this.agent == null) return;
         distance = Vector3.Distance(player.position, animator.transform.position);
-        if (distance < enemySO.AttackRange)
+        if (distance <= enemySO.AttackRange)
         {
             animator.SetBool("isAttacking", true);
             animator.SetBool("Attack", true);
+            this.agent.enabled = false;
             return;
         }
+        if (!this.agent.enabled) return;
         agent.SetDestination(player.position);
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (!this.agent.enabled) return;
         agent.SetDestination(animator.transform.position);
     }
 

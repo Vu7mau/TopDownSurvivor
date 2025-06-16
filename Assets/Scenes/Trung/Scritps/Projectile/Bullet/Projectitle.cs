@@ -40,6 +40,8 @@ public class Projectitle : PoolObj
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy")) return;
+        CharacterDamageReceiver characterDamageReceiver = other.GetComponentInChildren<CharacterDamageReceiver>();
+        if(characterDamageReceiver == null) return;
         this.Despawn.DoDespawn();
     }
 

@@ -9,17 +9,21 @@ public class EnemyHealth : DamageReceiver,IEnemy
 {
     [SerializeField] protected EnemySO enemySO;
     [SerializeField] protected bool _canTakeDamage = true;
-    [SerializeField] protected AudioClip beastHurtSFX;
-    [SerializeField] protected HpBarObj healthBar;
+
+
+    [Header("These components would be loaded when run the game!")]
     //[SerializeField] protected EnemyDamageReceiver enemyDamageReceiver;
+    [SerializeField] protected HpBarObj healthBarObj;
+    [SerializeField] protected Animator _animator;
+
+    [SerializeField] protected SpawnEnemies _spawnEnemies;
+    [SerializeField] protected HitDamageSpawner hitDamageSpawner;
+    [SerializeField] protected EnemyCtrlDespawn enemyCtrlDespawn;
+
+    [SerializeField] protected BloodSplash bloodSplash;
 
 
-    //private Rigidbody rb;
-    private Animator _animator;
-    private SpawnEnemies _spawnEnemies;
-
-
-    private float _amountIncrease = 0;
+    protected float _amountIncrease = 0;
     public float Health
     {
         get { return _hp; }
@@ -29,49 +33,95 @@ public class EnemyHealth : DamageReceiver,IEnemy
         get { return _hpMax; }
     }
 
-    protected override void LoadComponents()
-    {
-        base.LoadComponents();
-        this.LoadHealthBar();
-        //this.LoadEnemyDamageReceiver();
-    }
 
-    protected virtual void LoadHealthBar()
-    {
-        if (this.healthBar != null) return;
-        this.healthBar = GetComponentInChildren<HpBarObj>();
-        this.healthBar.gameObject.SetActive(true);
-    }
-    protected override void Awake()
-    {
-        base.Awake();
-        //this.rb = GetComponent<Rigidbody>();
-        this._animator = GetComponent<Animator>();
-        this._spawnEnemies =FindAnyObjectByType<SpawnEnemies>();
-    }
-    protected override void Start()
-    {
-        base.Start();
-        this.ResetStateEnemyDefault();
-    }
+
     protected override void OnEnable()
     {
         base.OnEnable();
-        this.ResetStateEnemyDefault();
-        this.healthBar.gameObject.SetActive(true);
+        this.RebornEnemy();
     }
     protected override void OnDisable()
     {
         base.OnDisable();
-        this._amountIncrease = 0;
     }
-    protected virtual void ResetStateEnemyDefault()
+
+    protected override void LoadComponents()
     {
-        this._hpMax = (int)enemySO.Health;
+        ///Load All Components
+        base.LoadComponents();
+        this.LoadAnimator();
+        this.LoadSpawnEnemies();
+        this.LoadHealthBar();
+        this.LoadEnemyCtrlDespawn();
+        this.LoadHitDamageSpawner();
+        this.LoadBloodSplash();
+        //this.LoadEnemyDamageReceiver();
+
+        ///Load Enemies
+        this.RebornEnemy();
+
+    }
+
+
+
+
+    //Load Components
+
+    protected virtual void LoadHealthBar()
+    {
+        if (this.healthBarObj != null) return;
+        this.healthBarObj = GetComponentInChildren<HpBarObj>();
+        this.healthBarObj.gameObject.SetActive(true);
+    }
+    protected virtual void LoadAnimator()
+    {
+        if (this._animator != null) return;
+        this._animator = GetComponent<Animator>();
+    }
+    protected virtual void LoadSpawnEnemies()
+    {
+        if (this._spawnEnemies != null) return;
+        this._spawnEnemies = FindAnyObjectByType<SpawnEnemies>();
+    }
+    protected virtual void LoadEnemyCtrlDespawn()
+    {
+        if (this.enemyCtrlDespawn != null) return;
+        this.enemyCtrlDespawn = GetComponentInChildren<EnemyCtrlDespawn>();
+    }
+    protected virtual void LoadHitDamageSpawner()
+    {
+        if (this.hitDamageSpawner != null) return;
+        this.hitDamageSpawner = FindAnyObjectByType<HitDamageSpawner>();
+    }
+    protected virtual void LoadBloodSplash()
+    {
+        if (this.bloodSplash != null) return;
+        List<BloodSplash> allMyComponents = ComponentFinder.FindAllComponentsInScene<BloodSplash>();
+        this.bloodSplash = allMyComponents[0];
+    }
+
+
+    //Reset Components
+    protected virtual void RebornEnemy()
+    {
+        this.ResetHealthGeneral();
+        this.ResetStateCollision();
         base.Reborn();
-        //this.rb.isKinematic = false;
+    }
+    protected virtual void ResetHealthGeneral()
+    {
+        this.healthBarObj.gameObject.SetActive(true);
+        this._hpMax = (int) enemySO.Health;
+    }
+    protected virtual void ResetStateCollision()
+    {
         this.gameObject.GetComponent<Collider>().enabled = true;
     }
+    protected virtual void ResetValues()
+    {
+        this._amountIncrease = 0;
+    }
+
 
     //protected virtual void LoadEnemyDamageReceiver()
     //{
@@ -79,6 +129,9 @@ public class EnemyHealth : DamageReceiver,IEnemy
     //    this.enemyDamageReceiver = GetComponentInChildren<EnemyDamageReceiver>();
     //    Debug.Log(transform.name + ":Load EnemyDamageReceiver!");
     //}
+
+
+
     public void CheckAmountIncreaseHealth(int _amountIncrease)
     {
         this._amountIncrease = (float)_amountIncrease / 100;
@@ -90,6 +143,9 @@ public class EnemyHealth : DamageReceiver,IEnemy
         this._hpMax = this._hpMax + (int)(this._hpMax * _amountIncrease);
         Debug.Log("Máu của quái là: "+this._hpMax);
     }
+
+
+
     public void TakeDamage(int damage)
     {
         if (!_canTakeDamage) { return; }
@@ -97,62 +153,63 @@ public class EnemyHealth : DamageReceiver,IEnemy
     }
     protected override void OnDead()
     {
+        if(this._spawnEnemies != null) this._spawnEnemies.EnemyDefeated(1);
         this.gameObject.GetComponent<Collider>().enabled = false;
-        //this.rb.isKinematic= true;
         this._canTakeDamage = false;
-        if (HasDeadState())
-            this._animator.SetTrigger("die");
-        if (!this._isDead)
-        {
-            //_spawnEnemies.EnemyDefeated(1);
-            this._isDead = true;
-        }
+        if (HasDeadState()) this._animator.SetTrigger("die");
+        if (!this._isDead) this._isDead = true;
     }
     public override void Deduct(int damage)
     {
         if(this._isDead) { OnDead(); return; }
         base.Deduct(damage);
+        CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
         Debug.Log("Máu quái còn " + this._hp);    
-        if (_animator != null)
-        {
-            if (HasHurtState() && !this._isDead)
-                _animator.SetTrigger("damage");
-            CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
-        }
+        //if (_animator != null)
+        //{
+        //    if (HasHurtState() && !this._isDead)
+        //        _animator.SetTrigger("damage");
+
+        //}
     }
-    public virtual bool HasHurtState() => _animator.HasState(0, Animator.StringToHash("getHit"));
+    //public virtual bool HasHurtState() => _animator.HasState(0, Animator.StringToHash("getHit"));
     public virtual bool HasDeadState() => _animator.HasState(0, Animator.StringToHash("die"));
     protected override void HurtEffect()
     {
         if(beastHurtSFX != null)
             SoundFXManager.Instance.PlaySoundFXClip(beastHurtSFX, transform);
-        StartCoroutine(HurtFXRoutine());
+        this.HurtFXRoutine();
     }
 
 
-
+    [Header("Hurt FX")]
+    [SerializeField] protected AudioClip beastHurtSFX;
+    
     [SerializeField] private Vector3 hurtScale;
     [SerializeField] private Vector3 hurtPositionOffset;
-    private IEnumerator HurtFXRoutine()
+    private void HurtFXRoutine()
     {
-        PoolingObjectList hitPoolingObj = GameObject.Find("HitPooling").GetComponent<PoolingObjectList>();
-        Transform hurt = hitPoolingObj.GetPoolingObject().transform;
-        if (hurt != null)
-        {
-            hurt.position = transform.position + hurtPositionOffset;
-            hurt.transform.localScale = hurtScale;
-            hurt.gameObject.SetActive(true);
-            yield return new WaitForSeconds(0.75f);
-            hitPoolingObj.ReturnToPool(hurt);
-        }
+        BloodSplash newBloodSplash = this.hitDamageSpawner.Spawn(bloodSplash, transform.position);
+        if (newBloodSplash == null) return;
+            newBloodSplash.transform.localScale = hurtScale;
+        newBloodSplash.gameObject.SetActive(true);
     }
+
+
+
+    //Others
     public void RewardPlayerAfterEnemyDead()
     {
         Rewards.Instance.RewardGemsPlayerWhenKillEnemy(enemySO.amount_Gems, transform);
     }
     public void DeleteEnemyRoutine()
     {
-        gameObject.SetActive(false);
+        //if(this.enemyCtrlDespawn != null)
+        //{
+        //    this.enemyCtrlDespawn.DoDespawn();
+        //    return;
+        //}
+        this.gameObject.SetActive(false);
     }
     public void Victory()
     {

@@ -1166,6 +1166,7 @@ GameObject:
   - component: {fileID: 4570266845362691753}
   - component: {fileID: 6859666168914482408}
   - component: {fileID: 7681701650619760980}
+  - component: {fileID: -6734541594688177425}
   m_Layer: 0
   m_Name: Zombie_Pacient_04
   m_TagString: Enemy
@@ -1190,6 +1191,7 @@ Transform:
   - {fileID: 4760985346372669905}
   - {fileID: 2428584484780906107}
   - {fileID: 9196898342407553430}
+  - {fileID: 7392708850071748155}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1118881133962216337
@@ -1273,10 +1275,29 @@ MonoBehaviour:
   _isDead: 0
   enemySO: {fileID: 11400000, guid: 4e2addb767598704cb17986c3c9a9868, type: 2}
   _canTakeDamage: 1
+  healthBarObj: {fileID: 0}
+  _animator: {fileID: 0}
+  _spawnEnemies: {fileID: 0}
+  hitDamageSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 0}
+  bloodSplash: {fileID: 0}
   beastHurtSFX: {fileID: 8300000, guid: 0c8d9612b61a51f4cb3c20051a17df41, type: 3}
-  healthBar: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
   hurtPositionOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &-6734541594688177425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5921367157248738129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  despawn: {fileID: 1867688609589044953}
+  nameEnemy: Zombie_Pacient_04
 --- !u!1 &5942593079275722547
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,4 +2310,77 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
   m_PrefabInstance: {fileID: 3002077383793764336}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8810093380708042963
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6442184458774354411}
+    m_Modifications:
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_Name
+      value: DespawnEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+--- !u!114 &1867688609589044953 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7181237706348211722, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+  m_PrefabInstance: {fileID: 8810093380708042963}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0f1ff3fbb40554f9bee80e9ab0c6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &7392708850071748155 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+  m_PrefabInstance: {fileID: 8810093380708042963}
   m_PrefabAsset: {fileID: 0}

@@ -1370,7 +1370,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6353661809454620862}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.14780942, z: 0, w: 0.9890159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.055072684, y: -0.060116272, z: 0.05607829}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1378,7 +1378,7 @@ Transform:
   - {fileID: 4502956669641936138}
   - {fileID: 6722209755428028955}
   m_Father: {fileID: 8700187288436632830}
-  m_LocalEulerAnglesHint: {x: 0, y: 17, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6733763712605384363
 GameObject:
   m_ObjectHideFlags: 0
@@ -1777,6 +1777,7 @@ GameObject:
   - component: {fileID: 5621771401634337132}
   - component: {fileID: 2159309267267697389}
   - component: {fileID: 6425978678940601988}
+  - component: {fileID: -8824760094674056641}
   m_Layer: 0
   m_Name: Zombie_Police
   m_TagString: Enemy
@@ -1800,6 +1801,7 @@ Transform:
   - {fileID: 8700187288436632830}
   - {fileID: 4929753896889989919}
   - {fileID: 9011112036875107180}
+  - {fileID: 8205468251616864210}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5351131679899781999
@@ -1842,7 +1844,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.74
-  m_BaseOffset: 0.08
+  m_BaseOffset: 0.01
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!65 &7895743588397992025
@@ -1864,8 +1866,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.7475675, z: 1}
-  m_Center: {x: 0, y: 0.7686792, z: 0}
+  m_Size: {x: 1, y: 1.648415, z: 1}
+  m_Center: {x: 0, y: 0.8182555, z: 0}
 --- !u!114 &5621771401634337132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1878,10 +1880,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8260849e69122e644a269b066ccac26e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletInvisiblePrefab: {fileID: 1868729732153658574, guid: e7f25614679e5224ba279ac972451f42, type: 3}
   position: {fileID: 3940331567741058026}
-  endPoint: {fileID: 0}
   offSet: {x: 0, y: 2, z: 0}
+  endPoint: {fileID: 0}
+  bulletInvisibleSpawner: {fileID: 0}
+  bulletInvisible: {fileID: 0}
 --- !u!114 &2159309267267697389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1899,8 +1902,13 @@ MonoBehaviour:
   _isDead: 0
   enemySO: {fileID: 11400000, guid: 82e816b70d8b0a24989c90bd19d97b57, type: 2}
   _canTakeDamage: 1
+  healthBarObj: {fileID: 0}
+  _animator: {fileID: 0}
+  _spawnEnemies: {fileID: 0}
+  hitDamageSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 0}
+  bloodSplash: {fileID: 0}
   beastHurtSFX: {fileID: 0}
-  healthBar: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
   hurtPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!54 &6425978678940601988
@@ -1925,11 +1933,25 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &-8824760094674056641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085040016616699974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  despawn: {fileID: 1057462473976643376}
+  nameEnemy: Zombie_Police
 --- !u!1 &8117626052404127214
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,4 +2324,77 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
   m_PrefabInstance: {fileID: 1324751145476791673}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7855470862288834874
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5108199756177751005}
+    m_Modifications:
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_Name
+      value: DespawnEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+--- !u!114 &1057462473976643376 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7181237706348211722, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+  m_PrefabInstance: {fileID: 7855470862288834874}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0f1ff3fbb40554f9bee80e9ab0c6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &8205468251616864210 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2079414839808505576, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+  m_PrefabInstance: {fileID: 7855470862288834874}
   m_PrefabAsset: {fileID: 0}

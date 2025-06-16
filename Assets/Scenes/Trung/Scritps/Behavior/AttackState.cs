@@ -19,10 +19,11 @@ public class AttackState : StateMachineBehaviour
         animator.transform.LookAt(this.player);
 
         distance = Vector3.Distance(player.position, animator.transform.position);
-        if (this.distance >= this.enemySO.AttackRange)
+        if (this.distance > this.enemySO.AttackRange)
         {
             animator.SetBool("isAttacking", false);
             animator.SetBool("Attack", false);
+            this.navMeshAgent.enabled = true;
             return;
         }
     }
