@@ -6,6 +6,7 @@ public class ZombiePoliceCtrl : ZombieCtrl
 {
     [SerializeField] protected BulletInvisbleSpawner bulletInvisibleSpawner;
     [SerializeField] protected BulletInvisible bulletInvisible;
+    [SerializeField] protected Transform gunFlashFX;
 
     protected override void LoadComponents()
     {
