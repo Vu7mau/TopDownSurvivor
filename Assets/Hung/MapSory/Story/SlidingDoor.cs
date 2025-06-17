@@ -1,12 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SlidingDoor : MonoBehaviour
 {
-    public enum DoorDirection { Horizontal, Vertical }
-    public DoorDirection direction = DoorDirection.Horizontal;
+    public enum DoorDirection { LeftRight, FrontBack }
+    public DoorDirection direction = DoorDirection.LeftRight;
 
     public Transform leftDoor;
     public Transform rightDoor;
+
     public float openDistance = 2f;
     public float moveSpeed = 2f;
 
@@ -38,13 +39,16 @@ public class SlidingDoor : MonoBehaviour
     {
         Vector3 offset;
 
-        if (direction == DoorDirection.Horizontal)
-            offset = new Vector3(openDistance, 0f, 0f);
+        // Chọn hướng mở
+        if (direction == DoorDirection.LeftRight)
+            offset = new Vector3(openDistance, 0f, 0f); // X
         else
-            offset = new Vector3(0f, openDistance, 0f);
+            offset = new Vector3(0f, 0f, openDistance); // Z
 
+        // Một cánh đi -offset, một cánh đi +offset
         leftTargetPos = leftClosedPos - offset;
         rightTargetPos = rightClosedPos + offset;
+
         isMoving = true;
     }
 
