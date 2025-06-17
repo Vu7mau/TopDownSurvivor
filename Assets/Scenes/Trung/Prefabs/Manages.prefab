@@ -885,51 +885,111 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   listWaves:
   - WaveIndex: 1
-    EnemyTypeIndex: 3
-    Amount: 5
-    timeForNextWave: 30
-    bossLists: []
-    waveMode: 0
-    amountHealthIncreasePercent: 0
-    amountDamageIncreasePercent: 0
-  - WaveIndex: 2
     EnemyTypeIndex: 1
-    Amount: 5
-    timeForNextWave: 30
+    Amount: 20
+    timeForNextWave: 60
     bossLists: []
     waveMode: 0
     amountHealthIncreasePercent: 0
     amountDamageIncreasePercent: 0
-  - WaveIndex: 3
+  - WaveIndex: 1
     EnemyTypeIndex: 2
-    Amount: 5
-    timeForNextWave: 30
-    bossLists: []
+    Amount: 15
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
     waveMode: 0
     amountHealthIncreasePercent: 0
     amountDamageIncreasePercent: 0
-  - WaveIndex: 4
+  - WaveIndex: 1
+    EnemyTypeIndex: 3
+    Amount: 20
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
+    waveMode: 0
+    amountHealthIncreasePercent: 0
+    amountDamageIncreasePercent: 0
+  - WaveIndex: 1
     EnemyTypeIndex: 4
-    Amount: 5
-    timeForNextWave: 30
-    bossLists: []
+    Amount: 25
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
     waveMode: 0
     amountHealthIncreasePercent: 0
     amountDamageIncreasePercent: 0
-  - WaveIndex: 5
-    EnemyTypeIndex: 5
-    Amount: 5
-    timeForNextWave: 30
-    bossLists: []
+  - WaveIndex: 1
+    EnemyTypeIndex: 1
+    Amount: 30
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
     waveMode: 0
     amountHealthIncreasePercent: 0
     amountDamageIncreasePercent: 0
-  - WaveIndex: 6
+  - WaveIndex: 1
     EnemyTypeIndex: 6
-    Amount: 5
-    timeForNextWave: 30
-    bossLists: []
+    Amount: 30
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
     waveMode: 0
+    amountHealthIncreasePercent: 0
+    amountDamageIncreasePercent: 0
+  - WaveIndex: 1
+    EnemyTypeIndex: 7
+    Amount: 30
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
+    waveMode: 0
+    amountHealthIncreasePercent: 0
+    amountDamageIncreasePercent: 0
+  - WaveIndex: 1
+    EnemyTypeIndex: 8
+    Amount: 30
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
+    waveMode: 0
+    amountHealthIncreasePercent: 0
+    amountDamageIncreasePercent: 0
+  - WaveIndex: 1
+    EnemyTypeIndex: 9
+    Amount: 30
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
+    waveMode: 0
+    amountHealthIncreasePercent: 0
+    amountDamageIncreasePercent: 0
+  - WaveIndex: 1
+    EnemyTypeIndex: 10
+    Amount: 20
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
+    waveMode: 0
+    amountHealthIncreasePercent: 0
+    amountDamageIncreasePercent: 0
+  - WaveIndex: 1
+    EnemyTypeIndex: 10
+    Amount: 20
+    timeForNextWave: 90
+    bossLists:
+    - BossType: 1
+      Amount: 1
+    waveMode: 2
     amountHealthIncreasePercent: 0
     amountDamageIncreasePercent: 0
 --- !u!1 &2178975751743986799
@@ -1061,7 +1121,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6469869434787795552}
-  - {fileID: 8669264245995095666}
+  - {fileID: 12157273339177247}
   m_Father: {fileID: 4135409583037356247}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2795316074650118929
@@ -1080,7 +1140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &311864779760079947
 Transform:
   m_ObjectHideFlags: 0
@@ -3732,7 +3792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6280867580407715853
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3989,7 +4049,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1868729732153658574, guid: fe7ccac9844d8664ba76b5fcd4b095e4, type: 3}
   m_PrefabInstance: {fileID: 1917081210939606217}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &5291861003122176823
+--- !u!1001 &3536502824266308698
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -4050,10 +4110,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bbf4e6bad6f7c164fabf907f9aa69d1e, type: 3}
---- !u!4 &8669264245995095666 stripped
+--- !u!4 &12157273339177247 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3548588485384254789, guid: bbf4e6bad6f7c164fabf907f9aa69d1e, type: 3}
-  m_PrefabInstance: {fileID: 5291861003122176823}
+  m_PrefabInstance: {fileID: 3536502824266308698}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5989296185714560877
 PrefabInstance:
@@ -4213,6 +4273,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MinigunBulletZombie
       objectReference: {fileID: 0}
+    - target: {fileID: 4550852323876629395, guid: ee16e9542c8ef0549bf4ec2bdf7ed265, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4231,10 +4295,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1580036882709467937}
     m_Modifications:
-    - target: {fileID: 2390363405043174338, guid: a04e26ef4986f02469e87e49effc6a11, type: 3}
-      propertyPath: weight
-      value: 0.18
-      objectReference: {fileID: 0}
     - target: {fileID: 3726290214769994924, guid: a04e26ef4986f02469e87e49effc6a11, type: 3}
       propertyPath: m_LocalPosition.x
       value: 116.4

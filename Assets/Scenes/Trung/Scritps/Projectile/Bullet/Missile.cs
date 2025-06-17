@@ -43,10 +43,23 @@ public class Missile : Projectitle
         List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
         this.explosion = allMyComponents[0];
     }
-    protected void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        this.explosionSpawner.Spawn(explosion, transform.position);
-        this.missileDespawn.DoDespawn();
+        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
+        {
+            Explosion newExplosde =  this.explosionSpawner.Spawn(explosion, transform.position);
+            newExplosde.GetComponentInChildren<CreateHitEnemy>().transform.gameObject.SetActive(true);
+            this.missileDespawn.DoDespawn();
+        }
+    }
+    private void OnCollisionEnter(Collision other)
+    {
+        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
+        {
+            Explosion newExplosde = this.explosionSpawner.Spawn(explosion, transform.position);
+            newExplosde.GetComponentInChildren<CreateHitEnemy>().transform.gameObject.SetActive(true);
+            this.missileDespawn.DoDespawn();
+        }
     }
     //protected void OnTriggerStay(Collider other)
     //{

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EffectFXSound : MonoBehaviour
 {
-    [SerializeField] private AudioClip snd_effect;
+    [SerializeField] private List<AudioClip> snd_Explosion_Effect;
     AudioSource t;
     private void Awake()
     {
@@ -12,8 +12,8 @@ public class EffectFXSound : MonoBehaviour
     }
     private void OnEnable()
     {
-        
-        t.clip = snd_effect;
+        int random = Random.Range(0, snd_Explosion_Effect.Count);
+        t.clip = snd_Explosion_Effect[random];
         t.playOnAwake = false;
         t.loop = false;
         t.Play();
@@ -21,7 +21,8 @@ public class EffectFXSound : MonoBehaviour
     }
     private void OnDisable()
     {
-        t.clip = snd_effect;
+        int random = Random.Range(0, snd_Explosion_Effect.Count);
+        t.clip = snd_Explosion_Effect[random];
         t.playOnAwake = false;
         t.loop = false;
         t.Stop();

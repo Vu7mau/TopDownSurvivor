@@ -101,7 +101,7 @@ MonoBehaviour:
   m_IsGlobal: 0
   priority: 0
   blendDistance: 1
-  weight: 1
+  weight: 0.18
   sharedProfile: {fileID: 11400000, guid: 65ada8fc537985e4d88f03e8a18c2144, type: 2}
 --- !u!1 &3001188752108515398
 GameObject:
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc52bc96f7dd29d44b90aaf706d1319d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basedDamage: 10
+  _basedDamage: 5
   canTakeDamage: 0
   enemySO: {fileID: 0}
 --- !u!135 &7637112855867802852
@@ -170,7 +170,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3133284742347023609
 GameObject:
@@ -248,7 +248,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.11, y: 0.000000033489, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2029617129246399910}
@@ -272,11 +272,11 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4710017300825278020
 MonoBehaviour:
@@ -294,6 +294,8 @@ MonoBehaviour:
   speed: 10
   createHitEnemy: {fileID: 7598835723555921611}
   lightBulletDespawn: {fileID: 2759594641154365847}
+  explosionSpawner: {fileID: 0}
+  explosion: {fileID: 0}
 --- !u!1 &8975965435834632384
 GameObject:
   m_ObjectHideFlags: 0

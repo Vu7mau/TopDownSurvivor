@@ -19,6 +19,6 @@ public class BulletInvisible : Projectitle
     }
     protected void OnTriggerEnter(Collider other)
     {
-        this.bulletInvisbleDespawn.DoDespawn();
+        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet")) this.bulletInvisbleDespawn.DoDespawn();
     }
 }

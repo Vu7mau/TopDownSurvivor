@@ -20,6 +20,6 @@ public class MinigunBulletZombie : Projectitle
     }
     protected void OnTriggerEnter(Collider other)
     {
-        this.minigunBulletZombieDespawn.DoDespawn();
+        if (!other.CompareTag("Enemy") || !other.GetComponentInChildren<DamageSender>()) this.minigunBulletZombieDespawn.DoDespawn();
     }
 }

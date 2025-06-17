@@ -19,7 +19,7 @@ public class ToxicAbyss : Projectitle
     }
     protected void OnTriggerEnter(Collider other)
     {
-        this.toxicAbyssDespawn.DoDespawn();
+        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet")) this.toxicAbyssDespawn.DoDespawn();
     }
 
 }

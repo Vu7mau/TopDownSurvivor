@@ -12,20 +12,30 @@ public class RobotZombie : Boss
     [SerializeField] protected LightBulletSpawner lightBulletSpawner;
     [SerializeField] protected MissileSpawner missileSpawner;
 
+
     [Header("Shooting")]
     [SerializeField] protected LightBullet lightBulletPrefab;
     [SerializeField] protected Transform position;
-    [SerializeField] protected int lightBulletSpawnCount;
-    [SerializeField] protected float lightBulletSpawnRadius = 1.5f;
+    [SerializeField] protected List<Transform> listPositionsLeft;
+    [SerializeField] protected List<Transform> listPositionsRight;
+    //[SerializeField] protected int lightBulletSpawnCount;
+    //[SerializeField] protected float lightBulletSpawnRadius = 1.5f;
+    [SerializeField] protected float timeBetweenEachShoot = 1f;
 
     [Header("Shooting")]
     [SerializeField] protected Missile missilePrefab;
+    [SerializeField] protected List<Transform> missilePositions;
 
-    [Header("Jump Attack")]
-    [SerializeField] protected float heightJump = 2f;
-    [SerializeField] protected float durationJump = 1f;
-    [SerializeField] protected int jumpCount = 1;
-    [SerializeField] protected Transform jumpAttackZone;
+    //[Header("Jump Attack")]
+    //[SerializeField] protected Transform jumpAttackZone;
+    //[SerializeField] protected float distanceSafe;
+    //[SerializeField] protected bool canJumpToSave = true;
+    //[SerializeField] protected float timeCooldownToJumpSafe;
+
+    protected bool isLookPlayer = true;
+
+    [Header("Lazer")]
+    [SerializeField] protected List<AudioClip> listLazerSnds;
 
     protected override void LoadComponents()
     {
@@ -60,16 +70,38 @@ public class RobotZombie : Boss
         this.missilePrefab = allMyComponents[0];
     }
 
+
     protected override void Attack()
     {
         base.Attack();
         this.AttackRoutine();
     }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        SpawnEnemies.Instance.IsFinale = true;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        //if (this.isLookPlayer) transform.LookAt(playerPosition.position);
+        //if (distanceToPlayer < distanceSafe && this.canJumpToSave)
+        //{
+        //    this._agent.enabled = false;
+        //    this._enemyAnimator.SetBool("CanJump", this.canJumpToSave);
+        //    this._enemyAnimator.SetBool("isAttacking", !this.canJumpToSave);
+        //    this._enemyAnimator.SetBool("Attack1", !this.canJumpToSave);
+        //    this._enemyAnimator.SetBool("Attack2", !this.canJumpToSave);
+        //    this._enemyAnimator.SetBool("Attack3", !this.canJumpToSave);
+        //    this.canJumpToSave = false;
+        //}
+    }
     protected virtual void AttackRoutine()
     {
-        currentState = BossState.Idle; // Tạm dừng trước khi chuyển lại Chase
+        currentState = BossState.Idle;
 
-        int attackIndex = Random.Range(0, this.amountAttacksAnimation); // Giả sử có 3 đòn tấn công
+        int attackIndex = Random.Range(0, this.amountAttacksAnimation);
 
         switch (attackIndex)
         {
@@ -92,84 +124,145 @@ public class RobotZombie : Boss
         else
             currentState = BossState.Attack;
     }
-    protected virtual void AttackTypeA()
+    private void AttackTypeA()
     {
-        this._agent.enabled = false;
         Debug.Log("Đòn đánh A");
         this._enemyAnimator.SetBool("isAttacking", true);
         this._enemyAnimator.SetBool("Attack1", true);
-        StartCoroutine(RadialShootRoutine());
+        //StartCoroutine(ShootRoutine());
     }
-    protected IEnumerator RadialShootRoutine()
+    //protected IEnumerator RadialShootRoutine()
+    //{
+    //    for (int i = 0; i < lightBulletSpawnCount; i++)
+    //    {
+    //        float angle = i * Mathf.PI * 2f / lightBulletSpawnCount;
+    //        Vector3 dir = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)).normalized;
+    //        Vector3 spawnPos = position.position + dir * lightBulletSpawnRadius;
+    //        LightBullet newLightBullet = this.lightBulletSpawner.Spawn(this.lightBulletPrefab,spawnPos);
+    //        if (newLightBullet == null) yield break;
+    //        newLightBullet.Direction = dir;
+    //        newLightBullet.SetDirection(dir);
+    //    }
+    //    yield return new WaitForSeconds(2f);
+    //    this._enemyAnimator.SetBool("isAttacking", false);
+    //    this._enemyAnimator.SetBool("Attack1", false);
+    //}
+    protected virtual void ShootMissileLeft()
     {
-        for (int i = 0; i < lightBulletSpawnCount; i++)
-        {
-            float angle = i * Mathf.PI * 2f / lightBulletSpawnCount;
-            Vector3 dir = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)).normalized;
-            Vector3 spawnPos = position.position + dir * lightBulletSpawnRadius;
-            LightBullet newLightBullet = this.lightBulletSpawner.Spawn(this.lightBulletPrefab,spawnPos);
-            if (newLightBullet == null) yield break;
-            newLightBullet.Direction = dir;
-            newLightBullet.SetDirection(dir);
-        }
-        yield return new WaitForSeconds(2f);
+        if (currentState == BossState.Death) return;
+        Missile newMissile = this.missileSpawner.Spawn(this.missilePrefab, missilePositions[0].position);
+        if (newMissile == null) return;
+        //newMissile.gameObject.transform.rotation = missilePositions[0].rotation;
+        newMissile.gameObject.GetComponent<Missile>().ShootAt(this.playerPosition.position, 30f);
+    }
+    protected virtual void ShootMissileRight()
+    {
+        if (currentState == BossState.Death) return;
+        Missile newMissile = this.missileSpawner.Spawn(this.missilePrefab, missilePositions[1].position);
+        if (newMissile == null) return;
+        //newMissile.gameObject.transform.rotation = Quaternion.Euler(-90,0,0);
+        newMissile.gameObject.GetComponent<Missile>().ShootAt(this.playerPosition.position, 30f);
+        EndAttack1();
+    }
+    protected virtual void EndAttack1()
+    {
         this._enemyAnimator.SetBool("isAttacking", false);
         this._enemyAnimator.SetBool("Attack1", false);
     }
-    //protected IEnumerator ShootRoutine()
-    //{
-    //    for(int i = 0; i < this.baseAmountAttack; i++)
-    //    {
-    //        Transform newObj = Instantiate(bulletPrefab, position.position, Quaternion.identity);
-    //        newObj.gameObject.GetComponent<Projectitle>().ShootAt(this.playerPosition.position);
-    //        yield return new WaitForSeconds(0.5f);
-    //    }
-    //}
 
-    [SerializeField] protected Transform missilePosition;
+
+
+    //[SerializeField] protected Transform missilePosition;
     protected virtual void AttackTypeB()
     {
         Debug.Log("Đòn đánh B");
-        this._agent.enabled = false;
         this._enemyAnimator.SetBool("isAttacking", true);
         this._enemyAnimator.SetBool("Attack2", true);
-        StartCoroutine(ShootMissile());
+        //tartCoroutine(ShootMissile());
     }
 
-    private IEnumerator ShootMissile()
+    protected virtual void ShootLightBullet()
     {
-        for(int i = 0; i < 3; i++)
+        StartCoroutine(ShootLightBulletLeft());
+    }
+
+    //protected virtual void DownFlyState()
+    //{
+    //    this._enemyAnimator.SetBool("CanJump", this.canJumpToSave);
+    //}
+
+    //private IEnumerator ShootMissile()
+    //{
+    //    for(int i = 0; i < 3; i++)
+    //    {
+    //        Missile newMissile = this.missileSpawner.Spawn(this.missilePrefab, missilePosition.position);
+    //        if (newMissile == null) yield break;
+    //        //newMissile.gameObject.transform.rotation = Quaternion.Euler(-90,0,0);
+    //        newMissile.gameObject.GetComponent<Missile>().ShootAt(this.playerPosition.position, 50f);
+    //        yield return new WaitForSeconds(1f);
+    //    }
+    //    this._enemyAnimator.SetBool("isAttacking", false);
+    //    this._enemyAnimator.SetBool("Attack2", false);
+    //}
+    private IEnumerator ShootLightBulletLeft()
+    {
+        if(this.listPositionsLeft.Count == 0) yield break;
+        for (int i = 0; i < listPositionsLeft.Count; i++)
         {
-            Missile newMissile = this.missileSpawner.Spawn(this.missilePrefab, missilePosition.position);
+            Vector3 target = this.playerPosition.position;
+            yield return new WaitForSeconds(0.3f);
+            if (this.listPositionsLeft[i] == null) continue;
+            if (currentState == BossState.Death) yield break;
+            LightBullet newMissile = this.lightBulletSpawner.Spawn(this.lightBulletPrefab, listPositionsLeft[i].position);
             if (newMissile == null) yield break;
             //newMissile.gameObject.transform.rotation = Quaternion.Euler(-90,0,0);
-            newMissile.gameObject.GetComponent<Missile>().ShootAt(this.playerPosition.position,30f);
-            yield return new WaitForSeconds(1f);
+            newMissile.gameObject.GetComponent<LightBullet>().ShootAt(target, 100f);
+            yield return new WaitForSeconds(this.timeBetweenEachShoot);
         }
         this._enemyAnimator.SetBool("isAttacking", false);
         this._enemyAnimator.SetBool("Attack2", false);
     }
+
+
+
     protected virtual void AttackTypeC()
     {
         Debug.Log("Đòn đánh C");
-        this.JumpToPlayer();
+        this.isLookPlayer = false;
+        this._enemyAnimator.SetBool("isAttacking", true);
+        this._enemyAnimator.SetBool("Attack3", true);
+        //this.JumpToPlayer();
+        
     }
-    protected virtual void JumpToPlayer()
+    protected virtual void EndAttackTypeC()
     {
-        this._agent.enabled = false;
-        Vector3 targetPos = this.playerPosition.position;
-        targetPos.y = transform.position.y;
-        float jumpPower = this.heightJump;     
-        float duration = this.durationJump;
-
-        this.transform.DOJump(targetPos, jumpPower, this.jumpCount, duration).OnComplete(() => {
-            Debug.Log("Boss đã nhảy tới Player");
-            currentState = BossState.Attack;
-            this._agent.enabled = true;
-            jumpAttackZone.gameObject.SetActive(true);
-        });
-        jumpAttackZone.gameObject.SetActive(false);
+        this._enemyAnimator.SetBool("isAttacking", false);
+        this._enemyAnimator.SetBool("Attack3", false);
+        this.isLookPlayer = true;
     }
+
+
+    protected virtual void ShootLazerSound()
+    {
+        int indexSound = Random.Range(0,listLazerSnds.Count);
+        SoundFXManager.Instance.PlaySoundFXClip(listLazerSnds[indexSound],transform,false);
+    }
+    //protected virtual void JumpToPlayer()
+    //{
+    //    this._agent.enabled = false;
+    //    Vector3 targetPos = this.playerPosition.position;
+    //    targetPos.y = transform.position.y;
+    //    float jumpPower = this.heightJump;     
+    //    float duration = this.durationJump;
+
+    //    this.transform.DOJump(targetPos, jumpPower, this.jumpCount, duration).OnComplete(() => {
+    //        Debug.Log("Boss đã nhảy tới Player");
+    //        currentState = BossState.Attack;
+    //        this._agent.enabled = true;
+    //        jumpAttackZone.gameObject.SetActive(true);
+    //    });
+    //    jumpAttackZone.gameObject.SetActive(false);
+    //}
     [SerializeField] protected ExplosionSpawner explosionSpawner;
     [SerializeField] protected Explosion explosion;
     protected virtual void LoadExplosionSpawner()
@@ -183,6 +276,9 @@ public class RobotZombie : Boss
         List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
         this.explosion = allMyComponents[0];
     }
+
+
+
     protected override void Die()
     {
         StartCoroutine(DieExplosionRoutine());
@@ -190,13 +286,20 @@ public class RobotZombie : Boss
     }
     private IEnumerator DieExplosionRoutine()
     {
+        this.isAttackPlayer = false;
+        this.isLookPlayer = false;
+        this._agent.enabled = false;
         Explosion newExplosion = this.explosionSpawner.Spawn(explosion, transform.position);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Explosion newExplosion1 = this.explosionSpawner.Spawn(explosion, transform.position+ new Vector3(-1,0,0));
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Explosion newExplosion2 = this.explosionSpawner.Spawn(explosion, transform.position + new Vector3(1, 0, 0));
-        yield return new WaitForSeconds(0.5f);
-        Explosion newExplosion3 = this.explosionSpawner.Spawn(explosion, transform.position);
+        yield return new WaitForSeconds(1f);
+        Explosion newExplosion3 = this.explosionSpawner.Spawn(explosion, transform.position + new Vector3(-1, 0, 0));
+        yield return new WaitForSeconds(1f);
+        Explosion newExplosion4 = this.explosionSpawner.Spawn(explosion, transform.position + new Vector3(1, 0, 0));
+        yield return new WaitForSeconds(1f);
+        Explosion newExplosion5 = this.explosionSpawner.Spawn(explosion, transform.position);
         this.gameObject.SetActive(false);
     }
 }

@@ -65,6 +65,7 @@ public class Projectitle : PoolObj
         this.speed = speed;
     }
 
+
     protected void Update()
     {
         transform.position += _direction * speed * Time.deltaTime;

@@ -1,0 +1,180 @@
+fileFormatVersion: 2
+guid: 0e59479054ce8b0479872754eab2b666
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'Head' not found\n"
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton:
+    - name: Ferret_rigged(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Ferret
+      parentName: Ferret_rigged(Clone)
+      position: {x: -0.000000008583069, y: 0, z: -0.008938378}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Pelvis
+      parentName: Ferret_rigged(Clone)
+      position: {x: -0.00000003051758, y: 0.30481908, z: 0}
+      rotation: {x: 0.5, y: 0.50000006, z: 0.5, w: -0.5}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Tower
+      parentName: Pelvis
+      position: {x: -0, y: 0, z: 0.05}
+      rotation: {x: 0.28606632, y: -0.05919987, z: -0.000000029802322, w: 0.9563794}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Weapon_L
+      parentName: Tower
+      position: {x: 0.01729001, y: 0.08354904, z: 0.04744031}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Weapon_R
+      parentName: Tower
+      position: {x: 0.017290017, y: -0.08354905, z: 0.04744031}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg1_L
+      parentName: Pelvis
+      position: {x: -0.0000000059229914, y: 0.06775113, z: 0}
+      rotation: {x: -0.47801358, y: -0.6121142, z: -0.4837544, w: 0.40348607}
+      scale: {x: 1.0000001, y: 1.000001, z: 1}
+    - name: Leg2_L
+      parentName: Leg1_L
+      position: {x: -0.14142132, y: 0, z: 0.032248933}
+      rotation: {x: -0.05385854, y: 0.0538586, z: 0.3232099, w: 0.9432571}
+      scale: {x: 0.99999994, y: 0.9999999, z: 0.9999999}
+    - name: Leg3_L
+      parentName: Leg2_L
+      position: {x: -0.14142323, y: 0.000000019073488, z: 0.00000001525879}
+      rotation: {x: 0.05492446, y: 0.045341667, z: -0.21463364, w: 0.9740944}
+      scale: {x: 0.99999994, y: 0.99999994, z: 1.0000001}
+    - name: Leg4_L
+      parentName: Leg3_L
+      position: {x: -0.049998697, y: 0.000000007629395, z: 0}
+      rotation: {x: -0.000000020410878, y: -0.00000008831193, z: 7.8731577e-10, w: 1}
+      scale: {x: 0.9999999, y: 1, z: 0.9999998}
+    - name: Leg1_R
+      parentName: Pelvis
+      position: {x: -0.0000000011831549, y: -0.067750975, z: 0}
+      rotation: {x: -0.48189345, y: 0.40556502, z: 0.47561702, w: 0.61407185}
+      scale: {x: -1, y: -1.0000002, z: -1}
+    - name: Leg2_R
+      parentName: Leg1_R
+      position: {x: -0.14142136, y: -0.00000001525879, z: 0.032248933}
+      rotation: {x: 0.05435472, y: -0.05435487, z: -0.32323682, w: -0.943191}
+      scale: {x: 0.9999998, y: 0.9999998, z: 1}
+    - name: Leg3_R
+      parentName: Leg2_R
+      position: {x: -0.14142324, y: -0.000000026702882, z: 0}
+      rotation: {x: 0.05525874, y: 0.04496175, z: -0.21463054, w: 0.97409374}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: Leg4_R
+      parentName: Leg3_R
+      position: {x: -0.049998697, y: 0.0000000038146974, z: 0}
+      rotation: {x: -0.0000000020629611, y: -0.00000016047723, z: -0.000000029801866, w: 1}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

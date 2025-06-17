@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Explosion : PoolObj
 {
-    [SerializeField] private float timeToDelete;
     protected bool _canTakeDamage= false;
     public override string GetName() => "Explosion";
     protected override void OnDisable()
@@ -16,11 +15,11 @@ public class Explosion : PoolObj
     {
         base.OnEnable();
         this.LoadStateDefault();
-        StartCoroutine(this.DeleteExplosion());
     }
     protected virtual void LoadStateDefault()
     {
         this._canTakeDamage = false;
+        this.transform.GetComponentInChildren<CreateHitEnemy>().transform.gameObject.SetActive(true);
     }
     protected override void Start()
     {
@@ -41,10 +40,5 @@ public class Explosion : PoolObj
     {
         if (rb.CompareTag("Enemy")) return;
         rb.AddForce(new Vector3(0,15,0),ForceMode.Impulse);
-    }
-    private IEnumerator DeleteExplosion()
-    {
-        yield return new WaitForSeconds(timeToDelete);
-        gameObject.SetActive(false);
     }
 }

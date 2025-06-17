@@ -41,6 +41,10 @@ public class SpawnEnemies :VuMonoBehaviour
     private int amountEnemiesPlayerKilled = 0;
     private int amountEnemiesMixed;
     private bool isStartFight = false;
+    public bool IsStartFight { set => isStartFight = value; }
+
+    private bool isFinale = false;
+    public bool IsFinale { set => isFinale = value; }
 
     private List<GameObject> listParentGameObject = new List<GameObject>();
     private List<GameObject> listParentBossesGameObject = new List<GameObject>();
@@ -91,24 +95,40 @@ public class SpawnEnemies :VuMonoBehaviour
         GameObject panelFinish = GameObject.Find("PanelWhenFinishTheBattle");
         if (timeIsUp) 
         {
-            panelFinish.transform.GetChild(1).gameObject.SetActive(true);
-            isStartFight = false;
-                Menu.Instance.die();
-            return;
+            if (!this.isFinale)
+            {
+                StartCoroutine(FinishPanelLoseRoutine(panelFinish, 1));
+                return;
+            }
         }
         else
         {
-            if(enemiesLeft == 0)
+            if(enemiesLeft == 0 && isFinale)
             {
-                panelFinish.transform.GetChild(0).gameObject.SetActive(true);
-                isStartFight = false;
-                Timer.Instance.StopCountDown(false, false);
-                Menu.Instance.Win();
-
+                StartCoroutine(FinishPanelWinRoutine(panelFinish, 0));
                 return;
             }
         }
 
+    }
+    IEnumerator FinishPanelWinRoutine(GameObject obj, int index)
+    {
+        isStartFight = false;
+        obj.transform.GetChild(index).gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        obj.transform.GetChild(index).gameObject.SetActive(false);
+        yield return new WaitForSeconds(3f);
+        Timer.Instance.StopCountDown(false, false);
+        Menu.Instance.Win();
+    }
+    IEnumerator FinishPanelLoseRoutine(GameObject obj, int index)
+    {
+        isStartFight = false;
+        obj.transform.GetChild(index).gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        obj.transform.GetChild(index).gameObject.SetActive(false);
+        yield return new WaitForSeconds(3f);
+        Menu.Instance.die();
     }
     IEnumerator SpawnWave()
     {

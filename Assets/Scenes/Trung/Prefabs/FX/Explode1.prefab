@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 10
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 0}
 --- !u!65 &7919010424000506502
 BoxCollider:
@@ -4967,7 +4967,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   despawn: {fileID: 0}
-  timeToDelete: 2
 --- !u!65 &4906428941842232104
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5001,7 +5000,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7bb4281136b4604c85f7aa529467436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snd_effect: {fileID: 8300000, guid: 7872b02787eb5b841888ed145a930b56, type: 3}
+  snd_Explosion_Effect:
+  - {fileID: 8300000, guid: 7872b02787eb5b841888ed145a930b56, type: 3}
+  - {fileID: 8300000, guid: 2460ed7d22fc0394f9df87796019bd5a, type: 3}
+  - {fileID: 8300000, guid: b4437a241bd4b714ea35d2629669b3ce, type: 3}
 --- !u!82 &4016494601154603939
 AudioSource:
   m_ObjectHideFlags: 0

@@ -28,12 +28,13 @@ public abstract class Boss : EnemyAnimatorAbstract
     [Header("Time to return swtich")]
     [SerializeField] protected float timeToReturnSwitch = 3f;
 
-
+    [SerializeField] protected EnemyHealth enemyHealth;
 
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadPlayerPosition();
+        this.LoadEnemyHealth();
     }
     protected override void Start()
     {
@@ -45,7 +46,12 @@ public abstract class Boss : EnemyAnimatorAbstract
         if (this.playerPosition != null) return;
         this.playerPosition = FindAnyObjectByType<CharacterAnimHandle>().transform;
     }
-    protected void Update()
+    protected virtual void LoadEnemyHealth()
+    {
+        if (this.enemyHealth != null) return;
+        this.enemyHealth = GetComponentInChildren<EnemyHealth>();
+    }
+    protected virtual void Update()
     {
         this.distanceToPlayer = Vector3.Distance(this.transform.position,this.playerPosition.position);
     }
@@ -61,7 +67,7 @@ public abstract class Boss : EnemyAnimatorAbstract
     }
     protected void StateRoutine()
     {
-        if (healthBase <= 0)
+        if (enemyHealth.Health <= 0)
         {
             this.currentState = BossState.Death;
         }
@@ -105,6 +111,11 @@ public abstract class Boss : EnemyAnimatorAbstract
             this.currentState = BossState.Idle;
             this.isAttackPlayer = false;
         }
+        else
+        {
+            this.currentState = BossState.Chase;
+            this.isAttackPlayer = false;
+        }
     }
     protected virtual bool CheckDistanceFromPlayer(float minDistance,float maxDistance,float currentDistance)
     {
@@ -117,11 +128,16 @@ public abstract class Boss : EnemyAnimatorAbstract
         this._agent.enabled = true;
         this._agent.speed = this.moveBaseSpeed;
         this._agent.SetDestination(playerPosition.position);
+        //transform.LookAt(playerPosition.position);
     }
 
     protected virtual void Attack()
     {
-        if (!this.isAttackPlayer) return;
+        if (!this.isAttackPlayer)
+        {
+            this.currentState = BossState.Chase;
+            return;
+        }
         //this._enemyAnimator.SetBool("isAttacking",this.isAttackPlayer);
     }
 
