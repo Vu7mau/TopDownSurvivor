@@ -8,7 +8,7 @@ public class BulletDamageSender : DamageSender
     [Header("BulletDamageSender")]
     [SerializeField] protected BulletCtrl _bulletCtrl;
 
-    public int DamageBonus => this._bulletCtrl.CharacterCtrl.GetDamageFromStats();
+   // public int DamageBonus => this._bulletCtrl.CharacterCtrl.GetDamageFromStats();
 
     protected override void OnEnable()
     {
@@ -39,7 +39,7 @@ public class BulletDamageSender : DamageSender
     //}
     protected override int SetDamage()
     {
-        int damage = this._basedDamage + this.DamageBonus;
+        int damage = this._basedDamage /*+ this.DamageBonus*/;
         return damage;
     }
 }

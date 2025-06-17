@@ -39,7 +39,7 @@ public class TextWarning : MonoBehaviour
     {
         if(SFX != null)
         {
-            SoundFXManager.Instance.PlaySoundFXClip(SFX, transform.parent, false);
+            SoundFXManager.Instance.PlaySoundFXClip(SFX, transform.parent);
         }
     }
 }

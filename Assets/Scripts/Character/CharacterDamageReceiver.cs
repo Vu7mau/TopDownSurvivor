@@ -40,7 +40,7 @@ public class CharacterDamageReceiver : DamageReceiver
     }
     public override void Deduct(int Deduct)
     {
-        HpBar.Instance.SetHealth((float)Deduct,(float)_hp,this._hpMax);
+        //HpBar.Instance.SetHealth((float)Deduct,(float)_hp,this._hpMax);
         base.Deduct(Deduct);
    
     }
@@ -53,10 +53,10 @@ public class CharacterDamageReceiver : DamageReceiver
     }
     protected override void HurtEffect()
     {
-        CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(8f, .1f);
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.maleHit, this.transform);
-        characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsHit");
-        DamagerScreen.Instance.ActivateDamageScreen();
+        //CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(8f, .1f);
+        //SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.maleHit, this.transform);
+        //characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsHit");
+        //DamagerScreen.Instance.ActivateDamageScreen();
 
         //if(enumeratorDamageScreen!=null)
         //{

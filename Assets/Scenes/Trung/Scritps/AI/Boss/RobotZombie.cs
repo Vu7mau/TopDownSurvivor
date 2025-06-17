@@ -245,7 +245,7 @@ public class RobotZombie : Boss
     protected virtual void ShootLazerSound()
     {
         int indexSound = Random.Range(0,listLazerSnds.Count);
-        SoundFXManager.Instance.PlaySoundFXClip(listLazerSnds[indexSound],transform,false);
+        SoundFXManager.Instance.PlaySoundFXClip(listLazerSnds[indexSound],transform);
     }
     //protected virtual void JumpToPlayer()
     //{

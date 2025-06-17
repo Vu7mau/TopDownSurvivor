@@ -64,13 +64,13 @@ public class CharacterMove : ObjectMovement
         int random=Random.Range(0, SoundFXManager.Instance.footStep.Length);
         if (isRightFoot)
         {
-            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform);
+            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform,.1f);
             isRightFoot = false;
             stepDelayCount = stepDelay;
         }
         else
         {
-            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform);
+            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform,.1f);
             isRightFoot = true;
             stepDelayCount = stepDelay;
         }

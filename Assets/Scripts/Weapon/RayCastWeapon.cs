@@ -21,6 +21,7 @@ public class RayCastWeapon : ObjectShooting
     protected RaycastHit _targetEnemy;
 
 
+    [SerializeField] public Transform model;
     public WeaponSlot weaponSlot => weaponInfo.weaponSlot;
     public Transform GunPoint => _gunPoint;
     public RaycastHit TargetEnemy => _targetEnemy;
@@ -39,6 +40,7 @@ public class RayCastWeapon : ObjectShooting
     protected override void LoadComponents()
     {
         base.LoadComponents();
+        this.LoadModel();
     }
 
     protected override void Update()
@@ -67,7 +69,7 @@ public class RayCastWeapon : ObjectShooting
     {
         if (string.IsNullOrEmpty(this.SetShellType())) return;
         Transform newBullet = ShellSpawner.Instance.Spawn(this.SetShellType(), this._shellSpawnPos.position, Quaternion.LookRotation(this._shellSpawnPos.forward));
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.handlingGun, this.transform);
+       // SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.handlingGun, this.transform);
     }
     protected override bool IsFireInputPresse()
     {
@@ -112,9 +114,17 @@ public class RayCastWeapon : ObjectShooting
     //{
     //    this._targetEnemy = target;
     //}
+    private void LoadModel()
+    {
+        if (model != null) return;
+
+        this.model = this.transform.Find("Model").GetComponent<Transform>();
+        if (this.model != null) Debug.Log("Load model success");
+    }    
     public virtual void SetIsWeaponActivate(bool isWeaponActivate)
     {
         _isWeaponActivate = isWeaponActivate;
+        this.model.gameObject.SetActive(isWeaponActivate);    
     }
     protected virtual string SetBulletType()
     {

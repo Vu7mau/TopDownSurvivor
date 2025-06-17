@@ -37,7 +37,12 @@ public class Magazine : MonoBehaviour
     }
     private void UpdateUI()
     {
-        if (!CharacterCtrl.Instance.ActiveWeapon.activeGun) return;
+        if (!CharacterCtrl.Instance.ActiveWeapon.activeGun) 
+        {
+            ImageMagazine.texture = ImageMagazines[2];
+            AmmoText.text = string.Empty;
+            return; 
+        }
         _currentAmmour = CharacterCtrl.Instance.ActiveWeapon.activeGun.GetCurrentAmmour();
         AmmoText.text = $"{_currentAmmour}/{_maxAmmour}";
         if (!CharacterCtrl.Instance.ActiveWeapon.IsHolstered)
@@ -46,7 +51,6 @@ public class Magazine : MonoBehaviour
             _maxAmmour = CharacterCtrl.Instance.ActiveWeapon.activeGun.GetMaxBullets();
             ImageMagazine.texture = CharacterCtrl.Instance.ActiveWeapon.activeGun.GunTexture();
             this.isChange = true;
-            Debug.Log("Do");
         }
         else this.isChange = false;
 

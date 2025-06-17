@@ -18,7 +18,7 @@ public class SetCoin : Singleton<SetCoin>
     public void SetCoinToUI(int amount)
     {                
         currentcoint += amount;
-        Text_coin.text = "x " + currentcoint.ToString();
+       // Text_coin.text = "x " + currentcoint.ToString();
     }    
     public void Savecoin()
     {                

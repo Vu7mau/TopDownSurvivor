@@ -11,7 +11,7 @@ public class ReloadAmmor : Singleton<ReloadAmmor>
 
 
 
-    public virtual void AmmoReload(float reloadTime,Vector3 target)
+    public virtual void AmmoReload(float reloadTime)
     { 
         if (_loaded) return;
 

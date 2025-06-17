@@ -5,7 +5,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 public class ActiveWeapon : VuMonoBehaviour
 {
-   
+
 
     //  [SerializeField] RayCastWeapon _weapon;
     [SerializeField] protected Transform[] weaponSlot;
@@ -13,19 +13,19 @@ public class ActiveWeapon : VuMonoBehaviour
 
 
     Transform animTransform;
-    [SerializeField] RayCastWeapon[] equipped_Weapons = new RayCastWeapon[2];
+    [SerializeField] RayCastWeapon[] equipped_Weapons = new RayCastWeapon[7];
     [SerializeField] int activateWeaponIndex;
     [SerializeField] bool isHolstered = false;
 
-    public bool IsHolstered=> isHolstered;
+    public bool IsHolstered => isHolstered;
     public RayCastWeapon activeGun;
-   // public Animator RigController=>_rigController;
+    // public Animator RigController=>_rigController;
     protected override void Start()
     {
         base.Start();
         // _rigController = GetComponentInChildren<Animator>();
         if (_rigController == null) Debug.LogWarning("Null anim");
-        this.LoadRayCastWeapon();
+       // this.LoadRayCastWeapon();
     }
 
     protected override void LoadComponents()
@@ -62,7 +62,7 @@ public class ActiveWeapon : VuMonoBehaviour
         if (Input.GetKeyUp(KeyCode.Alpha3))
         {
             this.SetActivateWeapon(WeaponSlot.Tertiary);
-        } 
+        }
         if (Input.GetKeyUp(KeyCode.Alpha4))
         {
             this.SetActivateWeapon(WeaponSlot.Quaternary);
@@ -97,28 +97,29 @@ public class ActiveWeapon : VuMonoBehaviour
         var _weapon = this.GetWeapon(weaponSlotIndex);
         if (_weapon)
         {
-          //  Destroy(_weapon.gameObject);
-          return;
+            //  Destroy(_weapon.gameObject);
+            return;
         }
-        if (equipped_Weapons[activateWeaponIndex]!=null)
+        if (equipped_Weapons[activateWeaponIndex] != null)
         {
-            this.equipped_Weapons[activateWeaponIndex].SetIsWeaponActivate(false);
+            this.equipped_Weapons[activateWeaponIndex].SetIsWeaponActivate(false);    
         }
         _weapon = newWeapon;
         _weapon.transform.SetParent(weaponSlot[weaponSlotIndex], false);
 
         this.equipped_Weapons[weaponSlotIndex] = _weapon;
         this.activateWeaponIndex = weaponSlotIndex;
-       
+
         this.SetActivateWeapon(newWeapon.weaponSlot);
     }
     protected virtual void SetActivateWeapon(WeaponSlot weaponSlot)
     {
+        
         int holsterIndex = activateWeaponIndex;
         int activateIndex = (int)weaponSlot;
         if (holsterIndex == activateIndex)
         {
-            holsterIndex = -1;
+           holsterIndex = -1;   
         }
         this.StartCoroutine(SwitchWeapon(holsterIndex, activateIndex));
     }
@@ -139,28 +140,41 @@ public class ActiveWeapon : VuMonoBehaviour
             do
             {
                 yield return new WaitForEndOfFrame();
-            } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
+            yield return new WaitForSeconds(.3f);
+            weapon.model.gameObject.SetActive(false);
         }
     }
     IEnumerator ActivateWeapon(int index)
     {
         var weapon = this.GetWeapon(index);
+        if (weapon == null)
+        {
+            Debug.LogWarning($"Weapon at index {index} is null!");
+            yield break;
+        }
+        weapon.model.gameObject.SetActive(true);
         if (weapon)
         {
-            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pickUp, this.transform);
+           // SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pickUp, this.transform);
             this._rigController.SetBool("holster_weapon", false);
             do
             {
                 yield return new WaitForEndOfFrame();
-            } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
+
             _rigController.Play("equip_" + weapon.WeaponName);
             this.isHolstered = false;
             weapon.SetIsWeaponActivate(!this.isHolstered);
             this.activeGun = weapon;
         }
+        else
+        {
+            this.activeGun = null;
+        }
     }
-  
+
 
     //[ContextMenu("Save WeaponPose")]
     //void SaveWeaponPose()
