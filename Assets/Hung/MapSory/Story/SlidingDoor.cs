@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class SlidingDoor : MonoBehaviour
 {
+    public enum DoorDirection { Horizontal, Vertical }
+    public DoorDirection direction = DoorDirection.Horizontal;
+
     public Transform leftDoor;
     public Transform rightDoor;
-
-    public Vector3 leftOpenOffset = new Vector3(-2f, 0f, 0f);
-    public Vector3 rightOpenOffset = new Vector3(2f, 0f, 0f);
+    public float openDistance = 2f;
     public float moveSpeed = 2f;
 
     private Vector3 leftClosedPos;
@@ -35,8 +36,15 @@ public class SlidingDoor : MonoBehaviour
 
     public void OpenDoor()
     {
-        leftTargetPos = leftClosedPos + leftOpenOffset;
-        rightTargetPos = rightClosedPos + rightOpenOffset;
+        Vector3 offset;
+
+        if (direction == DoorDirection.Horizontal)
+            offset = new Vector3(openDistance, 0f, 0f);
+        else
+            offset = new Vector3(0f, openDistance, 0f);
+
+        leftTargetPos = leftClosedPos - offset;
+        rightTargetPos = rightClosedPos + offset;
         isMoving = true;
     }
 
