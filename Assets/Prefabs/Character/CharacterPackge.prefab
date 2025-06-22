@@ -1111,7 +1111,7 @@ MonoBehaviour:
   _bulletDespawn: {fileID: 38905859012069709}
   _characterCtrl: {fileID: 5667398694453009905}
   _bulletImpact: {fileID: 4113805937711498703}
-  _damageSender: {fileID: 0}
+  _damageSender: {fileID: 7234147597292097577}
 --- !u!54 &5075004515404261197
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -72928,6 +72928,7 @@ MonoBehaviour:
   _characterCtrl: {fileID: 5667398694453009905}
   _aim: {fileID: 2834619330243725190}
   _aimDuration: 0.1
+  _isCancelShooting: 0
 --- !u!1 &2819206852201389715
 GameObject:
   m_ObjectHideFlags: 0
@@ -103556,7 +103557,7 @@ MonoBehaviour:
   _bulletDespawn: {fileID: 2857519124330307432}
   _characterCtrl: {fileID: 5667398694453009905}
   _bulletImpact: {fileID: 6091213562997488646}
-  _damageSender: {fileID: 0}
+  _damageSender: {fileID: 6052324111590109386}
 --- !u!54 &6646740308437526285
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -145920,16 +145921,10 @@ MonoBehaviour:
   - {fileID: 5014954032701812639}
   - {fileID: 4422739903525435614}
   _rigController: {fileID: 3466530327617069097}
-  equipped_Weapons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  equipped_Weapons: []
   activateWeaponIndex: 0
   isHolstered: 0
+  isSwitchingWeapon: 0
   activeGun: {fileID: 0}
 --- !u!114 &5640511708004306543
 MonoBehaviour:
@@ -146976,7 +146971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletDespawn: {fileID: 8742706249655253973}
   _characterCtrl: {fileID: 5667398694453009905}
-  _bulletImpact: {fileID: 0}
+  _bulletImpact: {fileID: 8059379577292279578}
   _damageSender: {fileID: 8892640345380344770}
 --- !u!54 &2779628002462903648
 Rigidbody:

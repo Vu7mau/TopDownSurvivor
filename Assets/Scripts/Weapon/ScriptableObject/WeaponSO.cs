@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName ="weaponInfo",menuName ="SO/Weapon")]
 public class WeponSO : ScriptableObject
@@ -18,6 +19,6 @@ public class WeponSO : ScriptableObject
     [Space]
     [Header("Cài đặt của súng")]
     [SerializeField] public LayerMask _enemyLayer;
-    [SerializeField] public Texture _gunTexture;
+    [SerializeField] public Sprite _gunImage;
     [SerializeField] public WeaponSlot weaponSlot;
 }

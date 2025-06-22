@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class HotbarUI : VuMonoBehaviour
     [SerializeField] public List<HotbarSlot> slots;
     [SerializeField] private int selectedIndex = -1;
 
+
+
+ 
     protected override void LoadComponents()
     {
         this.LoadAllSlot();
@@ -17,54 +21,79 @@ public class HotbarUI : VuMonoBehaviour
         if (Input.GetKeyUp(KeyCode.Alpha1))
         {
             selectedIndex = 0;
-            this.Select(selectedIndex);
+            TriggerSelect(selectedIndex);
         }
 
         if (Input.GetKeyUp(KeyCode.Alpha2))
         {
             selectedIndex = 1;
-            this.Select(selectedIndex);
+            TriggerSelect(selectedIndex);
+
         }
         if (Input.GetKeyUp(KeyCode.Alpha3))
         {
             selectedIndex = 2;
-            this.Select(selectedIndex);
+            TriggerSelect(selectedIndex);
+
         }
         if (Input.GetKeyUp(KeyCode.Alpha4))
         {
             selectedIndex = 3;
-            this.Select(selectedIndex);
+            TriggerSelect(selectedIndex);
+
         }
         if (Input.GetKeyUp(KeyCode.Alpha5))
         {
             selectedIndex = 4;
-            this.Select(selectedIndex);
+            TriggerSelect(selectedIndex);
+
         }
         if (Input.GetKeyUp(KeyCode.Alpha6))
         {
             selectedIndex = 5;
-            this.Select(selectedIndex);
+            TriggerSelect(selectedIndex);
+
         }
         if (Input.GetKeyUp(KeyCode.Alpha7))
         {
             selectedIndex = 6;
-            this.Select(selectedIndex);
-        }
-    }
-    private void Select(int index)
-    {
-        if (slots.Count < 1)
-        {
-            Debug.LogWarning("Danh sách hotbar slot trống !!!");
-            return;
-        }
-        foreach (var slot in slots)
-        {
-            slot.SetSelectedItem(false);
-        }
-        slots[index].SetSelectedItem(true);
-    }
+            TriggerSelect(selectedIndex);
 
+        }
+    }
+    private void Select()
+    {
+        //if (slots.Count < 1)
+        //{
+        //    Debug.LogWarning("Danh sách hotbar slot trống !!!");
+        //    return;
+        //}
+
+       
+        if (selectedIndex < CharacterCtrl.Instance.ActiveWeapon.Equipped_Weapons.Count)
+        {
+            foreach (var slot in slots)
+            {
+                slot.SetSelectedItem(false);
+            }
+
+            var image = CharacterCtrl.Instance.ActiveWeapon.Equipped_Weapons[selectedIndex].GunSprite();
+            if (image == null) return;
+            slots[this.selectedIndex].SetItem(image);
+        }
+        else
+        {
+
+            slots[selectedIndex].SetSelectedItem(true);
+        }    
+
+    }
+    // Gọi hàm này từ nơi khác để trigger chọn
+    public void TriggerSelect(int index)
+    {
+        selectedIndex = index;
+        Select();
+    }
     private void LoadAllSlot()
     {
         if (slots.Count > 0) return;

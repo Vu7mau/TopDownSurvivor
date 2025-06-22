@@ -15,9 +15,9 @@ public class HotbarSlot : VuMonoBehaviour
 
     }
 
-    public virtual void SetItem(Image weaponImage)
+    public virtual void SetItem(Sprite weaponImage)
     {
-        this._weaponImage = weaponImage;
+        this._weaponImage.sprite = weaponImage;
         this._weaponImage.enabled = true;
        this.SetSelectedItem(true);
     }    

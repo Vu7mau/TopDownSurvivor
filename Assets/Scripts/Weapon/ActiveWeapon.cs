@@ -7,25 +7,27 @@ public class ActiveWeapon : VuMonoBehaviour
 {
 
 
-    //  [SerializeField] RayCastWeapon _weapon;
     [SerializeField] protected Transform[] weaponSlot;
     [SerializeField] public Animator _rigController;
 
 
     Transform animTransform;
-    [SerializeField] RayCastWeapon[] equipped_Weapons = new RayCastWeapon[7];
+    [SerializeField] List<RayCastWeapon> equipped_Weapons = new List<RayCastWeapon>();
     [SerializeField] int activateWeaponIndex;
     [SerializeField] bool isHolstered = false;
+    [SerializeField] private bool isSwitchingWeapon = false;
 
+    public List<RayCastWeapon> Equipped_Weapons => equipped_Weapons;
     public bool IsHolstered => isHolstered;
     public RayCastWeapon activeGun;
+
     // public Animator RigController=>_rigController;
     protected override void Start()
     {
         base.Start();
         // _rigController = GetComponentInChildren<Animator>();
         if (_rigController == null) Debug.LogWarning("Null anim");
-       // this.LoadRayCastWeapon();
+        // this.LoadRayCastWeapon();
     }
 
     protected override void LoadComponents()
@@ -52,32 +54,45 @@ public class ActiveWeapon : VuMonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Alpha1))
         {
-            this.SetActivateWeapon(WeaponSlot.Primary);
+            if (equipped_Weapons.Count <1) return;
+            this.SetActivateWeapon(0);
         }
 
         if (Input.GetKeyUp(KeyCode.Alpha2))
         {
-            this.SetActivateWeapon(WeaponSlot.Secondary);
+            if (equipped_Weapons.Count < 2) return;
+
+            this.SetActivateWeapon(1);
         }
         if (Input.GetKeyUp(KeyCode.Alpha3))
         {
-            this.SetActivateWeapon(WeaponSlot.Tertiary);
+            if (equipped_Weapons.Count < 3) return;
+
+            this.SetActivateWeapon(2);
         }
         if (Input.GetKeyUp(KeyCode.Alpha4))
         {
-            this.SetActivateWeapon(WeaponSlot.Quaternary);
+            if (equipped_Weapons.Count < 4) return;
+
+            this.SetActivateWeapon(3);
         }
         if (Input.GetKeyUp(KeyCode.Alpha5))
         {
-            this.SetActivateWeapon(WeaponSlot.Quinary);
+            if (equipped_Weapons.Count < 5) return;
+
+            this.SetActivateWeapon(4);
         }
         if (Input.GetKeyUp(KeyCode.Alpha6))
         {
-            this.SetActivateWeapon(WeaponSlot.Senary);
+            if (equipped_Weapons.Count < 6) return;
+
+            this.SetActivateWeapon(5);
         }
         if (Input.GetKeyUp(KeyCode.Alpha7))
         {
-            this.SetActivateWeapon(WeaponSlot.Septenary);
+            if (equipped_Weapons.Count < 7) return;
+
+            this.SetActivateWeapon(6);
         }
     }
     protected virtual void ToggelActivateWeapon()
@@ -88,49 +103,67 @@ public class ActiveWeapon : VuMonoBehaviour
     }
     protected virtual RayCastWeapon GetWeapon(int index)
     {
-        if (index < 0 || index >= equipped_Weapons.Length) return null;
+        if (index < 0 || index >= equipped_Weapons.Count) return null;
         return this.equipped_Weapons[index];
     }
+
+    // Lấy vị trí của weapon để set positon sau đó thêm vào list wepaon
     public virtual void Equip(RayCastWeapon newWeapon)
     {
+
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
-        var _weapon = this.GetWeapon(weaponSlotIndex);
-        if (_weapon)
+        int hasWeapon = equipped_Weapons.IndexOf(newWeapon);
+        if (hasWeapon != -1)
         {
             //  Destroy(_weapon.gameObject);
             return;
         }
-        if (equipped_Weapons[activateWeaponIndex] != null)
-        {
-            this.equipped_Weapons[activateWeaponIndex].SetIsWeaponActivate(false);    
-        }
-        _weapon = newWeapon;
+        var _weapon = newWeapon;
         _weapon.transform.SetParent(weaponSlot[weaponSlotIndex], false);
 
-        this.equipped_Weapons[weaponSlotIndex] = _weapon;
-        this.activateWeaponIndex = weaponSlotIndex;
+        // this.equipped_Weapons[weaponSlotIndex] = _weapon;
+        this.equipped_Weapons.Add(_weapon);
+        int newSlotIndex = equipped_Weapons.IndexOf(_weapon);
+        CharacterUIManager.OnWeaponSelected?.Invoke(newSlotIndex);
+        //this.activateWeaponIndex = newSlotIndex;
 
-        this.SetActivateWeapon(newWeapon.weaponSlot);
+        this.SetActivateWeapon(newSlotIndex);
+
     }
-    protected virtual void SetActivateWeapon(WeaponSlot weaponSlot)
+    protected virtual void SetActivateWeapon(int weaponSlot)
     {
-        
+
         int holsterIndex = activateWeaponIndex;
-        int activateIndex = (int)weaponSlot;
+        int activateIndex = weaponSlot;
+        if (weaponSlot > equipped_Weapons.Count) return;
         if (holsterIndex == activateIndex)
         {
-           holsterIndex = -1;   
+            holsterIndex = -1;
         }
         this.StartCoroutine(SwitchWeapon(holsterIndex, activateIndex));
     }
     IEnumerator SwitchWeapon(int holsterIndex, int activateIndex)
     {
+        activateWeaponIndex = activateIndex;
+        if (equipped_Weapons.Count > 0 && equipped_Weapons.Count >= activateWeaponIndex)
+        {
+            if (equipped_Weapons[activateWeaponIndex] != null)
+            {
+                this.equipped_Weapons[activateWeaponIndex].SetIsWeaponActivate(false);
+            }
+        }
         yield return StartCoroutine(this.HolsterWeapon(holsterIndex));
         yield return StartCoroutine(this.ActivateWeapon(activateIndex));
-        activateWeaponIndex = activateIndex;
+
+        // Sự kiện update UI súng đang chọn 
+        CharacterUIManager.OnWeaponChange?.Invoke(this.activeGun.GunSprite(), this.activeGun.GetCurrentAmmour(), this.activeGun.GetMaxAmmour());
     }
+
     IEnumerator HolsterWeapon(int index)
     {
+
+        if (isHolstered) yield break;
+
         this.isHolstered = true;
         var weapon = this.GetWeapon(index);
         if (weapon)
@@ -142,12 +175,17 @@ public class ActiveWeapon : VuMonoBehaviour
                 yield return new WaitForEndOfFrame();
             } while (_rigController.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
 
-            yield return new WaitForSeconds(.3f);
+            yield return new WaitForSeconds(.5f);
             weapon.model.gameObject.SetActive(false);
         }
+
+
     }
     IEnumerator ActivateWeapon(int index)
     {
+        if (!IsHolstered) yield break;
+
+
         var weapon = this.GetWeapon(index);
         if (weapon == null)
         {
@@ -157,7 +195,7 @@ public class ActiveWeapon : VuMonoBehaviour
         weapon.model.gameObject.SetActive(true);
         if (weapon)
         {
-           // SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pickUp, this.transform);
+            // SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pickUp, this.transform);
             this._rigController.SetBool("holster_weapon", false);
             do
             {
@@ -173,6 +211,9 @@ public class ActiveWeapon : VuMonoBehaviour
         {
             this.activeGun = null;
         }
+
+
+
     }
 
 

@@ -31,11 +31,10 @@ public class BulletFly : BulletAbstract
     {      
         Vector3 direction = (/*this.AimPos().position*/this.GetAimPos() - this.GunPos().position).normalized;
 
-        if (_bulletCtrl.CharacterCtrl.CharacterAim.CanAimPrecisly() == false &&
-          _bulletCtrl.CharacterCtrl.CharacterAim.GetTarget() == null)
-        {
+        //if (_bulletCtrl.CharacterCtrl.CharacterAim.CanAimPrecisly() == false && _bulletCtrl.CharacterCtrl.CharacterAim.GetTarget() == null)
+        //{
             direction.y = 0;
-        }
+     //   }
 
      
         return( direction).normalized;

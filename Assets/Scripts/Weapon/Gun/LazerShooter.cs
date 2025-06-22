@@ -18,14 +18,8 @@ public class LazerShooter : RayCastWeapon
     {
         base.ShooterEffect();
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.lazerShoot, this.GunPoint);
-        if (!lazerTrailRenderer.enabled)
-            lazerTrailRenderer.enabled = true;
+      
     }
-    protected override void HoldFire()
-    {
-        if (lazerTrailRenderer.enabled)
-            lazerTrailRenderer.enabled = false;
-
-    }
+   
 
 }

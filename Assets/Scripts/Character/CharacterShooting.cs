@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Rendering;
@@ -11,6 +12,7 @@ public class CharacterShooting : CharacterCtrlAbstract
     [Header("Character Shooting")]
     [SerializeField] protected Rig _aim;
     [SerializeField] protected float _aimDuration;
+    [SerializeField] protected bool _isCancelShooting = false;
     // [SerializeField] protected ActiveWeapon _activeWeapon;
     protected override void LoadComponents()
     {
@@ -47,13 +49,16 @@ public class CharacterShooting : CharacterCtrlAbstract
     public virtual bool IsPressShooting()
     {
         if (this._weapon != null)
-            if (this._weapon.GetIsReloadingAmmo()/*||this._weapon.GetBurstLocked()*/)
+            if (this._weapon.GetIsReloadingAmmo()||_isCancelShooting)
             {
                 return false;
             }
         return _characterCtrl.InputManager.IsFiring();
     }
-
+    public  void SetCancel(bool value)
+    {
+        _isCancelShooting=value;
+    }
     //protected override void Shoot()
     //{
 

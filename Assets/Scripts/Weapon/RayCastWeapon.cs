@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.UI;
 
 public class RayCastWeapon : ObjectShooting
 {
@@ -60,16 +61,15 @@ public class RayCastWeapon : ObjectShooting
     {
         if (string.IsNullOrEmpty(this.SetBulletType())) return;
         Transform newBullet = BulletSpawner.Instance.Spawn(this.SetBulletType(), this.GunPoint.position, Quaternion.LookRotation(this.GunPoint.forward));
-        //  if (newBullet == null) return;
-        //  newBullet.gameObject.SetActive(true);
         this.ShooterEffect();
         this.SpawnShell();
+        CharacterUIManager.OnWeaponReload?.Invoke(_bulletsCount, weaponInfo._MaxBulletCount);
+
     }
     protected virtual void SpawnShell()
     {
         if (string.IsNullOrEmpty(this.SetShellType())) return;
         Transform newBullet = ShellSpawner.Instance.Spawn(this.SetShellType(), this._shellSpawnPos.position, Quaternion.LookRotation(this._shellSpawnPos.forward));
-       // SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.handlingGun, this.transform);
     }
     protected override bool IsFireInputPresse()
     {
@@ -79,7 +79,7 @@ public class RayCastWeapon : ObjectShooting
             return _isShooting;
         }
         else
-            return false;
+            return _isShooting =  false;
     }
     protected virtual void ShootLaser()
     {
@@ -91,10 +91,8 @@ public class RayCastWeapon : ObjectShooting
 
         if (Physics.Raycast(_gunPoint.position, _gunPoint.forward, out hit, 10, weaponInfo._enemyLayer))
         {
-            // endPosition = hit.point;
             float distance = Vector3.Distance(this._gunPoint.position, hit.point);
             endPosition = _gunPoint.position + _gunPoint.forward * distance;
-            //this.SetTarget(hit);
             this._targetEnemy = hit;
         }
         else
@@ -124,7 +122,7 @@ public class RayCastWeapon : ObjectShooting
     public virtual void SetIsWeaponActivate(bool isWeaponActivate)
     {
         _isWeaponActivate = isWeaponActivate;
-        this.model.gameObject.SetActive(isWeaponActivate);    
+      //  this.model.gameObject.SetActive(isWeaponActivate);    
     }
     protected virtual string SetBulletType()
     {
@@ -142,7 +140,7 @@ public class RayCastWeapon : ObjectShooting
     {
         return this._bulletsCount;
     }
-    public virtual int GetMaxBullets()
+    public virtual int GetMaxAmmour()
     {
         return weaponInfo._MaxBulletCount;
     }
@@ -150,10 +148,10 @@ public class RayCastWeapon : ObjectShooting
     {
         return _isBursting;
     }
-    public virtual Texture GunTexture()
+    public virtual Sprite GunSprite()
     {
-        if (weaponInfo._gunTexture == null) return null;
-        return weaponInfo._gunTexture;
+        if (weaponInfo._gunImage == null) return null;
+        return weaponInfo._gunImage;
     }
   
 }

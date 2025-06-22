@@ -27,6 +27,7 @@ public class InputManager : VuMonoBehaviour
     [SerializeField] private LayerMask aimLayerMask;
 
     [SerializeField] protected bool _isShooting=false;
+
    // public bool IsShooting=> _isShooting;   
     protected override void LoadComponents()
     {

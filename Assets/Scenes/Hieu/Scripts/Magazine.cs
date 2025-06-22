@@ -48,8 +48,8 @@ public class Magazine : MonoBehaviour
         if (!CharacterCtrl.Instance.ActiveWeapon.IsHolstered)
         {
             if (isChange) return;
-            _maxAmmour = CharacterCtrl.Instance.ActiveWeapon.activeGun.GetMaxBullets();
-            ImageMagazine.texture = CharacterCtrl.Instance.ActiveWeapon.activeGun.GunTexture();
+            _maxAmmour = CharacterCtrl.Instance.ActiveWeapon.activeGun.GetMaxAmmour();
+         //   ImageMagazine.texture = CharacterCtrl.Instance.ActiveWeapon.activeGun.GunTexture();
             this.isChange = true;
         }
         else this.isChange = false;
