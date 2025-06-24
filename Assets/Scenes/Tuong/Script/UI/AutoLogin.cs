@@ -34,6 +34,7 @@ public class AutoLogin : MonoBehaviour
         PlayerPrefs.SetInt("HasLoggedIn", 1);
         PlayerPrefs.Save();
         mainMenuTwo?.SetLoginState(true);
+        CharacterInformation.Instance.ShowCharacters();
     }
     private void OnLoginFailured(PlayFabError error)
     {

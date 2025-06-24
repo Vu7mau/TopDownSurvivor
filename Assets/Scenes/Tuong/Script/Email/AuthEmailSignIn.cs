@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 public class AuthEmailSignIn : AuthManager
 {
+    private string currentEmail;
     public void SignInGame()
     {
         if (string.IsNullOrEmpty(signInEmail.text))
@@ -32,6 +33,17 @@ public class AuthEmailSignIn : AuthManager
     private void OnSignInSuccess(LoginResult result)
     {
         message.text = "Đăng nhập thành công";
+        currentEmail = signInEmail.text;
+
+        bool isVerified = PlayerPrefs.GetInt("IsVerified", 0) == 1;
+        if(!isVerified)
+        {
+            EmailVerificationSender.Instance.SendOTPEmal(currentEmail);
+            message.text = "Vui lòng kiểm tra email - mã xác minh đã được gửi để hoàn tất đăng nhập.";
+            otpPanel.SetActive(true);
+            signInPanel.SetActive(false);
+            return;
+        }
         LinkDeviceAndProceed();
     }
     public void LinkDeviceAndProceed()

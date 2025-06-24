@@ -21,9 +21,9 @@ public class AuthManager : TuongMonobehaviour
     [Header("Panel")]
     [SerializeField] protected GameObject signUpPanel;
     private string getSignUpPanel = "SignUpPanel";
-    [SerializeField] protected GameObject signInPanel;
+    public GameObject signInPanel;
     private string getSignInPanel = "SignInPanel";
-    [SerializeField] protected GameObject otpPanel;
+    public GameObject otpPanel;
     private string getOTPPanel = "OTPPanel";
     [SerializeField] protected GameObject resetPasswordPanel;
     private string getResetPasswordPanel = "ResertPasswordPanel";
@@ -104,6 +104,7 @@ public class AuthManager : TuongMonobehaviour
     }
     public void LogOut()
     {
+        CharacterInformation.Instance.ClearCharacterInfo();
         PlayFabClientAPI.ForgetAllCredentials();
         PlayerPrefs.SetInt("HasLoggedIn", 0);
         PlayerPrefs.SetInt("AutoLoginDisable", 1);      

@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Mail;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 public class EmailVerificationSender : AuthManager
 {
@@ -80,7 +79,7 @@ public class EmailVerificationSender : AuthManager
     <p>Kính chào Quý khách,</p>
     <p>Mã xác minh tài khoản của bạn là:</p>
     <div class=""otp-code"">{otp}</div>
-    <p>Vui lòng nhập mã này để hoàn tất quá trình xác minh. Mã chỉ có hiệu lực trong vòng 10 phút.</p>
+    <p>Vui lòng nhập mã này để hoàn tất quá trình xác minh. Mã chỉ có hiệu lực trong vòng 5 phút.</p>
     <p>Để bảo mật thông tin, vui lòng không chia sẻ mã này với bất kỳ ai.</p>
     <p>Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ với bộ phận hỗ trợ của chúng tôi.</p>
     <div class=""footer"">
@@ -127,6 +126,7 @@ public class EmailVerificationSender : AuthManager
         if (inputOTP == currentOTP)
         {
             message.text = "Xác thực thành công!";
+            PlayerPrefs.SetInt("IsVerified", 1);
             PlayerPrefs.DeleteKey("Email");
             return true;
         }
@@ -138,6 +138,16 @@ public class EmailVerificationSender : AuthManager
     }
     public void ResendOTP()
     {
-        SendOTPEmal(PlayerPrefs.GetString("Email"));
+        string email = PlayerPrefs.GetString("Email", "");
+        if (!string.IsNullOrEmpty(email))
+        {
+            SendOTPEmal(email, onSuccess: () =>
+            {
+                PlayerPrefs.SetString("OtpTime", DateTime.Now.ToString("o"));
+                PlayerPrefs.Save();
+                message.text = "Mã OTP mới đã được gửi.";
+            },
+                onFailure: (error) => message.text = "Gửi lại mã OTP thất bại: " + error);
+        }
     }
 }

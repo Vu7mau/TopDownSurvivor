@@ -3,6 +3,7 @@ using PlayFab;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using System;
 public class AuthEmailSignUp : AuthManager
 {
     public void SignUpWithEmail()
@@ -15,6 +16,8 @@ public class AuthEmailSignUp : AuthManager
             RequireBothUsernameAndEmail = true
         };
         PlayerPrefs.SetString("Email", signUpEmail.text);
+        PlayerPrefs.SetInt("IsVerified", 0);
+        PlayerPrefs.SetString("OtpTime", DateTime.Now.ToString("o"));
         PlayerPrefs.Save();
         if (string.IsNullOrEmpty(signUpUserName.text))
         {
@@ -50,12 +53,16 @@ public class AuthEmailSignUp : AuthManager
     }
     private void OnSignUpSucces(RegisterPlayFabUserResult result)
     {
+        otpPanel.SetActive(true);
+        signUpPanel.SetActive(false);
+        PlayerPrefs.SetInt("IsVerified", 0);
+        PlayerPrefs.SetString("OtpTime", DateTime.Now.ToString("o"));
+        PlayerPrefs.Save();
+        message.text = "Đăng ký người dùng mới thành công. Vui lòng kiểm tra email của bạn để xác minh tài khoản.";
         EmailVerificationSender.Instance.SendOTPEmal(signUpEmail.text,
             onSuccess: () =>
             {
-                message.text = "Đăng ký người dùng mới thành công. Vui lòng kiểm tra email của bạn để xác minh tài khoản.";
-                otpPanel.SetActive(true);
-                signUpPanel.SetActive(false);
+
             },
             onFailure: (error) =>
             {

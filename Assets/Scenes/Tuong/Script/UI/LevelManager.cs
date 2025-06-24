@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
@@ -38,7 +37,10 @@ public class LevelManager : MonoBehaviour
         {
             await Task.Yield();
         }
-        loaderCanvas.SetActive(false);
+        if(loaderCanvas != null)
+        {
+            loaderCanvas.SetActive(false);
+        }
     }
     private void Update()
     {
