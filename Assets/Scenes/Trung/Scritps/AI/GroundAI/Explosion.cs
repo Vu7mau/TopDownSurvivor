@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Explosion : PoolObj
 {
+    [SerializeField] protected string _name;
+    public string Name { get => _name; }
+
+    public override string GetName() => _name;
     protected bool _canTakeDamage= false;
-    public override string GetName() => "Explosion";
+    [SerializeField] protected CreateHitEnemy hit;
+    public CreateHitEnemy Hit => hit;
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -16,14 +21,25 @@ public class Explosion : PoolObj
         base.OnEnable();
         this.LoadStateDefault();
     }
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadCreateHitEnemy();
+    }
     protected virtual void LoadStateDefault()
     {
         this._canTakeDamage = false;
-        this.transform.GetComponentInChildren<CreateHitEnemy>().transform.gameObject.SetActive(true);
+        this.hit.gameObject.SetActive(true);
     }
     protected override void Start()
     {
         base.Start();
+    }
+
+    protected virtual void LoadCreateHitEnemy()
+    {
+        if (this.hit != null) return;
+        this.hit = GetComponentInChildren<CreateHitEnemy>();
     }
     private void OnTriggerEnter(Collider other)
     {

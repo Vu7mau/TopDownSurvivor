@@ -40,6 +40,9 @@ public class Wave
     public int EnemyTypeIndex;
     public int Amount;
     public float timeForNextWave;
+
+    [Header("List of All Enemies Selected!")]
+    public List<ENEMYAI> enemiesAIList;
     public List<BOSS> bossLists;
     public enum ModeWave { EachType, Mixed, BossFight }
     public ModeWave waveMode;
@@ -47,11 +50,45 @@ public class Wave
     [Header("Health Enemy will be follow percent!")]
     public int amountHealthIncreasePercent;
     public int amountDamageIncreasePercent;
+
+
+
+
+    public int CalculatorAmountEnemiesAI()
+    {
+        int amount = 0;
+        foreach(ENEMYAI enemy  in enemiesAIList)
+        {
+            amount += enemy.Amount;
+        }
+        return amount;        
+    }
+    public int CalculatorAmountBosses()
+    {
+        int amount = 0;
+        foreach (BOSS boss in bossLists)
+        {
+            amount += boss.Amount;
+        }
+        return amount;
+    }
+    public int CalculatorAmountEnemiesFight()
+    {
+        return CalculatorAmountEnemiesAI() + CalculatorAmountBosses();
+    }
 }
+
 [System.Serializable]
-public struct BOSS
+public class BOSS
 {
     public int BossType;
+    public int Amount;
+}
+
+[System.Serializable]
+public class ENEMYAI
+{
+    public int EnemyTypeIndex;
     public int Amount;
 }
 

@@ -163,7 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 288234081849465726}
   - component: {fileID: 1928986395139069166}
-  - component: {fileID: 2418944896787596486}
+  - component: {fileID: 7713747440251534617}
   m_Layer: 0
   m_Name: CreateHitEnemy
   m_TagString: Untagged
@@ -201,8 +201,8 @@ MonoBehaviour:
   _basedDamage: 5
   canTakeDamage: 0
   enemySO: {fileID: 0}
---- !u!65 &2418944896787596486
-BoxCollider:
+--- !u!135 &7713747440251534617
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -220,8 +220,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 2.2135198, z: 1}
-  m_Center: {x: 0, y: 0.066821575, z: 0}
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8510225781361347330
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,11 +231,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1868729732153658574}
-  - component: {fileID: 2228548667084474011}
   - component: {fileID: 7839513121532337721}
+  - component: {fileID: 4936571047033355100}
   m_Layer: 0
   m_Name: ToxicAbyss
-  m_TagString: Untagged
+  m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -258,8 +258,24 @@ Transform:
   - {fileID: 288234081849465726}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2228548667084474011
-BoxCollider:
+--- !u!114 &7839513121532337721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8510225781361347330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fbb0a94d0bba0541bfaeb6d92d5f8ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  despawn: {fileID: 8703292632239658645}
+  speed: 20
+  createHitEnemy: {fileID: 1928986395139069166}
+  toxicAbyssDespawn: {fileID: 8703292632239658645}
+--- !u!135 &4936571047033355100
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -277,21 +293,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7839513121532337721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8510225781361347330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fbb0a94d0bba0541bfaeb6d92d5f8ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  despawn: {fileID: 8703292632239658645}
-  speed: 20
-  createHitEnemy: {fileID: 1928986395139069166}
-  toxicAbyssDespawn: {fileID: 8703292632239658645}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -91,7 +92,7 @@ public class SpawnEnemies :VuMonoBehaviour
     private void CheckFinish()
     {
         if (!isStartFight) return;
-        if (this.waveNumber < this._waves.listWaves.Count) return;
+        if (this.waveNumber <= this._waves.listWaves.Count) return;
         GameObject panelFinish = GameObject.Find("PanelWhenFinishTheBattle");
         if (timeIsUp) 
         {
@@ -137,20 +138,21 @@ public class SpawnEnemies :VuMonoBehaviour
             waveNumber = _waves.listWaves.Count;
         while (waveNumber <= _waves.listWaves.Count)
         {
-            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
-            {
-                SpawnEnemiesFight(waveNumber);
-            }
-            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.Mixed)
-            {
-                amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].Amount;
-                SpawnRandomEnemy(waveNumber, amountEnemiesMixed);
-            }
-            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.BossFight)
+            this.SpawnEnemiesFight(waveNumber);
+            if (_waves.listWaves[_waves.WaveElement(waveNumber)].CalculatorAmountBosses() != 0)
             {
                 amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].bossLists[0].Amount;
                 StartCoroutine(SpawnBosses(waveNumber, amountEnemiesMixed));
             }
+            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
+            {
+                
+            }
+            //if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.Mixed)
+            //{
+            //    amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].Amount;
+            //    SpawnRandomEnemy(waveNumber, amountEnemiesMixed);
+            //}
             UIManager.Instance.UpdateTimeToNextWave(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave);
             timeIsUp = false;
             yield return new WaitForSeconds(_waves.listWaves[_waves.WaveElement(waveNumber)].timeForNextWave);
@@ -159,10 +161,10 @@ public class SpawnEnemies :VuMonoBehaviour
     }
     public virtual void SpawnEnemiesFight(int wave)
     {
-        this.enemiesPerWave = _waves.listWaves[_waves.WaveElement(wave)].Amount;
+        this.enemiesPerWave = _waves.listWaves[_waves.WaveElement(wave)].CalculatorAmountEnemiesFight();
         //enemiesLeft = CalculatorEnemiesLeft(enemiesPerWave);
         //UIManager.Instance.UpdateWaveUI(waveNumber, enemiesLeft);
-        StartCoroutine(SpawnEnemy(wave, enemiesPerWave));
+        StartCoroutine(SpawnEnemyAI(wave, this.enemiesPerWave));
     }
 
     public virtual void EnemyDefeated(int amount)
@@ -172,7 +174,7 @@ public class SpawnEnemies :VuMonoBehaviour
         if (this.enemiesLeft < 0) this.enemiesLeft = 0;
         UIManager.Instance.UpdateWaveUI(waveNumber, this.enemiesLeft);
     }
-    private IEnumerator SpawnEnemy(int wave,int amountEachWave)
+    private IEnumerator SpawnEnemyAI(int wave,int amountEachWave)
     {
         if (wave < 1) { yield return null; }
         int amountEnemyWillSpawn = amountEachWave;
@@ -188,31 +190,40 @@ public class SpawnEnemies :VuMonoBehaviour
             {
                 this.totalAmountEnemiesEachWaves -= amountEnemyWillSpawn;
             }
-            for (int dem = 0; dem < amountEnemyWillSpawn; dem++)
+            Vector3 spawnPosition = GetPositionSpawn();
+            //GameObject enemy = transform.GetChild(_waves.listWaves[_waves.WaveElement(wave)].EnemyTypeIndex - 1).gameObject.transform.GetChild(dem).gameObject;
+            //if(enemy != null)
+            //{
+            //    enemy.transform.position = spawnPosition;
+            //    enemy.SetActive(true);
+            //    enemy.gameObject.GetComponent<EnemyHealth>().CheckAmountIncreaseHealth(_waves.listWaves[_waves.WaveElement(wave)].amountHealthIncreasePercent);
+            //}
+            EnemyCtrl enemyPrefab;
+            for (int i = 0; i < this._waves.listWaves[this._waves.WaveElement(waveNumber)].enemiesAIList.Count; i++)
             {
-                Vector3 spawnPosition = GetPositionSpawn();
-                //GameObject enemy = transform.GetChild(_waves.listWaves[_waves.WaveElement(wave)].EnemyTypeIndex - 1).gameObject.transform.GetChild(dem).gameObject;
-                //if(enemy != null)
-                //{
-                //    enemy.transform.position = spawnPosition;
-                //    enemy.SetActive(true);
-                //    enemy.gameObject.GetComponent<EnemyHealth>().CheckAmountIncreaseHealth(_waves.listWaves[_waves.WaveElement(wave)].amountHealthIncreasePercent);
-                //}
-                yield return new WaitForSeconds(1f);
-
-                EnemyCtrl enemyPrefab = this._spawn.listEnemies[this._waves.listWaves[wave - 1].EnemyTypeIndex - 1].GetComponent<EnemyCtrl>();
-
-
+                enemyPrefab = this._spawn.listEnemies[this._waves.listWaves[wave - 1].enemiesAIList[i].EnemyTypeIndex - 1].GetComponent<EnemyCtrl>();
                 string nameParentEnemy = "List" + enemyPrefab.name;
                 Transform parent = GameObject.Find(nameParentEnemy).transform;
                 this.enemiesSpawner.SetHoldParent(parent);
+                int amountEachType = this._waves.listWaves[this._waves.WaveElement(waveNumber)].enemiesAIList[i].Amount;
+                for (int t = 0; t < amountEachType; t++)
+                {
+                    EnemyCtrl newEnemy = this.enemiesSpawner.Spawn(enemyPrefab, spawnPosition);
+                    ++this.enemiesLeft;
+                    UIManager.Instance.UpdateWaveUI(wave, this.enemiesLeft);
+                    yield return new WaitForSeconds(1f);
+                }
+            }
+            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
+            {
+                
+            }
+            for (int dem = 0; dem < amountEnemyWillSpawn; dem++)
+            {
+                
 
 
-                EnemyCtrl newEnemy = this.enemiesSpawner.Spawn(enemyPrefab, spawnPosition);
-
-
-                ++this.enemiesLeft;
-                UIManager.Instance.UpdateWaveUI(wave, this.enemiesLeft);
+                
             }
             while(this.amountEnemiesPlayerKilled < amountEnemyWillSpawn)
             {
@@ -405,7 +416,7 @@ public class SpawnEnemies :VuMonoBehaviour
     {
         this.CreateManageEnemiesParent();
         //CreateEnemiesEachType();
-        //CreateManageBossesParent();
-        //CreateBossesEachType();
+        CreateManageBossesParent();
+        CreateBossesEachType();
     }
 }

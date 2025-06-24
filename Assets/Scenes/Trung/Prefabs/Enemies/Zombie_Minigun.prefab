@@ -397,8 +397,8 @@ GameObject:
   - component: {fileID: 8348214887107464329}
   - component: {fileID: 1839239339941553881}
   - component: {fileID: 6687373002429375228}
-  - component: {fileID: 1098828275195140566}
   - component: {fileID: -2851363473307723182}
+  - component: {fileID: 1098828275195140566}
   m_Layer: 7
   m_Name: Zombie_Minigun
   m_TagString: Enemy
@@ -504,10 +504,9 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 10
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: 94284bce5d7b4fd418a1293f61406abb, type: 2}
+  enemyAI: {fileID: 0}
   _canTakeDamage: 1
   healthBarObj: {fileID: 0}
-  _animator: {fileID: 0}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 0}
@@ -538,6 +537,20 @@ MonoBehaviour:
   - {fileID: 1228599393428204049}
   - {fileID: 3710681200952124826}
   shootTime: 10
+--- !u!114 &-2851363473307723182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309567981146657082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  despawn: {fileID: 5751218916542239875}
+  nameEnemy: Zombie_Minigun
 --- !u!54 &1098828275195140566
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -565,20 +578,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &-2851363473307723182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309567981146657082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  despawn: {fileID: 5751218916542239875}
-  nameEnemy: Zombie_Minigun
 --- !u!1 &1666944132906097723
 GameObject:
   m_ObjectHideFlags: 0

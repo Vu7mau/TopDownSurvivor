@@ -14,14 +14,12 @@ public class ChaseState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
-        player =FindAnyObjectByType<CharacterCtrl>().transform;
+        player =FindAnyObjectByType<CharacterAnimHandle>().transform;
         agent.speed = enemySO.ChaseSpeed;
-        agent.stoppingDistance = enemySO.AttackRange;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(this.agent == null) return;
         distance = Vector3.Distance(player.position, animator.transform.position);
         if (distance <= enemySO.AttackRange)
         {
@@ -30,8 +28,9 @@ public class ChaseState : StateMachineBehaviour
             this.agent.enabled = false;
             return;
         }
+        if (this.agent == null) return;
         if (!this.agent.enabled) return;
-        agent.SetDestination(player.position);
+        agent.SetDestination(this.player.position);
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

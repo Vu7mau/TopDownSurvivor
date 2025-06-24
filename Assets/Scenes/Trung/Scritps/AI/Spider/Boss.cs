@@ -20,13 +20,18 @@ public abstract class Boss : EnemyAnimatorAbstract
     [Header("Base Properties of Boss")]
     [SerializeField] protected float detectionBaseRange = 100000f;
     [SerializeField] protected float attackBaseRange = 5f;
-    [SerializeField] protected bool isAttackPlayer = false;
     [SerializeField] protected float moveBaseSpeed = 3f;
+    [SerializeField] protected float stopDistance = 5f;
     [SerializeField] protected Transform playerPosition;
-    [SerializeField] protected int healthBase = 100;
+    //[SerializeField] protected int healthBase = 100;
+
+    [SerializeField] protected bool isLookAtPlayer = true;
+    [SerializeField] protected bool isAttackPlayer = false;
+
+
 
     [Header("Time to return swtich")]
-    [SerializeField] protected float timeToReturnSwitch = 3f;
+    [SerializeField] protected float timeToReturnSwitch = 2f;
 
     [SerializeField] protected EnemyHealth enemyHealth;
 
@@ -35,11 +40,16 @@ public abstract class Boss : EnemyAnimatorAbstract
         base.LoadComponents();
         this.LoadPlayerPosition();
         this.LoadEnemyHealth();
+        this.LoadStopDistance();
+    }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.StartFight();
     }
     protected override void Start()
     {
         base.Start();
-        this.StateRoutine();
     }
     protected virtual void LoadPlayerPosition()
     {
@@ -53,24 +63,72 @@ public abstract class Boss : EnemyAnimatorAbstract
     }
     protected virtual void Update()
     {
-        this.distanceToPlayer = Vector3.Distance(this.transform.position,this.playerPosition.position);
+        this.distanceToPlayer = Vector3.Distance(this.transform.position, this.playerPosition.position);
+        this.LookAtPlayer();
+    }
+    protected virtual void LookAtPlayer()
+    {
+        if (!this.isLookAtPlayer) return;
+        Vector3 direction = this.playerPosition.position - transform.position;
+        direction.y = 0f;
+
+        direction.Normalize();
+        if (direction != Vector3.zero)
+        {
+            Quaternion directionPlayer = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation,directionPlayer, 5* Time.deltaTime);
+        }
+    }
+    protected virtual void LoadStopDistance()
+    {
+        if(this._agent == null) return;
+        if(!this._agent.enabled) return;
+        this._agent.stoppingDistance = this.stopDistance;
+    }
+
+    protected void FixedUpdate()
+    {
+        this.CoolDownAttack();
+        this.StateRoutine();
+    }
+
+    protected virtual void StartFight()
+    {
+        StartCoroutine(SwtichStateAttack());
     }
     protected void RandomState()
     {
         int randomStateIndex = Random.Range(1, 3);
-        if(randomStateIndex != 2)
+        if (randomStateIndex != 2)
         {
             currentState = BossState.Chase;
             return;
         }
         currentState = BossState.Attack;
     }
+
+    float eclapse = 0f;
+    protected virtual void CoolDownAttack()
+    {
+        if (this.isAttackPlayer) return;
+        eclapse += Time.deltaTime;
+        if (eclapse < this.timeToReturnSwitch) return;
+        this.isAttackPlayer = true;
+        eclapse = 0f;
+    }
+
+    protected IEnumerator SwtichStateAttack()
+    {
+        while (true)
+        {
+            yield return new WaitUntil(() => this.isAttackPlayer);
+            this.Attack();
+            yield return new WaitUntil(() => !this.isAttackPlayer);
+        }
+    }
     protected void StateRoutine()
     {
-        if (enemyHealth.Health <= 0)
-        {
-            this.currentState = BossState.Death;
-        }
+        if (enemyHealth.Health <= 0) this.currentState = BossState.Death;
         switch (currentState)
         {
             case BossState.Idle:
@@ -80,14 +138,6 @@ public abstract class Boss : EnemyAnimatorAbstract
             case BossState.Chase:
                 this.ChasePlayer();
                 //this.CheckBossIsAttackPlayer();
-                break;
-
-            case BossState.Attack:
-                this.Attack();
-                break;
-
-            case BossState.Death:
-                this.Die();
                 break;
         }
     }
@@ -125,6 +175,7 @@ public abstract class Boss : EnemyAnimatorAbstract
     protected virtual void ChasePlayer()
     {
         if (this._agent == null) return;
+        if(!this._agent.enabled) return;
         this._agent.enabled = true;
         this._agent.speed = this.moveBaseSpeed;
         this._agent.SetDestination(playerPosition.position);
@@ -167,9 +218,6 @@ public abstract class Boss : EnemyAnimatorAbstract
     //    else
     //        currentState = BossState.Attack; // Tấn công tiếp nếu vẫn còn gần
     //}
-
-    
-
     protected virtual void Die()
     {
         Debug.Log("Boss chết");

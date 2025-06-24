@@ -7,14 +7,13 @@ using UnityEngine.AI;
 
 public class EnemyHealth : DamageReceiver,IEnemy
 {
-    [SerializeField] protected EnemySO enemySO;
+    [SerializeField] protected EnemyAI enemyAI;
     [SerializeField] protected bool _canTakeDamage = true;
 
 
     [Header("These components would be loaded when run the game!")]
     //[SerializeField] protected EnemyDamageReceiver enemyDamageReceiver;
     [SerializeField] protected HpBarObj healthBarObj;
-    [SerializeField] protected Animator _animator;
 
     [SerializeField] protected SpawnEnemies _spawnEnemies;
     [SerializeField] protected HitDamageSpawner hitDamageSpawner;
@@ -49,7 +48,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     {
         ///Load All Components
         base.LoadComponents();
-        this.LoadAnimator();
+        this.LoadEnemyAI();
         this.LoadSpawnEnemies();
         this.LoadHealthBar();
         this.LoadEnemyCtrlDespawn();
@@ -73,15 +72,15 @@ public class EnemyHealth : DamageReceiver,IEnemy
         this.healthBarObj = GetComponentInChildren<HpBarObj>();
         this.healthBarObj.gameObject.SetActive(true);
     }
-    protected virtual void LoadAnimator()
-    {
-        if (this._animator != null) return;
-        this._animator = GetComponent<Animator>();
-    }
     protected virtual void LoadSpawnEnemies()
     {
         if (this._spawnEnemies != null) return;
         this._spawnEnemies = FindAnyObjectByType<SpawnEnemies>();
+    }
+    protected virtual void LoadEnemyAI()
+    {
+        if (this.enemyAI != null) return;
+        this.enemyAI = GetComponentInChildren<EnemyAI>();
     }
     protected virtual void LoadEnemyCtrlDespawn()
     {
@@ -111,7 +110,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     protected virtual void ResetHealthGeneral()
     {
         this.healthBarObj.gameObject.SetActive(true);
-        this._hpMax = (int) enemySO.Health;
+        this._hpMax = (int)this.enemyAI.EnemySO.Health;
     }
     protected virtual void ResetStateCollision()
     {
@@ -156,7 +155,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
         if(this._spawnEnemies != null) this._spawnEnemies.EnemyDefeated(1);
         this.gameObject.GetComponent<Collider>().enabled = false;
         this._canTakeDamage = false;
-        if (HasDeadState()) this._animator.SetTrigger("die");
+        if (HasDeadState()) this.enemyAI.Animator.SetTrigger("die");
         if (!this._isDead) this._isDead = true;
     }
     public override void Deduct(int damage)
@@ -172,8 +171,8 @@ public class EnemyHealth : DamageReceiver,IEnemy
 
         //}
     }
-    //public virtual bool HasHurtState() => _animator.HasState(0, Animator.StringToHash("getHit"));
-    public virtual bool HasDeadState() => _animator.HasState(0, Animator.StringToHash("die"));
+    //public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
+    public virtual bool HasDeadState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("Death"));
     protected override void HurtEffect()
     {
         if(beastHurtSFX != null)
@@ -200,7 +199,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     //Others
     public void RewardPlayerAfterEnemyDead()
     {
-        Rewards.Instance.RewardGemsPlayerWhenKillEnemy(enemySO.amount_Gems, transform);
+        Rewards.Instance.RewardGemsPlayerWhenKillEnemy(this.enemyAI.EnemySO.amount_Gems, transform);
     }
     public void DeleteEnemyRoutine()
     {

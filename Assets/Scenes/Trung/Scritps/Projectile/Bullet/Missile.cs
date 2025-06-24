@@ -41,23 +41,21 @@ public class Missile : Projectitle
     {
         if (this.explosion != null) return;
         List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
-        this.explosion = allMyComponents[0];
+        foreach (var myComponent in allMyComponents)
+        {
+            if (myComponent.GetComponent<Explosion>().Name == "Explode1")
+            {
+                this.explosion = myComponent;
+                break;
+            }
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
+        if (!other.CompareTag("BulletEnemy") && !other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
         {
             Explosion newExplosde =  this.explosionSpawner.Spawn(explosion, transform.position);
-            newExplosde.GetComponentInChildren<CreateHitEnemy>().transform.gameObject.SetActive(true);
-            this.missileDespawn.DoDespawn();
-        }
-    }
-    private void OnCollisionEnter(Collision other)
-    {
-        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
-        {
-            Explosion newExplosde = this.explosionSpawner.Spawn(explosion, transform.position);
-            newExplosde.GetComponentInChildren<CreateHitEnemy>().transform.gameObject.SetActive(true);
+            newExplosde.Hit.gameObject.SetActive(true);
             this.missileDespawn.DoDespawn();
         }
     }

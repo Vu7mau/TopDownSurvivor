@@ -59,6 +59,10 @@ public class Projectitle : PoolObj
     {
         this._direction = direction;
     }
+    public virtual void SetVelocity(float newSpeed)
+    {
+        this.speed = newSpeed;
+    }
     public virtual void SetDirection(Vector3 direction, float speed)
     {
         this._direction = direction;

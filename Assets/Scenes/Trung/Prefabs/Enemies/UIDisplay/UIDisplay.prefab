@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 5895287776054990226}
   healthEaseSlider: {fileID: 3386391027936729591}
-  hpBarObj: {fileID: 0}
+  hpBarObj: {fileID: 8026783689419623545}
   enemyHealth: {fileID: 0}
   timeEaseLerp: 0.05
 --- !u!114 &1616380477845312083
@@ -64,8 +64,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 0}
-  targetPosition: {fileID: 0}
-  offSet: {x: 0, y: 2, z: 0}
+  targetPosition: {fileID: 5036989782882635072}
+  offSet: {x: 0, y: 2.5, z: 0}
 --- !u!1 &2837634865267167289
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textDisplayPrefab: {fileID: 0}
-  _spawner: {fileID: 0}
+  _spawner: {fileID: 8396801846767635544}
   textCanvas: {fileID: 195395857259666555}
 --- !u!1 &4192405905313013038
 GameObject:
@@ -1017,6 +1017,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TextDisplayObj
       objectReference: {fileID: 0}
+    - target: {fileID: 326765652296639894, guid: 00949ccc6cb4b2f4d8252d29b60c080d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 512342377478411016, guid: 00949ccc6cb4b2f4d8252d29b60c080d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1096,6 +1100,18 @@ PrefabInstance:
     - target: {fileID: 512342377478411016, guid: 00949ccc6cb4b2f4d8252d29b60c080d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500423821693128258, guid: 00949ccc6cb4b2f4d8252d29b60c080d, type: 3}
+      propertyPath: spawner
+      value: 
+      objectReference: {fileID: 8396801846767635544}
+    - target: {fileID: 1500423821693128258, guid: 00949ccc6cb4b2f4d8252d29b60c080d, type: 3}
+      propertyPath: timeLife
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500423821693128258, guid: 00949ccc6cb4b2f4d8252d29b60c080d, type: 3}
+      propertyPath: currentTime
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

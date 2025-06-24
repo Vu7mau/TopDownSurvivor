@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 3579921576939280352}
   m_Layer: 0
   m_Name: Lazer
-  m_TagString: Untagged
+  m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -188,17 +188,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1234051776881407968, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
+      propertyPath: enemySO
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1234051776881407968, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
+      propertyPath: _basedDamage
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3059291028090726344, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
       propertyPath: m_Size.x
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3059291028090726344, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
       propertyPath: m_Size.y
-      value: 32.952007
+      value: 5386.573
       objectReference: {fileID: 0}
     - target: {fileID: 3059291028090726344, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
       propertyPath: m_Size.z
-      value: 1.9975836
+      value: 8.3779955
       objectReference: {fileID: 0}
     - target: {fileID: 3059291028090726344, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
       propertyPath: m_Center.x
@@ -206,11 +214,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3059291028090726344, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
       propertyPath: m_Center.y
-      value: -15.975992
+      value: -344.81134
       objectReference: {fileID: 0}
     - target: {fileID: 3059291028090726344, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
       propertyPath: m_Center.z
-      value: -0.00085821154
+      value: 3.189348
       objectReference: {fileID: 0}
     - target: {fileID: 3059291028090726344, guid: 3a1167d60960f38459de5bebcfc33ce0, type: 3}
       propertyPath: m_IsTrigger
