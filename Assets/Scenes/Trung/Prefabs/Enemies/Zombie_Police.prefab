@@ -11580,6 +11580,7 @@ GameObject:
   - component: {fileID: 2159309267267697389}
   - component: {fileID: 6425978678940601988}
   - component: {fileID: -8824760094674056641}
+  - component: {fileID: -6092367534138771830}
   m_Layer: 7
   m_Name: Zombie_Police
   m_TagString: Enemy
@@ -11703,14 +11704,13 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: 82e816b70d8b0a24989c90bd19d97b57, type: 2}
+  enemyAI: {fileID: 0}
   _canTakeDamage: 1
   healthBarObj: {fileID: 0}
-  _animator: {fileID: 0}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 0}
-  bloodSplash: {fileID: 0}
+  bloodSplash: {fileID: 390792938675970527}
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
   hurtPositionOffset: {x: 0, y: 0, z: 0}
@@ -11755,6 +11755,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawn: {fileID: 1057462473976643376}
   nameEnemy: Zombie_Police
+--- !u!114 &-6092367534138771830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085040016616699974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshagent: {fileID: 0}
+  animator: {fileID: 0}
+  pathUpdateDelay: 0.2
+  enemySO: {fileID: 11400000, guid: 82e816b70d8b0a24989c90bd19d97b57, type: 2}
 --- !u!1 &8117626052404127214
 GameObject:
   m_ObjectHideFlags: 0
@@ -12123,6 +12139,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!114 &390792938675970527 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1661289770563452070, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 1324751145476791673}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4929753896889989919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}

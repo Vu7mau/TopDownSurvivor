@@ -1916,6 +1916,7 @@ GameObject:
   - component: {fileID: 5404592795245532362}
   - component: {fileID: 1487275684112206453}
   - component: {fileID: 556235242515059557}
+  - component: {fileID: -512246348687097727}
   m_Layer: 7
   m_Name: Zombie_FireFighter
   m_TagString: Enemy
@@ -2020,14 +2021,13 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: d93ae0312d6fafe4eb13fedaa013e726, type: 2}
+  enemyAI: {fileID: 0}
   _canTakeDamage: 1
   healthBarObj: {fileID: 0}
-  _animator: {fileID: 0}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 0}
-  bloodSplash: {fileID: 0}
+  bloodSplash: {fileID: 4467020039377406475}
   beastHurtSFX: {fileID: 8300000, guid: 0c8d9612b61a51f4cb3c20051a17df41, type: 3}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
   hurtPositionOffset: {x: 0, y: 0, z: 0}
@@ -2062,6 +2062,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawn: {fileID: 6068291363493833466}
   nameEnemy: Zombie_FireFighter
+--- !u!114 &-512246348687097727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9012152331269360993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshagent: {fileID: 0}
+  animator: {fileID: 0}
+  pathUpdateDelay: 0.2
+  enemySO: {fileID: 11400000, guid: d93ae0312d6fafe4eb13fedaa013e726, type: 2}
 --- !u!1 &9020629919445531096
 GameObject:
   m_ObjectHideFlags: 0
@@ -2198,6 +2214,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!114 &4467020039377406475 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1661289770563452070, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 3094005037757167277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9005064111995670731 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}

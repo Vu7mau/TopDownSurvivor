@@ -1817,6 +1817,7 @@ GameObject:
   - component: {fileID: 6753895616421936714}
   - component: {fileID: 3689798172535934146}
   - component: {fileID: -9121994584922200252}
+  - component: {fileID: -9144330162191211134}
   m_Layer: 7
   m_Name: Zombie_HouseWife
   m_TagString: Enemy
@@ -1921,10 +1922,9 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: d1b026aa3cb71e44fb0f55dfd352cef0, type: 2}
+  enemyAI: {fileID: 0}
   _canTakeDamage: 1
   healthBarObj: {fileID: 0}
-  _animator: {fileID: 0}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 0}
@@ -1946,6 +1946,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawn: {fileID: 6180596796075437180}
   nameEnemy: Zombie_HouseWife
+--- !u!114 &-9144330162191211134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8990054397899822950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshagent: {fileID: 0}
+  animator: {fileID: 0}
+  pathUpdateDelay: 0.2
+  enemySO: {fileID: 11400000, guid: d1b026aa3cb71e44fb0f55dfd352cef0, type: 2}
 --- !u!1 &8997702807573140354
 GameObject:
   m_ObjectHideFlags: 0

@@ -1750,6 +1750,7 @@ GameObject:
   - component: {fileID: 3263663517504054116}
   - component: {fileID: 6269595595726266558}
   - component: {fileID: -1531243743946643831}
+  - component: {fileID: -8813635221062628486}
   m_Layer: 7
   m_Name: Zombie_Suitman
   m_TagString: Enemy
@@ -1871,14 +1872,13 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 10
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: 415d7367ca4c23c4f9d49a3ab3d6e397, type: 2}
+  enemyAI: {fileID: 0}
   _canTakeDamage: 1
   healthBarObj: {fileID: 0}
-  _animator: {fileID: 0}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 0}
-  bloodSplash: {fileID: 0}
+  bloodSplash: {fileID: 7903647093317262372}
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
   hurtPositionOffset: {x: 0, y: 0, z: 0}
@@ -1896,6 +1896,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawn: {fileID: 8634116595817828200}
   nameEnemy: Zombie_Suitman
+--- !u!114 &-8813635221062628486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7945127476044001139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshagent: {fileID: 0}
+  animator: {fileID: 0}
+  pathUpdateDelay: 0.2
+  enemySO: {fileID: 11400000, guid: 415d7367ca4c23c4f9d49a3ab3d6e397, type: 2}
 --- !u!1 &8293467414895181283
 GameObject:
   m_ObjectHideFlags: 0
@@ -2397,3 +2413,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
   m_PrefabInstance: {fileID: 8836470496705241218}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7903647093317262372 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1661289770563452070, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 8836470496705241218}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

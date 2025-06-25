@@ -90,13 +90,12 @@ public class EnemyHealth : DamageReceiver,IEnemy
     protected virtual void LoadHitDamageSpawner()
     {
         if (this.hitDamageSpawner != null) return;
-        this.hitDamageSpawner = FindAnyObjectByType<HitDamageSpawner>();
+        this.hitDamageSpawner = GetComponentInChildren<HitDamageSpawner>();
     }
     protected virtual void LoadBloodSplash()
     {
         if (this.bloodSplash != null) return;
-        List<BloodSplash> allMyComponents = ComponentFinder.FindAllComponentsInScene<BloodSplash>();
-        this.bloodSplash = allMyComponents[0];
+        this.bloodSplash = GetComponentInChildren<BloodSplash>();
     }
 
 

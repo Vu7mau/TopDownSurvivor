@@ -1944,6 +1944,7 @@ GameObject:
   - component: {fileID: 3425512638718451681}
   - component: {fileID: 690081636752971902}
   - component: {fileID: 1952686386862226442}
+  - component: {fileID: -8075821039796069069}
   m_Layer: 7
   m_Name: Zombie_Dog
   m_TagString: Enemy
@@ -2048,10 +2049,9 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: 6da524514f074c2489ab4e7aea5f4b4a, type: 2}
+  enemyAI: {fileID: 0}
   _canTakeDamage: 1
   healthBarObj: {fileID: 0}
-  _animator: {fileID: 0}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 0}
@@ -2073,6 +2073,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawn: {fileID: 2665120059913261056}
   nameEnemy: Zombie_Dog
+--- !u!114 &-8075821039796069069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6986040242600326363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshagent: {fileID: 0}
+  animator: {fileID: 0}
+  pathUpdateDelay: 0.2
+  enemySO: {fileID: 11400000, guid: d1b026aa3cb71e44fb0f55dfd352cef0, type: 2}
 --- !u!1 &6991945925111864063
 GameObject:
   m_ObjectHideFlags: 0
