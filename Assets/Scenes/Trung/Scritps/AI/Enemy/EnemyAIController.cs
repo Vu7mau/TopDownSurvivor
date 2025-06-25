@@ -10,6 +10,9 @@ public class EnemyAIController : VuMonoBehaviour
     [SerializeField] protected FindNearestTargets findTargets;
 
     [SerializeField] protected bool isAttacking = false;
+    [SerializeField] protected bool isLookAtTarGet = true;
+
+    [SerializeField] protected bool isNearTarget = false;
 
 
     [SerializeField] protected EnemyHealth enemyHealth;
@@ -68,7 +71,7 @@ public class EnemyAIController : VuMonoBehaviour
 
     protected virtual void Update()
     {
-        if(this.targetPosition != null)
+        if (this.targetPosition != null)
         {
             if (this.EnemyIsDead())
             {
@@ -77,7 +80,15 @@ public class EnemyAIController : VuMonoBehaviour
             }
             //this.inRangeAttack = Vector3.Distance(transform.position,targetPosition.position) <= this.attackDistance;
             this.inRangeAttack = this.findTargets.TargetsNearest.Count > 0;
-            if (this.inRangeAttack) this.Attack();
+            if (this.inRangeAttack)
+            {
+                this.isNearTarget = true;
+                this.Attack();
+            }
+            else
+            {
+                this.isNearTarget = false;
+            }
             this.enemyReferences.Animator.SetBool("attack", this.inRangeAttack);
             this.UpdatePath();
         }
@@ -94,6 +105,7 @@ public class EnemyAIController : VuMonoBehaviour
     }
     protected virtual void LookAtTarGet()
     {
+        if (!this.isLookAtTarGet) return;
         Vector3 lookPos = targetPosition.position - transform.position;
         lookPos.y = 0f;
         Quaternion rotation = Quaternion.LookRotation(lookPos);
@@ -117,5 +129,9 @@ public class EnemyAIController : VuMonoBehaviour
     {
         this.isAttacking = false;
         this.enemyReferences.NavMeshAgent.enabled = true;
+    }
+    protected virtual void SwitchFarState()
+    {
+
     }
 }

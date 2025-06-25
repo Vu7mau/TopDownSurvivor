@@ -5,7 +5,7 @@ using UnityEngine;
 public class CreateHitEnemy : DamageSender
 {
     [SerializeField] protected bool canTakeDamage = false;
-    public bool CanTakeDamage { set { canTakeDamage = value; } }
+    public bool CanTakeDamage { get => canTakeDamage; set { canTakeDamage = value; } }
     [SerializeField] protected EnemySO enemySO;
     protected int dem;
     protected int _amountDamagePercent;

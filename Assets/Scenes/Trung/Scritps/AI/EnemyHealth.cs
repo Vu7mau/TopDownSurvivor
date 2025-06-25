@@ -172,7 +172,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
         //}
     }
     //public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
-    public virtual bool HasDeadState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("Death"));
+    public virtual bool HasDeadState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("die"));
     protected override void HurtEffect()
     {
         if(beastHurtSFX != null)
