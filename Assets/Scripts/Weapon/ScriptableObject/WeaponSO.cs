@@ -8,9 +8,10 @@ public class WeponSO : ScriptableObject
 {
     [Header("Thông số của súng")]
     [SerializeField] public string weaponName;
-    [SerializeField] public float _shootDelay = .2f;
-    [SerializeField] public int _MaxBulletCount = 30;
-    [SerializeField] public float _reloadAmmoTime = 2f;
+    [SerializeField] public float shootDelay = .2f;
+    [SerializeField] public int totalAmmo = 10;
+    [SerializeField] public int maxBulletCount = 30;
+    [SerializeField] public float reloadAmmoTime = 2f;
     [SerializeField] public float zoomSpeed;
     [SerializeField] public float recoilSize;
     [SerializeField] public float recoilDuration;
@@ -18,7 +19,7 @@ public class WeponSO : ScriptableObject
 
     [Space]
     [Header("Cài đặt của súng")]
-    [SerializeField] public LayerMask _enemyLayer;
-    [SerializeField] public Sprite _gunImage;
+    [SerializeField] public LayerMask enemyLayer;
+    [SerializeField] public Sprite gunImage;
     [SerializeField] public WeaponSlot weaponSlot;
 }

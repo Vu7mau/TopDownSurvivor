@@ -69,14 +69,13 @@ public class HotbarUI : VuMonoBehaviour
         //    return;
         //}
 
-       
+        foreach (var slot in slots)
+        {
+            slot.SetSelectedItem(false);
+        }
         if (selectedIndex < CharacterCtrl.Instance.ActiveWeapon.Equipped_Weapons.Count)
         {
-            foreach (var slot in slots)
-            {
-                slot.SetSelectedItem(false);
-            }
-
+          
             var image = CharacterCtrl.Instance.ActiveWeapon.Equipped_Weapons[selectedIndex].GunSprite();
             if (image == null) return;
             slots[this.selectedIndex].SetItem(image);

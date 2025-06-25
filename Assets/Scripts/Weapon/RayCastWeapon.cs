@@ -10,6 +10,7 @@ public class RayCastWeapon : ObjectShooting
 
 
     [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsPressShooting();
+    [SerializeField] protected Vector3 _mousePoint => CharacterCtrl.Instance.CharacterAim.GetAim().position;
     [Space]
     [Header("RayCastWeapon")]
     [SerializeField] protected ParticleSystem _muzzelFlash;
@@ -25,11 +26,12 @@ public class RayCastWeapon : ObjectShooting
     [SerializeField] public Transform model;
     public WeaponSlot weaponSlot => weaponInfo.weaponSlot;
     public Transform GunPoint => _gunPoint;
+    public Vector3 MousePoint => _mousePoint;
     public RaycastHit TargetEnemy => _targetEnemy;
     public string WeaponName => weaponInfo.weaponName;
     public bool IsWeaponActivate => _isWeaponActivate;
 
-    public float ReloadAmmorTime => weaponInfo._reloadAmmoTime;
+    public float ReloadAmmorTime => weaponInfo.reloadAmmoTime;
 
 
     protected override void Awake()
@@ -61,10 +63,9 @@ public class RayCastWeapon : ObjectShooting
     {
         if (string.IsNullOrEmpty(this.SetBulletType())) return;
         Transform newBullet = BulletSpawner.Instance.Spawn(this.SetBulletType(), this.GunPoint.position, Quaternion.LookRotation(this.GunPoint.forward));
+        CharacterUIManager.OnWeaponReload?.Invoke(_bulletsCount, weaponInfo.maxBulletCount);
         this.ShooterEffect();
         this.SpawnShell();
-        CharacterUIManager.OnWeaponReload?.Invoke(_bulletsCount, weaponInfo._MaxBulletCount);
-
     }
     protected virtual void SpawnShell()
     {
@@ -79,7 +80,7 @@ public class RayCastWeapon : ObjectShooting
             return _isShooting;
         }
         else
-            return _isShooting =  false;
+            return _isShooting = false;
     }
     protected virtual void ShootLaser()
     {
@@ -89,15 +90,17 @@ public class RayCastWeapon : ObjectShooting
         Vector3 endPosition;
         lineRenderer.enabled = true;
 
-        if (Physics.Raycast(_gunPoint.position, _gunPoint.forward, out hit, 10, weaponInfo._enemyLayer))
+        Vector3 shootDirection = (MousePoint - GunPoint.position).normalized;
+        shootDirection.y = 0;
+        float distance = Vector3.Distance(this._gunPoint.position, MousePoint);
+        if (Physics.Raycast(_gunPoint.position, _gunPoint.forward, out hit, distance, weaponInfo.enemyLayer))
         {
-            float distance = Vector3.Distance(this._gunPoint.position, hit.point);
             endPosition = _gunPoint.position + _gunPoint.forward * distance;
             this._targetEnemy = hit;
         }
         else
         {
-            endPosition = _gunPoint.position + _gunPoint.forward * 10;
+            endPosition = _gunPoint.position + _gunPoint.forward * distance;
             this._targetEnemy = hit;
         }
         lineRenderer.SetPosition(0, _gunPoint.position);
@@ -108,21 +111,21 @@ public class RayCastWeapon : ObjectShooting
     {
         CinemachineCtrl.Instance.CinemachineZoom.ToggleZoom(IsShooting, weaponInfo.zoomSpeed);
     }
-    //protected virtual void SetTarget(RaycastHit target)
-    //{
-    //    this._targetEnemy = target;
-    //}
+
     private void LoadModel()
     {
         if (model != null) return;
 
         this.model = this.transform.Find("Model").GetComponent<Transform>();
         if (this.model != null) Debug.Log("Load model success");
-    }    
+    }
     public virtual void SetIsWeaponActivate(bool isWeaponActivate)
     {
         _isWeaponActivate = isWeaponActivate;
-      //  this.model.gameObject.SetActive(isWeaponActivate);    
+        //  this.model.gameObject.SetActive(isWeaponActivate);    
+    }
+    protected override void HoldFire()
+    {
     }
     protected virtual string SetBulletType()
     {
@@ -142,7 +145,7 @@ public class RayCastWeapon : ObjectShooting
     }
     public virtual int GetMaxAmmour()
     {
-        return weaponInfo._MaxBulletCount;
+        return weaponInfo.maxBulletCount;
     }
     public virtual bool GetBurstLocked()
     {
@@ -150,8 +153,12 @@ public class RayCastWeapon : ObjectShooting
     }
     public virtual Sprite GunSprite()
     {
-        if (weaponInfo._gunImage == null) return null;
-        return weaponInfo._gunImage;
+        if (weaponInfo.gunImage == null) return null;
+        return weaponInfo.gunImage;
     }
-  
+    public virtual void UpdateTotalBullet(int bulletCount)
+    {
+        weaponInfo.totalAmmo += bulletCount;
+    }
+
 }

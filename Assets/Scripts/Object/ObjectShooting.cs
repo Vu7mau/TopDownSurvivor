@@ -10,23 +10,21 @@ public abstract class ObjectShooting : VuMonoBehaviour
     [SerializeField] protected WeponSO weaponInfo;
     [SerializeField] protected bool _isShooting = false;
     [SerializeField] protected bool _isReloadAmmour = false;
-    //[SerializeField] protected float _shootDelay = .2f;
     [SerializeField] protected float _shootTimer = 0f;
-    //[SerializeField] protected int _MaxBulletCount = 30;
     [SerializeField] protected int _bulletsCount = 0;
-    //[SerializeField] protected float _reloadAmmoTime = 2f;
     [SerializeField] protected float _reloadAmmoTimer = 0f;
     [SerializeField] protected FireMode fireMode;
     [SerializeField] protected bool _isBursting = false;
+
+    private int _totalBulletTemp = 0;
 
 
     public bool IsShooting => _isShooting;
 
     protected override void OnEnable()
     {
-        base.OnDisable();
-
-        this._bulletsCount = weaponInfo._MaxBulletCount;
+        _totalBulletTemp = weaponInfo.totalAmmo;
+        this._bulletsCount = weaponInfo.maxBulletCount;
     }
 
     protected virtual void Update()
@@ -36,16 +34,17 @@ public abstract class ObjectShooting : VuMonoBehaviour
     protected virtual void FixedUpdate()
     {
         if (this.IsReloadingAmmo()) return;
+        this._shootTimer += Time.fixedDeltaTime;
         if (this._isShooting)
             this.Shooting();
         else
-           this.HoldFire();
+            this.HoldFire();
     }
 
     protected virtual void Shooting()
-    {      
-        this._shootTimer += Time.fixedDeltaTime;
-        if (this._shootTimer < weaponInfo._shootDelay)
+    {
+    
+        if (this._shootTimer < weaponInfo.shootDelay)
         {
             _isBursting = true;
             return;
@@ -60,15 +59,38 @@ public abstract class ObjectShooting : VuMonoBehaviour
 
     protected virtual bool IsReloadingAmmo()
     {
+        // Kiểm tra nếu còn đạn trong kho
+        if (_totalBulletTemp < 1) return true;
+        // Nếu thời gian reload chưa hết, tiếp tục reload
+
+        // Kiểm tra nếu còn đạn trong băng đạn
         if (this._bulletsCount > 0) return false;
-        if (this._reloadAmmoTimer < weaponInfo._reloadAmmoTime)
+
+
+
+        if (this._reloadAmmoTimer < weaponInfo.reloadAmmoTime)
         {
-            this._reloadAmmoTimer += Time.fixedDeltaTime;
+            this._reloadAmmoTimer += Time.deltaTime;  // Sử dụng Time.deltaTime cho Update
             _isReloadAmmour = true;
             return true;
         }
+
+        // Nếu thời gian reload hoàn tất, tiến hành reload
         this._reloadAmmoTimer = 0;
-        this._bulletsCount = weaponInfo._MaxBulletCount;
+
+        // Kiểm tra và cập nhật totalAmmo không bị giảm dưới 0
+        if (_totalBulletTemp > weaponInfo.maxBulletCount)
+        {
+            _totalBulletTemp -= weaponInfo.maxBulletCount;
+            this._bulletsCount = _totalBulletTemp;
+        }
+        else
+        {
+            this._bulletsCount = _totalBulletTemp;
+            _totalBulletTemp = 0;
+        }
+
+
         _isReloadAmmour = false;
         return false;
     }
@@ -86,7 +108,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
                 return 3;
 
             case FireMode.Auto:
-                return weaponInfo._MaxBulletCount;
+                return weaponInfo.maxBulletCount;
 
             default:
                 return 0;
@@ -95,7 +117,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
 
     protected virtual void HoldFire()
     {
-       
+
     }
 
     public enum FireMode

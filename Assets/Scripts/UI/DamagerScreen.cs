@@ -34,11 +34,12 @@ public class DamagerScreen : Singleton<DamagerScreen>
     public virtual void ActivateDamageScreen()
     {
         this._damageScreenVolume.priority = 2;
-        this._screenAnimator.SetTrigger("IsHit");
-        if (_damageScreenVolume != null && _damageScreenVolume.profile.TryGet(out vignette))
-        {
-            ChangeVignetteColor(Color.red);
-        }
+        Debug.Log("abc");
+      this._screenAnimator.SetTrigger("IsHit");
+        //if (_damageScreenVolume != null && _damageScreenVolume.profile.TryGet(out vignette))
+        //{
+        //    ChangeVignetteColor(Color.red);
+        //}
 
     }
     public virtual void ResetVolumePriority()

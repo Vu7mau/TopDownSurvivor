@@ -168,7 +168,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
         //{
         //    if (HasHurtState() && !this._isDead)
         //        _animator.SetTrigger("damage");
-
+            
         //}
     }
     //public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));

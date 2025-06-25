@@ -30,14 +30,14 @@ public class CharacterAim : CharacterCtrlAbstract
 
     protected virtual void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            isAimingPrecisly = !isAimingPrecisly;
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            isLockingToTarget = !isLockingToTarget;
-        }
+        //if (Input.GetKeyDown(KeyCode.P))
+        //{
+        //    isAimingPrecisly = !isAimingPrecisly;
+        //}
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    isLockingToTarget = !isLockingToTarget;
+        //}
 
         //this.UpdateAimVisual();
         this.UpdateCameraPosition();

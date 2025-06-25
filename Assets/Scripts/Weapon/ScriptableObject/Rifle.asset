@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: Rifle
   m_EditorClassIdentifier: 
   weaponName: rifle
-  _shootDelay: 0.15
-  _MaxBulletCount: 30
-  _reloadAmmoTime: 2
+  shootDelay: 0.1
+  totalAmmo: 1000
+  maxBulletCount: 30
+  reloadAmmoTime: 2
   zoomSpeed: 7
   recoilSize: 3
   recoilDuration: 0.3
-  _enemyLayer:
+  enemyLayer:
     serializedVersion: 2
-    m_Bits: 128
-  _gunImage: {fileID: 21300000, guid: 9240a48061ed1a14792e3ff8d7338beb, type: 3}
+    m_Bits: 4294967295
+  gunImage: {fileID: 21300000, guid: 9240a48061ed1a14792e3ff8d7338beb, type: 3}
   weaponSlot: 0

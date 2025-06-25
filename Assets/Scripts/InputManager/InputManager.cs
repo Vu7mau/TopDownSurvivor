@@ -17,29 +17,28 @@ public class InputManager : VuMonoBehaviour
     //public FixedJoystick RotationJoystick => _rotationJoystick;
 
     [SerializeField] protected Vector2 _moveInput;
-    public Vector2 MoveInput=> _moveInput;
+    public Vector2 MoveInput => _moveInput;
     [Space]
 
     [SerializeField] protected Vector3 _mouseInput;
-    public Vector3 MousePosition=> _mouseInput;
-    private RaycastHit lastKnowMouseHit; 
+    public Vector3 MousePosition => _mouseInput;
+    private RaycastHit lastKnowMouseHit;
 
     [SerializeField] private LayerMask aimLayerMask;
 
-    [SerializeField] protected bool _isShooting=false;
+    [SerializeField] protected bool _isShooting = false;
 
-   // public bool IsShooting=> _isShooting;   
+    // public bool IsShooting=> _isShooting;   
     protected override void LoadComponents()
     {
         base.LoadComponents();
         playerControls = new PlayerControls();
-      // if (playerControls != null) Debug.Log("Success");
+        // if (playerControls != null) Debug.Log("Success");
     }
     protected override void Start()
     {
-        base.Start();
-        this.AssignMoveInputEvents();
-        this.AssignMouseInputEvents();
+
+        this.AssignInputEvents();
     }
     protected override void OnEnable()
     {
@@ -61,22 +60,12 @@ public class InputManager : VuMonoBehaviour
 
         return lastKnowMouseHit;
     }
-    protected virtual void AssignMoveInputEvents()
+
+    protected virtual void AssignInputEvents()
     {
-        //controls = player.controls;
         // Key Input
         playerControls.Character.Movement.performed += context => _moveInput = context.ReadValue<Vector2>();
         playerControls.Character.Movement.canceled += context => _moveInput = Vector2.zero;
-        //playerControls.Character.Run.performed += context =>
-        //{
-        //    speed = runSpeed;
-        //    isRunning = true;
-        //};
-        //playerControls.Character.Run.canceled += context => { speed = walkSpeed; isRunning = false; };
-   
-    }
-    protected virtual void AssignMouseInputEvents()
-    {
         // Mouse Input
         playerControls.Character.Aim.performed += context => _mouseInput = context.ReadValue<Vector2>();
         playerControls.Character.Aim.canceled += context => _mouseInput = Vector2.zero;
@@ -85,8 +74,21 @@ public class InputManager : VuMonoBehaviour
         playerControls.Character.Fire.performed += context => _isShooting = true;
         playerControls.Character.Fire.canceled += context => _isShooting = false;
     }
-    public virtual bool IsFiring()=>_isShooting;
-  
+    public void DetachInputEvents()
+    {
+        playerControls.Character.Aim.performed -= context => _mouseInput = context.ReadValue<Vector2>();
+        playerControls.Character.Aim.canceled -= context => _mouseInput = Vector2.zero;
+
+        //Fire
+        playerControls.Character.Fire.performed -= context => _isShooting = true;
+        playerControls.Character.Fire.canceled -= context => _isShooting = false;
+
+        // Key Input
+        playerControls.Character.Movement.performed -= context => _moveInput = context.ReadValue<Vector2>();
+        playerControls.Character.Movement.canceled -= context => _moveInput = Vector2.zero;
+    }
+    public virtual bool IsFiring() => _isShooting;
+
     protected override void OnDisable()
     {
         base.OnDisable();

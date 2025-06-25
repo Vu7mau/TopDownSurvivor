@@ -49,7 +49,7 @@ public class HealthDisplay : VuMonoBehaviour
     }
     private IEnumerator SmoothHealth(float targetHp, float maxHp)
     {
-        Debug.Log("Im herew");
+   
         float elapsed = 0f;
 
         float startFill = healthBarFill.fillAmount;

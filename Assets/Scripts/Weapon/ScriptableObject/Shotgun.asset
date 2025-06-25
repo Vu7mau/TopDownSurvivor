@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   weaponName: shotgun
-  _shootDelay: 1
-  _MaxBulletCount: 7
-  _reloadAmmoTime: 2
+  shootDelay: 0.2
+  totalAmmo: 10
+  maxBulletCount: 30
+  reloadAmmoTime: 2
   zoomSpeed: 2
   recoilSize: 10
   recoilDuration: 0.2
-  _enemyLayer:
+  enemyLayer:
     serializedVersion: 2
     m_Bits: 128
-  _gunImage: {fileID: 21300000, guid: b7c8eb8518429a346bb4919a78f046a6, type: 3}
+  gunImage: {fileID: 21300000, guid: b7c8eb8518429a346bb4919a78f046a6, type: 3}
   weaponSlot: 2

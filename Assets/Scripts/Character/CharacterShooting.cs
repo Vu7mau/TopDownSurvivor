@@ -49,7 +49,7 @@ public class CharacterShooting : CharacterCtrlAbstract
     public virtual bool IsPressShooting()
     {
         if (this._weapon != null)
-            if (this._weapon.GetIsReloadingAmmo()||_isCancelShooting)
+            if (this._weapon.GetIsReloadingAmmo()||_isCancelShooting||_characterCtrl.CharacterMove.StopShootingByMovement)
             {
                 return false;
             }

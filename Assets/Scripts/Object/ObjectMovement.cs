@@ -20,10 +20,14 @@ public class ObjectMovement : VuMonoBehaviour
     {
         Vector3 movement = new Vector3( _targetPosition.x * _speed * Time.fixedDeltaTime,0,_targetPosition.z * _speed * Time.fixedDeltaTime);
         if (_targetPosition != Vector3.zero)
+        {
             _rb.MovePosition(_rb.position + movement);
+        }
         else
             _rb.velocity = new Vector3(0, _rb.velocity.y, 0);
         //  _rb.transform.position = new Vector3(_rb.position.x + _targetPosition.x * _speed * Time.fixedDeltaTime, 0, _rb.position.z + _targetPosition.z * _speed * Time.fixedDeltaTime);
+        _rb.velocity = Vector3.zero;
+
     }
     public virtual void SetMoveSpeed(float speed)
     {

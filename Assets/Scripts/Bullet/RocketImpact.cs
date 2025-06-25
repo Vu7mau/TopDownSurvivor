@@ -7,6 +7,7 @@ public class RocketImpact : BulletImpact
     [Space]
     [Header("RocketImpact")]
     [SerializeField] private ParticleSystem _explosionEffect;
+    [SerializeField] private float _explosionColliderSize;
 
 
     protected override void SetEffectPos(Collision collision)
@@ -18,7 +19,8 @@ public class RocketImpact : BulletImpact
     protected override void HandleVisualEffect()
     {
         base.HandleVisualEffect();
-        _explosionEffect.Play();
+       _explosionEffect.Play();
+        _SphereCollider.radius = _explosionColliderSize;
     }
     protected override void ResetPlaybackTime()
     {
@@ -27,9 +29,17 @@ public class RocketImpact : BulletImpact
         {
             _explosionEffect.Simulate(0, true, true);
         }
+
+    }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        _SphereCollider.radius = .04f;
+
     }
     protected override void HandleSoundEffect()
     {
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rocketExplosion,this.transform);
+        Debug.Log("Im here");
     }
 }

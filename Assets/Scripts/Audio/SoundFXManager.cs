@@ -29,7 +29,7 @@ public class SoundFXManager : AudioManager
     [SerializeField] public  AudioClip lazerExplosion;
     [Space]
     [Header("Character")]
-    [SerializeField] public  AudioClip maleHit;
+    [SerializeField] public  AudioClip[] maleHit;
     [SerializeField] public  AudioClip[] footStep;
 
     [Space]

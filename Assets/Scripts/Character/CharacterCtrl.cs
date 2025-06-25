@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterCtrl : Singleton<CharacterCtrl>
 {
-  
+
 
     [Header("Character Ctrl")]
     [SerializeField] protected InputManager _inputManager;
@@ -17,24 +17,35 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     [SerializeField] protected CharacterAim _characterAim;
     public CharacterAim CharacterAim => _characterAim;
 
-      [SerializeField] protected CharacterShooting _characterShooting;
+    [SerializeField] protected CharacterShooting _characterShooting;
     public CharacterShooting CharacterShooting => _characterShooting;
-  
-      [SerializeField] protected ActiveWeapon _activeWeapon;
+
+    [SerializeField] protected ActiveWeapon _activeWeapon;
     public ActiveWeapon ActiveWeapon => _activeWeapon;
 
     [SerializeField] protected CharacterStats _characterStats;
-    public CharacterStats CharacterStats => _characterStats; 
+    public CharacterStats CharacterStats => _characterStats;
     [SerializeField] protected CharacterAnimHandle _characterAnimHandle;
-    public CharacterAnimHandle CharacterAnimHandle => _characterAnimHandle; 
+    public CharacterAnimHandle CharacterAnimHandle => _characterAnimHandle;
     [SerializeField] protected CharacterDamageReceiver _characterDamageReceiver;
-    public CharacterDamageReceiver CharacterDamageReceiver => _characterDamageReceiver;  
+    public CharacterDamageReceiver CharacterDamageReceiver => _characterDamageReceiver;
     [SerializeField] protected CharacterLeveUp _characterLeveUp;
     public CharacterLeveUp CharacterLeveUp => _characterLeveUp;
 
 
-
-
+    public void DisableAllComponet()
+    {
+        _inputManager.gameObject.SetActive(false);
+        _characterMove.gameObject.SetActive(false);
+       _characterAim.gameObject.SetActive(false);
+        _characterShooting.gameObject.SetActive(false);
+       // _activeWeapon.gameObject.SetActive(false);
+        //_characterStats.gameObject.SetActive(false);
+     //   _characterAnimHandle.gameObject.SetActive(false);
+      //  _characterDamageReceiver.gameObject.SetActive(false);
+        _characterLeveUp.gameObject.SetActive(false);
+        gameObject.GetComponent<Rigidbody>().isKinematic = true;
+    }
     protected override void LoadComponents()
     {
 
@@ -47,14 +58,14 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         this.LoadCharacterAnimHandle();
         this.LoadCharacterDamageReceiver();
         this.LoadCharacterLeveUp();
-       
+
     }
- 
+
     protected virtual void LoadInputManager()
     {
         if (this._inputManager != null) return;
 
-        this._inputManager=GameObject.FindObjectOfType<InputManager>();
+        this._inputManager = GameObject.FindObjectOfType<InputManager>();
         Debug.Log(" Load InputManager Success " + this.transform.name);
     }
     protected virtual void LoadCharacterMove()
@@ -78,7 +89,7 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
 
         this._characterShooting = this.transform.GetComponentInChildren<CharacterShooting>();
         Debug.Log(" Load CharacterShooting Success " + this._characterShooting.transform.name);
-    }  
+    }
     protected virtual void LoadActiveWeapon()
     {
         if (this._activeWeapon != null) return;
@@ -91,16 +102,16 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     {
         if (this._characterStats != null) return;
 
-        this._characterStats = GameObject.FindObjectOfType<CharacterStats>();
-        Debug.Log("LoadCharacterStats success " + this._characterStats.transform.name);
-    } 
+       // this._characterStats = GameObject.FindObjectOfType<CharacterStats>();
+      //  Debug.Log("LoadCharacterStats success " + this._characterStats.transform.name);
+    }
     protected virtual void LoadCharacterAnimHandle()
     {
         if (this._characterAnimHandle != null) return;
 
         this._characterAnimHandle = transform.GetComponentInChildren<CharacterAnimHandle>();
         Debug.Log("LoadCharacterAnimHandle success " + this._characterStats.transform.name);
-    } 
+    }
     protected virtual void LoadCharacterDamageReceiver()
     {
         if (this._characterDamageReceiver != null) return;
@@ -126,7 +137,7 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     {
         return this._characterStats.AttackEnemy();
     }
-   
+
 }
 
 

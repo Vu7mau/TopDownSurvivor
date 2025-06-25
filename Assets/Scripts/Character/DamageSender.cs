@@ -15,7 +15,6 @@ public class DamageSender : VuMonoBehaviour
         DamageReceiver damageReceiver = obj.GetComponentInChildren<DamageReceiver>();
 
         if (damageReceiver == null ) return;
-        Debug.Log("Truyen damage!");
         this.Send(damageReceiver);
        
     }

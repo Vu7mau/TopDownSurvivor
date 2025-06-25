@@ -10,6 +10,15 @@ public class CharacterMove : ObjectMovement
     protected bool isRightFoot = true;
     [SerializeField] protected float stepDelay = .5f;
     [SerializeField] protected float stepDelayCount = 0;
+    [SerializeField] protected bool isDoging = false;
+    [SerializeField] protected float dogeTimer = 0;
+    [SerializeField] protected float dogeForce = 5;
+
+
+    [SerializeField] protected AnimationCurve dogeCurve;
+
+    private bool _stopShootingByMovement=false;
+    public bool StopShootingByMovement => _stopShootingByMovement;
 
     protected override void LoadComponents()
     {
@@ -30,18 +39,32 @@ public class CharacterMove : ObjectMovement
         this._rb = transform.parent.GetComponent<Rigidbody>();
         Debug.Log("Load LoadRigidbody Success at " + this.transform.name);
     }
+    protected override void Start()
+    {
+        Keyframe doge_lastFrame = dogeCurve[dogeCurve.length - 1];
+        dogeTimer = doge_lastFrame.time;
+    }
+    private void Update()
+    {
+       
+    }
+
     protected override void FixedUpdate()
     {
-        base.FixedUpdate();
+        if (!isDoging)
+            base.FixedUpdate();
         this.GetMoveDirect();
         this.GetTarget(_moveDir);
-   
+
+
+
+     
     }
     protected virtual void GetTarget(Vector3 target)
     {
         this._targetPosition = target;
-        if (_targetPosition != Vector3.zero) 
-        { 
+        if (_targetPosition != Vector3.zero)
+        {
             _isMoving = true;
             this.FootStepAudi();
             return;
@@ -61,20 +84,22 @@ public class CharacterMove : ObjectMovement
     {
         stepDelayCount -= Time.deltaTime;
         if (stepDelayCount >= 0) return;
-        int random=Random.Range(0, SoundFXManager.Instance.footStep.Length);
+        int random = Random.Range(0, SoundFXManager.Instance.footStep.Length);
         if (isRightFoot)
         {
-            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform,.1f);
+            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform, .3f);
             isRightFoot = false;
             stepDelayCount = stepDelay;
         }
         else
         {
-            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform,.1f);
+            SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.footStep[random], this.transform, .3f);
             isRightFoot = true;
             stepDelayCount = stepDelay;
         }
     }
+
+   
 }
 //protected virtual Vector3 GetConvertInput(Vector2 input)
 //{

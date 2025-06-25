@@ -7,7 +7,7 @@ using UnityEngine;
 public class BulletImpact : BulletAbstract
 {
     [Header("Bullet Impart")]
-    [SerializeField] protected SphereCollider _capsuleCollider;
+    [SerializeField] protected SphereCollider _SphereCollider;
     //[SerializeField] protected Rigidbody _rigidbody;
 
     [SerializeField] protected ParticleSystem _hitEffect;
@@ -27,8 +27,8 @@ public class BulletImpact : BulletAbstract
 
     protected virtual void LoadCollider()
     {
-        if (this._capsuleCollider != null) return;
-        this._capsuleCollider = GetComponent<SphereCollider>();
+        if (this._SphereCollider != null) return;
+        this._SphereCollider = GetComponent<SphereCollider>();
         //this._capsuleCollider.isTrigger = true;
         //this._capsuleCollider.radius = 0.05f;
         Debug.Log(transform.name + ": LoadCollider", gameObject);

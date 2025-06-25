@@ -12,8 +12,8 @@ public class CharacterDamageReceiver : DamageReceiver
     {
         base.Start();
         this.SetMaxHealth();
-      //  HpBar.Instance.SetHealthMaxBarVolume(this._hpMax);
-    
+        //  HpBar.Instance.SetHealthMaxBarVolume(this._hpMax);
+
     }
     protected override void LoadComponents()
     {
@@ -28,14 +28,18 @@ public class CharacterDamageReceiver : DamageReceiver
         this.characterCtrl = GetComponent<CharacterCtrl>();
         Debug.Log("LoadCharacterCtrl");
     }
- 
+
     protected override void OnDead()
     {
         Debug.Log("PLayer Death");
+        characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsDead");
+        characterCtrl.InputManager.DetachInputEvents();
+        characterCtrl.DisableAllComponet();
+
     }
     protected virtual void SetMaxHealth()
     {
-      //  this._hpMax = this.characterCtrl.GetHealthFromStats();
+        //  this._hpMax = this.characterCtrl.GetHealthFromStats();
         this.Reborn();
     }
     public override void Deduct(int Deduct)
@@ -43,24 +47,22 @@ public class CharacterDamageReceiver : DamageReceiver
         //HpBar.Instance.SetHealth((float)Deduct,(float)_hp,this._hpMax);
         base.Deduct(Deduct);
         CharacterUIManager.OnUpdateHealth?.Invoke(_hp, _hpMax);
-
-
-
     }
     public override void Add(int add)
     {
-        this._hpMax += add;
-       // HpBar.Instance.SetHealth(-(float)add, (float)this._hp, this._hpMax);
+        //int tagertHp=_hp+add;
         base.Add(add);
         CharacterUIManager.OnUpdateHealth?.Invoke(_hp, _hpMax);
+        CharacterEffect.HealingEffect?.Invoke();
 
     }
     protected override void HurtEffect()
     {
         CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(8f, .1f);
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.maleHit, this.transform);
+        int random = UnityEngine.Random.Range(0, SoundFXManager.Instance.maleHit.Length);
+        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.maleHit[random], this.transform);
         characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsHit");
-        DamagerScreen.Instance.ActivateDamageScreen();
+        // DamagerScreen.Instance.ActivateDamageScreen();
 
         if (enumeratorDamageScreen != null)
         {
@@ -74,14 +76,10 @@ public class CharacterDamageReceiver : DamageReceiver
         float remainingHealthPercent = this._hp / this._hpMax * 100;
         float duration = .7f;
         WaitForSeconds durationTurn = new WaitForSeconds(duration);
-        while (remainingHealthPercent <= 10)
-        {
-            DamagerScreen.Instance.ActivateDamageScreen();
-            yield return durationTurn;
-        }
         DamagerScreen.Instance.ActivateDamageScreen();
         enumeratorDamageScreen = null;
-    }
+        yield return durationTurn;
 
+    }
 
 }

@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class ReloadAmmor : Singleton<ReloadAmmor>
 {
-    [SerializeField] protected Slider _reloadSlider;
+    [SerializeField] protected Image _reloadSlider;
     [SerializeField] protected float _speed;
     bool _loaded = false;
 
 
 
     public virtual void AmmoReload(float reloadTime)
-    { 
+    {
         if (_loaded) return;
 
         this._loaded = true;
@@ -21,9 +21,9 @@ public class ReloadAmmor : Singleton<ReloadAmmor>
 
     IEnumerator Reload(float reloadTime)
     {
-     
+
         this._reloadSlider.gameObject.SetActive(true);
-        this._reloadSlider.value = 0;
+        this._reloadSlider.fillAmount = 0;
         //this._reloadSlider.maxValue = reloadTime;
         float elapsedTime = 0f;
 
@@ -34,14 +34,14 @@ public class ReloadAmmor : Singleton<ReloadAmmor>
             yield return null;
         }
         _reloadSlider.gameObject.SetActive(false);
-        this._reloadSlider.value = 0;
+        this._reloadSlider.fillAmount = 0;
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.reloadRiffle, this.transform);
         Invoke(nameof(this.ResetLoaded), .1f);
     }
-   
+
     protected virtual void UpdateReloadSlider(float value)
     {
-        this._reloadSlider.value = value;
+        this._reloadSlider.fillAmount = value;
     }
     protected virtual void ResetLoaded()
     {
@@ -56,7 +56,7 @@ public class ReloadAmmor : Singleton<ReloadAmmor>
     {
         if (this._reloadSlider != null) return;
 
-        this._reloadSlider = GetComponentInChildren<Slider>();
+        this._reloadSlider = this.transform.Find("Fill"). GetComponent<Image>();
         Debug.Log("LoadAmmorReloadSlider " + this._reloadSlider.transform.name);
     }
 }

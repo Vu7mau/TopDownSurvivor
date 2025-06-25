@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CharacterAnimHandle : CharacterCtrlAbstract
@@ -7,18 +9,21 @@ public class CharacterAnimHandle : CharacterCtrlAbstract
     [Space]
     [Header("Character AnimHandle")]
     [SerializeField] protected Animator _animator;
-    public Animator ChracterAnimator=>_animator;
+    public Animator ChracterAnimator => _animator;
 
+
+
+  
     protected override void LoadComponents()
     {
         base.LoadComponents();
-       this.LoadCharacterAnimator();
+        this.LoadCharacterAnimator();
     }
     protected virtual void LoadCharacterAnimator()
     {
-        if( _animator != null ) return;
+        if (_animator != null) return;
 
-        _animator=this.transform.GetComponentInChildren<Animator>();
+        _animator = this.transform.GetComponentInChildren<Animator>();
         Debug.Log("Load Character Animator Success " + _animator.transform.name);
     }
 
@@ -31,4 +36,7 @@ public class CharacterAnimHandle : CharacterCtrlAbstract
         _animator.SetFloat("Forward", _characterCtrl.InputManager.MoveInput.y);
         _animator.SetFloat("Sideways", _characterCtrl.InputManager.MoveInput.x);
     }
+
+ 
+
 }
