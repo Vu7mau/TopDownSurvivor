@@ -42,7 +42,7 @@ public class GameEventManager : MonoBehaviour
             powerIsOn = true;
             lightObject.SetActive(true);
             dialogManager.ShowDialog("Nguồn điện đã được khởi động lại!");
-            Debug.Log("Điện đã bật");
+            //Debug.Log("Điện đã bật");
         }
     }
 }
