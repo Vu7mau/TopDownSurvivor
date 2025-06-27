@@ -19090,6 +19090,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 401846, guid: 74c214f0739460f48a3ea12a42918452, type: 3}
   m_PrefabInstance: {fileID: 97360064}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &97909468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 97909469}
+  m_Layer: 0
+  m_Name: ExplosivePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &97909469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97909468}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.22, y: 2.44, z: -0.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 252847467}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &98148962
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49457,6 +49488,7 @@ MonoBehaviour:
   hpDoor: 5
   explosionEffect: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
   explosiveTime: 2
+  explosivePostion: {fileID: 97909469}
 --- !u!65 &252847469
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -172669,7 +172701,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3417740024307175669, guid: 199bbd8d210f6ca4e9009b39ca6c50e0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 97909469}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2604647239066749519, guid: 199bbd8d210f6ca4e9009b39ca6c50e0, type: 3}
       insertIndex: -1
