@@ -31,7 +31,7 @@ public class GameEventManager : MonoBehaviour
         }
         else
         {
-            dialogManager.ShowDialog("Cần nguồn điện để mở cửa!");
+            dialogManager.ShowDialog("Cần Khởi động lại nguồn điện");
         }
     }
 
