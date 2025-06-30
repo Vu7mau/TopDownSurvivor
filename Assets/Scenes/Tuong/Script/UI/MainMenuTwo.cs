@@ -57,6 +57,10 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void ShowSettings()
     {
+        if(previousPanelId == 0)
+            playMenu.SetActive(false);
+        else pausePanel.SetActive(false);
+        settingsPanel.SetActive(true);
         settingEffect.ShowPanel();
     }
     public void CloseSetingPanel()
