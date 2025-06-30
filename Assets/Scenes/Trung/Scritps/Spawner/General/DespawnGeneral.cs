@@ -42,8 +42,8 @@ public abstract class DespawnGeneral<T> : DespawnBase where T: PoolObj
     {
         this.currentTime -= Time.deltaTime;
         if (this.currentTime > 0) return;
-        this.DoDespawn();
         this.currentTime = this.timeLife;
+        this.DoDespawn();
     }
     public override void DoDespawn()
     {

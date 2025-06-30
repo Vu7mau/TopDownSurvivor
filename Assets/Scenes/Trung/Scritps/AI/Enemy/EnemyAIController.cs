@@ -17,6 +17,9 @@ public class EnemyAIController : VuMonoBehaviour
 
     [SerializeField] protected EnemyHealth enemyHealth;
 
+    [SerializeField] protected int amountAnimationAttackNear = 1;
+    [SerializeField] protected int amountAnimationAttackFar = 1;
+
     //protected float attackDistance;
     protected float pathUpdateDeadline;
 
@@ -73,10 +76,13 @@ public class EnemyAIController : VuMonoBehaviour
     {
         if (this.targetPosition != null)
         {
-            if (this.EnemyIsDead())
+            if (this.enemyHealth != null)
             {
-                this.enemyReferences.NavMeshAgent.enabled = false;
-                return;
+                if (this.EnemyIsDead())
+                {
+                    this.Death();
+                    return;
+                }
             }
             //this.inRangeAttack = Vector3.Distance(transform.position,targetPosition.position) <= this.attackDistance;
             this.inRangeAttack = this.findTargets.TargetsNearest.Count > 0;
@@ -91,6 +97,7 @@ public class EnemyAIController : VuMonoBehaviour
             }
             this.enemyReferences.Animator.SetBool("attack", this.inRangeAttack);
             this.UpdatePath();
+            this.LookAtTarGet();
         }
         this.enemyReferences.Animator.SetFloat("Speed",this.enemyReferences.NavMeshAgent.desiredVelocity.sqrMagnitude);
     }
@@ -101,7 +108,6 @@ public class EnemyAIController : VuMonoBehaviour
     {
         this.isAttacking = true;
         this.enemyReferences.NavMeshAgent.enabled = false;
-        this.LookAtTarGet();
     }
     protected virtual void LookAtTarGet()
     {
@@ -133,5 +139,18 @@ public class EnemyAIController : VuMonoBehaviour
     protected virtual void SwitchFarState()
     {
 
+    }
+
+    protected virtual void LookAtTartgetPlease()
+    {
+        this.isLookAtTarGet = true;
+    }
+    protected virtual void DontLookAtTarget()
+    {
+        this.isLookAtTarGet = false;
+    }
+    protected virtual void Death()
+    {
+        this.enemyReferences.NavMeshAgent.enabled = false;
     }
 }

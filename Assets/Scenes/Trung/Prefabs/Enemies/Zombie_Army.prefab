@@ -593,9 +593,9 @@ GameObject:
   - component: {fileID: 852577968523569868}
   - component: {fileID: 9020269387423464866}
   - component: {fileID: 5437256174090775942}
+  - component: {fileID: 1271572896741478245}
   - component: {fileID: 3973153752197142690}
   - component: {fileID: 1635806981825184837}
-  - component: {fileID: 1271572896741478245}
   - component: {fileID: 5856058978959243039}
   - component: {fileID: -23525964665716925}
   m_Layer: 7
@@ -688,6 +688,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2.5638463, z: 1}
   m_Center: {x: 0, y: 1.2802922, z: 0}
+--- !u!54 &1271572896741478245
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836701863530952022}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!114 &3973153752197142690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,46 +745,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ea8bc0012f89f3468f41907cdb85731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 0
-  _hpMax: 0
+  _hp: 200
+  _hpMax: 200
   _isDead: 0
-  enemyAI: {fileID: 0}
+  enemyAI: {fileID: -23525964665716925}
   _canTakeDamage: 1
-  healthBarObj: {fileID: 0}
+  healthBarObj: {fileID: 686360183769295340}
   _spawnEnemies: {fileID: 0}
-  hitDamageSpawner: {fileID: 0}
-  enemyCtrlDespawn: {fileID: 0}
+  hitDamageSpawner: {fileID: 5385234626002005250}
+  enemyCtrlDespawn: {fileID: 6937122837625186742}
   bloodSplash: {fileID: 8209142865325414707}
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
-  hurtPositionOffset: {x: 0, y: 0, z: 0}
---- !u!54 &1271572896741478245
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2836701863530952022}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!114 &5856058978959243039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -770,6 +769,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pool_Name: Zombie_Army
   despawn: {fileID: 6937122837625186742}
   nameEnemy: Zombie_Army
 --- !u!114 &-23525964665716925
@@ -12116,6 +12116,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DespawnEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12210,11 +12214,33 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!114 &686360183769295340 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8026783689419623545, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 7413679044350961045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ee003039ae17045be945b9bba95461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3524870341939545075 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
   m_PrefabInstance: {fileID: 7413679044350961045}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5385234626002005250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3197168241599334551, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 7413679044350961045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8209142865325414707 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1661289770563452070, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}

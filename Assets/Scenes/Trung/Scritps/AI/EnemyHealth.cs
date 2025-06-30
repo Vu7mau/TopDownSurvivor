@@ -86,6 +86,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     {
         if (this.enemyCtrlDespawn != null) return;
         this.enemyCtrlDespawn = GetComponentInChildren<EnemyCtrlDespawn>();
+        if (this.enemyCtrlDespawn == null) return;
     }
     protected virtual void LoadHitDamageSpawner()
     {
@@ -174,8 +175,8 @@ public class EnemyHealth : DamageReceiver,IEnemy
     public virtual bool HasDeadState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("die"));
     protected override void HurtEffect()
     {
-        if(beastHurtSFX != null)
-            SoundFXManager.Instance.PlaySoundFXClip(beastHurtSFX, transform);
+        if(this.beastHurtSFX != null)
+            SoundFXManager.Instance.PlaySoundFXClip(this.beastHurtSFX, this.transform);
         this.HurtFXRoutine();
     }
 
@@ -183,13 +184,15 @@ public class EnemyHealth : DamageReceiver,IEnemy
     [Header("Hurt FX")]
     [SerializeField] protected AudioClip beastHurtSFX;
     
-    [SerializeField] private Vector3 hurtScale;
-    [SerializeField] private Vector3 hurtPositionOffset;
+    [SerializeField] protected Vector3 hurtScale = new Vector3(0.25f,0.25f,0.25f);
+    //[SerializeField] protected Vector3 hurtPositionOffset;
     private void HurtFXRoutine()
     {
-        BloodSplash newBloodSplash = this.hitDamageSpawner.Spawn(bloodSplash, transform.position);
+        if (this.hitDamageSpawner == null) return;
+        if (this.bloodSplash == null) return;
+        BloodSplash newBloodSplash = this.hitDamageSpawner.Spawn(this.bloodSplash, this.transform.position);
         if (newBloodSplash == null) return;
-            newBloodSplash.transform.localScale = hurtScale;
+            newBloodSplash.transform.localScale = this.hurtScale;
         newBloodSplash.gameObject.SetActive(true);
     }
 

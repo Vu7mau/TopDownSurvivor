@@ -7,7 +7,7 @@ public class AbyssFollowTarget : PoolObj
     [SerializeField] protected Transform targetPosition;
     [SerializeField] protected float speed = 5f;
 
-    [SerializeField] protected float energy = 100f;
+    [SerializeField] protected float energy = 500f;
 
     [SerializeField] protected CreateHitEnemy hit;
 
@@ -40,16 +40,21 @@ public class AbyssFollowTarget : PoolObj
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (!other.transform.CompareTag("BulletEnemy") && !other.transform.CompareTag("Enemy"))
+        //if (!other.transform.gameObject.CompareTag("BulletEnemy") && !other.transform.gameObject.CompareTag("Enemy") && !other.gameObject.CompareTag("bullet"))
+        //{
+            
+        //}
+        if (other.transform.CompareTag("Player"))
         {
+            this.hit.TriggerEnter(other);
             this.Despawn.DoDespawn();
         }
-        if (other.transform.CompareTag("bullet"))
-        {
-            this.energy -= 10f;
-            CharacterEvents.characterDamaged?.Invoke(this.gameObject, 10f);
-            Debug.Log("Energy còn: "+ this.energy);
-            if(this.energy <= 0) { this.Despawn.DoDespawn(); }
-        }
+        //if (other.transform.gameObject.CompareTag("bullet"))
+        //{
+        //    this.energy -= 10f;
+        //    CharacterEvents.characterDamaged?.Invoke(this.gameObject, 10f);
+        //    Debug.Log("Energy còn: "+ this.energy);
+        //    if(this.energy <= 0) { this.Despawn.DoDespawn(); }
+        //}
     }
 }

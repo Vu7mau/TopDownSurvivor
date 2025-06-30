@@ -28,7 +28,9 @@ public class Zombie_FireFighterCtrl : ZombieCtrl
     }
     protected virtual void Explode()
     {
-        Explosion newExplosion = this.explosionSpawner.Spawn(explosionPrefab, transform.position);
+        if(this.explosionPrefab == null) return;
+        if (this.explosionPrefab == null) return;
+        Explosion newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, transform.position);
         if (newExplosion == null) return;
     }
 }

@@ -1165,9 +1165,9 @@ GameObject:
   - component: {fileID: 1118881133962216337}
   - component: {fileID: 4570266845362691753}
   - component: {fileID: 6859666168914482408}
-  - component: {fileID: 7681701650619760980}
-  - component: {fileID: -6734541594688177425}
   - component: {fileID: 38760416935518665}
+  - component: {fileID: -6734541594688177425}
+  - component: {fileID: 7681701650619760980}
   m_Layer: 7
   m_Name: Zombie_Pacient_04
   m_TagString: Enemy
@@ -1259,6 +1259,36 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.6738926, y: 1.5148256, z: 0.5310356}
   m_Center: {x: -0.0031971333, y: 0.734447, z: 0.032329887}
+--- !u!114 &38760416935518665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5921367157248738129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshagent: {fileID: 4570266845362691753}
+  animator: {fileID: 1118881133962216337}
+  pathUpdateDelay: 0.2
+  enemySO: {fileID: 11400000, guid: 4e2addb767598704cb17986c3c9a9868, type: 2}
+--- !u!114 &-6734541594688177425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5921367157248738129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  despawn: {fileID: 1867688609589044953}
+  nameEnemy: Zombie_Pacient_04
 --- !u!114 &7681701650619760980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1283,37 +1313,6 @@ MonoBehaviour:
   bloodSplash: {fileID: 4514739084650765142}
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
-  hurtPositionOffset: {x: 0, y: 0, z: 0}
---- !u!114 &-6734541594688177425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5921367157248738129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  despawn: {fileID: 1867688609589044953}
-  nameEnemy: Zombie_Pacient_04
---- !u!114 &38760416935518665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5921367157248738129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  navMeshagent: {fileID: 4570266845362691753}
-  animator: {fileID: 1118881133962216337}
-  pathUpdateDelay: 0.2
-  enemySO: {fileID: 11400000, guid: 4e2addb767598704cb17986c3c9a9868, type: 2}
 --- !u!1 &5942593079275722547
 GameObject:
   m_ObjectHideFlags: 0
@@ -2311,7 +2310,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6224393246146596342, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6592392401733574153, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2423,6 +2422,10 @@ PrefabInstance:
     - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
       propertyPath: m_Name
       value: DespawnEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

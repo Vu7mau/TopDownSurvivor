@@ -53,4 +53,9 @@ public class CreateHitEnemy : DamageSender
             canTakeDamage = true;
         }
     }
+
+    public virtual void TriggerEnter(Collider other)
+    {
+        this.OnTriggerEnter(other);
+    }
 }

@@ -2059,8 +2059,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  despawn: {fileID: 6633489274088206949}
-  nameEnemy: Zombie_Woman
+  pool_Name: Zombie_Nurse
+  despawn: {fileID: 0}
+  nameEnemy: Zombie_Nurse
 --- !u!114 &7226716250151467964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2077,7 +2078,11 @@ MonoBehaviour:
   enemyReferences: {fileID: 2802871740797282616}
   findTargets: {fileID: 7230828089876139871}
   isAttacking: 0
+  isLookAtTarGet: 1
+  isNearTarget: 0
   enemyHealth: {fileID: 4289118204742551848}
+  amountAnimationAttackNear: 1
+  amountAnimationAttackFar: 1
 --- !u!114 &4289118204742551848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2102,7 +2107,6 @@ MonoBehaviour:
   bloodSplash: {fileID: 0}
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
-  hurtPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &8121353241923806986
 GameObject:
   m_ObjectHideFlags: 0
@@ -2119,7 +2123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &314806023339756682
 Transform:
   m_ObjectHideFlags: 0

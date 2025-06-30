@@ -21,6 +21,12 @@ public class WolfBossController : EnemyAIController
     [SerializeField] protected AbyssFollowTarget abyss2;
     [SerializeField] protected AbyssFollowTargetSpawner abyssFollowTargetSpawner;
 
+    [SerializeField] protected List<AudioClip> snd_Attacks;
+    [SerializeField] protected List<AudioClip> snd_Deaths;
+
+    [SerializeField] protected bool isStarted = false;
+    public bool IsStarted { get => isStarted; set => isStarted = value; }
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -41,6 +47,14 @@ public class WolfBossController : EnemyAIController
         this.LoadToxicAbyss();
         this.LoadAbyssFollowTarget();
         this.LoadAbyssFollowTargetSpawner();
+        this.LoadCircleWarning();
+        this.LoadCircleWarningSpawner();
+    }
+
+    protected override void Update()
+    {
+        if (!this.isStarted) return;
+        base.Update();
     }
 
     //Load Componenents
@@ -154,6 +168,7 @@ public class WolfBossController : EnemyAIController
     }
     protected virtual void AttackFar1()
     {
+        if (!this.isStarted) return;
         base.Attack();
         this.RandomFarAttack();
     }
@@ -197,29 +212,74 @@ public class WolfBossController : EnemyAIController
     }
     private IEnumerator ShootAbyssBulletRoutine()
     {
-        Vector3 targetPosition = this.targetPosition.position;
+        if (this.abyssSpawner == null) yield break;
+        if (this.abyss == null) yield break;
+        float x = Random.Range(-10f, 10f);
+        float z = Random.Range(-10f, 10f);
+        Vector3 targetPosition = this.targetPosition.position + new Vector3(0,0,0);
         AbyssProjectitle newToxicAbyss = this.abyssSpawner.Spawn(this.abyss, transform.position);
         if (newToxicAbyss == null) yield break;
-        newToxicAbyss.GetComponent<AbyssProjectitle>().ShootAt(this.transform.position + new Vector3(0, 100f, 0));
+        newToxicAbyss.GetComponent<AbyssProjectitle>().ShootAt(this.transform.position + new Vector3(0, 1000f, 0));
         newToxicAbyss.GetComponent<AbyssProjectitle>().SetVelocity(30f);
-        yield return new WaitForSeconds(1f);
+        this.SpawnCircleWarning(targetPosition);
+        yield return new WaitForSeconds(1.5f);
+        newToxicAbyss.GetComponent<AbyssProjectitle>().SetVelocity(100f);
         newToxicAbyss.GetComponent<AbyssProjectitle>().ShootAt(targetPosition);
 
 
+    }
+
+    [SerializeField] protected CircleWarning circleWarning;
+    [SerializeField] protected CircleWarningSpawner circleWarningSpawner;
+
+    protected virtual void LoadCircleWarningSpawner()
+    {
+        if (this.circleWarningSpawner != null) return;
+        this.circleWarningSpawner = FindAnyObjectByType<CircleWarningSpawner>();
+        Debug.Log(transform.name + ": LoadAbyssToxicSpawner");
+    }
+    protected virtual void LoadCircleWarning()
+    {
+        if (this.circleWarning != null) return;
+        List<CircleWarning> allMyComponents = ComponentFinder.FindAllComponentsInScene<CircleWarning>();
+        this.circleWarning = allMyComponents[0];
+        Debug.Log(transform.name + ": LoadToxicAbyss");
+    }
+
+
+    protected virtual void SpawnCircleWarning(Vector3 target)
+    {
+        if(this.circleWarningSpawner == null) return;
+        if(this.circleWarning == null) return;
+        CircleWarning circleWarning = this.circleWarningSpawner.Spawn(this.circleWarning, target + new Vector3(0,0.3f,0));
+        if (circleWarning == null) return;
+        circleWarning.transform.localScale = new Vector3(5f, 5f, 5f);
+        circleWarning.transform.rotation = Quaternion.Euler(-90f,0,0);
     }
     protected virtual void Attack3()
     {
         Debug.Log("Attack3");
         this.enemyReferences.Animator.SetBool("attackFar", true);
         this.enemyReferences.Animator.SetInteger("index", 3);
-        this.ShootAbyss2();
     }
     protected virtual void ShootAbyss2()
     {
-        AbyssFollowTarget abyss2 = this.abyssFollowTargetSpawner.Spawn(this.abyss2, transform.position + new Vector3(0,3,0));
+        if (this.abyssFollowTargetSpawner == null) return;
+        if (this.abyss2 == null) return;
+        AbyssFollowTarget abyss2 = this.abyssFollowTargetSpawner.Spawn(this.abyss2, transform.position + new Vector3(0,-0.5f,0));
         if (abyss2 == null) return;
     }
 
+    protected virtual void Snd_Death()
+    {
+        int index = Random.Range(0, this.snd_Deaths.Count);
+        SoundFXManager.Instance.PlaySoundFXClip(this.snd_Deaths[index], this.transform);
+    }
+    protected virtual void Attack1()
+    {
+        int index = Random.Range(0, this.snd_Attacks.Count);
+        SoundFXManager.Instance.PlaySoundFXClip(this.snd_Attacks[index], this.transform);
+    }
 
     //[SerializeField] protected Transform posCapture;
     //protected virtual void Attack4()

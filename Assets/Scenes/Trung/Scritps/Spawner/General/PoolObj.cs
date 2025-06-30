@@ -32,19 +32,30 @@ public static class ComponentFinder
 
 public abstract class PoolObj : VuMonoBehaviour
 {
+
+    [SerializeField] protected string pool_Name;
+
     [SerializeField] protected DespawnBase despawn;
     public DespawnBase Despawn => despawn;
 
-    public abstract string GetName();
+    public virtual string GetName() => this.pool_Name;
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadDespawn();
+        this.LoadNamePoolObj();
+    }
+
+    protected virtual void LoadNamePoolObj()
+    {
+        if (this.pool_Name.Length != 0) return;
+        this.pool_Name = this.transform.gameObject.name;
     }
     protected virtual void LoadDespawn()
     {
         if (this.despawn != null) return;
         this.despawn = transform.GetComponentInChildren<DespawnBase>();
+        if (this.despawn == null) return;
         Debug.Log(transform.name + ": LoadDespawn",gameObject);
     }
 }

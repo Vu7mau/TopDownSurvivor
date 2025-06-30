@@ -1,23 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json.Utilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
 public class Projectitle : PoolObj
 {
+
     [SerializeField] protected float speed = 10f;
+    public float Speed { get =>  speed; set => speed = value; }
 
     [SerializeField] protected CreateHitEnemy createHitEnemy;
+
+
     protected Vector3 _direction;
     public Vector3 Direction
     {
         get { return _direction; }
         set { _direction = value; }
-    }
-    public override string GetName()
-    {
-        return "Projectitle";
     }
     protected override void OnEnable()
     {
@@ -43,6 +44,7 @@ public class Projectitle : PoolObj
 
     protected virtual void ResetProjectile()
     {
+        if (this.createHitEnemy == null) return;
         this.createHitEnemy.CanTakeDamage = false;
     }
 
@@ -57,7 +59,7 @@ public class Projectitle : PoolObj
     }
     public virtual void SetDirection(Vector3 direction)
     {
-        this._direction = direction;
+        this._direction = direction.normalized;
     }
     public virtual void SetVelocity(float newSpeed)
     {
@@ -65,7 +67,7 @@ public class Projectitle : PoolObj
     }
     public virtual void SetDirection(Vector3 direction, float speed)
     {
-        this._direction = direction;
+        this._direction = direction.normalized;
         this.speed = speed;
     }
 
