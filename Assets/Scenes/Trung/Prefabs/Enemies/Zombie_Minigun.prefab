@@ -592,6 +592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pool_Name: Zombie_Minigun
   despawn: {fileID: 5751218916542239875}
   nameEnemy: Zombie_Minigun
 --- !u!1 &1666944132906097723
@@ -12012,10 +12013,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5357058004746088795}
     m_Modifications:
+    - target: {fileID: 95559713003490256, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: enemyHealth
+      value: 
+      objectReference: {fileID: 1839239339941553881}
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 5950788484225044095, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: textDisplayPrefab
+      value: 
+      objectReference: {fileID: 2732199373489776692}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -12086,6 +12095,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2732199373489776692 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 513294684834387507, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 2518970218789830151}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4b049c27d865f408367c7b772b0fb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3889764481733870241 stripped
@@ -12166,6 +12186,10 @@ PrefabInstance:
     - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
       propertyPath: m_Name
       value: DespawnEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

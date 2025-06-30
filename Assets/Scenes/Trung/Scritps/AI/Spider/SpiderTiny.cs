@@ -59,7 +59,9 @@ public class SpiderTiny : EnemyAI
     }
     protected virtual void Explode()
     {
-        Explosion newExplosion = this.explosionSpawner.Spawn(explosionPrefab, transform.position);
+        if(this.explosionSpawner == null) return;
+        if(this.explosionPrefab ==  null) return;
+        Explosion newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, transform.position);
         if(newExplosion == null) return;
     }
 }

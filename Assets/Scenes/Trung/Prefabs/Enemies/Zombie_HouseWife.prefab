@@ -1943,6 +1943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pool_Name: 
   despawn: {fileID: 6180596796075437180}
   nameEnemy: Zombie_HouseWife
 --- !u!114 &-9144330162191211134
@@ -1957,8 +1958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 823492965d786eb429c49df81099df72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshagent: {fileID: 0}
-  animator: {fileID: 0}
+  navMeshagent: {fileID: 3743995275122167633}
+  animator: {fileID: 1434241217979313460}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: d1b026aa3cb71e44fb0f55dfd352cef0, type: 2}
 --- !u!1 &8997702807573140354
@@ -2047,6 +2048,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 5950788484225044095, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: textDisplayPrefab
+      value: 
+      objectReference: {fileID: 1968183791542349594}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2121,6 +2126,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1968183791542349594 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 513294684834387507, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 2040115722716608809}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4b049c27d865f408367c7b772b0fb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &3463670411601260990 stripped
@@ -2201,6 +2217,10 @@ PrefabInstance:
     - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
       propertyPath: m_Name
       value: DespawnEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243591001282146529, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7181237706348211722, guid: c2a20473a783cdf4cb331c188bf898c7, type: 3}
       propertyPath: parent

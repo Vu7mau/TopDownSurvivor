@@ -70,17 +70,20 @@ public class EnemyHealth : DamageReceiver,IEnemy
     {
         if (this.healthBarObj != null) return;
         this.healthBarObj = GetComponentInChildren<HpBarObj>();
+        if(this.healthBarObj == null) return;
         this.healthBarObj.gameObject.SetActive(true);
     }
     protected virtual void LoadSpawnEnemies()
     {
         if (this._spawnEnemies != null) return;
         this._spawnEnemies = FindAnyObjectByType<SpawnEnemies>();
+        if (this._spawnEnemies == null) return;
     }
     protected virtual void LoadEnemyAI()
     {
         if (this.enemyAI != null) return;
         this.enemyAI = GetComponentInChildren<EnemyAI>();
+        if(this.enemyAI == null) return;
     }
     protected virtual void LoadEnemyCtrlDespawn()
     {
@@ -92,11 +95,13 @@ public class EnemyHealth : DamageReceiver,IEnemy
     {
         if (this.hitDamageSpawner != null) return;
         this.hitDamageSpawner = GetComponentInChildren<HitDamageSpawner>();
+        if( this.hitDamageSpawner == null) return;
     }
     protected virtual void LoadBloodSplash()
     {
         if (this.bloodSplash != null) return;
         this.bloodSplash = GetComponentInChildren<BloodSplash>();
+        if( this.bloodSplash == null) return;
     }
 
 
@@ -109,8 +114,8 @@ public class EnemyHealth : DamageReceiver,IEnemy
     }
     protected virtual void ResetHealthGeneral()
     {
-        this.healthBarObj.gameObject.SetActive(true);
-        this._hpMax = (int)this.enemyAI.EnemySO.Health;
+        if(this.healthBarObj != null) this.healthBarObj.gameObject.SetActive(true);
+        if(this.enemyAI != null) this._hpMax = (int)this.enemyAI.EnemySO.Health;
     }
     protected virtual void ResetStateCollision()
     {
@@ -172,7 +177,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
         //}
     }
     //public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
-    public virtual bool HasDeadState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("die"));
+    public virtual bool HasDeadState() => this.enemyAI != null && this.enemyAI.Animator.HasState(0, Animator.StringToHash("die"));
     protected override void HurtEffect()
     {
         if(this.beastHurtSFX != null)

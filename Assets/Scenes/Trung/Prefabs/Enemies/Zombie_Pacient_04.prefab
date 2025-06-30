@@ -1287,6 +1287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pool_Name: Zombie_Pacient_04
   despawn: {fileID: 1867688609589044953}
   nameEnemy: Zombie_Pacient_04
 --- !u!114 &7681701650619760980
@@ -2256,6 +2257,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6442184458774354411}
     m_Modifications:
+    - target: {fileID: 95559713003490256, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: enemyHealth
+      value: 
+      objectReference: {fileID: 7681701650619760980}
     - target: {fileID: 1843276435439890286, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2268,6 +2273,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 5950788484225044095, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: textDisplayPrefab
+      value: 
+      objectReference: {fileID: 3365899428004409795}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2342,6 +2351,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3365899428004409795 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 513294684834387507, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 3002077383793764336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e4b049c27d865f408367c7b772b0fb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4514739084650765142 stripped

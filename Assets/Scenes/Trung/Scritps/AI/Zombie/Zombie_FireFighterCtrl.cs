@@ -22,6 +22,7 @@ public class Zombie_FireFighterCtrl : ZombieCtrl
     {
         if (this.explosionSpawner != null) return;
         this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+        if(this.explosionSpawner == null) return;
     }
     protected override void Shooting()
     {
