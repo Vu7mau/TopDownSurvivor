@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using static EffectPanelSetting;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
@@ -17,10 +18,9 @@ public class MainMenuTwo : MonoBehaviour
     [SerializeField] private GameObject modePanel;
     [SerializeField] private EffectSignIn pauseSignInEffect;
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private EffectPanelSetting settingEffect;
+    public EffectPanelSetting settingEffect;
     [SerializeField] private GameObject settingsPanel;
-
-
+    private int previousPanelId;
     public GameObject PlayMenu => playMenu;
     public GameObject LogoutButton => logoutButton;
     public GameObject PlayButton => playButton;
@@ -31,7 +31,7 @@ public class MainMenuTwo : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         authManager = FindObjectOfType<AuthManager>();
-        playMenu.SetActive(true);
+        settingsPanel.SetActive(true);
         bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
         logoutButton.SetActive(hasLoggedIn);
         HidePanel();
@@ -45,36 +45,34 @@ public class MainMenuTwo : MonoBehaviour
         settingsPanel.SetActive(false);
         modePanel.SetActive(false);
     }
-    public void OpenPausePanel()
+    public void OpenSettingFromMainMenu()
     {
-        playMenu.SetActive(false);
-        pausePanel.SetActive(true);
-        pauseSignInEffect.ShowPanel();
+        previousPanelId = 0;
+        ShowSettings();
     }
-    public void ClosePausePanel()
+    public void OpenSettingFromPause()
     {
-        pauseSignInEffect.HidePanel(() =>
-        {
-            pausePanel.SetActive(false);
-            playMenu.SetActive(true);
-        });
+        previousPanelId = 1;
+        ShowSettings();
     }
-    public void OffPauseSettingPanel()
+    public void ShowSettings()
     {
-        pauseSignInEffect.HidePanel(() =>
-        {
-            pausePanel.SetActive(false);
-            settingsPanel.SetActive(true);
-            settingEffect.ShowPanelTwo();
-        });
+        settingEffect.ShowPanel();
     }
     public void CloseSetingPanel()
     {
         settingEffect.HidePanel(() =>
         {
             settingsPanel.SetActive(false);
-            pausePanel.SetActive(true);
-            pauseSignInEffect.ShowPanel();
+            if(previousPanelId == 0)
+            {
+                playMenu.SetActive(true);
+            }
+            else if (previousPanelId == 1)  
+            {
+                pausePanel.SetActive(true);
+                pauseSignInEffect.ShowPanel();
+            }
         });
     }
     public void ExitGame()
