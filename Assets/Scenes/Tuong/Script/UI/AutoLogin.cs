@@ -33,8 +33,11 @@ public class AutoLogin : MonoBehaviour
         Debug.Log("Auto Login thành công");
         PlayerPrefs.SetInt("HasLoggedIn", 1);
         PlayerPrefs.Save();
-        mainMenuTwo?.SetLoginState(true);
+        //mainMenuTwo?.SetLoginState(true);
         CharacterInformation.Instance.ShowCharacters();
+        MainMenuTwo.Instance.LogoutButton.SetActive(true);   
+        MainMenuTwo.Instance.PlayMenu.SetActive(true);
+
     }
     private void OnLoginFailured(PlayFabError error)
     {

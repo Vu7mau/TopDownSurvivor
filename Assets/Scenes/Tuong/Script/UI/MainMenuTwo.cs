@@ -1,69 +1,81 @@
-﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using System.Collections;
 public class MainMenuTwo : MonoBehaviour
 {
-    [SerializeField] private GameObject mainMenuPanel;
+    public static MainMenuTwo Instance;
+    AuthManager authManager;
+    [SerializeField] private EffectSignIn effectLogin;
+    [SerializeField] private EffectSignIn effectRegister;
+    [SerializeField] private EffectSignIn effectResetPassword;
     [SerializeField] private GameObject loginPanel;
-    [SerializeField] private GameObject optionsPanel;
-    [SerializeField] private GameObject highScoresPanel;
-    [SerializeField] private GameObject creditsPanel;
-    [SerializeField] private GameObject newgamePanel;
-    [SerializeField] private int sceneIndex = 1;
-    [SerializeField] private GameObject loginButton;
-    [SerializeField] private GameObject newGameButton;
-    [SerializeField] private GameObject continueButton;
-    [SerializeField] private GameObject optionsButton;
-    [SerializeField] private GameObject highScoreButton;
+    [SerializeField] private GameObject registerPanel;
+    [SerializeField] private GameObject resetPanel;
+    [SerializeField] private GameObject playButton;
+    [SerializeField] private GameObject settingButton;
+    [SerializeField] private GameObject logoutButton;
+    [SerializeField] private GameObject playMenu;
+    [SerializeField] private GameObject modePanel;
+    [SerializeField] private EffectSignIn pauseSignInEffect;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private EffectPanelSetting settingEffect;
+    [SerializeField] private GameObject settingsPanel;
+
+
+    public GameObject PlayMenu => playMenu;
+    public GameObject LogoutButton => logoutButton;
+    public GameObject PlayButton => playButton;
+    public GameObject SettingPanel => settingsPanel;
+    public GameObject PausePanel => pausePanel;
     private void Start()
     {
-        mainMenuPanel.SetActive(true);
-        loginPanel.SetActive(false);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+        authManager = FindObjectOfType<AuthManager>();
+        playMenu.SetActive(true);
         bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
-        SetLoginState(hasLoggedIn);
+        logoutButton.SetActive(hasLoggedIn);
+        HidePanel();
     }
-    public void LoginButton()
+    public void HidePanel()
     {
-        mainMenuPanel.SetActive(false);
-        loginPanel.SetActive(true);
+        playMenu.SetActive(true);
+        loginPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        resetPanel.SetActive(false);
+        settingsPanel.SetActive(false);
+        modePanel.SetActive(false);
     }
-    public void NewGameButton()
+    public void OpenPausePanel()
     {
-        PlayerPrefs.DeleteKey("SavedLevel");
-        StartCoroutine(LoadSceneAsync());
+        playMenu.SetActive(false);
+        pausePanel.SetActive(true);
+        pauseSignInEffect.ShowPanel();
     }
-    private IEnumerator LoadSceneAsync()
+    public void ClosePausePanel()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneIndex);
-        while (!asyncLoad.isDone)
+        pauseSignInEffect.HidePanel(() =>
         {
-            yield return null;
-        }
+            pausePanel.SetActive(false);
+            playMenu.SetActive(true);
+        });
     }
-    public void OptionsButton()
+    public void OffPauseSettingPanel()
     {
-        optionsPanel.SetActive(true);
+        pauseSignInEffect.HidePanel(() =>
+        {
+            pausePanel.SetActive(false);
+            settingsPanel.SetActive(true);
+            settingEffect.ShowPanelTwo();
+        });
     }
-    public void ExitOptions()
+    public void CloseSetingPanel()
     {
-        optionsPanel.SetActive(false);
-    }
-    public void HighScoresButton()
-    {
-        highScoresPanel.SetActive(true);
-    }
-    public void ExitHighScores()
-    {
-        highScoresPanel.SetActive(false);
-    }
-    public void CreditsButton()
-    {
-        creditsPanel.SetActive(true);
-    }
-    public void ExitCredits()
-    {
-        creditsPanel.SetActive(false);
+        settingEffect.HidePanel(() =>
+        {
+            settingsPanel.SetActive(false);
+            pausePanel.SetActive(true);
+            pauseSignInEffect.ShowPanel();
+        });
     }
     public void ExitGame()
     {
@@ -72,35 +84,112 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void SetLoginState(bool isLoggedIn)
     {
-        if (loginButton != null)
+    }
+    private IEnumerator ClearInputLogin(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        authManager.signInEmail.text = string.Empty;
+        authManager.signInPassword.text = string.Empty;
+    }
+    private IEnumerator ClearInputRegister(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        authManager.signUpUserName.text = string.Empty;
+        authManager.signUpEmail.text = string.Empty;
+        authManager.signUpPassword.text = string.Empty;
+    }
+    private IEnumerator ClearInputResetPassword(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        authManager.emailInputField.text = string.Empty;
+    }
+    public void ExitPanelLogin()
+    {
+        NotificationUI.Instance.HideImmediately();
+        effectLogin.HidePanel(() =>
         {
-            loginButton.SetActive(!isLoggedIn);
+            PlayMenu.SetActive(true);
+            logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            StartCoroutine(ClearInputLogin(0.5f));
+        });
+    }
+    public void OpenOptionsPanel()
+    {
+        settingsPanel.SetActive(true);
+    }
+    public void CloseOptionsPanel()
+    {
+        settingsPanel.SetActive(false);
+    }
+    public void Play()
+    {
+        bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
+        if (hasLoggedIn)
+        {
+            modePanel.SetActive(true);
         }
-        newGameButton.GetComponent<Button>().interactable = isLoggedIn;
-        continueButton.GetComponent<Button>().interactable = isLoggedIn;
-        optionsButton.GetComponent<Button>().interactable = isLoggedIn;
-        highScoreButton.GetComponent<Button>().interactable = isLoggedIn;
+        else
+        {
+            loginPanel.SetActive(true);
+        }
+        playMenu.SetActive(false);
     }
-    public void ExitPanelSignIn()
+    public void ExitPanelRegister()
     {
-        loginPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        NotificationUI.Instance.HideImmediately();
+        effectRegister.HidePanel(() =>
+        {
+            PlayMenu.SetActive(true);
+            logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            StartCoroutine(ClearInputRegister(0.5f));
+        });
     }
-    public void LoadCampaignScene(int index)
+    public void OpenSignUpPanel()
     {
-        SceneManager.LoadScene(index);
+        effectLogin.HidePanel(() =>
+        {
+            loginPanel.SetActive(false);
+            registerPanel.SetActive(true);
+            effectRegister.ShowPanel();
+            StartCoroutine(ClearInputLogin(0.5f));
+        });
     }
-    public void LoadSurvive(int index)
+    public void OpenResetPasswordPanel()
     {
-        SceneManager.LoadScene(index);
+        effectLogin.HidePanel(() =>
+        {
+            loginPanel.SetActive(false);
+            resetPanel.SetActive(true);
+            effectResetPassword.ShowPanel();
+            StartCoroutine(ClearInputLogin(0.5f));
+        });
     }
-    public void BackToMainMenu()
+    public void CloseResetPasswordPanel()
     {
-        newgamePanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        NotificationUI.Instance.HideImmediately();
+        effectResetPassword.HidePanel(() =>
+        {
+            PlayMenu.SetActive(true);
+            logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            StartCoroutine(ClearInputResetPassword(0.5f));
+        });
     }
-    public void OpenNewGamePanel()
+    public void OpenPanelLogin()
     {
-        newgamePanel.SetActive(true);
+        effectRegister.HidePanel(() =>
+        {
+            registerPanel.SetActive(false);
+            loginPanel.SetActive(true);
+            effectLogin.ShowPanel();
+            StartCoroutine(ClearInputRegister(0.5f));
+        });
+    }
+    public void CloseSettingPanel()
+    {
+        settingEffect.HidePanel(() =>
+        {
+            settingsPanel.SetActive(false);
+            playMenu.SetActive(true);
+        });
     }
 }

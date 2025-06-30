@@ -1,13 +1,19 @@
 ﻿using PlayFab;
 using PlayFab.ClientModels;
-using UnityEngine.UI;
+using System.Text.RegularExpressions;
+using UnityEngine;
 public class ResetPassword : AuthManager
 {
     public void SendRecoveryEmail()
     {
-        if(string.IsNullOrEmpty(emailInputField.text))
+        if (string.IsNullOrEmpty(emailInputField.text))
         {
-            message.text = "Vui lòng nhập địa chỉ email";
+            NotificationUI.Instance.Show("Vui lòng nhập địa chỉ email");
+            return;
+        }
+        if (!Regex.IsMatch(emailInputField.text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
+            NotificationUI.Instance.Show("Email không hợp lệ.");
             return;
         }
         var request = new SendAccountRecoveryEmailRequest
@@ -19,10 +25,16 @@ public class ResetPassword : AuthManager
     }
     private void OnSendRecoveryEmailSuccess(SendAccountRecoveryEmailResult result)
     {
-        message.text = "Email khôi phục đã được gửi.";
+        NotificationUI.Instance.Show("Email khôi phục đã được gửi đến " + 
+            "Vui lòng kiểm tra hộp thư và đổi mật khẩu, sau đó quay lại đăng nhập.", 7f, () =>
+            {
+                MainMenuTwo.Instance.CloseResetPasswordPanel();
+                MainMenuTwo.Instance.OpenPanelLogin();
+                signInEmail.text = emailInputField.text;
+            });
     }
     private void OnSendRecoveryEmailError(PlayFabError error)
     {
-        message.text = "Lỗi: " + error.ErrorMessage;
+        NotificationUI.Instance.Show("Lỗi khi gửi email khôi phục", 3f);
     }
 }

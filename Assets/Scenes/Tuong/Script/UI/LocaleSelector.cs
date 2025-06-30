@@ -1,28 +1,41 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
+using TMPro;
+
 public class LocaleSelector : MonoBehaviour
 {
-    private bool active = false;
-    private void Start()
+    public TMP_Dropdown dropdown;
+    private bool isInitialized = false;
+    void Start()
     {
-        int ID = PlayerPrefs.GetInt("LocaleKey", 0);
-        ChangeLocale(ID);   
-    }
-    public void ChangeLocale(int localeID)
-    {
-        if(active == true)
+        if (dropdown == null)
         {
+            Debug.LogError("Dropdown chưa được gán trong Inspector!");
             return;
         }
-        StartCoroutine(SetLocale(localeID));
+        StartCoroutine(SetupDropdown());
     }
-    private IEnumerator SetLocale(int localeID)
+    IEnumerator SetupDropdown()
     {
-        active = true;
         yield return LocalizationSettings.InitializationOperation;
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeID];
-        PlayerPrefs.SetInt("LocaleKey", localeID);
-        active = false;
+        int savedLocaleIndex = PlayerPrefs.GetInt("LocaleKey", 0);
+        dropdown.value = savedLocaleIndex;
+        dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+        ChangeLocale(savedLocaleIndex);
+        isInitialized = true;
+    }
+
+    public void OnDropdownValueChanged(int index)
+    {
+        if (isInitialized)
+        {
+            ChangeLocale(index);
+        }
+    }
+    void ChangeLocale(int index)
+    {
+        PlayerPrefs.SetInt("LocaleKey", index);
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
     }
 }

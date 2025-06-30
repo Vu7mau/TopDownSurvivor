@@ -1,8 +1,8 @@
 ﻿using PlayFab.ClientModels;
 using PlayFab;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using System.Collections;
 public class AuthEmailSignIn : AuthManager
 {
     private string currentEmail;
@@ -10,17 +10,17 @@ public class AuthEmailSignIn : AuthManager
     {
         if (string.IsNullOrEmpty(signInEmail.text))
         {
-            message.text = "Vui lòng nhập địa chỉ email";
+            NotificationUI.Instance.Show("Vui lòng nhập địa chỉ email.");
             return;
         }
         if (!Regex.IsMatch(signInEmail.text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
         {
-            message.text = "Email không hợp lệ";
+            NotificationUI.Instance.Show("Email không hợp lệ.");
             return;
         }
         if (string.IsNullOrEmpty(signInPassword.text))
         {
-            message.text = "Vui lòng nhập mật khẩu";
+            NotificationUI.Instance.Show("Vui lòng nhập mật khẩu.");
             return;
         }
         var request = new LoginWithEmailAddressRequest
@@ -32,19 +32,20 @@ public class AuthEmailSignIn : AuthManager
     }
     private void OnSignInSuccess(LoginResult result)
     {
-        message.text = "Đăng nhập thành công";
         currentEmail = signInEmail.text;
-
-        bool isVerified = PlayerPrefs.GetInt("IsVerified", 0) == 1;
-        if(!isVerified)
-        {
-            EmailVerificationSender.Instance.SendOTPEmal(currentEmail);
-            message.text = "Vui lòng kiểm tra email - mã xác minh đã được gửi để hoàn tất đăng nhập.";
-            otpPanel.SetActive(true);
-            signInPanel.SetActive(false);
-            return;
-        }
-        LinkDeviceAndProceed();
+        PlayerPrefs.SetInt("HasLoggedIn", 1);
+        NotificationUI.Instance.Show("Đăng nhập thành công", 2f, () =>{
+            LinkDeviceAndProceed();
+            MainMenuTwo.Instance.ExitPanelLogin();
+            StartCoroutine(ClearInput(0.5f));
+        });
+        ;
+    }
+    private IEnumerator ClearInput(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        signInEmail.text = string.Empty;
+        signInPassword.text = string.Empty;
     }
     public void LinkDeviceAndProceed()
     {
@@ -75,35 +76,37 @@ public class AuthEmailSignIn : AuthManager
     }
     private void OnLoginFinalized()
     {
-        PlayerPrefs.SetInt("HasLoggedIn", 1);
         PlayerPrefs.SetInt("AutoLoginDisable", 0);
         PlayerPrefs.Save();
         LeaderBoardManager leaderBoardManager = FindObjectOfType<LeaderBoardManager>();
         if (leaderBoardManager != null)
         {
-            leaderBoardManager.GetLeaderboard();
+            leaderBoardManager.GetLeaderBoardCampaign();
         }
-        SceneManager.LoadScene(levelIndex);
+        CharacterInformation.Instance.ShowCharacters();
     }
     private void OnErrorSignIn(PlayFabError error)
     {
+        if(error.Error == PlayFabErrorCode.InvalidParams && error.ErrorDetails != null)
+        {
+            if(error.ErrorDetails.ContainsKey("Email") || error.ErrorDetails.ContainsKey("Password"))
+            {
+                NotificationUI.Instance.Show("Email hoặc mật khẩu không đúng.");
+                return;
+            }
+        }
         switch (error.Error)
         {
             case PlayFabErrorCode.AccountNotFound:
-                message.text = "Không tìm thấy tài khoản";
-                break;
             case PlayFabErrorCode.InvalidPassword:
-                message.text = "Sai mật khẩu";
-                break;
             case PlayFabErrorCode.InvalidEmailAddress:
-                message.text = "Email không hợp lệ";
+                NotificationUI.Instance.Show("Email hoặc mật khẩu không đúng.");
                 break;
             case PlayFabErrorCode.AccountBanned:
-                message.text = "Tài khoản bị khóa";
+                NotificationUI.Instance.Show("Tài khoản bị khóa.");
                 break;
             default:
-                message.text = "Đăng nhập thất bại: " + error.ErrorMessage;
-                Debug.LogError($"Lỗi đăng nhập: {error.Error} - {error.ErrorMessage}");
+                NotificationUI.Instance.Show("Email hoặc mật khẩu không đúng.");
                 break;
         }
     }
