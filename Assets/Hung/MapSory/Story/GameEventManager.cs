@@ -45,4 +45,22 @@ public class GameEventManager : MonoBehaviour
             //Debug.Log("Điện đã bật");
         }
     }
+
+    public void StartMap2()
+    {
+        dialogManager.ShowDialog("Có nguyên một khu vực bí mật ở dưới lòng đất. Tìm hiểu xem có gì dưới đây ");
+    }
+
+    public void Map21()
+    {
+        dialogManager.ShowDialog("Máy tính cần mật khẩu, hãy tìm kiếm xung quanh ");
+    }
+    public void Map22()
+    {
+        dialogManager.ShowDialog("Cổng không gian? Họ đang nghiên cứu cái gì đây vậy?");
+    }
+    public void Map23()
+    {
+        dialogManager.ShowDialog("Một con robot nằm chắn lối ra");
+    }
 }

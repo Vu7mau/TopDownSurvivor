@@ -2,7 +2,7 @@
 
 public class TriggerZone : MonoBehaviour
 {
-    public enum TriggerType { DarkZone, DoorZone, PowerSwitch }
+    public enum TriggerType { DarkZone, DoorZone, PowerSwitch, StartMap2, Map21, Map22 , Map23}
     public TriggerType triggerType;
 
     public GameEventManager eventManager;
@@ -24,6 +24,18 @@ public class TriggerZone : MonoBehaviour
                 break;
             case TriggerType.PowerSwitch:
                 eventManager.OnActivatePowerSwitch();
+                break;
+            case TriggerType.StartMap2:
+                eventManager.StartMap2();
+                break;
+            case TriggerType.Map21:
+                eventManager.Map21();
+                break;
+            case TriggerType.Map22:
+                eventManager.Map22();
+                break;
+            case TriggerType.Map23:
+                eventManager.Map23();
                 break;
         }
     }
