@@ -8,27 +8,32 @@ public class EffectPanelSetting : MonoBehaviour
     [SerializeField] private float hideOffetY = 600f;
     private Vector2 originalPos;
     private Vector2 hidePos;
+    private void Awake()
+    {
+        originalPos = panelSetting.anchoredPosition;
+    }
     private void OnEnable()
     {
-        if (originalPos == Vector2.zero)
-        {
-            originalPos = panelSetting.anchoredPosition;
-            hidePos = originalPos + Vector2.up * hideOffetY;
-        }
+        Vector2 hidePos = originalPos + Vector2.up * hideOffetY;
+        panelSetting.DOKill(true);
+        panelSetting.anchoredPosition = hidePos;
+        panelSetting.DOAnchorPos(originalPos, duration).SetEase(Ease.OutCubic).SetUpdate(true);
     }
     public void ShowPanel()
     {
         panelSetting.DOKill(true);
+        Vector2 hidePos = originalPos + Vector2.up * hideOffetY;
         panelSetting.anchoredPosition = hidePos;
         gameObject.SetActive(true);
         MainMenuTwo.Instance.PlayMenu.SetActive(false);
         MainMenuTwo.Instance.SettingPanel.SetActive(true);
-        panelSetting.DOAnchorPos(originalPos, duration).SetEase(Ease.OutCubic);
+        panelSetting.DOAnchorPos(originalPos, duration).SetEase(Ease.OutCubic).SetUpdate(true);
     }
     public void HidePanel(Action onComplete = null)
     {
+        Vector2 hidePos = originalPos + Vector2.up * hideOffetY;
         panelSetting.DOKill(true);
-        panelSetting.DOAnchorPos(hidePos, duration).SetEase(Ease.InCubic)
+        panelSetting.DOAnchorPos(hidePos, duration).SetEase(Ease.InCubic).SetUpdate(true)
             .OnComplete(() =>
             {
                 gameObject.SetActive(false);

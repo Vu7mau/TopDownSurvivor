@@ -4,7 +4,7 @@ using static EffectPanelSetting;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
-    AuthManager authManager;
+    public AuthManager authManager;
     [SerializeField] private EffectSignIn effectLogin;
     [SerializeField] private EffectSignIn effectRegister;
     [SerializeField] private EffectSignIn effectResetPassword;
@@ -26,6 +26,10 @@ public class MainMenuTwo : MonoBehaviour
     public GameObject PlayButton => playButton;
     public GameObject SettingPanel => settingsPanel;
     public GameObject PausePanel => pausePanel;
+    public GameObject ResetPanel => resetPanel;
+    public EffectSignIn EffectLogin => effectLogin;
+    public EffectSignIn EffectResetPassword => effectResetPassword;
+    public GameObject LoginPanel => loginPanel;
     private void Start()
     {
         if (Instance == null) Instance = this;
@@ -100,7 +104,7 @@ public class MainMenuTwo : MonoBehaviour
         authManager.signUpEmail.text = string.Empty;
         authManager.signUpPassword.text = string.Empty;
     }
-    private IEnumerator ClearInputResetPassword(float delay)
+    public IEnumerator ClearInputResetPassword(float delay)
     {
         yield return new WaitForSeconds(delay);
         authManager.emailInputField.text = string.Empty;

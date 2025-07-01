@@ -28,7 +28,18 @@ public class ResetPassword : AuthManager
         NotificationUI.Instance.Show("Email khôi phục đã được gửi đến " + 
             "Vui lòng kiểm tra hộp thư và đổi mật khẩu, sau đó quay lại đăng nhập.", 7f, () =>
             {
-                MainMenuTwo.Instance.CloseResetPasswordPanel();
+                NotificationUI.Instance.HideImmediately();
+                MainMenuTwo.Instance.EffectResetPassword.HidePanel(() =>
+                {
+                    MainMenuTwo.Instance.LogoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+                    MainMenuTwo.Instance.ResetPanel.SetActive(false);
+                    MainMenuTwo.Instance.LoginPanel.SetActive(true);
+                    MainMenuTwo.Instance.EffectLogin.ShowPanel();
+                    
+                    MainMenuTwo.Instance.authManager.signInEmail.text = emailInputField.text;
+                    MainMenuTwo.Instance.StartCoroutine(MainMenuTwo.Instance.ClearInputResetPassword(0.5f));    
+
+                });
                 MainMenuTwo.Instance.OpenPanelLogin();
                 signInEmail.text = emailInputField.text;
             });

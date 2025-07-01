@@ -19,9 +19,12 @@ public class ButtonSlideUp : MonoBehaviour
     }
     private IEnumerator PlayAfterBuild()
     {
-        yield return null;  
+        yield return new WaitUntil(() => layoutGroup.gameObject.activeInHierarchy);
+        yield return new WaitForEndOfFrame();
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
+        yield return null;
+        layoutGroup.enabled = false;
         Play();
     }
     public void Play()
@@ -30,10 +33,11 @@ public class ButtonSlideUp : MonoBehaviour
         for (int i = 0; i < buttons.Count; i++)
         {
             RectTransform btn = buttons[i];
-            Vector2 targetPos = btn.anchoredPosition;
-            btn.anchoredPosition = new Vector2(targetPos.x, targetPos.y + startOffsetY);
+            Vector3 targetPos = btn.localPosition;
+            btn.localPosition = new Vector3(targetPos.x, targetPos.y + startOffsetY, targetPos.z);
+            
             btn
-                .DOAnchorPosY(targetPos.y, slideDuration)
+                .DOLocalMoveY(targetPos.y, slideDuration)
                 .SetDelay(i * delayBetween)
                 .SetEase(easeType);
         }

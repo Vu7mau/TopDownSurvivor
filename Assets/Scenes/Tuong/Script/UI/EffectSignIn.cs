@@ -21,11 +21,11 @@ public class EffectSignIn : MonoBehaviour
     {
         panel.localScale = Vector3.one * minScale;
         panel.gameObject.SetActive(true);
-        panel.DOScale(Vector3.one * maxScale, duration).SetEase(showEase);
+        panel.DOScale(Vector3.one * maxScale, duration).SetEase(showEase).SetUpdate(true);
     }
     public void HidePanel(Action onComplete = null)
     {
-        panel.DOScale(Vector3.one * minScale, duration).SetEase(hideEase)
+        panel.DOScale(Vector3.one * minScale, duration).SetEase(hideEase).SetUpdate(true)
             .OnComplete(() =>
             {
                 panel.gameObject.SetActive(false);
