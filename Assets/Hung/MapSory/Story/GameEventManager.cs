@@ -5,6 +5,7 @@ public class GameEventManager : MonoBehaviour
     public GameObject lightObject;
     public DialogManager dialogManager;
     public SlidingDoor slidingDoor;
+    public PowerStartupSequence powerStartupSequence;
 
     private bool powerIsOn = false;
 
@@ -31,34 +32,39 @@ public class GameEventManager : MonoBehaviour
         }
         else
         {
-            dialogManager.ShowDialog("Cần Khởi động lại nguồn điện");
+            dialogManager.ShowDialog("Cần khởi động lại nguồn điện");
         }
     }
 
     public void OnActivatePowerSwitch()
     {
-        if (!powerIsOn)
+        if (!powerIsOn && powerStartupSequence != null)
         {
-            powerIsOn = true;
-            lightObject.SetActive(true);
-            dialogManager.ShowDialog("Nguồn điện đã được khởi động lại!");
-            //Debug.Log("Điện đã bật");
+            powerStartupSequence.StartSequence();
         }
+    }
+
+    public void FinishPowerActivation()
+    {
+        powerIsOn = true;
+        lightObject.SetActive(true);
     }
 
     public void StartMap2()
     {
-        dialogManager.ShowDialog("Có nguyên một khu vực bí mật ở dưới lòng đất. Tìm hiểu xem có gì dưới đây ");
+        dialogManager.ShowDialog("Có nguyên một khu vực bí mật ở dưới lòng đất. Tìm hiểu xem có gì dưới đây");
     }
 
     public void Map21()
     {
-        dialogManager.ShowDialog("Máy tính cần mật khẩu, hãy tìm kiếm xung quanh ");
+        dialogManager.ShowDialog("Máy tính cần mật khẩu, hãy tìm kiếm xung quanh");
     }
+
     public void Map22()
     {
         dialogManager.ShowDialog("Cổng không gian? Họ đang nghiên cứu cái gì đây vậy?");
     }
+
     public void Map23()
     {
         dialogManager.ShowDialog("Một con robot nằm chắn lối ra");

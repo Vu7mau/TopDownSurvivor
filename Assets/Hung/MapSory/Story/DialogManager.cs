@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class DialogManager : MonoBehaviour
@@ -20,12 +19,11 @@ public class DialogManager : MonoBehaviour
 
     public void ShowDialog(string message)
     {
-        StopAllCoroutines(); // Dừng các hiệu ứng cũ nếu đang chạy
+        StopAllCoroutines();
         dialogPanel.SetActive(true);
         canvasGroup.alpha = 1f;
         dialogText.text = message;
 
-        // Tự tắt sau 3 giây
         CancelInvoke(nameof(StartFadeOut));
         Invoke(nameof(StartFadeOut), 3f);
     }
