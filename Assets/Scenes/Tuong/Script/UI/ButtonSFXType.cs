@@ -6,5 +6,6 @@ public enum ButtonSFXType
     Back,
     Pause,
     UnPause,
-    Hover
+    Hover,
+    None
 }

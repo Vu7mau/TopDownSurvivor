@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class PausePanelTwo : MonoBehaviour
 {
     public GameObject pausePanel;
+    public GameObject backGround;
     public GameObject settingsPanel;
     public EffectSignIn effectPausePanel;
     public EffectPanelSetting effectPanelSetting;
@@ -15,6 +16,7 @@ public class PausePanelTwo : MonoBehaviour
     {
         settingsPanel.SetActive(false);
         pausePanel.SetActive(false);
+        backGround.SetActive(false);
     }
     private void Update()
     {
@@ -26,6 +28,7 @@ public class PausePanelTwo : MonoBehaviour
             {
                 isTransitioning = true;
                 pausePanel.SetActive(true);
+                backGround.SetActive(true);
                 effectPausePanel.ShowPanel();
                 DOVirtual.DelayedCall(0.01f, () =>
                 {
@@ -41,6 +44,7 @@ public class PausePanelTwo : MonoBehaviour
                 isTransitioning = true;
                 effectPausePanel.HidePanel(() =>
                 {
+                    backGround.SetActive(false);
                     ResumeGame();
                     isTransitioning = false;
                 });
@@ -52,6 +56,7 @@ public class PausePanelTwo : MonoBehaviour
         Time.timeScale = 1f;
         effectPausePanel.HidePanel(() =>
         {
+            backGround.SetActive(false);
             isTransitioning = false;
         });
     }
