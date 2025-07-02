@@ -11,8 +11,6 @@ public class AuthManager : TuongMonobehaviour
     private string getSignUpEmail = "SignUpEmail";
     public TMP_InputField signUpPassword;
     private string getSignUpPassword = "SignUpPassword";
-    public TMP_InputField otp;
-    private string getOtp = "OTPInputField";
     [Header("Sign In")]
     public TMP_InputField signInEmail;
     private string getSignInEmail = "SignInEmail";
@@ -23,30 +21,22 @@ public class AuthManager : TuongMonobehaviour
     private string getSignUpPanel = "SignUpPanel";
     public GameObject signInPanel;
     private string getSignInPanel = "SignInPanel";
-    public GameObject otpPanel;
-    private string getOTPPanel = "OTPPanel";
     [SerializeField] protected GameObject resetPasswordPanel;
     private string getResetPasswordPanel = "ResertPasswordPanel";
     [Header("Reset Password")]
     public TMP_InputField resetPasswordInput;
     private string getEmailInputField = "ResetPasswordEmail";
-    [SerializeField] protected TextMeshProUGUI message;
-    private string getMessage = "Message";
-    [Header("LoadScene")]
-    public int levelIndex = 1;
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadTMPInputField();
         this.LoadGameObject();
-        this.LoadTextMeshProUGUI();
     }
     protected virtual void LoadTMPInputField()
     {
         if (signUpUserName == null) signUpUserName = LoadTMPInputField(signUpUserName, getSignUpUserName);
         if (signUpEmail == null) signUpEmail = LoadTMPInputField(signUpEmail, getSignUpEmail);
         if (signUpPassword == null) signUpPassword = LoadTMPInputField(signUpPassword, getSignUpPassword);
-        if (otp == null) otp = LoadTMPInputField(otp, getOtp);
         if (signInEmail == null) signInEmail = LoadTMPInputField(signInEmail, getSignInEmail);
         if (signInPassword == null) signInPassword = LoadTMPInputField(signInPassword, getSignInPassword);
         if (resetPasswordInput == null) resetPasswordInput = LoadTMPInputField(resetPasswordInput, getEmailInputField);
@@ -55,12 +45,7 @@ public class AuthManager : TuongMonobehaviour
     {
         if (signUpPanel == null) signUpPanel = LoadGameObject(signUpPanel, getSignUpPanel);
         if (signInPanel == null) signInPanel = LoadGameObject(signInPanel, getSignInPanel);
-        if (otpPanel == null) otpPanel = LoadGameObject(otpPanel, getOTPPanel);
         if (resetPasswordPanel == null) resetPasswordPanel = LoadGameObject(resetPasswordPanel, getResetPasswordPanel);
-    }
-    protected virtual void LoadTextMeshProUGUI()
-    {
-        if (message == null) message = LoadTextMeshProUGUI(message, getMessage);
     }
     public void LogOut()
     {

@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.Audio;
-
 public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     IPointerDownHandler, IPointerUpHandler
 {

@@ -32,8 +32,7 @@ public class AutoLogin : MonoBehaviour
         Debug.Log("Auto Login thành công");
         PlayerPrefs.SetInt("HasLoggedIn", 1);
         PlayerPrefs.Save();
-        //mainMenuTwo?.SetLoginState(true);
-        CharacterInformation.Instance.ShowCharacters();
+        //CharacterInformation.Instance.ShowCharacters();
         MainMenuTwo.Instance.LogoutButton.SetActive(true);   
         MainMenuTwo.Instance.PlayMenu.SetActive(true);
 
