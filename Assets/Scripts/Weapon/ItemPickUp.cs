@@ -38,15 +38,20 @@ public class ItemPickUp : VuMonoBehaviour
         if(other.TryGetComponent<CharacterDamageReceiver>(out CharacterDamageReceiver damageReceiver))
         {
             damageReceiver.Add(_healingAmount);
-        }    
+            this.gameObject.SetActive(false);
+
+        }
     }
     public void AddAmmour(Collider other)
     {
         if(other.TryGetComponent<ActiveWeapon>(out ActiveWeapon activeWeapon))
         {
+            if(activeWeapon.activeGun == null) return;
             activeWeapon.activeGun.UpdateTotalBullet(_bulletAmount);
-        }  
-            
+            this.gameObject.SetActive(false);
+
+        }
+
     }    
 
 }

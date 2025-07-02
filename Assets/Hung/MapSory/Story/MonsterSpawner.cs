@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.AI;
 
 public class MonsterSpawnerTrigger : MonoBehaviour
 {
     public GameObject monsterPrefab;   // Prefab quái vật
     public int spawnAmount = 3;        // Số lượng quái spawn mỗi lần
-    public bool spawnOnlyOnce = true;  // Spawn 1 lần thôi
+    public float spawnDuration = 5f;
+    public bool spawnOnlyOnce = false;  // Spawn 1 lần thôi
 
     private bool hasSpawned = false;
 
@@ -15,23 +18,23 @@ public class MonsterSpawnerTrigger : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            SpawnMonsters();
+            StartCoroutine(SpawnMonstersOverTime());
+            Debug.Log("Hee");
         }
     }
 
-    void SpawnMonsters()
+    private IEnumerator SpawnMonstersOverTime()
     {
+        float spawnInterval = spawnDuration / spawnAmount;
+
         for (int i = 0; i < spawnAmount; i++)
         {
-            // Spawn với offset ngẫu nhiên quanh vị trí trigger
-            Vector3 offset = new Vector3(
-                Random.Range(-1.5f, 1.5f),
-                0f,
-                Random.Range(-1.5f, 1.5f)
-            );
+            // Tạo offset ngẫu nhiên quanh vị trí trigger
+            Vector3 offset = new Vector3(Random.Range(-1.5f, 1.5f), 0f, Random.Range(-1.5f, 1.5f));
             Vector3 spawnPos = transform.position + offset;
             Instantiate(monsterPrefab, spawnPos, Quaternion.identity);
+            yield return new WaitForSeconds(spawnInterval);
         }
-        hasSpawned = true;
+        spawnOnlyOnce = true;
     }
 }

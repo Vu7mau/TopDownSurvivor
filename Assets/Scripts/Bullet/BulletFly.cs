@@ -29,7 +29,8 @@ public class BulletFly : BulletAbstract
     }
     protected virtual Vector3 BulletDirection()
     {      
-        Vector3 direction = (/*this.AimPos().position*/this.GetAimPos() - this.GunPos().position).normalized;
+        
+        Vector3 direction = (/*this.AimPos().position*/this.AimPos().position - this.GunPos().position).normalized;
 
         //if (_bulletCtrl.CharacterCtrl.CharacterAim.CanAimPrecisly() == false && _bulletCtrl.CharacterCtrl.CharacterAim.GetTarget() == null)
         //{

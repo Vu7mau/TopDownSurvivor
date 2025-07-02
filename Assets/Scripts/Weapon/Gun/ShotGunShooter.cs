@@ -7,8 +7,8 @@ public class ShotGunShooter : RayCastWeapon
     [Space]
     [Header("ShotGunShooter")]
     [SerializeField] private int bulletsPerShot = 0;
-  
-    
+
+
     protected override string SetBulletType()
     {
         return BulletSpawner.ShotGunBullet;
@@ -41,6 +41,7 @@ public class ShotGunShooter : RayCastWeapon
         }
         this.ShooterEffect();
         this.SpawnShell();
-      _isShooting = false;
+        _isShooting = false;
+
     }
 }

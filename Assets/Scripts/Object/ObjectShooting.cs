@@ -37,8 +37,10 @@ public abstract class ObjectShooting : VuMonoBehaviour
         this._shootTimer += Time.fixedDeltaTime;
         if (this._isShooting)
             this.Shooting();
-        else
+        else if(!this._isShooting)
             this.HoldFire();
+
+
     }
 
     protected virtual void Shooting()
@@ -82,7 +84,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
         if (_totalBulletTemp > weaponInfo.maxBulletCount)
         {
             _totalBulletTemp -= weaponInfo.maxBulletCount;
-            this._bulletsCount = _totalBulletTemp;
+            this._bulletsCount = weaponInfo.maxBulletCount;
         }
         else
         {
@@ -117,7 +119,7 @@ public abstract class ObjectShooting : VuMonoBehaviour
 
     protected virtual void HoldFire()
     {
-
+       
     }
 
     public enum FireMode
