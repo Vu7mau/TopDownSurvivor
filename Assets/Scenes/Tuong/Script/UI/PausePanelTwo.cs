@@ -14,6 +14,7 @@ public class PausePanelTwo : MonoBehaviour
     private void Start()
     {
         settingsPanel.SetActive(false);
+        pausePanel.SetActive(false);
     }
     private void Update()
     {
@@ -57,11 +58,15 @@ public class PausePanelTwo : MonoBehaviour
     public void Restart(int sceneIndex)
     {
         Time.timeScale = 1f;
+        pausePanel.SetActive(false);
+        DOTween.KillAll();
         LevelManager.Instance.LoadLevel(sceneIndex);
     }
     public void BackToMainMenu(int sceneIndex)
     {
         Time.timeScale = 1f;
+        pausePanel.SetActive(false);
+        DOTween.KillAll();
         LevelManager.Instance.LoadLevel(sceneIndex);
     }
     public void Settings()

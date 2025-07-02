@@ -53408,6 +53408,7 @@ GameObject:
   - component: {fileID: 2445414183171676836}
   - component: {fileID: 5206153569591690569}
   - component: {fileID: 972845655211250007}
+  - component: {fileID: 5206153569591690570}
   m_Layer: 5
   m_Name: Button-Right
   m_TagString: Untagged
@@ -70811,8 +70812,7 @@ MonoBehaviour:
   signInPanel: {fileID: 6179734121288989197}
   otpPanel: {fileID: 4239069397483211450}
   resetPasswordPanel: {fileID: 6541268758637294307}
-  buttonLogin: {fileID: 0}
-  emailInputField: {fileID: 8358339642968693585}
+  resetPasswordInput: {fileID: 0}
   message: {fileID: 7141075303076505196}
   levelIndex: 1
 --- !u!222 &2555625391151093592
@@ -72099,10 +72099,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2817686619738454461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 150}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 155, y: -540}
+  m_SizeDelta: {x: 113, y: 122}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &2810507541597329382
 RectTransform:
@@ -73206,8 +73206,7 @@ MonoBehaviour:
   signInPanel: {fileID: 6179734121288989197}
   otpPanel: {fileID: 4239069397483211450}
   resetPasswordPanel: {fileID: 6541268758637294307}
-  buttonLogin: {fileID: 0}
-  emailInputField: {fileID: 8680389442307992500}
+  resetPasswordInput: {fileID: 8358339642968693585}
   message: {fileID: 7141075303076505196}
   levelIndex: 1
 --- !u!222 &3042412017584954264
@@ -76400,10 +76399,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2817686619738454461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 150}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1765, y: -540}
+  m_SizeDelta: {x: 113, y: 122}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3729245690098151125
 MonoBehaviour:
@@ -86925,6 +86924,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5206153569591690570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695472914189351207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b346538b1f6bb074ca8705423bd8d933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5211357040657970541
 GameObject:
   m_ObjectHideFlags: 0
@@ -97988,8 +97999,7 @@ MonoBehaviour:
   signInPanel: {fileID: 6179734121288989197}
   otpPanel: {fileID: 4239069397483211450}
   resetPasswordPanel: {fileID: 6541268758637294307}
-  buttonLogin: {fileID: 0}
-  emailInputField: {fileID: 8358339642968693585}
+  resetPasswordInput: {fileID: 8358339642968693585}
   message: {fileID: 7141075303076505196}
   levelIndex: 1
 --- !u!1 &6487026799277350969
@@ -98910,6 +98920,7 @@ GameObject:
   - component: {fileID: 8022614896769436275}
   - component: {fileID: 1207476993147802949}
   - component: {fileID: 2279090754675061027}
+  - component: {fileID: 8022614896769436276}
   m_Layer: 5
   m_Name: Button-Lerf
   m_TagString: Untagged
@@ -99456,8 +99467,7 @@ MonoBehaviour:
   signInPanel: {fileID: 6179734121288989197}
   otpPanel: {fileID: 4239069397483211450}
   resetPasswordPanel: {fileID: 6541268758637294307}
-  buttonLogin: {fileID: 0}
-  emailInputField: {fileID: 8358339642968693585}
+  resetPasswordInput: {fileID: 8358339642968693585}
   message: {fileID: 7141075303076505196}
   levelIndex: 1
 --- !u!224 &6876942092154696472
@@ -99567,7 +99577,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &6899517839559265960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101503,8 +101513,7 @@ MonoBehaviour:
   signInPanel: {fileID: 6179734121288989197}
   otpPanel: {fileID: 4239069397483211450}
   resetPasswordPanel: {fileID: 6541268758637294307}
-  buttonLogin: {fileID: 0}
-  emailInputField: {fileID: 8358339642968693585}
+  resetPasswordInput: {fileID: 0}
   message: {fileID: 7141075303076505196}
   levelIndex: 1
 --- !u!1 &7262648950403541917
@@ -105039,6 +105048,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6711455485161681853}
   m_CullTransparentMesh: 1
+--- !u!114 &8022614896769436276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6711455485161681853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b346538b1f6bb074ca8705423bd8d933, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &8034285487659816178
 CanvasRenderer:
   m_ObjectHideFlags: 0
