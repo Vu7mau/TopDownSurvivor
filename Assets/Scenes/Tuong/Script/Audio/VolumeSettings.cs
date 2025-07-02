@@ -4,32 +4,32 @@ using UnityEngine.Audio;
 public class VolumeSettings : MonoBehaviour
 {
     [SerializeField] private AudioMixer myMixer;
-    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider backGroundSlider;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider buttonSlider;
 
+
     private void Start()
     {
-        if (PlayerPrefs.HasKey("MusicVolume")) LoadVolume();
+        if (PlayerPrefs.GetInt("HasSetVolume", 0) == 1) LoadVolume();
         else
         {
             FirstTimeSetup();
         }
-        ApplyAllVolumes();
-
     }
     private void FirstTimeSetup()
     {
-        PlayerPrefs.SetFloat("MusicVolume", musicSlider.value);
+        PlayerPrefs.SetInt("HasSetVolume", 1);  
+        PlayerPrefs.SetFloat("BackGroundVolume", backGroundSlider.value);
         PlayerPrefs.SetFloat("SFXVolume", sfxSlider.value);
         PlayerPrefs.SetFloat("ButtonVolume", buttonSlider.value);
         ApplyAllVolumes();
     }
-    public void SetMusicVolume()
+    public void SetBackGroundVolume()
     {
-        float volume = Mathf.Max(musicSlider.value, 0.0001f);
-        myMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat("MusicVolume", volume);
+        float volume = Mathf.Max(backGroundSlider.value, 0.0001f);
+        myMixer.SetFloat("BackGroundVolume", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("BackGroundVolume", volume);
     }
     public void SetSFXVolume()
     {
@@ -45,16 +45,15 @@ public class VolumeSettings : MonoBehaviour
     }
     private void ApplyAllVolumes()
     {
-        SetMusicVolume();
+        SetBackGroundVolume();
         SetSFXVolume();
         SetButtonVolume();
     }
     private void LoadVolume()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        backGroundSlider.value = PlayerPrefs.GetFloat("BackGroundVolume");
         sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
         buttonSlider.value = PlayerPrefs.GetFloat("ButtonVolume");
         ApplyAllVolumes();
     }
-    
 }

@@ -52858,11 +52858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5281e9a46a06ee4999e07f3969a0cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicSource: {fileID: 2277546308145730085}
-  sfxSource: {fileID: 4635478020735395126}
   buttonSource: {fileID: 5672355123600667275}
-  backgroundMusic: {fileID: 8300000, guid: 96726162420090a49b9ac50751eff2b2, type: 3}
-  button: {fileID: 8300000, guid: 39c215eaa96240d44b2121c044c1fcc4, type: 3}
   buttonSFXList:
   - type: 1
     clip: {fileID: 8300000, guid: c5cb2ac29e89dbf43a9b644caaad45e6, type: 3}
@@ -54404,7 +54400,7 @@ AudioSource:
   m_GameObject: {fileID: 3904519737695766139}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -568667323903076521, guid: 33a16d6d3395e9740980cf491779bf2e, type: 2}
+  OutputAudioMixerGroup: {fileID: 7086637574495628774, guid: a2f72edfb3ed6ae4dbf7537dc79605d1, type: 2}
   m_audioClip: {fileID: 8300000, guid: 96726162420090a49b9ac50751eff2b2, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -73017,7 +73013,7 @@ AudioSource:
   m_GameObject: {fileID: 3058766489056355709}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -3661523393001636150, guid: 33a16d6d3395e9740980cf491779bf2e, type: 2}
+  OutputAudioMixerGroup: {fileID: -5415316243539117706, guid: a2f72edfb3ed6ae4dbf7537dc79605d1, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -73604,7 +73600,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8641086403406446814}
         m_TargetAssemblyTypeName: VolumeSettings, Assembly-CSharp
-        m_MethodName: SetMusicVolume
+        m_MethodName: SetBackGroundVolume
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -75223,7 +75219,7 @@ AudioSource:
   m_GameObject: {fileID: 5545097572781736695}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 7248918794343716359, guid: 33a16d6d3395e9740980cf491779bf2e, type: 2}
+  OutputAudioMixerGroup: {fileID: 7489503633844658492, guid: a2f72edfb3ed6ae4dbf7537dc79605d1, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -90529,8 +90525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14f19ce718d5cf4f81522c0409ed5cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myMixer: {fileID: 24100000, guid: 33a16d6d3395e9740980cf491779bf2e, type: 2}
-  musicSlider: {fileID: 4920168692218952063}
+  myMixer: {fileID: 24100000, guid: a2f72edfb3ed6ae4dbf7537dc79605d1, type: 2}
+  backGroundSlider: {fileID: 4920168692218952063}
   sfxSlider: {fileID: 1065409610993680541}
   buttonSlider: {fileID: 7997920483678960867}
 --- !u!224 &8666594898538862351

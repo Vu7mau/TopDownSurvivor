@@ -10,13 +10,8 @@ public class AudioManagerTwo : MonoBehaviour
         public ButtonSFXType type;
         public AudioClip clip;
     }
-    [Header("Audio Source")]
-    [SerializeField] AudioSource musicSource;
-    [SerializeField] AudioSource sfxSource;
     [SerializeField] AudioSource buttonSource;
-    [Header("Audio Clip")]
-    [SerializeField] private AudioClip backgroundMusic;
-    [SerializeField] private AudioClip button;
+
     [SerializeField] private List<ButtonSFXEntry> buttonSFXList;
     private Dictionary<ButtonSFXType, AudioClip> buttonSFXDict;
     private void Start()
@@ -27,11 +22,6 @@ public class AudioManagerTwo : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        musicSource.clip = backgroundMusic;
-        musicSource.loop = true;
-        musicSource.Play();
-        sfxSource.clip = button;
-        buttonSource.clip = button;
         buttonSFXDict = new Dictionary<ButtonSFXType, AudioClip>();
         foreach (var entry in buttonSFXList)
         {
@@ -40,11 +30,6 @@ public class AudioManagerTwo : MonoBehaviour
                 buttonSFXDict.Add(entry.type, entry.clip);
             }
         }
-    }
-    public void PlaySFX(AudioClip clip)
-    {
-        if(sfxSource!= null) 
-            sfxSource.PlayOneShot(clip);
     }
     public void PlayButtonSFX(ButtonSFXType type)
     {
