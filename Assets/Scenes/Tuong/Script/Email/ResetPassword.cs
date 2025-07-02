@@ -37,11 +37,7 @@ public class ResetPassword : AuthManager
                     MainMenuTwo.Instance.EffectLogin.ShowPanel();
                     
                     MainMenuTwo.Instance.authManager.signInEmail.text = emailInputField.text;
-                    MainMenuTwo.Instance.StartCoroutine(MainMenuTwo.Instance.ClearInputResetPassword(0.5f));    
-
                 });
-                MainMenuTwo.Instance.OpenPanelLogin();
-                signInEmail.text = emailInputField.text;
             });
     }
     private void OnSendRecoveryEmailError(PlayFabError error)

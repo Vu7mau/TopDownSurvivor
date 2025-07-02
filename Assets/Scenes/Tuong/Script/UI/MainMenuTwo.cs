@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using static EffectPanelSetting;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
@@ -88,9 +87,6 @@ public class MainMenuTwo : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
-    public void SetLoginState(bool isLoggedIn)
-    {
-    }
     private IEnumerator ClearInputLogin(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -167,17 +163,16 @@ public class MainMenuTwo : MonoBehaviour
             loginPanel.SetActive(false);
             resetPanel.SetActive(true);
             effectResetPassword.ShowPanel();
-            StartCoroutine(ClearInputLogin(0.5f));
         });
     }
     public void CloseResetPasswordPanel()
     {
         NotificationUI.Instance.HideImmediately();
+        StartCoroutine(ClearInputResetPassword(0.1f));
         effectResetPassword.HidePanel(() =>
         {
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
-            StartCoroutine(ClearInputResetPassword(0.5f));
         });
     }
     public void OpenPanelLogin()

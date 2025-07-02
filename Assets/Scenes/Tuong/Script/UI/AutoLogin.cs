@@ -15,7 +15,6 @@ public class AutoLogin : MonoBehaviour
         }
         else
         {
-            mainMenuTwo.SetLoginState(false);
         }
     }
     private void LoginWithCustomID()
@@ -44,6 +43,5 @@ public class AutoLogin : MonoBehaviour
         Debug.Log("Lỗi Auto đăng nhập");
         PlayerPrefs.SetInt("HasLoggedIn", 0);
         PlayerPrefs.Save();
-        mainMenuTwo?.SetLoginState(false);
     }
 }
