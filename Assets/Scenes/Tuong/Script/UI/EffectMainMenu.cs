@@ -23,7 +23,6 @@ public class EffectMainMenu : MonoBehaviour
         CacheTargetPositions();
         PrepareStartPositions();
 
-        // Tắt layout để khỏi rebuild mỗi khung
         layoutGroup.enabled = false;
 
         PlayButtonAnimation();
@@ -59,7 +58,6 @@ public class EffectMainMenu : MonoBehaviour
 
         seq.OnComplete(() =>
         {
-            // Bật lại layout sau khi xong
             layoutGroup.enabled = true;
         });
     }

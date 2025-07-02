@@ -67,4 +67,13 @@ public class BulletCtrl : VuMonoBehaviour
         _damageSender.Send(collision.transform);
 
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.CompareTag("bullet") || other.transform.CompareTag("Player"))
+            return;
+        //_bulletImpact.CreateParticleFX(other);
+        //rb.velocity = Vector3.zero;
+        //_damageSender.Send(other.transform);
+    }
 }

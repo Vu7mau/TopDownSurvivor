@@ -15,7 +15,10 @@ public class IdleState : StateMachineBehaviour
     {
         float distance = Vector3.Distance(player.position,animator.transform.position);
         if (distance < enemySO.ChaseRange)
+        {
             animator.SetBool("isChasing", true);
+
+        }    
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

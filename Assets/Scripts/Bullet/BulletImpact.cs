@@ -46,6 +46,18 @@ public class BulletImpact : BulletAbstract
         //this._bulletCtrl.BulletDespawn.DespawnObject();
         // Debug.Log("Do her");
     }
+    public void CreateParticleFX(Collider collision)
+    {
+        if (this._isActive) return;
+        _isActive = true;
+        this.SetEffectPos(collision);
+        this.ResetPlaybackTime();
+        this.HandleVisualEffect();
+        this.HandleSoundEffect();
+        Invoke(nameof(Despawn), .2f);
+        //this._bulletCtrl.BulletDespawn.DespawnObject();
+        // Debug.Log("Do her");
+    }
     protected virtual void Despawn()
     {
         _bulletCtrl.BulletDespawn.DespawnObject();
@@ -54,6 +66,12 @@ public class BulletImpact : BulletAbstract
     {
         _hitEffect.transform.position = collision.contacts[0].point;
         _hitEffect.transform.forward = collision.contacts[0].normal;
+    }
+    protected virtual void SetEffectPos(Collider collision)
+    {
+        Vector3 contactPoint = GetComponent<Collider>().ClosestPoint(collision.transform.position);
+        _hitEffect.transform.position = contactPoint;
+        _hitEffect.transform.forward = contactPoint;
     }
     protected virtual void HandleVisualEffect()
     {

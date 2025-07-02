@@ -78,7 +78,7 @@ public class AuthEmailSignIn : AuthManager
     {
         PlayerPrefs.SetInt("AutoLoginDisable", 0);
         PlayerPrefs.Save();
-        LeaderBoardManager leaderBoardManager = FindObjectOfType<LeaderBoardManager>();
+        LeaderBoardCampaign leaderBoardManager = FindObjectOfType<LeaderBoardCampaign>();
         if (leaderBoardManager != null)
         {
             leaderBoardManager.GetLeaderBoardCampaign();

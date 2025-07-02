@@ -4,39 +4,32 @@ using UnityEngine.Audio;
 public class VolumeSettings : MonoBehaviour
 {
     [SerializeField] private AudioMixer myMixer;
-    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider backGroundSlider;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider buttonSlider;
 
-    //[SerializeField] private Button muteOnButton;
-    //[SerializeField] private Button muteOffButton;
 
-    private bool isMuted = false;
     private void Start()
     {
-        isMuted = PlayerPrefs.GetInt("IsMuted", 0) == 1;
-        if (PlayerPrefs.HasKey("MusicVolume")) LoadVolume();
+        if (PlayerPrefs.GetInt("HasSetVolume", 0) == 1) LoadVolume();
         else
         {
             FirstTimeSetup();
         }
-        //ApplyMuteState();
-        //UpdateMuteButtons();
-        ApplyAllVolumes();
-
     }
     private void FirstTimeSetup()
     {
-        PlayerPrefs.SetFloat("MusicVolume", musicSlider.value);
+        PlayerPrefs.SetInt("HasSetVolume", 1);  
+        PlayerPrefs.SetFloat("BackGroundVolume", backGroundSlider.value);
         PlayerPrefs.SetFloat("SFXVolume", sfxSlider.value);
         PlayerPrefs.SetFloat("ButtonVolume", buttonSlider.value);
         ApplyAllVolumes();
     }
-    public void SetMusicVolume()
+    public void SetBackGroundVolume()
     {
-        float volume = Mathf.Max(musicSlider.value, 0.0001f);
-        myMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
-        PlayerPrefs.SetFloat("MusicVolume", volume);
+        float volume = Mathf.Max(backGroundSlider.value, 0.0001f);
+        myMixer.SetFloat("BackGroundVolume", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("BackGroundVolume", volume);
     }
     public void SetSFXVolume()
     {
@@ -52,49 +45,15 @@ public class VolumeSettings : MonoBehaviour
     }
     private void ApplyAllVolumes()
     {
-        SetMusicVolume();
+        SetBackGroundVolume();
         SetSFXVolume();
         SetButtonVolume();
     }
     private void LoadVolume()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
+        backGroundSlider.value = PlayerPrefs.GetFloat("BackGroundVolume");
         sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
         buttonSlider.value = PlayerPrefs.GetFloat("ButtonVolume");
         ApplyAllVolumes();
     }
-    public void OnMuteButtonPressed()
-    {
-        isMuted = true;
-        PlayerPrefs.SetInt("IsMuted", 1);
-        PlayerPrefs.Save();
-        ApplyMuteState();
-        //UpdateMuteButtons();
-    }
-    public void OnUnMuteButtonPressed()
-    {
-        isMuted = false;
-        PlayerPrefs.SetInt("IsMuted", 0);
-        PlayerPrefs.Save();
-        ApplyMuteState();
-        //UpdateMuteButtons();
-    }
-    public void ApplyMuteState()
-    {
-        if (isMuted)
-        {
-            myMixer.SetFloat("Music", -80f);
-            myMixer.SetFloat("SFX", -80f);
-            myMixer.SetFloat("Button", -80f);
-        }
-        else
-        {
-            ApplyAllVolumes();
-        }
-    }
-    //private void UpdateMuteButtons()
-    //{
-    //    muteOnButton.gameObject.SetActive(!isMuted);
-    //    muteOffButton.gameObject.SetActive(isMuted);
-    //}
 }

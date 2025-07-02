@@ -9,6 +9,7 @@ public class CharacterUIManager : VuMonoBehaviour
     [SerializeField] private GunDisplayPanel gunDisplayPanel;
     [SerializeField] private HotbarUI hotbarUI;
     [SerializeField] private HealthDisplay healthDisplay;
+   // [SerializeField] private ScreenFader screenFader;
 
     public static Action<Sprite, int, int> OnWeaponChange;
     public static Action<int, int> OnWeaponReload;
@@ -16,6 +17,10 @@ public class CharacterUIManager : VuMonoBehaviour
     public static Action<int> OnWeaponSelected;
 
     public static Action<float,float> OnUpdateHealth;
+
+
+    public static Action OnScreenFadeIn;
+    public static Action OnScreenFadeOut;
 
 
 
@@ -30,6 +35,9 @@ public class CharacterUIManager : VuMonoBehaviour
 
 
         OnUpdateHealth += healthDisplay.SetHealth;
+
+        //OnScreenFadeIn += screenFader.ScreenFadeIn;
+        //OnScreenFadeOut += screenFader.ScreenFadeOut;
     }
 
     protected override void OnDisable()
@@ -41,6 +49,9 @@ public class CharacterUIManager : VuMonoBehaviour
 
         OnUpdateHealth -= healthDisplay.SetHealth;
 
+
+        //OnScreenFadeIn -= screenFader.ScreenFadeIn;
+        //OnScreenFadeOut -= screenFader.ScreenFadeOut;
     }
 
     protected override void LoadComponents()
@@ -48,6 +59,7 @@ public class CharacterUIManager : VuMonoBehaviour
         this.Load_GunDisplayPanel();
         this.Load_HotbarUI();
         this.Load_HealthDisplay();
+      //  this.Load_ScreenFader();
     }
 
     private void Load_GunDisplayPanel()
@@ -68,4 +80,10 @@ public class CharacterUIManager : VuMonoBehaviour
 
         healthDisplay = this.transform.GetComponentInChildren<HealthDisplay>();
     }
+    //private void Load_ScreenFader()
+    //{
+    //    if (screenFader != null) return;
+
+    //    screenFader = this.transform.GetComponentInChildren<ScreenFader>();
+    //}
 }

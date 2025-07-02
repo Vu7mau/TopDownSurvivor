@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,13 +12,27 @@ public class ObjectMovement : VuMonoBehaviour
     [SerializeField] protected float _distance = 1f;
     [SerializeField] protected float _minDistance = 1f;
 
+
+    [SerializeField] protected float _baseSpeed = 0;
+    protected bool _isShooting = false;
+
+    protected override void Start()
+    {
+       
+    }
+    protected override void OnEnable()
+    {
+        Debug.Log("Start");
+        _baseSpeed += _speed;
+    }
+
     protected virtual void FixedUpdate()
     {
         this.Moving();
     }
     protected virtual void Moving()
     {
-        Vector3 movement = new Vector3( _targetPosition.x * _speed * Time.fixedDeltaTime,0,_targetPosition.z * _speed * Time.fixedDeltaTime);
+        Vector3 movement = new Vector3(_targetPosition.x * _speed * Time.fixedDeltaTime, 0, _targetPosition.z * _speed * Time.fixedDeltaTime);
         if (_targetPosition != Vector3.zero)
         {
             _rb.MovePosition(_rb.position + movement);
@@ -26,7 +40,7 @@ public class ObjectMovement : VuMonoBehaviour
         else
             _rb.velocity = new Vector3(0, _rb.velocity.y, 0);
         //  _rb.transform.position = new Vector3(_rb.position.x + _targetPosition.x * _speed * Time.fixedDeltaTime, 0, _rb.position.z + _targetPosition.z * _speed * Time.fixedDeltaTime);
-        _rb.velocity = Vector3.zero;
+        // _rb.velocity = Vector3.zero;
 
     }
     public virtual void SetMoveSpeed(float speed)
@@ -37,5 +51,7 @@ public class ObjectMovement : VuMonoBehaviour
     {
         this._speed -= deduct;
     }
+
+ 
 
 }
