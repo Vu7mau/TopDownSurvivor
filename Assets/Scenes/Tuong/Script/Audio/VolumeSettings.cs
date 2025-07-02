@@ -8,20 +8,13 @@ public class VolumeSettings : MonoBehaviour
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Slider buttonSlider;
 
-    //[SerializeField] private Button muteOnButton;
-    //[SerializeField] private Button muteOffButton;
-
-    private bool isMuted = false;
     private void Start()
     {
-        isMuted = PlayerPrefs.GetInt("IsMuted", 0) == 1;
         if (PlayerPrefs.HasKey("MusicVolume")) LoadVolume();
         else
         {
             FirstTimeSetup();
         }
-        //ApplyMuteState();
-        //UpdateMuteButtons();
         ApplyAllVolumes();
 
     }
@@ -63,38 +56,5 @@ public class VolumeSettings : MonoBehaviour
         buttonSlider.value = PlayerPrefs.GetFloat("ButtonVolume");
         ApplyAllVolumes();
     }
-    public void OnMuteButtonPressed()
-    {
-        isMuted = true;
-        PlayerPrefs.SetInt("IsMuted", 1);
-        PlayerPrefs.Save();
-        ApplyMuteState();
-        //UpdateMuteButtons();
-    }
-    public void OnUnMuteButtonPressed()
-    {
-        isMuted = false;
-        PlayerPrefs.SetInt("IsMuted", 0);
-        PlayerPrefs.Save();
-        ApplyMuteState();
-        //UpdateMuteButtons();
-    }
-    public void ApplyMuteState()
-    {
-        if (isMuted)
-        {
-            myMixer.SetFloat("Music", -80f);
-            myMixer.SetFloat("SFX", -80f);
-            myMixer.SetFloat("Button", -80f);
-        }
-        else
-        {
-            ApplyAllVolumes();
-        }
-    }
-    //private void UpdateMuteButtons()
-    //{
-    //    muteOnButton.gameObject.SetActive(!isMuted);
-    //    muteOffButton.gameObject.SetActive(isMuted);
-    //}
+    
 }
