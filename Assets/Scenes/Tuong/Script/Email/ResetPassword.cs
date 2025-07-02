@@ -6,42 +6,41 @@ public class ResetPassword : AuthManager
 {
     public void SendRecoveryEmail()
     {
-        if (string.IsNullOrEmpty(emailInputField.text))
+        if (string.IsNullOrEmpty(resetPasswordInput.text))
         {
             NotificationUI.Instance.Show("Vui lòng nhập địa chỉ email");
             return;
         }
-        if (!Regex.IsMatch(emailInputField.text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        if (!Regex.IsMatch(resetPasswordInput.text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
         {
             NotificationUI.Instance.Show("Email không hợp lệ.");
             return;
         }
         var request = new SendAccountRecoveryEmailRequest
         {
-            Email = emailInputField.text,
+            Email = resetPasswordInput.text,
             TitleId = PlayFabSettings.staticSettings.TitleId
         };
         PlayFabClientAPI.SendAccountRecoveryEmail(request, OnSendRecoveryEmailSuccess, OnSendRecoveryEmailError);
     }
     private void OnSendRecoveryEmailSuccess(SendAccountRecoveryEmailResult result)
     {
+        PlayerPrefs.SetString("ResetPasswordEmail", resetPasswordInput.text);
+        PlayerPrefs.Save();
         NotificationUI.Instance.Show("Email khôi phục đã được gửi đến " + 
             "Vui lòng kiểm tra hộp thư và đổi mật khẩu, sau đó quay lại đăng nhập.", 7f, () =>
             {
                 NotificationUI.Instance.HideImmediately();
                 MainMenuTwo.Instance.EffectResetPassword.HidePanel(() =>
                 {
+                    MainMenuTwo.Instance.authManager.resetPasswordInput.text = string.Empty;
                     MainMenuTwo.Instance.LogoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
                     MainMenuTwo.Instance.ResetPanel.SetActive(false);
                     MainMenuTwo.Instance.LoginPanel.SetActive(true);
                     MainMenuTwo.Instance.EffectLogin.ShowPanel();
                     
-                    MainMenuTwo.Instance.authManager.signInEmail.text = emailInputField.text;
-                    MainMenuTwo.Instance.StartCoroutine(MainMenuTwo.Instance.ClearInputResetPassword(0.5f));    
-
+                    MainMenuTwo.Instance.authManager.signInEmail.text = PlayerPrefs.GetString("ResetPasswordEmail");
                 });
-                MainMenuTwo.Instance.OpenPanelLogin();
-                signInEmail.text = emailInputField.text;
             });
     }
     private void OnSendRecoveryEmailError(PlayFabError error)

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using static EffectPanelSetting;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
@@ -88,9 +87,6 @@ public class MainMenuTwo : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
-    public void SetLoginState(bool isLoggedIn)
-    {
-    }
     private IEnumerator ClearInputLogin(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -107,7 +103,9 @@ public class MainMenuTwo : MonoBehaviour
     public IEnumerator ClearInputResetPassword(float delay)
     {
         yield return new WaitForSeconds(delay);
-        authManager.emailInputField.text = string.Empty;
+        authManager.resetPasswordInput.text = string.Empty;
+        authManager.signInEmail.text = string.Empty;
+        authManager.signInPassword.text = string.Empty;
     }
     public void ExitPanelLogin()
     {
@@ -167,17 +165,22 @@ public class MainMenuTwo : MonoBehaviour
             loginPanel.SetActive(false);
             resetPanel.SetActive(true);
             effectResetPassword.ShowPanel();
-            StartCoroutine(ClearInputLogin(0.5f));
+            StartCoroutine(ClearInputResetPassword(0.01f));
         });
+    }
+    private IEnumerator DelayedClear()
+    {
+        yield return null;                // hoặc yield return new WaitForSeconds(0.1f);
+        authManager.resetPasswordInput.text = string.Empty;
     }
     public void CloseResetPasswordPanel()
     {
         NotificationUI.Instance.HideImmediately();
         effectResetPassword.HidePanel(() =>
         {
+            authManager.resetPasswordInput.text = string.Empty;
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
-            StartCoroutine(ClearInputResetPassword(0.5f));
         });
     }
     public void OpenPanelLogin()

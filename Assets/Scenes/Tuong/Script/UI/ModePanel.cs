@@ -66,16 +66,44 @@ public class ModePanel : MonoBehaviour
     }
     private void AnimatedModeTransition(int direction)
     {
+        if (isTransitioning) return;
         isTransitioning = true;
-        float halfSlide = transitionDistance * 0.33f;
-        Vector2 targetPos = modeContentContainer.anchoredPosition + Vector2.right * direction * halfSlide;
+        modeText.text = currentMode == Mode.Campaign ? "Chiến dịch" : "Sinh tồn";
+        modeDescriptionText.text = currentMode == Mode.Campaign
+            ? campaignDescription
+            : surviveDescription;
+        Sprite newSprite = currentMode == Mode.Campaign
+            ? campaignBackground
+            : surviveBackground;
 
-        modeContentContainer.DOAnchorPos(targetPos, transitionDuration).SetEase(transitionEase).OnComplete(() =>
+        var parent = backgroundImage.transform.parent;
+        GameObject cloneGO = Instantiate(backgroundImage.gameObject, parent);
+        var cloneImg = cloneGO.GetComponent<Image>();
+
+        cloneImg.sprite = newSprite;
+        RectTransform rtOrig = backgroundImage.rectTransform;
+        RectTransform rtClone = cloneImg.rectTransform;
+
+        Vector2 origPos = rtOrig.anchoredPosition;
+        Vector2 offPosOld = origPos + Vector2.right * direction * transitionDistance;
+        Vector2 offPosNew = origPos - Vector2.right * direction * transitionDistance;
+        rtClone.anchoredPosition = offPosNew;
+        Sequence seq = DOTween.Sequence();
+
+        seq.Join(rtOrig
+            .DOAnchorPos(offPosOld, transitionDuration)
+            .SetEase(transitionEase)
+        );
+        seq.Join(rtClone
+            .DOAnchorPos(origPos, transitionDuration)
+            .SetEase(transitionEase)
+        );
+        seq.OnComplete(() =>
         {
-            RefeshUI();
-            modeContentContainer.anchoredPosition = Vector2.right * direction * halfSlide;
-            modeContentContainer.DOAnchorPos(Vector2.zero, transitionDuration / 2).SetEase(transitionEase)
-            .OnComplete(()=> isTransitioning = false);
+            backgroundImage.sprite = newSprite;
+            rtOrig.anchoredPosition = origPos;
+            Destroy(cloneGO);
+            isTransitioning = false;
         });
     }
 }

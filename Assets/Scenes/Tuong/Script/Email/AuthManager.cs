@@ -27,10 +27,8 @@ public class AuthManager : TuongMonobehaviour
     private string getOTPPanel = "OTPPanel";
     [SerializeField] protected GameObject resetPasswordPanel;
     private string getResetPasswordPanel = "ResertPasswordPanel";
-    [SerializeField] protected GameObject buttonLogin;
-    private string getButtonLogin = "ButtonLogin";
     [Header("Reset Password")]
-    public TMP_InputField emailInputField;
+    public TMP_InputField resetPasswordInput;
     private string getEmailInputField = "ResetPasswordEmail";
     [SerializeField] protected TextMeshProUGUI message;
     private string getMessage = "Message";
@@ -51,14 +49,13 @@ public class AuthManager : TuongMonobehaviour
         if (otp == null) otp = LoadTMPInputField(otp, getOtp);
         if (signInEmail == null) signInEmail = LoadTMPInputField(signInEmail, getSignInEmail);
         if (signInPassword == null) signInPassword = LoadTMPInputField(signInPassword, getSignInPassword);
-        if (emailInputField == null) emailInputField = LoadTMPInputField(emailInputField, getEmailInputField);
+        if (resetPasswordInput == null) resetPasswordInput = LoadTMPInputField(resetPasswordInput, getEmailInputField);
     }
     protected virtual void LoadGameObject()
     {
         if (signUpPanel == null) signUpPanel = LoadGameObject(signUpPanel, getSignUpPanel);
         if (signInPanel == null) signInPanel = LoadGameObject(signInPanel, getSignInPanel);
         if (otpPanel == null) otpPanel = LoadGameObject(otpPanel, getOTPPanel);
-        if (buttonLogin == null) buttonLogin = LoadGameObject(buttonLogin, getButtonLogin);
         if (resetPasswordPanel == null) resetPasswordPanel = LoadGameObject(resetPasswordPanel, getResetPasswordPanel);
     }
     protected virtual void LoadTextMeshProUGUI()
