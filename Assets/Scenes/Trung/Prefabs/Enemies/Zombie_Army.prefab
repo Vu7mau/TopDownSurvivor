@@ -598,6 +598,7 @@ GameObject:
   - component: {fileID: 1635806981825184837}
   - component: {fileID: 5856058978959243039}
   - component: {fileID: -23525964665716925}
+  - component: {fileID: 236459627064406257}
   m_Layer: 7
   m_Name: Zombie_Army
   m_TagString: Enemy
@@ -665,7 +666,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2.4
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!65 &5437256174090775942
 BoxCollider:
@@ -711,7 +712,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
@@ -788,6 +789,22 @@ MonoBehaviour:
   animator: {fileID: 852577968523569868}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: 4007c082e61d69f4a89813d8a5b217e8, type: 2}
+  isMoving: 0
+--- !u!114 &236459627064406257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836701863530952022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 10000
+  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &2928228912642783028
 GameObject:
   m_ObjectHideFlags: 0

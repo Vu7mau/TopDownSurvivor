@@ -395,11 +395,11 @@ GameObject:
   - component: {fileID: 2377376293294229248}
   - component: {fileID: 1860228915049275743}
   - component: {fileID: 8348214887107464329}
-  - component: {fileID: 1098828275195140566}
   - component: {fileID: 184486387661950844}
   - component: {fileID: 1839239339941553881}
   - component: {fileID: 6687373002429375228}
   - component: {fileID: -2851363473307723182}
+  - component: {fileID: 7438491672114296847}
   m_Layer: 7
   m_Name: Zombie_Minigun
   m_TagString: Enemy
@@ -467,7 +467,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.55
   m_BaseOffset: 0.31
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!65 &8348214887107464329
 BoxCollider:
@@ -490,33 +490,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9443512, y: 1.5361869, z: 1}
   m_Center: {x: -0.027824402, y: 0.4747957, z: 0}
---- !u!54 &1098828275195140566
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309567981146657082}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!114 &184486387661950844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,6 +506,7 @@ MonoBehaviour:
   animator: {fileID: 2377376293294229248}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: 94284bce5d7b4fd418a1293f61406abb, type: 2}
+  isMoving: 0
 --- !u!114 &1839239339941553881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,7 +547,7 @@ MonoBehaviour:
   offSet: {x: 0, y: 1.5, z: 0}
   endPoint: {fileID: 0}
   minigunBulletZombieSpawner: {fileID: 0}
-  bulletMinigunPrefab: {fileID: 4710017300825278020, guid: ee16e9542c8ef0549bf4ec2bdf7ed265, type: 3}
+  bulletMinigunPrefab: {fileID: 0}
   listPositions:
   - {fileID: 701801873102785225}
   - {fileID: 7187947899525064642}
@@ -595,6 +569,21 @@ MonoBehaviour:
   pool_Name: Zombie_Minigun
   despawn: {fileID: 5751218916542239875}
   nameEnemy: Zombie_Minigun
+--- !u!114 &7438491672114296847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309567981146657082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 10000
+  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &1666944132906097723
 GameObject:
   m_ObjectHideFlags: 0

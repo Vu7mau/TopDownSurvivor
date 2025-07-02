@@ -11581,6 +11581,7 @@ GameObject:
   - component: {fileID: 2159309267267697389}
   - component: {fileID: -8824760094674056641}
   - component: {fileID: -6092367534138771830}
+  - component: {fileID: 8978313546806902852}
   m_Layer: 7
   m_Name: Zombie_Police
   m_TagString: Enemy
@@ -11648,7 +11649,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.74
   m_BaseOffset: 0.01
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!65 &7895743588397992025
 BoxCollider:
@@ -11771,6 +11772,21 @@ MonoBehaviour:
   animator: {fileID: 5351131679899781999}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: 82e816b70d8b0a24989c90bd19d97b57, type: 2}
+--- !u!114 &8978313546806902852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8085040016616699974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 10000
+  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &8117626052404127214
 GameObject:
   m_ObjectHideFlags: 0

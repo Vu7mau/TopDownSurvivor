@@ -291212,6 +291212,7 @@ GameObject:
   - component: {fileID: 7334931529703991533}
   - component: {fileID: 3289389880929443539}
   - component: {fileID: 4494286475033730284}
+  - component: {fileID: 7625167722492412728}
   m_Layer: 0
   m_Name: Sci-Fi
   m_TagString: Untagged
@@ -291322,6 +291323,7 @@ MonoBehaviour:
   enemyReferences: {fileID: 7334931529703991533}
   findTargets: {fileID: 125555891764102276}
   isAttacking: 0
+  isMoving: 0
   isLookAtTarGet: 0
   isNearTarget: 0
   enemyHealth: {fileID: 4494286475033730284}
@@ -291391,6 +291393,21 @@ MonoBehaviour:
   bloodSplash: {fileID: 3828773173757179161}
   beastHurtSFX: {fileID: 0}
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
+--- !u!114 &7625167722492412728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888495746247662378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 10000
+  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &6892555393454805946
 GameObject:
   m_ObjectHideFlags: 0

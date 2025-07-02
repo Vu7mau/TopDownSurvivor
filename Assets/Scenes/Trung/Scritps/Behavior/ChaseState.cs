@@ -6,9 +6,10 @@ using UnityEngine.AI;
 public class ChaseState : StateMachineBehaviour
 {
     [SerializeField] private EnemySO enemySO;
+    protected EnemyAI enemyAI;
+    private float distance;
     NavMeshAgent agent;
     Transform player;
-    private float distance;
 
     public float Distance => distance;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -16,6 +17,7 @@ public class ChaseState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         player =FindAnyObjectByType<CharacterAnimHandle>().transform;
         agent.speed = enemySO.ChaseSpeed;
+        enemyAI = animator.GetComponent<EnemyAI>();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -30,6 +32,7 @@ public class ChaseState : StateMachineBehaviour
         }
         if (this.agent == null) return;
         if (!this.agent.enabled) return;
+        if (!this.enemyAI.IsMoving) return;
         this.agent.SetDestination(this.player.position);
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
