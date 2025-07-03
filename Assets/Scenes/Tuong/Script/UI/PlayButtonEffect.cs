@@ -23,6 +23,12 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private Vector3 originalScale;
     [Header("SFXType")]
     public ButtonSFXType buttonSFXType = ButtonSFXType.Confirm;
+    public ButtonSFXType buttonSFXTypeTwo = ButtonSFXType.Hover;
+
+    private Tween outlineTween;
+    private Tween tintTween;
+    private Tween scaleTween;
+
 
     void Start()
     {
@@ -36,31 +42,44 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
     }
     private void OnDisable()
     {
-        rectTransform?.DOKill();
-        outline?.DOKill();
-        targetImage?.DOKill();
+        KillAllTweens();
+    }
+    private void KillAllTweens()
+    {
+        outlineTween?.Kill();
+        tintTween?.Kill();
+        scaleTween?.Kill();
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        outline?.DOColor(hoverOutlineColor, 0.2f);
-        targetImage?.DOColor(hoverTintColor, 0.2f);
-        rectTransform.DOScale(originalScale * hoverScale, scaleTime)
-             .SetEase(Ease.OutBack);
+        outlineTween?.Kill();
+        outlineTween = outline?.DOColor(hoverOutlineColor, 0.2f);
+        tintTween?.Kill();
+        tintTween = targetImage?.DOColor(hoverTintColor, 0.2f);
+        scaleTween?.Kill();
+        scaleTween = rectTransform
+            .DOScale(originalScale * hoverScale, scaleTime)
+            .SetEase(Ease.OutBack)
+            .SetUpdate(true);
+        AudioManagerTwo.Instance.PlayButtonSFX(buttonSFXTypeTwo);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        outline?.DOColor(originalOutlineColor, 0.2f);
-        targetImage?.DOColor(originalTintColor, 0.2f);
-        rectTransform.DOScale(originalScale, scaleTime)
-             .SetEase(Ease.OutBack);
+        outlineTween?.Kill();
+        outlineTween = outline?.DOColor(originalOutlineColor, 0.2f);
+        tintTween?.Kill();
+        tintTween = targetImage?.DOColor(originalTintColor, 0.2f);
+        scaleTween?.Kill();
+        scaleTween = rectTransform
+            .DOScale(originalScale , scaleTime)
+            .SetEase(Ease.OutBack)
+            .SetUpdate(true);
     }
     public void OnPointerDown(PointerEventData evt)
     {
-        rectTransform.DOKill(true);
-        outline?.DOKill();
-        targetImage?.DOKill();
+        KillAllTweens();
 
-        rectTransform.DOScale(originalScale * pressedScale, scaleTime);
+        scaleTween = rectTransform.DOScale(originalScale * pressedScale, scaleTime);
        
         AudioManagerTwo.Instance.PlayButtonSFX(buttonSFXType);
     }
@@ -73,9 +92,13 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
         Color targetTint = isHover ? hoverTintColor : originalTintColor;
         Color targetOutln = isHover ? hoverOutlineColor : originalOutlineColor;
 
-        rectTransform.DOScale(targetScale, scaleTime)
-             .SetEase(Ease.OutBack);
-        targetImage?.DOColor(targetTint, scaleTime);
-        outline?.DOColor(targetOutln, 0.2f);
+        scaleTween?.Kill();
+        scaleTween = rectTransform.DOScale(targetScale, scaleTime)
+                    .SetEase(Ease.OutBack);
+        tintTween?.Kill();
+        tintTween = targetImage?.DOColor(targetTint, scaleTime);
+
+        outlineTween?.Kill();
+        outlineTween = outline?.DOColor(targetOutln, 0.2f);
     }
 }

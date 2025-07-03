@@ -9,11 +9,10 @@ public class NotificationUI : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private RectTransform background;
     [SerializeField] private TextMeshProUGUI messageText;
-    [SerializeField] private RectTransform textRect;
-
     private CanvasGroup canvasGroup;
     private Sequence seq;       
     private bool isShowing = false;
+    private Vector2 originalPos;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -21,7 +20,7 @@ public class NotificationUI : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        originalPos = background.anchoredPosition;
         Instance = this;
 
         canvasGroup = background.GetComponent<CanvasGroup>();
@@ -44,8 +43,7 @@ public class NotificationUI : MonoBehaviour
         messageText.text = message;
         panel.SetActive(true);
         Vector2 startPos = new Vector2(0, -200f);
-        background.anchoredPosition = startPos;
-        textRect.anchoredPosition = startPos;
+        background.anchoredPosition = new Vector2(originalPos.x, originalPos.y - 200f); 
         messageText.color = new Color(  
             messageText.color.r,
             messageText.color.g,
@@ -53,11 +51,9 @@ public class NotificationUI : MonoBehaviour
             1f
         );
         seq = DOTween.Sequence();
-        seq.Append(background.DOAnchorPosY(0, 0.3f).SetEase(Ease.OutBack))
-            .Join(textRect.DOAnchorPosY(0, 0.3f).SetEase(Ease.OutBack))// Nhảy lên vị trí
-           .AppendInterval(duration) // Giữ vị trí trong th gian
-           .Append(background.DOAnchorPosY(-200f, 0.3f).SetEase(Ease.InBack))
-           .Join(textRect.DOAnchorPosY(-200f, 0.3f).SetEase(Ease.InBack))
+        seq.Append(background.DOAnchorPosY(originalPos.y, 0.3f).SetEase(Ease.OutBack))
+           .AppendInterval(duration) 
+           .Append(background.DOAnchorPosY(originalPos.y - 200f, 0.3f).SetEase(Ease.InBack))
            .Join(messageText.DOFade(0f, 0.3f))
            .OnComplete(() =>
            {

@@ -1917,6 +1917,7 @@ GameObject:
   - component: {fileID: 1487275684112206453}
   - component: {fileID: 556235242515059557}
   - component: {fileID: -512246348687097727}
+  - component: {fileID: 2906644603789886922}
   m_Layer: 7
   m_Name: Zombie_FireFighter
   m_TagString: Enemy
@@ -1983,7 +1984,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.52
   m_BaseOffset: 0.02
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!65 &4513084627431500138
 BoxCollider:
@@ -2078,6 +2079,21 @@ MonoBehaviour:
   animator: {fileID: 8948856960787549404}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: d93ae0312d6fafe4eb13fedaa013e726, type: 2}
+--- !u!114 &2906644603789886922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9012152331269360993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 10000
+  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &9020629919445531096
 GameObject:
   m_ObjectHideFlags: 0

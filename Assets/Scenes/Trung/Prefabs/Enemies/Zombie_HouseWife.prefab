@@ -1818,6 +1818,7 @@ GameObject:
   - component: {fileID: 3689798172535934146}
   - component: {fileID: -9121994584922200252}
   - component: {fileID: -9144330162191211134}
+  - component: {fileID: 2100070798655450567}
   m_Layer: 7
   m_Name: Zombie_HouseWife
   m_TagString: Enemy
@@ -1884,7 +1885,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.66
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!65 &6753895616421936714
 BoxCollider:
@@ -1943,7 +1944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pool_Name: 
+  pool_Name: Zombie_HouseWife
   despawn: {fileID: 6180596796075437180}
   nameEnemy: Zombie_HouseWife
 --- !u!114 &-9144330162191211134
@@ -1962,6 +1963,22 @@ MonoBehaviour:
   animator: {fileID: 1434241217979313460}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: d1b026aa3cb71e44fb0f55dfd352cef0, type: 2}
+  isMoving: 0
+--- !u!114 &2100070798655450567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8990054397899822950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 10000
+  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &8997702807573140354
 GameObject:
   m_ObjectHideFlags: 0

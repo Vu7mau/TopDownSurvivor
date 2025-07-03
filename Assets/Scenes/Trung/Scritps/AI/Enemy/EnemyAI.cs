@@ -19,6 +19,9 @@ public class EnemyAI : VuMonoBehaviour
     public EnemySO EnemySO { get => enemySO; }
     public float PathUpdateDelay { get => pathUpdateDelay;}
 
+    [SerializeField] protected bool isMoving = false;
+    public bool IsMoving { get => isMoving; set => isMoving = value; }
+
     protected override void LoadComponents()
     {
         base.LoadComponents();

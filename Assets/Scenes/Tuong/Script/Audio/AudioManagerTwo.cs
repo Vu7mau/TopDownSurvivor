@@ -14,6 +14,9 @@ public class AudioManagerTwo : MonoBehaviour
 
     [SerializeField] private List<ButtonSFXEntry> buttonSFXList;
     private Dictionary<ButtonSFXType, AudioClip> buttonSFXDict;
+
+    private float lastHoverSoundTime = -1f;
+    [SerializeField] private float hoverSoundCooldown = 0.15f;
     private void Start()
     {
         if (Instance == null) Instance = this;
@@ -33,6 +36,11 @@ public class AudioManagerTwo : MonoBehaviour
     }
     public void PlayButtonSFX(ButtonSFXType type)
     {
+        if (type == ButtonSFXType.Hover)
+        {
+            if (Time.time - lastHoverSoundTime < hoverSoundCooldown) return;
+            lastHoverSoundTime = Time.time;
+        }
         if (buttonSFXDict.TryGetValue(type, out var clip) && clip != null)
         {
             buttonSource.PlayOneShot(clip);

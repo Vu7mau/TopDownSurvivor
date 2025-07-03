@@ -107,6 +107,7 @@ public class EnemyAIController : VuMonoBehaviour
     protected virtual void Attack()
     {
         this.isAttacking = true;
+        this.enemyReferences.IsMoving = false;
         this.enemyReferences.NavMeshAgent.enabled = false;
     }
     protected virtual void LookAtTarGet()
@@ -127,13 +128,15 @@ public class EnemyAIController : VuMonoBehaviour
             Debug.Log("Updating path!");
             this.pathUpdateDeadline = Time.time + this.enemyReferences.PathUpdateDelay;
              if (this.isAttacking) return;
-             if (!this.enemyReferences.NavMeshAgent.enabled) return;
+             if(!this.enemyReferences.IsMoving) return;
+            this.enemyReferences.NavMeshAgent.enabled = true;
             this.enemyReferences.NavMeshAgent.SetDestination(targetPosition.position);
         }
     }
     protected virtual void EndAttack()
     {
         this.isAttacking = false;
+        this.enemyReferences.IsMoving = true;
         this.enemyReferences.NavMeshAgent.enabled = true;
     }
     protected virtual void SwitchFarState()

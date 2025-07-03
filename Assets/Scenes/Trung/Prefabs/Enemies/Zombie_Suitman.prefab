@@ -1751,6 +1751,7 @@ GameObject:
   - component: {fileID: 6269595595726266558}
   - component: {fileID: -1531243743946643831}
   - component: {fileID: -8813635221062628486}
+  - component: {fileID: 3315971249046066356}
   m_Layer: 7
   m_Name: Zombie_Suitman
   m_TagString: Enemy
@@ -1817,7 +1818,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2.14
   m_BaseOffset: 0.02
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!65 &3263663517504054116
 BoxCollider:
@@ -1912,6 +1913,21 @@ MonoBehaviour:
   animator: {fileID: 6593809352031580511}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: 415d7367ca4c23c4f9d49a3ab3d6e397, type: 2}
+--- !u!114 &3315971249046066356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7945127476044001139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycastDistance: 10000
+  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &8293467414895181283
 GameObject:
   m_ObjectHideFlags: 0
