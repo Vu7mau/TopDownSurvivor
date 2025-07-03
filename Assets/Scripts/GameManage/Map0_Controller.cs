@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Map0_Controller : Map_Controller
 {
     [SerializeField] private Light light;
+   
+
+   
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            gameController.SwitchMap(0);
+            gameController.SwitchMap(mapIndexNextTo);
+            this.processing.gameObject.SetActive(false);
             //CharacterUIManager.OnScreenFadeOut?.Invoke();
             //mapDisable.gameObject.SetActive(false);
             //Debug.Log("Enter map");

@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
 {
     [SerializeField] private List<Map_Controller> maps; // Danh sách map
-                                                        // [SerializeField] private List<Transform> mapSpawnPoints; // Vị trí spawn trên map
+                                                   
     [SerializeField] private Map_Controller currentMap; // Map hiện tại
+    [SerializeField] private Map_Controller lastMap; // Map hiện tại
 
 
     public Action OnMapSwitched; // Sự kiện thông báo chuyển map
     public Action OnWaveStarted; // Sự kiện thông báo bắt đầu wave
+
     [SerializeField] private Transform character;
 
 
@@ -37,6 +40,13 @@ public class GameController : Singleton<GameController>
         if (character == null)
         {
             character = GameObject.FindObjectOfType<CharacterCtrl>()?.transform;
+        }
+    }
+    protected override void OnEnable()
+    {
+        if(currentMap == null)
+        {
+            currentMap = maps.FirstOrDefault();
         }
     }
     public void MoveCharacterPos(Transform pos)
@@ -69,11 +79,12 @@ public class GameController : Singleton<GameController>
             return;
         }
 
+        lastMap=currentMap;
         // Bật map mới
         currentMap = maps[mapIndex];
-        currentMap.gameObject.SetActive(true);
+        currentMap.map.gameObject.SetActive(true);
         StartCoroutine(FadeOut());
-        // Di chuyển nhân vật
+
 
         // Thông báo chuyển map
         OnMapSwitched?.Invoke();
@@ -115,11 +126,11 @@ public class GameController : Singleton<GameController>
         fadeImage.color = color;
         isFadeInComplete = true;
         yield return isFadeInComplete;
-        MoveCharacterPos(currentMap.teleportToPos);
-        // Tắt map hiện tại
-        if (currentMap != null)
+        MoveCharacterPos(currentMap.currentMapSpawnPoint);
+        // Tắt map cũ
+        if (lastMap != null)
         {
-            currentMap.lastMap.gameObject.SetActive(false);
+            lastMap.map.gameObject.SetActive(false);
         }
 
 
