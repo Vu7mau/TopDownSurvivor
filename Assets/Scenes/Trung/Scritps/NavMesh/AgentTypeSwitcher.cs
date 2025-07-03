@@ -74,7 +74,7 @@ public class AgentTypeSwitcher : MonoBehaviour
 
     private void AddNavMeshSurfaceTag()
     {
-        var navSurfaces = FindObjectsOfType<NavMeshSurface>(true); // include inactive objects
+        var navSurfaces = FindObjectsOfType<NavMeshSurface>(false); // include inactive objects
 
         foreach (var surface in navSurfaces)
         {
@@ -119,7 +119,9 @@ public class AgentTypeSwitcher : MonoBehaviour
     void DetectSurfaceBelow()
     {
         Ray ray = new Ray(transform.position + offset, Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance))
+        int groundLayerMask = LayerMask.GetMask("Ground");
+
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance, groundLayerMask))
         {
             Debug.Log("Hit: " + hit.transform.name);
             var surfaceTag = hit.collider.GetComponentInChildren<NavMeshSurfaceTag>();

@@ -23,6 +23,23 @@ public class SciFiController : EnemyAIController
 
     protected float eclapse = 0f;
 
+
+    [Space]
+    [Header("Sound FX")]
+    [Space]
+
+    [SerializeField] protected List<AudioClip> snd_steps;
+    [SerializeField] protected AudioClip snd_attack1;
+    [SerializeField] protected AudioClip snd_attack2;
+    [SerializeField] protected AudioClip snd_attack3;
+    [SerializeField] protected AudioClip snd_attack4;
+    [SerializeField] protected AudioClip snd_attack5;
+    [SerializeField] protected AudioClip snd_attack6;
+    [SerializeField] protected AudioClip snd_death1;
+    [SerializeField] protected AudioClip snd_death2;
+
+
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -194,5 +211,12 @@ public class SciFiController : EnemyAIController
             yield return new WaitForSeconds(this.timeDelay);
         }
         this.EndAttack();
+    }
+
+    //Sound FX
+    protected virtual void OnStepFootSoundFX()
+    {
+        int random = Random.Range(0, this.snd_steps.Count);
+        SoundFXManager.Instance.PlaySoundFXClip(this.snd_steps[random], transform, 1);
     }
 }
