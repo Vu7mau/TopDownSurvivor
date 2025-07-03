@@ -5,27 +5,28 @@ using UnityEngine;
 public class EffectFXSound : MonoBehaviour
 {
     [SerializeField] private List<AudioClip> snd_Explosion_Effect;
-    AudioSource t;
+    //AudioSource t;
     private void Awake()
     {
-        t = gameObject.GetComponent<AudioSource>();
+        //t = gameObject.GetComponent<AudioSource>();
     }
     private void OnEnable()
     {
         int random = Random.Range(0, snd_Explosion_Effect.Count);
-        t.clip = snd_Explosion_Effect[random];
-        t.playOnAwake = false;
-        t.loop = false;
-        t.Play();
-        t.volume = 5f;
+        //t.clip = snd_Explosion_Effect[random];
+        //t.playOnAwake = false;
+        //t.loop = false;
+        //t.Play();
+        //t.volume = 5f;
+        SoundFXManager.Instance.PlaySoundFXClip(this.snd_Explosion_Effect[random],transform,1);
     }
-    private void OnDisable()
-    {
-        int random = Random.Range(0, snd_Explosion_Effect.Count);
-        t.clip = snd_Explosion_Effect[random];
-        t.playOnAwake = false;
-        t.loop = false;
-        t.Stop();
-        t.volume = 0f;
-    }
+    //private void OnDisable()
+    //{
+    //    int random = Random.Range(0, snd_Explosion_Effect.Count);
+    //    t.clip = snd_Explosion_Effect[random];
+    //    t.playOnAwake = false;
+    //    t.loop = false;
+    //    t.Stop();
+    //    t.volume = 0f;
+    //}
 }
