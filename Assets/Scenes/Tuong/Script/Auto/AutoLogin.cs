@@ -33,6 +33,7 @@ public class AutoLogin : MonoBehaviour
         PlayerPrefs.SetInt("HasLoggedIn", 1);
         PlayerPrefs.Save();
         //CharacterInformation.Instance.ShowCharacters();
+        if(MainMenuTwo.Instance == null) return;
         MainMenuTwo.Instance.LogoutButton.SetActive(true);   
         MainMenuTwo.Instance.PlayMenu.SetActive(true);
 
