@@ -40,21 +40,23 @@ public class AudioManagerTwo : MonoBehaviour
             }
         }
     }
-    public void PlayButtonSFX(ButtonSFXType type)
+    public void PlayButtonSFX(ButtonSFXType type, bool ignoreCooldown = false)
     {
         float now = Time.unscaledTime;
-
-        if (now - lastAnyButtonSoundTime < buttonSFXGlobalCooldown)
-            return;
-
-        if (type == ButtonSFXType.Hover)
+        if (!ignoreCooldown)
         {
-            if (now - lastHoverSoundTime < hoverSoundCooldown)
+            if (now - lastAnyButtonSoundTime < buttonSFXGlobalCooldown)
                 return;
-            lastHoverSoundTime = now;
-        }
 
-        lastAnyButtonSoundTime = now;
+            if (type == ButtonSFXType.Hover)
+            {
+                if (now - lastHoverSoundTime < hoverSoundCooldown)
+                    return;
+                lastHoverSoundTime = now;
+            }
+
+            lastAnyButtonSoundTime = now;
+        }
 
         if (buttonSFXDict.TryGetValue(type, out var clip) && clip != null)
         {

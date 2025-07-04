@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     IPointerDownHandler, IPointerUpHandler
 {
+    public System.Func<bool> IsLockedFunc;
     [Header("Components")]
     public Outline outline;
     public Image targetImage;
@@ -28,8 +29,6 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private Tween outlineTween;
     private Tween tintTween;
     private Tween scaleTween;
-
-
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -55,6 +54,8 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (IsLockedFunc != null && IsLockedFunc()) return;
+
         outlineTween?.Kill();
         outlineTween = outline?.DOColor(hoverOutlineColor, 0.2f);
         tintTween?.Kill();
@@ -83,7 +84,8 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
         KillAllTweens();
 
         scaleTween = rectTransform.DOScale(originalScale * pressedScale, scaleTime);
-       
+        if (IsLockedFunc != null && IsLockedFunc()) return;
+
         AudioManagerTwo.Instance.PlayButtonSFX(buttonSFXType);
     }
     public void OnPointerUp(PointerEventData evt)

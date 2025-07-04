@@ -132,6 +132,7 @@ public class MainMenuTwo : MonoBehaviour
         if (hasLoggedIn)
         {
             modePanel.SetActive(true);
+            ModePanel.Instance.SetUpPanel();
         }
         else
         {

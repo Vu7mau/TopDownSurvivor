@@ -8,5 +8,6 @@ public enum ButtonSFXType
     UnPause,
     Hover,
     None,
-    Deny
+    Lock,
+    Unlock
 }

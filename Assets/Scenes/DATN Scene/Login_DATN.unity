@@ -853,7 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.7607843, g: 0.47843137, b: 0, a: 1}
+  m_EffectColor: {r: 0.5647059, g: 0.6431373, b: 0.68235296, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
 --- !u!114 &524694304
@@ -869,7 +869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7176471, b: 0, a: 1}
+  m_Color: {r: 0.66971165, g: 0.6912809, b: 0.7056604, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1555,8 +1555,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0.31958008, y: 124}
-  m_SizeDelta: {x: -697.3611, y: 121.7908}
+  m_AnchoredPosition: {x: -3.7230225, y: 124}
+  m_SizeDelta: {x: -753.4499, y: 121.7908}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &745249442
 MonoBehaviour:
@@ -1580,8 +1580,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d2d7db28ae66c3d42835c55fc868f755, type: 2}
-  m_sharedMaterial: {fileID: 2565930991730470295, guid: d2d7db28ae66c3d42835c55fc868f755, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a2c185c821ccff74eae3c5a351c79e5f, type: 2}
+  m_sharedMaterial: {fileID: 1387093667567511465, guid: a2c185c821ccff74eae3c5a351c79e5f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1755,8 +1755,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Tho\xE1t"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e318d017028a6184f8d5049ac170927d, type: 2}
-  m_sharedMaterial: {fileID: -3479803284585806342, guid: e318d017028a6184f8d5049ac170927d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 03f780b01b9b2e640984a49e5a44edd1, type: 2}
+  m_sharedMaterial: {fileID: 5831262166238291534, guid: 03f780b01b9b2e640984a49e5a44edd1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1893,7 +1893,6 @@ GameObject:
   - component: {fileID: 1109524602}
   - component: {fileID: 1109524606}
   - component: {fileID: 1109524605}
-  - component: {fileID: 1109524604}
   - component: {fileID: 1109524603}
   m_Layer: 5
   m_Name: Button-Play
@@ -1918,9 +1917,9 @@ RectTransform:
   - {fileID: 1695200542}
   m_Father: {fileID: 1340514502}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1730, y: -998}
   m_SizeDelta: {x: 240, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1109524603
@@ -1945,102 +1944,6 @@ MonoBehaviour:
   mixer: {fileID: 24100000, guid: 33a16d6d3395e9740980cf491779bf2e, type: 2}
   buttonSFXType: 0
   buttonSFXTypeTwo: 6
---- !u!82 &1109524604
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1109524601}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7cc057bed53baf34799f52aab3c84800, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &1109524605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2081,7 +1984,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 724469197}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -2141,9 +2044,9 @@ RectTransform:
   - {fileID: 894805959}
   m_Father: {fileID: 1340514502}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 190, y: -998}
   m_SizeDelta: {x: 240, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1296983525
@@ -2160,8 +2063,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 524694303}
   targetImage: {fileID: 524694304}
-  hoverOutlineColor: {r: 1, g: 0.84313726, b: 0, a: 1}
-  hoverTintColor: {r: 0.9019608, g: 0.6509804, b: 0, a: 1}
+  hoverOutlineColor: {r: 0.31431115, g: 0.4459056, b: 0.509434, a: 1}
+  hoverTintColor: {r: 0.5243503, g: 0.53492343, b: 0.5396226, a: 1}
   hoverScale: 1.05
   pressedScale: 0.95
   scaleTime: 0.1
@@ -2384,7 +2287,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 50
   m_ChildAlignment: 7
-  m_Spacing: 1200
+  m_Spacing: 1300
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -2427,9 +2330,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2817686619738454461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 155, y: -540}
   m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1463920762
@@ -2643,9 +2546,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4808165658165798092}
         m_TargetAssemblyTypeName: GameProgress, Assembly-CSharp
-        m_MethodName: TestUnlockSurvive
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2949,8 +2852,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Ch\u01A1i"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e318d017028a6184f8d5049ac170927d, type: 2}
-  m_sharedMaterial: {fileID: -3479803284585806342, guid: e318d017028a6184f8d5049ac170927d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 03f780b01b9b2e640984a49e5a44edd1, type: 2}
+  m_sharedMaterial: {fileID: 5831262166238291534, guid: 03f780b01b9b2e640984a49e5a44edd1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6165,6 +6068,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: e58d8bd078f188a4ba314e933b98528b, type: 3}
   - type: 6
     clip: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+  - type: 8
+    clip: {fileID: 8300000, guid: 1d1cbd314cdc76f44bfc257e5e0b764a, type: 3}
   hoverSoundCooldown: 0.15
   buttonSFXGlobalCooldown: 0.1
 --- !u!222 &1508035155097535374
@@ -6571,7 +6476,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 599, y: -138}
+  m_AnchoredPosition: {x: 599, y: -148}
   m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1717126836331297664
@@ -19162,9 +19067,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2817686619738454461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1765, y: -540}
   m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3729775034597238007
@@ -34273,7 +34178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6929481640965134827
 RectTransform:
   m_ObjectHideFlags: 0
@@ -35021,8 +34926,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Sinh t\u1ED3n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e318d017028a6184f8d5049ac170927d, type: 2}
-  m_sharedMaterial: {fileID: -3479803284585806342, guid: e318d017028a6184f8d5049ac170927d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 03f780b01b9b2e640984a49e5a44edd1, type: 2}
+  m_sharedMaterial: {fileID: 5831262166238291534, guid: 03f780b01b9b2e640984a49e5a44edd1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -47713,18 +47618,17 @@ MonoBehaviour:
   modeDescriptionText: {fileID: 745249442}
   playButton: {fileID: 1109524605}
   modeContentContainer: {fileID: 8747654059073594885}
+  playButtonEffect: {fileID: 1109524603}
   backgroundImageA: {fileID: 5388726719239183413}
   backgroundImageB: {fileID: 1842274228}
   lockOverlay: {fileID: 2000392024}
-  unlockButton: {fileID: 1906287017}
   transitionDistance: 1300
-  transitionDuration: 1.5
+  transitionDuration: 0.8
   transitionEase: 9
   campaignBackground: {fileID: 21300000, guid: 1ae2651def5bba14d9cb50de27ee1db6, type: 3}
   surviveBackground: {fileID: 21300000, guid: 44a3b12847a782741b13382703a4a113, type: 3}
   campaignSceneIndex: 1
   surviveSceneIndex: 2
-  resetUnlockButton: {fileID: 1906287015}
 --- !u!224 &9096459084321983206
 RectTransform:
   m_ObjectHideFlags: 0

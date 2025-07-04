@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
 
 public class ModePanel : MonoBehaviour
@@ -15,15 +16,15 @@ public class ModePanel : MonoBehaviour
     public TextMeshProUGUI modeDescriptionText;
     public Button playButton;
     public RectTransform modeContentContainer;
-
+    public PlayButtonEffect playButtonEffect;
     [Header("Backgrounds")]
     public Image backgroundImageA;
     public Image backgroundImageB;
 
     [Header("LockUI")]
     public GameObject lockOverlay;
-    public Button unlockButton;
     public const string SURVIVE_UNLOCK_KEY = "SurviveUnlocked";
+    private bool IsSurviveUnlocked() => ModeUnlockManager.IsSurviveUnlocked();
 
     public float transitionDistance = 800f;
     public float transitionDuration = 0.4f;
@@ -53,22 +54,15 @@ public class ModePanel : MonoBehaviour
         else
             Destroy(gameObject);
     }
-
-    private void Start()
-    {
-#if UNITY_EDITOR
-        resetUnlockButton.GetComponent<Button>().onClick.AddListener(ResetSurviveUnlock);
-        resetUnlockButton.SetActive(true);
-#endif
-    }
-
     private void OnEnable()
     {
-        currentMode = Mode.Campaign;
-        ResetBackgroundState();
-        RefreshUIInstant();
+        SetUpPanel();
+        if (playButtonEffect != null)
+        {
+            playButtonEffect.IsLockedFunc = () =>
+                currentMode == Mode.Survive && !IsSurviveUnlocked();
+        }
     }
-
     public void RefreshUIInstant()
     {
         modeText.text = currentMode == Mode.Campaign ? "Chiến dịch" : "Sinh tồn";
@@ -92,6 +86,14 @@ public class ModePanel : MonoBehaviour
 
     public void OnPlay()
     {
+        if(isTransitioning) return;
+        if (currentMode == Mode.Survive && !IsSurviveUnlocked())
+        {
+            PlayLockFeedBack();
+            return;
+        }
+        AudioManagerTwo.Instance.PlayButtonSFX(ButtonSFXType.Confirm);
+
         transitionSequence?.Kill();
         DOTween.Kill(gameObject, true);
         LevelManager.Instance.LoadLevel(currentMode == Mode.Campaign ? campaignSceneIndex : surviveSceneIndex);
@@ -101,6 +103,7 @@ public class ModePanel : MonoBehaviour
     {
         isTransitioning = true;
         currentMode = (Mode)(((int)currentMode + (direction > 0 ? 1 : -1) + 2) % 2);
+
         modeText.text = currentMode == Mode.Campaign ? "Chiến dịch" : "Sinh tồn";
         modeDescriptionText.text = currentMode == Mode.Campaign ? campaignDescription : surviveDescription;
 
@@ -109,6 +112,11 @@ public class ModePanel : MonoBehaviour
         usingA = !usingA;
         to.sprite = currentMode == Mode.Campaign ? campaignBackground : surviveBackground;
 
+        bool willBelocked = (currentMode == Mode.Survive && !IsSurviveUnlocked());
+        if (willBelocked)
+        {
+            lockOverlay.SetActive(true);
+        }
         var rtFrom = from.rectTransform;
         var rtTo = to.rectTransform;
         Vector2 origin = rtFrom.anchoredPosition;
@@ -125,49 +133,75 @@ public class ModePanel : MonoBehaviour
                 rtFrom.anchoredPosition = origin;
                 rtFrom.gameObject.SetActive(false);
                 UpdateLockStateUI();
+
                 isTransitioning = false;
             });
     }
-
-    private bool IsSurviveUnlocked() => PlayerPrefs.GetInt(SURVIVE_UNLOCK_KEY, 0) == 1;
-
     private void UpdateLockStateUI()
     {
         if (isSceneLoading) return;
-        bool surviveUnlocked = (currentMode == Mode.Survive && !IsSurviveUnlocked());
-        if (surviveUnlocked)
-        {
-            lockOverlay.SetActive(true);
-            playButton.interactable = false;
-        }
-        else
-        {
-            playButton.interactable = true;
-        }
+        bool surviveLocked = (currentMode == Mode.Survive && !IsSurviveUnlocked());
+        lockOverlay.SetActive(surviveLocked);
     }
 
     public void UnlockSurviveMode()
     {
         PlayerPrefs.SetInt(SURVIVE_UNLOCK_KEY, 1);
         PlayerPrefs.Save();
+        if (!isTransitioning)
+            RefreshUIInstant();
     }
 
     public void ResetSurviveUnlock()
     {
         PlayerPrefs.SetInt(SURVIVE_UNLOCK_KEY, 0);
         PlayerPrefs.Save();
-        Debug.Log("❌ SURVIVE_UNLOCK_KEY reset về 0");
         if (!isTransitioning)
             RefreshUIInstant();
     }
+    public void SetUpPanel()
+    {   
+
+        currentMode = Mode.Campaign;
+        usingA = true;
+
+        backgroundImageA.rectTransform.anchoredPosition = Vector2.zero;
+        backgroundImageB.rectTransform.anchoredPosition = Vector2.zero;
+        backgroundImageA.gameObject.SetActive(true);
+        backgroundImageB.gameObject.SetActive(false);
+        backgroundImageA.sprite = campaignBackground;
+
+        modeText.text = "Chiến dịch";
+        modeDescriptionText.text = campaignDescription;
+        lockOverlay.SetActive(false);
+    }
     public void Back()
     {
+        transitionSequence?.Kill();
+        DOTween.Kill(backgroundImageA.gameObject);
+        DOTween.Kill(backgroundImageB.gameObject);
+        isTransitioning = false;
+        SetUpPanel();
+
         isSceneLoading = false;
         MainMenuTwo.Instance.ModePanelPublic.SetActive(false);
         MainMenuTwo.Instance.PlayMenu.SetActive(true);
         MainMenuTwo.Instance.LoginPanel.SetActive(false);
     }
-#if UNITY_EDITOR
-    public GameObject resetUnlockButton;
-#endif
+    private Tween shakeTween;
+    private void PlayLockFeedBack()
+    {
+        Debug.Log("gọi thành công");
+        AudioManagerTwo.Instance.PlayButtonSFX(ButtonSFXType.Lock, ignoreCooldown: true);
+
+        var rt = lockOverlay.GetComponent<RectTransform>();
+        shakeTween?.Kill();
+        rt.anchoredPosition = Vector2.zero;
+        shakeTween = rt.DOShakeAnchorPos(
+            duration: 0.3f,
+            strength: new Vector2(10, 0),
+            vibrato: 10,
+            randomness: 0
+        );
+    }
 }
