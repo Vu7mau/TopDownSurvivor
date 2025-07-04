@@ -134,10 +134,15 @@ public class ModePanel : MonoBehaviour
     private void UpdateLockStateUI()
     {
         if (isSceneLoading) return;
-        if (currentMode == Mode.Survive && !IsSurviveUnlocked())
+        bool surviveUnlocked = (currentMode == Mode.Survive && !IsSurviveUnlocked());
+        if (surviveUnlocked)
         {
             lockOverlay.SetActive(true);
             playButton.interactable = false;
+        }
+        else
+        {
+            playButton.interactable = true;
         }
     }
 

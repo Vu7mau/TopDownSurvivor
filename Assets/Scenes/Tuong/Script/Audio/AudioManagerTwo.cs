@@ -20,7 +20,7 @@ public class AudioManagerTwo : MonoBehaviour
 
     private float lastAnyButtonSoundTime = -1f;
     [SerializeField] private float buttonSFXGlobalCooldown = 0.1f;
-    private void Start()
+    private void Awake()
     {
         if (Instance == null) Instance = this;
         else
@@ -28,6 +28,9 @@ public class AudioManagerTwo : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+    }
+    private void Start()
+    {
         buttonSFXDict = new Dictionary<ButtonSFXType, AudioClip>();
         foreach (var entry in buttonSFXList)
         {
@@ -39,16 +42,23 @@ public class AudioManagerTwo : MonoBehaviour
     }
     public void PlayButtonSFX(ButtonSFXType type)
     {
-        if (Time.time - lastAnyButtonSoundTime < buttonSFXGlobalCooldown) return;
+        float now = Time.unscaledTime;
+
+        if (now - lastAnyButtonSoundTime < buttonSFXGlobalCooldown)
+            return;
+
         if (type == ButtonSFXType.Hover)
         {
-            if (Time.time - lastHoverSoundTime < hoverSoundCooldown) return;
-            lastHoverSoundTime = Time.time;
+            if (now - lastHoverSoundTime < hoverSoundCooldown)
+                return;
+            lastHoverSoundTime = now;
         }
-        lastAnyButtonSoundTime = Time.time;
+
+        lastAnyButtonSoundTime = now;
+
         if (buttonSFXDict.TryGetValue(type, out var clip) && clip != null)
         {
-            buttonSource.PlayOneShot(clip); 
+            buttonSource.PlayOneShot(clip);
         }
     }
 }
