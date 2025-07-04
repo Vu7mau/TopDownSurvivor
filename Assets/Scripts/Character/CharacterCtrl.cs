@@ -29,8 +29,14 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     public CharacterAnimHandle CharacterAnimHandle => _characterAnimHandle;
     [SerializeField] protected CharacterDamageReceiver _characterDamageReceiver;
     public CharacterDamageReceiver CharacterDamageReceiver => _characterDamageReceiver;
+
+
     [SerializeField] protected CharacterLeveUp _characterLeveUp;
-    public CharacterLeveUp CharacterLeveUp => _characterLeveUp;
+    public CharacterLeveUp CharacterLeveUp => _characterLeveUp; 
+    
+    
+    [SerializeField] protected CharacterEffect _characterEffect;
+    public CharacterEffect CharacterEffect => _characterEffect;
 
 
     public void DisableAllComponet()
@@ -58,6 +64,7 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         this.LoadCharacterAnimHandle();
         this.LoadCharacterDamageReceiver();
         this.LoadCharacterLeveUp();
+        this.LoadCharacterEffect();
 
     }
 
@@ -68,19 +75,26 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         this._inputManager = GameObject.FindObjectOfType<InputManager>();
         Debug.Log(" Load InputManager Success " + this.transform.name);
     }
+    protected virtual void LoadCharacterEffect()
+    {
+        if (this._characterEffect != null) return;
+
+        this._characterEffect = this.transform.GetComponentInChildren<CharacterEffect>();
+        Debug.Log(" Load CharacterEffect Success " + this._characterEffect.transform.name);
+    }
     protected virtual void LoadCharacterMove()
     {
         if (this._characterMove != null) return;
 
         this._characterMove = this.transform.GetComponentInChildren<CharacterMove>();
-        Debug.Log(" Load InputManager Success " + this._characterMove.transform.name);
+        Debug.Log(" Load CharacterMove Success " + this._characterMove.transform.name);
     }
     protected virtual void LoadCharacterAim()
     {
         if (this._characterAim != null) return;
 
         this._characterAim = this.transform.GetComponentInChildren<CharacterAim>();
-        Debug.Log(" Load InputManager Success " + this._characterAim.transform.name);
+        Debug.Log(" Load CharacterAim Success " + this._characterAim.transform.name);
     }
 
     protected virtual void LoadCharacterShooting()

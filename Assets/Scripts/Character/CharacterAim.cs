@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
@@ -41,9 +41,17 @@ public class CharacterAim : CharacterCtrlAbstract
 
         //this.UpdateAimVisual();
         this.UpdateCameraPosition();
-        this.UpdateAimPosition();
+        //  this.UpdateAimPosition();
+        StartCoroutine(DelayUpdateAim());
     }
 
+    IEnumerator DelayUpdateAim()
+    {
+        yield return null; // chờ 1 frame
+
+        // Bây giờ camera đã ổn định
+        UpdateAimPosition();
+    }
     protected virtual void UpdateAimVisual()
     {
         Transform gunPoint =this._characterCtrl.CharacterShooting.GetGunPoint();

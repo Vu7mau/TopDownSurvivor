@@ -19,7 +19,15 @@ public class Map0_Controller : Map_Controller
             //CharacterUIManager.OnScreenFadeOut?.Invoke();
             //mapDisable.gameObject.SetActive(false);
             //Debug.Log("Enter map");
-             FadeOutLight(2);
+            CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
+            FadeOutLight(2);
+        }
+    }
+    protected override void OnEnable()
+    {
+        if (map.gameObject.activeSelf)
+        {
+            CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
         }
     }
 

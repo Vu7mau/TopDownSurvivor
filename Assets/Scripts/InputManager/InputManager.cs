@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -50,6 +50,11 @@ public class InputManager : VuMonoBehaviour
 
     public RaycastHit GetMouseHitInfo()
     {
+        if (!Camera.main.pixelRect.Contains(_mouseInput))
+        {
+            return lastKnowMouseHit; // không raycast nếu chuột ngoài vùng nhìn thấy của camera
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(_mouseInput);
 
         if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
@@ -67,7 +72,9 @@ public class InputManager : VuMonoBehaviour
         playerControls.Character.Movement.performed += context => _moveInput = context.ReadValue<Vector2>();
         playerControls.Character.Movement.canceled += context => _moveInput = Vector2.zero;
         // Mouse Input
-        playerControls.Character.Aim.performed += context => _mouseInput = context.ReadValue<Vector2>();
+        //playerControls.Character.Aim.performed += context => _mouseInput = context.ReadValue<Vector2>();
+        //playerControls.Character.Aim.canceled += context => _mouseInput = Vector2.zero;
+        playerControls.Character.Aim.performed += context => _mouseInput = Input.mousePosition;
         playerControls.Character.Aim.canceled += context => _mouseInput = Vector2.zero;
 
         //Fire
@@ -76,7 +83,9 @@ public class InputManager : VuMonoBehaviour
     }
     public void DetachInputEvents()
     {
-        playerControls.Character.Aim.performed -= context => _mouseInput = context.ReadValue<Vector2>();
+        //playerControls.Character.Aim.performed -= context => _mouseInput = context.ReadValue<Vector2>();
+        //playerControls.Character.Aim.canceled -= context => _mouseInput = Vector2.zero;
+        playerControls.Character.Aim.performed -= context => _mouseInput = Input.mousePosition;
         playerControls.Character.Aim.canceled -= context => _mouseInput = Vector2.zero;
 
         //Fire

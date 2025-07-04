@@ -19,17 +19,19 @@ public class Map_Controller : GameControllerAbstract
     
 
 
-    protected override void OnEnable()
+    public  void EnableProcessing()
     {
         if (processing != null)
         {
+            processing. gameObject.SetActive(true);
             processing.priority = 1f;
         }
     }
-    protected override void OnDisable()
+    public void DisableProcessing()
     {
         if (processing != null)
         {
+            processing. gameObject.SetActive(false);
             processing.priority = 0f;
         }
     }

@@ -125,7 +125,7 @@ public class EnemyAIController : VuMonoBehaviour
     {
         if (Time.time >= pathUpdateDeadline)
         {
-            Debug.Log("Updating path!");
+          //  Debug.Log("Updating path!");
             this.pathUpdateDeadline = Time.time + this.enemyReferences.PathUpdateDelay;
              if (this.isAttacking) return;
              if(!this.enemyReferences.IsMoving) return;

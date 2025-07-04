@@ -22,6 +22,8 @@ public class ShotGunShooter : RayCastWeapon
         base.ShooterEffect();
         CinemachineCtrl.Instance.CinemachineShake.ShakeCamera(weaponInfo.recoilSize, weaponInfo.recoilDuration);
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.rifleShoot, this.GunPoint);
+        CharacterUIManager.OnWeaponReload?.Invoke(_bulletsCount, weaponInfo.maxBulletCount);
+
     }
     protected override void Shoot()
     {

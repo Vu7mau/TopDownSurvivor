@@ -24,7 +24,7 @@ public class RayCastWeapon : ObjectShooting
 
 
     [SerializeField] public Transform model;
-    [SerializeField] public Transform flash;
+   // [SerializeField] public Transform flash;
     public WeaponSlot weaponSlot => weaponInfo.weaponSlot;
     public Transform GunPoint => _gunPoint;
     public Vector3 MousePoint => _mousePoint;
@@ -37,7 +37,7 @@ public class RayCastWeapon : ObjectShooting
 
     protected override void OnDisable()
     {
-        
+
     }
     protected override void OnEnable()
     {
@@ -75,10 +75,26 @@ public class RayCastWeapon : ObjectShooting
         CharacterUIManager.OnWeaponReload?.Invoke(_bulletsCount, weaponInfo.maxBulletCount);
         this.ShooterEffect();
         this.SpawnShell();
-   
+
+        //if (flash != null)
+        //{
+        //    if (!flash.gameObject.activeSelf)
+        //    {
+        //        flash.gameObject.SetActive(true);
+        //    }
+        //}
+
     }
     protected override void HoldFire()
     {
+
+        //if (flash != null)
+        //{
+        //    if (flash.gameObject.activeSelf)
+        //    {
+        //        flash.gameObject.SetActive(false);
+        //    }
+        //}
     }
     protected virtual void SpawnShell()
     {
@@ -136,10 +152,10 @@ public class RayCastWeapon : ObjectShooting
     {
         _isWeaponActivate = isWeaponActivate;
 
-        if (flash != null)
-        {
-            this.flash.gameObject.SetActive(isWeaponActivate);
-        }
+        //if (flash != null)
+        //{
+        //    this.flash.gameObject.SetActive(isWeaponActivate);
+        //}
 
     }
 

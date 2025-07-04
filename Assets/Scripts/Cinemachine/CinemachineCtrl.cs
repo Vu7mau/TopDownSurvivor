@@ -15,6 +15,10 @@ public class CinemachineCtrl : VuMonoBehaviour
     [SerializeField] protected CinemachineZoom _cinemachineZoom;
     public CinemachineZoom CinemachineZoom => _cinemachineZoom;
 
+
+       [SerializeField] protected SwitchedCam _switchedCam;
+    public SwitchedCam SwitchedCam => _switchedCam;
+
     protected override void Awake()
     {
         base.Awake();
@@ -27,6 +31,7 @@ public class CinemachineCtrl : VuMonoBehaviour
         this.LoadCinemachineShake();
         this.LoadCinemachineVirtual();
         this.LoadCinemachineZoom();
+        this.LoadSwitchedCam();
     }
 
     protected virtual void LoadCinemachineVirtual()
@@ -50,5 +55,12 @@ public class CinemachineCtrl : VuMonoBehaviour
 
         this._cinemachineZoom = transform.GetComponentInChildren<CinemachineZoom>();
         Debug.Log("CinemachineVirtualCamera");
+    } 
+    protected virtual void LoadSwitchedCam()
+    {
+        if(_switchedCam != null) return;
+
+        this._switchedCam = transform.GetComponentInChildren<SwitchedCam>();
+        Debug.Log("LoadSwitchedCam");
     }
 }

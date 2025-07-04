@@ -83,6 +83,7 @@ public class GameController : Singleton<GameController>
         // Bật map mới
         currentMap = maps[mapIndex];
         currentMap.map.gameObject.SetActive(true);
+        currentMap.EnableProcessing();
         StartCoroutine(FadeOut());
 
 
@@ -131,6 +132,7 @@ public class GameController : Singleton<GameController>
         if (lastMap != null)
         {
             lastMap.map.gameObject.SetActive(false);
+            lastMap.DisableProcessing();
         }
 
 
