@@ -43,6 +43,9 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private void OnDisable()
     {
         KillAllTweens();
+        DOTween.Kill(rectTransform); 
+        DOTween.Kill(targetImage);
+        DOTween.Kill(outline);
     }
     private void KillAllTweens()
     {
@@ -101,4 +104,5 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
         outlineTween?.Kill();
         outlineTween = outline?.DOColor(targetOutln, 0.2f);
     }
+
 }

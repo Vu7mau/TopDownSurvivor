@@ -29,6 +29,7 @@ public class MainMenuTwo : MonoBehaviour
     public EffectSignIn EffectLogin => effectLogin;
     public EffectSignIn EffectResetPassword => effectResetPassword;
     public GameObject LoginPanel => loginPanel;
+    public GameObject ModePanelPublic => modePanel;
     private void Start()
     {
         if (Instance == null) Instance = this;
