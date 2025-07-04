@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject loaderCanvas;
     [SerializeField] private Slider progressSlider;
     private float target;
+    private bool isLoading = false; 
     private void Awake()
     {
         if (Instance != null) Destroy(gameObject);
@@ -19,6 +20,8 @@ public class LevelManager : MonoBehaviour
     }
     public async void LoadLevel(int levelName)
     {
+        if(isLoading) return;
+        isLoading = true;
         target = 0f;
         if(progressSlider != null) progressSlider.value = 0f;
 
@@ -42,6 +45,7 @@ public class LevelManager : MonoBehaviour
         {
             loaderCanvas.SetActive(false);
         }
+        isLoading = false;
     }
     private void Update()
     {
