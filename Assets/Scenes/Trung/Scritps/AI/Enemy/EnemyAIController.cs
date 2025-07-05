@@ -11,6 +11,7 @@ public class EnemyAIController : VuMonoBehaviour
 
     [SerializeField] protected bool isAttacking = false;
     [SerializeField] protected bool isLookAtTarGet = true;
+    public bool IsLookAtTarget { get => isLookAtTarGet; set => isLookAtTarGet = value; }
 
     [SerializeField] protected bool isNearTarget = false;
 

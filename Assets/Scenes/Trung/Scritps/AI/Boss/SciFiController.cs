@@ -29,14 +29,13 @@ public class SciFiController : EnemyAIController
     [Space]
 
     [SerializeField] protected List<AudioClip> snd_steps;
-    [SerializeField] protected AudioClip snd_attack1;
+    [SerializeField] protected List<AudioClip> snd_attack1s;
     [SerializeField] protected AudioClip snd_attack2;
     [SerializeField] protected AudioClip snd_attack3;
     [SerializeField] protected AudioClip snd_attack4;
-    [SerializeField] protected AudioClip snd_attack5;
+    //[SerializeField] protected AudioClip snd_attack5;
     [SerializeField] protected AudioClip snd_attack6;
-    [SerializeField] protected AudioClip snd_death1;
-    [SerializeField] protected AudioClip snd_death2;
+    [SerializeField] protected List<AudioClip> snd_deaths;
 
 
 
@@ -207,6 +206,7 @@ public class SciFiController : EnemyAIController
             yield return new WaitForSeconds(this.timeDelay);
             this.e_Shooting.Shooting(this.minigunBullet, this.minigunBulletSpawnPosition);
             if (this.e_Shooting.NewProjectitle == null) yield break;
+            this.PlayerSFXAttack6();
             this.e_Shooting.NewProjectitle.GetComponent<Projectitle>().ShootAt(target);
             yield return new WaitForSeconds(this.timeDelay);
         }
@@ -216,7 +216,40 @@ public class SciFiController : EnemyAIController
     //Sound FX
     protected virtual void OnStepFootSoundFX()
     {
-        int random = Random.Range(0, this.snd_steps.Count);
-        SoundFXManager.Instance.PlaySoundFXClip(this.snd_steps[random], transform, 1);
+        if (this.snd_steps.Count == 0) return;
+        this.PlaySoundFX(this.snd_steps);
+    }
+    protected virtual void PlayerSFXAttack1()
+    {
+        if (this.snd_attack1s.Count == 0) return;
+        this.PlaySoundFX(this.snd_attack1s);
+    }
+    protected virtual void PlayerSFXEDeath()
+    {
+        if (this.snd_deaths.Count == 0) return;
+        this.PlaySoundFX(this.snd_deaths);
+    }
+
+    protected virtual void PlayerSFXAttack6()
+    {
+        if (this.snd_attack6 == null) return;
+        SoundFXManager.Instance.PlaySoundFXClip(snd_attack6, transform, 1);
+    }
+    protected virtual void PlayerSFXAttack3()
+    {
+        if(this.snd_attack3 == null) return;
+        SoundFXManager.Instance.PlaySoundFXClip(snd_attack3, transform, 1);
+    }
+
+    protected virtual void PlayerSFXDeath()
+    {
+        if (this.snd_deaths.Count > 0) return;
+        this.PlaySoundFX(snd_deaths);
+    }
+
+    private void PlaySoundFX(List<AudioClip> sounds)
+    {
+        int random = Random.Range(0, sounds.Count);
+        SoundFXManager.Instance.PlaySoundFXClip(sounds[random], transform, 1);
     }
 }

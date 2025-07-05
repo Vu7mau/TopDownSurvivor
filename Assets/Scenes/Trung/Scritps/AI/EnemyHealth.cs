@@ -9,6 +9,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
 {
     [SerializeField] protected EnemyAI enemyAI;
     [SerializeField] protected bool _canTakeDamage = true;
+    public bool CanTakeDamage { get => CanTakeDamage; set => _canTakeDamage = value;}
 
 
     [Header("These components would be loaded when run the game!")]
@@ -166,28 +167,32 @@ public class EnemyHealth : DamageReceiver,IEnemy
     public override void Deduct(int damage)
     {
         if(this._isDead) { OnDead(); return; }
+        if (!this._canTakeDamage) return;
         base.Deduct(damage);
         CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
-        Debug.Log("Máu quái còn " + this._hp);    
-        //if (_animator != null)
-        //{
-        //    if (HasHurtState() && !this._isDead)
-        //        _animator.SetTrigger("damage");
-            
-        //}
+        Debug.Log("Máu quái còn " + this._hp);
+        if (this.enemyAI.Animator != null)
+        {
+            if (HasHurtState() && !this._isDead)
+                this.enemyAI.Animator.SetTrigger("damage");
+
+        }
     }
-    //public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
+    public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
     public virtual bool HasDeadState() => this.enemyAI != null && this.enemyAI.Animator.HasState(0, Animator.StringToHash("die"));
     protected override void HurtEffect()
     {
-        if(this.beastHurtSFX != null)
-            SoundFXManager.Instance.PlaySoundFXClip(this.beastHurtSFX, this.transform);
+        if(this.beastHurtSFXs.Count > 0)
+        {
+            int random = Random.Range(0, this.beastHurtSFXs.Count);
+            SoundFXManager.Instance.PlaySoundFXClip(this.beastHurtSFXs[random], this.transform);
+        }
         this.HurtFXRoutine();
     }
 
 
     [Header("Hurt FX")]
-    [SerializeField] protected AudioClip beastHurtSFX;
+    [SerializeField] protected List<AudioClip> beastHurtSFXs;
     
     [SerializeField] protected Vector3 hurtScale = new Vector3(0.25f,0.25f,0.25f);
     //[SerializeField] protected Vector3 hurtPositionOffset;

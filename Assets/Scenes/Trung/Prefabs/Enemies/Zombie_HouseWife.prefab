@@ -1874,7 +1874,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8990054397899822950}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.24
+  m_Radius: 0.74
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -1885,7 +1885,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.66
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!65 &6753895616421936714
 BoxCollider:
@@ -1930,7 +1930,7 @@ MonoBehaviour:
   hitDamageSpawner: {fileID: 3463670411601260990}
   enemyCtrlDespawn: {fileID: 6180596796075437180}
   bloodSplash: {fileID: 811180432809444751}
-  beastHurtSFX: {fileID: 0}
+  beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!114 &-9121994584922200252
 MonoBehaviour:
@@ -1963,7 +1963,7 @@ MonoBehaviour:
   animator: {fileID: 1434241217979313460}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: d1b026aa3cb71e44fb0f55dfd352cef0, type: 2}
-  isMoving: 0
+  isMoving: 1
 --- !u!114 &2100070798655450567
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,6 +11,8 @@ public class Explosion : PoolObj
     protected bool _canTakeDamage= false;
     [SerializeField] protected CreateHitEnemy hit;
     public CreateHitEnemy Hit => hit;
+
+    [SerializeField] protected float force = 5f;
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -55,6 +57,6 @@ public class Explosion : PoolObj
     private void AddForceToTarget(Rigidbody rb)
     {
         if (rb.CompareTag("Enemy")) return;
-        rb.AddForce(new Vector3(0,15,0),ForceMode.Impulse);
+        rb.AddForce(new Vector3(0, force, 0),ForceMode.Impulse);
     }
 }
