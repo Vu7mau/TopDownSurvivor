@@ -247,6 +247,30 @@ public class SciFiController : EnemyAIController
         this.PlaySoundFX(snd_deaths);
     }
 
+    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected Explosion explosion;
+    [SerializeField] protected List<Transform> explosionPoss;
+    [SerializeField] protected Transform fire;
+    protected virtual void DestroyBossExplosion()
+    {
+        if(this.explosionSpawner == null) return;
+        if(explosion == null) return;
+        StartCoroutine(DestroyExplosionRoutine());
+    }
+    IEnumerator DestroyExplosionRoutine()
+    {
+        if (this.explosionPoss.Count == 0) yield break;
+        for (int i = 0; i < this.explosionPoss.Count; i++)
+        {
+            this.explosionSpawner.Spawn(this.explosion, this.explosionPoss[i].position);
+            yield return new WaitForSeconds(1);
+        }
+        yield return new WaitForSeconds(1f);
+        Explosion nbig = this.explosionSpawner.Spawn(this.explosion, transform.position);
+        nbig.transform.localScale = new Vector3(3, 3, 3);
+        fire.transform.gameObject.SetActive(true);
+    }
+
     private void PlaySoundFX(List<AudioClip> sounds)
     {
         int random = Random.Range(0, sounds.Count);
