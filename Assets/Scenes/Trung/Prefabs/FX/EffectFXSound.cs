@@ -13,6 +13,7 @@ public class EffectFXSound : MonoBehaviour
     private void OnEnable()
     {
         int random = Random.Range(0, snd_Explosion_Effect.Count);
+        if (this.snd_Explosion_Effect.Count == 0) return;
         //t.clip = snd_Explosion_Effect[random];
         //t.playOnAwake = false;
         //t.loop = false;
