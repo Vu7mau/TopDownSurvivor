@@ -135,7 +135,11 @@ public class SpawnEnemies :VuMonoBehaviour
     {
         this.isStartFight = true;
         if (waveNumber > _waves.listWaves.Count)
+        {
             waveNumber = _waves.listWaves.Count;
+            this.isFinale = true;
+            yield break;
+        }
         while (waveNumber <= _waves.listWaves.Count)
         {
             this.SpawnEnemiesFight(waveNumber);
