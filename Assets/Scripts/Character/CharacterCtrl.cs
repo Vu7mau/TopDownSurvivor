@@ -135,10 +135,10 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     }
     protected virtual void LoadCharacterLeveUp()
     {
-        if (this._characterLeveUp != null) return;
+        //if (this._characterLeveUp != null) return;
 
-        this._characterLeveUp = GetComponentInChildren<CharacterLeveUp>();
-        Debug.Log("LoadCharacterAnimHandle success " + this._characterLeveUp.transform.name);
+        //this._characterLeveUp = GetComponentInChildren<CharacterLeveUp>();
+        //Debug.Log("LoadCharacterAnimHandle success " + this._characterLeveUp.transform.name);
     }
 
 

@@ -1,26 +1,35 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class PanelDie : MonoBehaviour
+public class PanelDie : Singleton<VuMonoBehaviour>
 {
-    public GameObject panelDie;
-    private void Start()
+    public GameObject pnlDie;
+
+    //private void Start()
+    //{
+    //    panelDie.SetActive(false);
+    //}
+    protected override void Start()
     {
-        panelDie.SetActive(false);
+        pnlDie.SetActive(false);
     }
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
     }
+    //private void OnEnable()
+    //{
+    //    Time.timeScale = 0f;
+    //}
     public void Restart()
     {
         Time.timeScale = 1f;
-        panelDie.SetActive(false);
+        pnlDie.SetActive(false);
         LevelManager.Instance.LoadLevel(SceneManager.GetActiveScene().buildIndex);
     }
     public void MainMenu()
     {
         Time.timeScale = 1f;
-        panelDie.SetActive(false);
-        LevelManager.Instance.LoadLevel(0); 
+        pnlDie.SetActive(false);
+        LevelManager.Instance.LoadLevel(0);
     }
 }

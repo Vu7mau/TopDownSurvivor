@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +7,11 @@ public class CharacterDamageReceiver : DamageReceiver
 {
     [SerializeField] protected CharacterCtrl characterCtrl;
 
+    [SerializeField] protected PanelDie _pnl;
     protected IEnumerator enumeratorDamageScreen;
     protected override void Start()
     {
-        base.Start();
+       // base.Start();
         this.SetMaxHealth();
         //  HpBar.Instance.SetHealthMaxBarVolume(this._hpMax);
 
@@ -35,6 +36,7 @@ public class CharacterDamageReceiver : DamageReceiver
         characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsDead");
         characterCtrl.InputManager.DetachInputEvents();
         characterCtrl.DisableAllComponet();
+        _pnl.pnlDie.gameObject.SetActive(true);
 
     }
     protected virtual void SetMaxHealth()
