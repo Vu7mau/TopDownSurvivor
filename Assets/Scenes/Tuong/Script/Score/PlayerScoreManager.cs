@@ -1,30 +1,60 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
 public class PlayerScoreManager : MonoBehaviour
 {
     public static PlayerScoreManager Instance;
-    public int currentScore = 0;
+    private int totalScore = 0;
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
     }
-    public void AddScore(int amount)
+    public void AddScore(int value)
     {
-        currentScore += amount;
-        Debug.Log("Điểm hiện tại: " + currentScore);
-    }
-    public int GetCurrentScore()
-    {
-        return currentScore;
+        totalScore += value;
+        Debug.Log("Điểm hiện tại: " + totalScore);
     }
     public void ResetScore()
     {
-        currentScore = 0;
+        totalScore = 0;
+        Debug.Log("Điểm đã được đặt lại.");
+    }
+    public void SendFinalScore()
+    {
+        SendScoreToLeaderboard(totalScore);
+        Debug.Log("Gửi điểm cuối cùng: " + totalScore);
+    }
+    private void ApplicationQuit()
+    {
+        if(totalScore > 0)
+        {
+            Debug.Log("Thoát game, gửi điểm lên hệ thống");
+            SendFinalScore();
+        }
+    }
+    public void SendScoreToLeaderboard(int score)
+    {
+        string mode = PlayerPrefs.GetString("LastMode", "Campaign"); 
+        if(mode == "Campaign")
+        {
+            LeaderBoardCampaign.Instance.SendScoreCampaign(score);
+            Debug.Log("Gửi điểm lên bxh Campign: "+score);
+        }
+        else if(mode == "Survive")
+        {
+            LeaderBoardSurvive.Instance.SendScoreSurvive(score);
+            Debug.Log("Gửi điểm lên bxh Survive: " + score);
+        }
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SendFinalScore();
+            Instance.ResetScore();
+        }
     }
 }

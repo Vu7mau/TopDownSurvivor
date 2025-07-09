@@ -46,6 +46,7 @@ public class LevelManager : MonoBehaviour
             loaderCanvas.SetActive(false);
         }
         isLoading = false;
+        CountDownTimer.Instance.StartTimer();
     }
     private void Update()
     {

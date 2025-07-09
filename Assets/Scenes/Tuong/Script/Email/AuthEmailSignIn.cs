@@ -34,7 +34,8 @@ public class AuthEmailSignIn : AuthManager
     {
         currentEmail = signInEmail.text;
         PlayerPrefs.SetInt("HasLoggedIn", 1);
-        NotificationUI.Instance.Show("Đăng nhập thành công", 2f, () =>{
+        NotificationUI.Instance.Show("Đăng nhập thành công", 2f, () =>
+        {
             LinkDeviceAndProceed();
             MainMenuTwo.Instance.ExitPanelLogin();
             StartCoroutine(ClearInput(0.5f));
@@ -78,18 +79,17 @@ public class AuthEmailSignIn : AuthManager
     {
         PlayerPrefs.SetInt("AutoLoginDisable", 0);
         PlayerPrefs.Save();
-        LeaderBoardCampaign leaderBoardManager = FindObjectOfType<LeaderBoardCampaign>();
-        if (leaderBoardManager != null)
-        {
-            leaderBoardManager.GetLeaderBoardCampaign();
-        }
+        if (LeaderBoardCampaign.Instance != null)
+            LeaderBoardCampaign.Instance.GetLeaderBoardCampaign(); 
+        if (LeaderBoardSurvive.Instance != null)
+            LeaderBoardSurvive.Instance.GetLeaderBoardSurvive();
         CharacterInformation.Instance.ShowCharacters();
     }
     private void OnErrorSignIn(PlayFabError error)
     {
-        if(error.Error == PlayFabErrorCode.InvalidParams && error.ErrorDetails != null)
+        if (error.Error == PlayFabErrorCode.InvalidParams && error.ErrorDetails != null)
         {
-            if(error.ErrorDetails.ContainsKey("Email") || error.ErrorDetails.ContainsKey("Password"))
+            if (error.ErrorDetails.ContainsKey("Email") || error.ErrorDetails.ContainsKey("Password"))
             {
                 NotificationUI.Instance.Show("Email hoặc mật khẩu không đúng.");
                 return;

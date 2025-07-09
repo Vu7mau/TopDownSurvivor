@@ -46,7 +46,7 @@ public class ModePanel : MonoBehaviour
     private Mode currentMode = Mode.Campaign;
     private string campaignDescription = "Khám phá cốt truyện hấp dẫn, chinh phục từng thử thách theo hành trình.";
     private string surviveDescription = "Sinh tồn giữa vùng đất lạ, chiến đấu không ngừng để sống sót càng lâu càng tốt.";
-
+    public Mode CurrentMode => currentMode;
     private void Awake()
     {
         if (Instance == null)
@@ -93,7 +93,8 @@ public class ModePanel : MonoBehaviour
             return;
         }
         AudioManagerTwo.Instance.PlayButtonSFX(ButtonSFXType.Confirm);
-
+        PlayerPrefs.SetString("LastMode", currentMode.ToString());
+        PlayerPrefs.Save();
         transitionSequence?.Kill();
         DOTween.Kill(gameObject, true);
         LevelManager.Instance.LoadLevel(currentMode == Mode.Campaign ? campaignSceneIndex : surviveSceneIndex);

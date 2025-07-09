@@ -56,6 +56,7 @@ public class AuthManager : TuongMonobehaviour
         PlayerPrefs.Save();
         MainMenuTwo.Instance.PlayMenu.SetActive(true);
         MainMenuTwo.Instance.LogoutButton.SetActive(false);
+        MainMenuTwo.Instance.IconLeaderBoard.SetActive(false);
         Debug.Log("Đăng xuất thành công.");
     }
 }

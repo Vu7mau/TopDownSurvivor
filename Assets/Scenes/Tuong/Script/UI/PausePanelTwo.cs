@@ -1,6 +1,5 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 public class PausePanelTwo : MonoBehaviour
 {
     public GameObject pausePanel;
@@ -8,15 +7,21 @@ public class PausePanelTwo : MonoBehaviour
     public GameObject settingsPanel;
     public EffectSignIn effectPausePanel;
     public EffectPanelSetting effectPanelSetting;
+    public GameObject timerPrefab;
 
     private bool isTransitioning = false;
     private const float transitionDelay = 1f;
     private bool isInSettingPanel = false;
     private void Start()
     {
+        if(CountDownTimer.Instance == null)
+        {
+            Instantiate(timerPrefab);
+        }
         settingsPanel.SetActive(false);
         pausePanel.SetActive(false);
         backGround.SetActive(false);
+
     }
     private void Update()
     {
@@ -70,6 +75,8 @@ public class PausePanelTwo : MonoBehaviour
     public void BackToMainMenu(int sceneIndex)
     {
         Time.timeScale = 1f;
+        CountDownTimer.Instance.ResetTimer();
+        CountDownTimer.Instance.PauseTimer();
         pausePanel.SetActive(false);
         DOTween.KillAll();
         LevelManager.Instance.LoadLevel(sceneIndex);

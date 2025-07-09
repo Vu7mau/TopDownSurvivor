@@ -15,8 +15,8 @@ public class MainMenuTwo : MonoBehaviour
     [SerializeField] private GameObject logoutButton;
     [SerializeField] private GameObject playMenu;
     [SerializeField] private GameObject modePanel;
-    [SerializeField] private EffectSignIn pauseSignInEffect;
-    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject leaderboardPanel;
+    [SerializeField] private GameObject iconLeaderboard;
     public EffectPanelSetting settingEffect;
     [SerializeField] private GameObject settingsPanel;
     private int previousPanelId;
@@ -24,12 +24,12 @@ public class MainMenuTwo : MonoBehaviour
     public GameObject LogoutButton => logoutButton;
     public GameObject PlayButton => playButton;
     public GameObject SettingPanel => settingsPanel;
-    public GameObject PausePanel => pausePanel;
     public GameObject ResetPanel => resetPanel;
     public EffectSignIn EffectLogin => effectLogin;
     public EffectSignIn EffectResetPassword => effectResetPassword;
     public GameObject LoginPanel => loginPanel;
     public GameObject ModePanelPublic => modePanel;
+    public GameObject IconLeaderBoard => iconLeaderboard;
     private void Start()
     {
         if (Instance == null) Instance = this;
@@ -38,6 +38,7 @@ public class MainMenuTwo : MonoBehaviour
         settingsPanel.SetActive(true);
         bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
         logoutButton.SetActive(hasLoggedIn);
+        iconLeaderboard.SetActive(hasLoggedIn);
         HidePanel();
     }
     public void HidePanel()
@@ -48,6 +49,7 @@ public class MainMenuTwo : MonoBehaviour
         resetPanel.SetActive(false);
         settingsPanel.SetActive(false);
         modePanel.SetActive(false);
+        leaderboardPanel.SetActive(false);
     }
     public void OpenSettingFromMainMenu()
     {
@@ -63,7 +65,6 @@ public class MainMenuTwo : MonoBehaviour
     {
         if(previousPanelId == 0)
             playMenu.SetActive(false);
-        else pausePanel.SetActive(false);
         settingsPanel.SetActive(true);
         settingEffect.ShowPanel();
     }
@@ -75,11 +76,6 @@ public class MainMenuTwo : MonoBehaviour
             if(previousPanelId == 0)
             {
                 playMenu.SetActive(true);
-            }
-            else if (previousPanelId == 1)  
-            {
-                pausePanel.SetActive(true);
-                pauseSignInEffect.ShowPanel();
             }
         });
     }
@@ -115,6 +111,7 @@ public class MainMenuTwo : MonoBehaviour
         {
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             StartCoroutine(ClearInputLogin(0.5f));
         });
     }
@@ -147,6 +144,7 @@ public class MainMenuTwo : MonoBehaviour
         {
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             StartCoroutine(ClearInputRegister(0.5f));
         });
     }
@@ -183,6 +181,7 @@ public class MainMenuTwo : MonoBehaviour
             authManager.resetPasswordInput.text = string.Empty;
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
         });
     }
     public void OpenPanelLogin()
@@ -202,5 +201,26 @@ public class MainMenuTwo : MonoBehaviour
             settingsPanel.SetActive(false);
             playMenu.SetActive(true);
         });
+    }
+    public void OpenLeaderBoardPanel()
+    {
+        playMenu.SetActive(false);
+        leaderboardPanel.SetActive(true);
+        iconLeaderboard.SetActive(false);
+        StartCoroutine(LoadLeaderboardAfterUIReady());
+    }
+    public void CloseLeaderBoardPanel()
+    {
+        iconLeaderboard.SetActive(true);
+        playMenu.SetActive(true);
+        leaderboardPanel.SetActive(false);
+    }
+    private IEnumerator LoadLeaderboardAfterUIReady()
+    {
+        yield return null;
+        LeaderBoardCampaign.Instance?.GetLeaderBoardCampaign();
+        LeaderBoardSurvive.Instance?.GetLeaderBoardSurvive();
+        LeaderBoardCampaign.Instance?.GetMyRank();
+        LeaderBoardSurvive.Instance?.GetMyRank();
     }
 }

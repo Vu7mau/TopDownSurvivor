@@ -62,27 +62,69 @@ public class AuthEmailSignUp : AuthManager
         PlayFabClientAPI.RegisterPlayFabUser(request, OnSignUpSucces, OnErrorSignUp);
     }
     private void OnSignUpSucces(RegisterPlayFabUserResult result)
-    {
-        PlayerPrefs.SetInt("HasLoggedIn", 1);
-        NotificationUI.Instance.Show("Đăng ký người dùng mới thành công", 2f, () => {
-            MainMenuTwo.Instance.ExitPanelRegister();
-            StartCoroutine(ClearInput(0.5f));
-        });
-        CharacterInformation.Instance.ShowCharacters();
-        PlayFabClientAPI.UpdateUserTitleDisplayName(
-            new UpdateUserTitleDisplayNameRequest
-            {
-                DisplayName = signUpUserName.text
-            },
-        result =>
+{
+    PlayerPrefs.SetInt("HasLoggedIn", 1);
+    LeaderBoardCampaign.Instance?.EnsureDefaultScore();
+    LeaderBoardSurvive.Instance?.EnsureDefaultScore();
+
+    NotificationUI.Instance.Show("Đăng ký người dùng mới thành công", 2f, () => {
+        LinkDeviceAndProceed();
+        MainMenuTwo.Instance.ExitPanelRegister();
+        LeaderBoardCampaign.Instance?.GetLeaderBoardCampaign();
+        LeaderBoardSurvive.Instance?.GetLeaderBoardSurvive();
+        StartCoroutine(ClearInput(0.5f));
+    });
+
+    CharacterInformation.Instance.ShowCharacters();
+    PlayFabClientAPI.UpdateUserTitleDisplayName(
+        new UpdateUserTitleDisplayNameRequest
         {
-            Debug.Log("Cập nhật tên người dùng thành công");
+            DisplayName = signUpUserName.text
         },
-        error =>
+        result => Debug.Log("Cập nhật tên người dùng thành công"),
+        error => Debug.LogError("Lỗi cập nhật tên người dùng: " + error.GenerateErrorReport())
+    );
+}
+
+    private void LinkDeviceAndProceed()
+    {
+        string deviceId = SystemInfo.deviceUniqueIdentifier;
+        var linkRequest = new LinkCustomIDRequest
         {
-            Debug.LogError("Lỗi cập nhật tên người dùng: " + error.GenerateErrorReport());
-        }
-        );
+            CustomId = deviceId,
+            ForceLink = true
+        };
+
+        PlayFabClientAPI.LinkCustomID(linkRequest,
+            success =>
+            {
+                Debug.Log("Đã liên kết tài khoản với thiết bị sau khi đăng ký.");
+                OnLoginFinalized();
+            },
+            error =>
+            {
+                if (error.Error == PlayFabErrorCode.LinkedDeviceAlreadyClaimed)
+                {
+                    Debug.Log("Thiết bị đã liên kết trước đó, tiếp tục.");
+                    OnLoginFinalized();
+                }
+                else
+                {
+                    Debug.LogError("Lỗi liên kết thiết bị: " + error.ErrorMessage);
+                }
+            });
+    }
+    private void OnLoginFinalized()
+    {
+        PlayerPrefs.SetInt("AutoLoginDisable", 0);
+        PlayerPrefs.Save();
+        if (LeaderBoardCampaign.Instance != null)
+            LeaderBoardCampaign.Instance.GetLeaderBoardCampaign();
+        if (LeaderBoardSurvive.Instance != null)
+            LeaderBoardSurvive.Instance.GetLeaderBoardSurvive();
+        CharacterInformation.Instance.ShowCharacters();
+        LeaderBoardCampaign.Instance.EnsureDefaultScore();
+        LeaderBoardSurvive.Instance.EnsureDefaultScore();
     }
     private IEnumerator ClearInput(float delay)
     {
