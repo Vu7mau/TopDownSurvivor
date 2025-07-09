@@ -44,7 +44,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
         {
             StatisticName = leaderboardStat,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 100
         },
         res => { topEntries = res.Leaderboard.ToList(); doneScores = true; },
         err => { Debug.LogError(err.GenerateErrorReport()); doneScores = true; });
@@ -56,7 +56,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
         {
             StatisticName = timeStat,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 100
         }, res => { foreach (var e in res.Leaderboard) timeMap[e.PlayFabId] = e.StatValue; doneTimes = true; },
         err => { Debug.LogWarning(err.GenerateErrorReport()); doneTimes = true; });
         yield return new WaitUntil(() => doneTimes);
