@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4278159870124092420}
-  - component: {fileID: 8703292632239658645}
+  - component: {fileID: 8019349917477502463}
   m_Layer: 0
   m_Name: Despawn
-  m_TagString: Untagged
+  m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1868729732153658574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8703292632239658645
+--- !u!114 &8019349917477502463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,13 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 758592307341994509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c715110d4aa49ce46a8a8c5310a3afb4, type: 3}
+  m_Script: {fileID: 11500000, guid: 01cf63a16a95e8142b67f8b3f4951c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 7839513121532337721}
   spawner: {fileID: 0}
-  timeLife: 5
-  currentTime: 5
+  timeLife: 3
+  currentTime: 3
 --- !u!1 &873152462934318911
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,10 +59,9 @@ GameObject:
   - component: {fileID: 8462458326881920660}
   - component: {fileID: 6397864444031809297}
   - component: {fileID: 8328975166133394792}
-  - component: {fileID: 9083743895809648285}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,12 +74,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873152462934318911}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1868729732153658574}
+  m_Father: {fileID: 660470979331055875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6397864444031809297
 MeshFilter:
@@ -132,27 +131,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &9083743895809648285
-SphereCollider:
+--- !u!1 &3085934537242522252
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 873152462934318911}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 660470979331055875}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &660470979331055875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3085934537242522252}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8462458326881920660}
+  m_Father: {fileID: 1868729732153658574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6491661199973382755
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +176,7 @@ GameObject:
   - component: {fileID: 7713747440251534617}
   m_Layer: 0
   m_Name: CreateHitEnemy
-  m_TagString: Untagged
+  m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -248,14 +258,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8510225781361347330}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 107.42752, y: 0.3158055, z: 84.87495}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 120.88577, y: 16.6309, z: 217.9992}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8462458326881920660}
-  - {fileID: 4278159870124092420}
+  - {fileID: 660470979331055875}
   - {fileID: 288234081849465726}
+  - {fileID: 4278159870124092420}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7839513121532337721
@@ -270,10 +280,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fbb0a94d0bba0541bfaeb6d92d5f8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  despawn: {fileID: 8703292632239658645}
-  speed: 20
+  pool_Name: ToxicAbyss
+  despawn: {fileID: 8019349917477502463}
+  speed: 30
   createHitEnemy: {fileID: 1928986395139069166}
-  toxicAbyssDespawn: {fileID: 8703292632239658645}
 --- !u!135 &4936571047033355100
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -289,7 +299,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

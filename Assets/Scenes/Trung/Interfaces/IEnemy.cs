@@ -5,7 +5,7 @@ using UnityEngine;
 interface IEnemy
 {
     //public bool HasHurtState();
-    public bool HasDeadState();
+    //public bool HasDeadState();
 }
 //interface INpc
 //{

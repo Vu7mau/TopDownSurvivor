@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosion : PoolObj
+public class Explosion : EffectFX
 {
-    [SerializeField] protected string _name;
-    public string Name { get => _name; }
-
-    public override string GetName() => _name;
-    protected bool _canTakeDamage= false;
     [SerializeField] protected CreateHitEnemy hit;
-    public CreateHitEnemy Hit => hit;
 
     [SerializeField] protected float force = 5f;
+
+    public CreateHitEnemy Hit => hit;
+
+    protected bool _canTakeDamage= false;
     protected override void OnDisable()
     {
         base.OnDisable();

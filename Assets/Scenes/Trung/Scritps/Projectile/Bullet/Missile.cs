@@ -5,7 +5,7 @@ using UnityEngine;
 public class Missile : Projectitle
 {
     public override string GetName() => "Missile";
-    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected EffectFXSpawner explosionSpawner;
     [SerializeField] protected Explosion explosion;
     [SerializeField] protected MissileDespawn missileDespawn;
 
@@ -30,7 +30,7 @@ public class Missile : Projectitle
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+        this.explosionSpawner = FindAnyObjectByType<EffectFXSpawner>();
     }
     protected virtual void LoadMissileDespawn()
     {
@@ -43,7 +43,7 @@ public class Missile : Projectitle
         List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
         foreach (var myComponent in allMyComponents)
         {
-            if (myComponent.GetComponent<Explosion>().Name == "Explode1")
+            if (myComponent.GetComponent<Explosion>().GetName() == "Explode1")
             {
                 this.explosion = myComponent;
                 break;
@@ -54,8 +54,8 @@ public class Missile : Projectitle
     {
         if (!other.CompareTag("BulletEnemy") && !other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
         {
-            Explosion newExplosde =  this.explosionSpawner.Spawn(explosion, transform.position);
-            newExplosde.Hit.gameObject.SetActive(true);
+            EffectFX newExplosde =  this.explosionSpawner.Spawn(explosion, transform.position);
+            newExplosde.GetComponent<Explosion>().Hit.gameObject.SetActive(true);
             this.missileDespawn.DoDespawn();
         }
     }

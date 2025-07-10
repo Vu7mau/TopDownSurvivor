@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Zombie_FireFighterCtrl : ZombieCtrl
+public class Zombie_FireFighterCtrl : VuMonoBehaviour
 {
+
+
     [SerializeField] protected Explosion explosionPrefab;
-    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    protected EffectFXSpawner explosionSpawner;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -15,23 +17,27 @@ public class Zombie_FireFighterCtrl : ZombieCtrl
     protected virtual void LoadExplosion()
     {
         if (this.explosionPrefab != null) return;
-        List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
-        this.explosionPrefab = allMyComponents[0];
+        //List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
+        //foreach (var myComponent in allMyComponents)
+        //{
+        //    if(myComponent.GetComponent<Explosion>().GetName() == "Explode1")
+        //    {
+        //        this.explosionPrefab = myComponent;
+        //        break;
+        //    }
+        //}
     }
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+        this.explosionSpawner = FindAnyObjectByType<EffectFXSpawner>();
         if(this.explosionSpawner == null) return;
-    }
-    protected override void Shooting()
-    {
     }
     protected virtual void Explode()
     {
-        if(this.explosionPrefab == null) return;
+        if(this.explosionSpawner == null) return;
         if (this.explosionPrefab == null) return;
-        Explosion newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, transform.position);
+        EffectFX newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, transform.position);
         if (newExplosion == null) return;
     }
 }

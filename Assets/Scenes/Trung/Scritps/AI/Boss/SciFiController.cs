@@ -124,17 +124,17 @@ public class SciFiController : EnemyAIController
             yield return new WaitUntil(() => this.farState == FarState.Chase);
         }
     }
-    protected override void EndAttack()
+    public override void EndAttack()
     {
         base.EndAttack();
         this.enemyReferences.Animator.SetBool("attack", false);
         this.enemyReferences.Animator.SetBool("attackFar", false);
         this.farState = FarState.Chase;
     }
-    protected override void UpdatePath()
+    protected override void UpdateEnemyPath()
     {
         if (this.farState != FarState.Chase) return;
-        base.UpdatePath();
+        base.UpdateEnemyPath();
     }
     protected virtual void AttackFar1()
     {
@@ -144,7 +144,7 @@ public class SciFiController : EnemyAIController
     protected virtual void RandomFarAttack()
     {
 
-        int attackIndex = Random.Range(0, this.amountAnimationAttackFar);
+        int attackIndex = Random.Range(0, this.amountAttackFar);
 
         this.enemyReferences.Animator.SetFloat("AttackFar", attackIndex);
         this.enemyReferences.Animator.SetBool("attackFar", true);
@@ -247,7 +247,7 @@ public class SciFiController : EnemyAIController
         this.PlaySoundFX(snd_deaths);
     }
 
-    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected EffectFXSpawner explosionSpawner;
     [SerializeField] protected Explosion explosion;
     [SerializeField] protected List<Transform> explosionPoss;
     [SerializeField] protected Transform fire;
@@ -266,7 +266,7 @@ public class SciFiController : EnemyAIController
             yield return new WaitForSeconds(1);
         }
         yield return new WaitForSeconds(1f);
-        Explosion nbig = this.explosionSpawner.Spawn(this.explosion, transform.position);
+        EffectFX nbig = this.explosionSpawner.Spawn(this.explosion, transform.position);
         nbig.transform.localScale = new Vector3(3, 3, 3);
         fire.transform.gameObject.SetActive(true);
     }

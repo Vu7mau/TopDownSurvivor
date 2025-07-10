@@ -11,6 +11,9 @@ public class Projectitle : PoolObj
     [SerializeField] protected float speed = 10f;
     public float Speed { get =>  speed; set => speed = value; }
 
+    [SerializeField] protected Vector3 offSet = new Vector3(0, 0.947f,0);
+
+
     [SerializeField] protected CreateHitEnemy createHitEnemy;
 
 
@@ -20,6 +23,8 @@ public class Projectitle : PoolObj
         get { return _direction; }
         set { _direction = value; }
     }
+
+    
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -48,9 +53,14 @@ public class Projectitle : PoolObj
         this.createHitEnemy.CanTakeDamage = false;
     }
 
+
+
+
+
+
     public virtual void ShootAt(Vector3 target)
     {
-        _direction = (target - transform.position).normalized;
+        _direction = (target + this.offSet - transform.position).normalized;
     }
     public virtual void ShootAt(Vector3 target, float newSpeed)
     {
@@ -72,8 +82,25 @@ public class Projectitle : PoolObj
     }
 
 
+
+
     protected void Update()
     {
         transform.position += _direction * speed * Time.deltaTime;
+    }
+
+
+
+
+
+
+    protected void OnCollisionEnter(Collision other)
+    {
+        if (other.transform.CompareTag("Player") && this.createHitEnemy.CanTakeDamage)
+        {
+            this.createHitEnemy.CanTakeDamage = false;
+            this.Despawn.DoDespawn();
+        }
+        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("BulletEnemy") && !other.transform.CompareTag("bullet")) this.Despawn.DoDespawn();
     }
 }

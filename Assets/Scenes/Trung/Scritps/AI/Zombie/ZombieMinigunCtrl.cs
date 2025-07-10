@@ -3,50 +3,41 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ZombieMinigunCtrl : ZombieCtrl
+public class ZombieMinigunCtrl : EShooting
 {
-    [SerializeField] protected MinigunBulletZombieSpawner minigunBulletZombieSpawner;
-    [SerializeField] protected MinigunBulletZombie bulletMinigunPrefab;
-    [SerializeField] protected List<Transform> listPositions;
+    protected EnemyAIController enemyAIController;
 
-    [SerializeField] protected int shootTime = 4;
+
+    [SerializeField] protected List<Transform> listPositions;
+    [SerializeField] protected MinigunBulletZombie minigunBullet;
+    [SerializeField] protected int shootTime = 10;
     
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadMinigunBulletZombie();
-        this.LoadMinigunBulletZombieSpawner();
-        this.LoadEndPoint();
+        this.LoadEnemyAIController();
     }
-    protected virtual void LoadEndPoint()
+
+    protected virtual void LoadEnemyAIController()
     {
-        if (this.endPoint != null) return;
-        this.endPoint = FindAnyObjectByType<CharacterAnimHandle>().transform;
-        Debug.Log(transform.name + ": Load EndPoint!", gameObject);
+        if (this.enemyAIController != null) return;
+        this.enemyAIController = GetComponent<EnemyAIController>();
     }
-    protected virtual void LoadMinigunBulletZombieSpawner()
-    {
-        if (this.minigunBulletZombieSpawner != null) return;
-        this.minigunBulletZombieSpawner = FindAnyObjectByType<MinigunBulletZombieSpawner>();
-    }
-    protected virtual void LoadMinigunBulletZombie()
-    {
-        if (this.bulletMinigunPrefab != null) return;
-        List<MinigunBulletZombie> allMyComponents = ComponentFinder.FindAllComponentsInScene<MinigunBulletZombie>();
-        this.bulletMinigunPrefab = allMyComponents[0];
-    }
-    protected override void Shooting()
+    protected virtual void MinigunShoot()
     {
         StartCoroutine(this.ShootingRoutine());
     }
     private IEnumerator ShootingRoutine()
     {
-        for (int i = 0; i < shootTime; i++)
+        for(int i = 0; i< shootTime; i++)
         {
-            MinigunBulletZombie newBullet = this.minigunBulletZombieSpawner.Spawn(bulletMinigunPrefab, listPositions[i % listPositions.Count].position);
-            if (newBullet == null) yield break;
-            newBullet.gameObject.GetComponent<MinigunBulletZombie>().ShootAt(endPoint.position + offSet);
+            this.enemyAIController.IsLookAtTarget = true;
+            int dem = Random.Range(0, this.listPositions.Count);
             yield return new WaitForSeconds(0.7f);
+            this.Shooting(this.minigunBullet, this.listPositions[dem]);
+            if (this.newProjectitle == null) yield break;
+            this.newProjectitle.gameObject.GetComponent<MinigunBulletZombie>().ShootAt(this.targetPosition.position);
         }
+        this.enemyAIController.EndAttack();
     }
 }

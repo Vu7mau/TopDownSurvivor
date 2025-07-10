@@ -6,7 +6,7 @@ using UnityEngine;
 public class SpiderTiny : EnemyAI
 {
     [SerializeField] protected Explosion explosionPrefab;
-    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected EffectFXSpawner explosionSpawner;
 
     [SerializeField] protected EnemyHealth spiderHealth;
     [SerializeField] protected bool _spiderIsDead;
@@ -27,7 +27,7 @@ public class SpiderTiny : EnemyAI
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+        this.explosionSpawner = FindAnyObjectByType<EffectFXSpawner>();
     }
     protected virtual void LoadEnemyHealth()
     {
@@ -61,7 +61,7 @@ public class SpiderTiny : EnemyAI
     {
         if(this.explosionSpawner == null) return;
         if(this.explosionPrefab ==  null) return;
-        Explosion newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, transform.position);
+        EffectFX newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, transform.position);
         if(newExplosion == null) return;
     }
 }

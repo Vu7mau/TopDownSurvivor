@@ -28,9 +28,9 @@ public class BossRise : VuMonoBehaviour
         if(other.transform.GetComponentInChildren<CharacterAnimHandle>() != null)
         {
             this.enemyAI.Animator.SetBool("isStartFightBoss",true);
-            this.enemyHealth.CanTakeDamage = true;
+            this.enemyHealth.CanGetDamage = true;
             this.isStartFightBoss=true;
-            this.enemyAI.IsMoving = true;
+            //this.enemyAI.isMoving = true;
             this.transform.gameObject.SetActive(false);
         }
     }

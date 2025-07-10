@@ -1,29 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Autodesk.Fbx;
+using UnityEditor;
 using UnityEngine;
 
-public class EnemyAIController : VuMonoBehaviour
+public class EnemyAIController : EnemyBase
 {
-    [SerializeField] protected Transform targetPosition;
+    [Header("All custom components when need to ref!")]
     [SerializeField] protected EnemyAI enemyReferences;
-
-    [SerializeField] protected FindNearestTargets findTargets;
-
-    [SerializeField] protected bool isAttacking = false;
-    [SerializeField] protected bool isLookAtTarGet = true;
-    public bool IsLookAtTarget { get => isLookAtTarGet; set => isLookAtTarGet = value; }
-
-    [SerializeField] protected bool isNearTarget = false;
-
-
     [SerializeField] protected EnemyHealth enemyHealth;
+    [SerializeField] protected EnemyCtrlDespawn enemyCtrlDespawn;
 
-    [SerializeField] protected int amountAnimationAttackNear = 1;
-    [SerializeField] protected int amountAnimationAttackFar = 1;
+    [Space]
+    [Header("Default Components nessessary!")]
+    [SerializeField] protected Transform targetPosition;
+
+
+    [Space]
+    [Header("Control state when active/ deactive!")]
+
+    [SerializeField] protected bool isLookAtTarGet = false;
+    [SerializeField] protected bool isAttacking = false;
+    [SerializeField] protected bool isNearTarget = false;
+    [SerializeField] protected bool isMoving = true;
+
+
+    [Space]
+    [Header("Properties")]
+    [SerializeField] protected float distanceNearest = 1f;
+    public float DistanceNearest { get => distanceNearest; }
+
+
+    protected float distanceToTarget;
+    public float DistanceToTarget { get => this.distanceToTarget; }
+
+    //public variable
+
+    public bool IsLookAtTarget { get => isLookAtTarGet; set => isLookAtTarGet = value; }
+    public bool IsMoving { get => isMoving; set => isMoving = value; }
+
+    public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
+
+
+    [Space]
+    [Header("Control behavior of enemies base!")]
+
+    [SerializeField] protected int amountAttackNear = 1;
+    [SerializeField] protected int amountAttackFar = 1;
+
+
+    //Hide in Hirachi variable
+
 
     //protected float attackDistance;
     protected float pathUpdateDeadline;
-
     protected bool inRangeAttack = false;
 
 
@@ -34,7 +64,7 @@ public class EnemyAIController : VuMonoBehaviour
         this.LoadTargetPosition();
         this.LoadEnemyHealth();
         this.LoadEnemyReferences();
-        this.LoadFindTargets();
+        this.LoadEnemyCtrlDespawn();
     }
     protected override void Start()
     {
@@ -42,8 +72,23 @@ public class EnemyAIController : VuMonoBehaviour
         this.LoadAllProperties();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.SetEnemyWhenAppear();
+    }
+
+    //Load All Properties
+    protected virtual void LoadAllProperties()
+    {
+        //this.attackDistance = this.enemyReferences.EnemySO.AttackRange;
+        this.enemyReferences.NavMeshAgent.speed = this.enemyReferences.EnemySO.ChaseSpeed;
+        this.enemyReferences.NavMeshAgent.stoppingDistance = this.enemyReferences.EnemySO.AttackRange;
+        this.enemyReferences.NavMeshAgent.acceleration = this.enemyReferences.EnemySO.ChaseSpeed;
+    }
 
 
+    //Load Custom Components
     protected virtual void LoadTargetPosition()
     {
         if (this.targetPosition != null) return;
@@ -54,17 +99,11 @@ public class EnemyAIController : VuMonoBehaviour
         if (this.enemyReferences != null) return;
         this.enemyReferences = GetComponentInChildren<EnemyAI>();
     }
-    protected virtual void LoadFindTargets()
+    protected virtual void LoadEnemyCtrlDespawn()
     {
-        if (this.findTargets != null) return;
-        this.findTargets = GetComponentInChildren<FindNearestTargets>();
-    }
-
-    protected virtual void LoadAllProperties()
-    {
-        //this.attackDistance = this.enemyReferences.EnemySO.AttackRange;
-        this.enemyReferences.NavMeshAgent.speed = this.enemyReferences.EnemySO.ChaseSpeed;
-        this.enemyReferences.NavMeshAgent.stoppingDistance = this.enemyReferences.EnemySO.AttackRange;
+        if (this.enemyCtrlDespawn != null) return;
+        this.enemyCtrlDespawn = GetComponentInChildren<EnemyCtrlDespawn>();
+        if (this.enemyCtrlDespawn == null) return;
     }
     protected virtual void LoadEnemyHealth()
     {
@@ -73,7 +112,28 @@ public class EnemyAIController : VuMonoBehaviour
     }
 
 
+    protected virtual void SetEnemyWhenAppear()
+    {
+        this.enemyReferences.NavMeshAgent.enabled = true;
+        this.isAttacking = false;
+        this.isLookAtTarGet = false;
+        this.isNearTarget = false;
+        this.isMoving = true;
+
+
+        this.WaitingForEnemyDeath();
+
+
+
+    }
+
+
     protected virtual void Update()
+    {
+        this.ControlBehviorEnemy();
+    }
+
+    protected virtual void ControlBehviorEnemy()
     {
         if (this.targetPosition != null)
         {
@@ -81,65 +141,194 @@ public class EnemyAIController : VuMonoBehaviour
             {
                 if (this.EnemyIsDead())
                 {
-                    this.Death();
                     return;
                 }
             }
+
+
+            this.Chase();
             //this.inRangeAttack = Vector3.Distance(transform.position,targetPosition.position) <= this.attackDistance;
-            this.inRangeAttack = this.findTargets.TargetsNearest.Count > 0;
-            if (this.inRangeAttack)
-            {
-                this.isNearTarget = true;
-                this.Attack();
-            }
-            else
-            {
-                this.isNearTarget = false;
-            }
-            this.enemyReferences.Animator.SetBool("attack", this.inRangeAttack);
-            this.UpdatePath();
-            this.LookAtTarGet();
+            this.Attack();
+
+
+
+            
+
+
+
         }
-        this.enemyReferences.Animator.SetFloat("Speed",this.enemyReferences.NavMeshAgent.desiredVelocity.sqrMagnitude);
+
+
+        this.enemyReferences.Animator.SetFloat("Speed", this.enemyReferences.NavMeshAgent.desiredVelocity.sqrMagnitude);
     }
+
+    protected virtual void WaitingForEnemyDeath()
+    {
+        StartCoroutine(this.WaitingForEnemyDeathRoutine());
+    }
+
 
     protected virtual bool EnemyIsDead() => this.enemyHealth.Health <= 0;
 
-    protected virtual void Attack()
+    protected int RandomAnimationBlend(int _amountAnimations) => Random.Range(0, _amountAnimations);
+
+    protected bool HasState(string _state) => this.enemyReferences.Animator.HasState(0, Animator.StringToHash(_state));
+
+
+
+    protected override void Idle()
     {
-        this.isAttacking = true;
-        this.enemyReferences.IsMoving = false;
-        this.enemyReferences.NavMeshAgent.enabled = false;
-    }
-    protected virtual void LookAtTarGet()
-    {
-        if (!this.isLookAtTarGet) return;
-        Vector3 lookPos = targetPosition.position - transform.position;
-        lookPos.y = 0f;
-        Quaternion rotation = Quaternion.LookRotation(lookPos);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.2f);
-        //if (!this.inRangeAttack) isAttacking = false;
-        //if(!this.isAttacking) this.EndAttack();
+        if (!HasState("Idle"))
+        {
+            Debug.LogWarning("Chưa có trạng thái Idle, vui lòng thêm!");
+            return;
+        }
+        this.enemyReferences.Animator.SetFloat("IdleState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.IdleAnimations));
+        
+        this.enemyReferences.Animator.SetBool("isMoving", false);
+        this.isMoving = false;
+
+        this.enemyReferences.Animator.SetBool("attack", false);
+        this.isAttacking = false;
     }
 
-    protected virtual void UpdatePath()
+
+    protected override void Chase()
     {
-        if (Time.time >= pathUpdateDeadline)
+        if (this.isAttacking) return;
+        if (!this.isMoving) return;
+        //Check Player is in chase range!
+        if (!HasState("Movement"))
+        {
+            Debug.LogWarning("Chưa có trạng thái Movement, vui lòng thêm!");
+            return;
+        }
+
+        if(this.targetPosition != null)
+        {
+            this.distanceToTarget = Vector3.Distance(this.transform.position, this.targetPosition.position);
+            bool canChasePlayer = Vector3.Distance(transform.position, targetPosition.position) <= this.enemyReferences.EnemySO.ChaseRange;
+            if (canChasePlayer)
+            {
+                this.UpdateEnemyPath();
+            }
+            this.LookAtTarGet();
+        }
+    }
+
+    protected override void Attack()
+    {
+        this.enemyReferences.Animator.SetFloat("distance",this.distanceToTarget);
+        this.AttackWhenNearPlayer();
+        this.AttackWhenFarPlayer();
+
+
+
+
+    }
+
+
+
+    //Death
+    protected IEnumerator WaitingForEnemyDeathRoutine()
+    {
+        yield return new WaitUntil(() => this.enemyHealth.CanGetDamage);
+        yield return new WaitUntil(() => this.enemyHealth.Health <= 0 && !this.enemyHealth.CanGetDamage);
+        this.Death();
+    }
+
+    protected override void Death()
+    {
+        this.enemyReferences.NavMeshAgent.enabled = false;
+
+        if(!HasState("Death")) return;
+        this.enemyReferences.Animator.SetTrigger("Death");
+        this.enemyReferences.Animator.SetFloat("DeathState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.DeathAnimations));
+    }
+    protected virtual void DeleteEnemy()
+    {
+        //if(this.enemyCtrlDespawn != null)
+        //{
+        //    this.enemyCtrlDespawn.DoDespawn();
+        //    return;
+        //}
+        this.gameObject.SetActive(false);
+    }
+    protected virtual void DeleteEnemyWhileHpEqual0()
+    {
+        if (!GetComponent<Collider>().enabled && gameObject.activeInHierarchy)
+        {
+            this.DeleteEnemy();
+            //RewardPlayerAfterEnemyDead();
+        }
+    }
+
+
+
+
+
+    protected override void AttackWhenNearPlayer()
+    {
+        if(this.targetPosition == null) return;
+        if (!HasState("AttackNear")) return;
+        if (this.distanceToTarget < this.distanceNearest)
+        {
+            this.isAttacking = true;
+            this.enemyReferences.NavMeshAgent.enabled = false;
+            this.isNearTarget = true;
+            this.enemyReferences.Animator.SetFloat("AttackNearState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.AttackAnimations));
+        }
+        else
+        {
+            this.isNearTarget = false;
+            this.isAttacking = false;
+            this.enemyReferences.NavMeshAgent.enabled = true;
+        }
+        this.enemyReferences.Animator.SetBool("attack", this.isAttacking);
+    }
+
+    protected override void AttackWhenFarPlayer()
+    {
+        if(this.targetPosition == null) return;
+    }
+
+
+
+
+
+    protected override void LookAtTarGet()
+    {
+        if (!this.isLookAtTarGet) return;
+        Vector3 lookPos = this.targetPosition.position - this.transform.position;
+        lookPos.y = 0f;
+        Quaternion rotation = Quaternion.LookRotation(lookPos);
+        this.transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.2f);
+    }
+
+    protected virtual void UpdateEnemyPath()
+    {
+        if (Time.time >= this.pathUpdateDeadline)
         {
           //  Debug.Log("Updating path!");
             this.pathUpdateDeadline = Time.time + this.enemyReferences.PathUpdateDelay;
-             if (this.isAttacking) return;
-             if(!this.enemyReferences.IsMoving) return;
             this.enemyReferences.NavMeshAgent.enabled = true;
-            this.enemyReferences.NavMeshAgent.SetDestination(targetPosition.position);
+            this.enemyReferences.NavMeshAgent.SetDestination(this.targetPosition.position);
+            this.enemyReferences.Animator.SetBool("isMoving", true);
         }
     }
-    protected virtual void EndAttack()
+    public virtual void EndAttack()
     {
         this.isAttacking = false;
-        this.enemyReferences.IsMoving = true;
+        this.isMoving = true;
         this.enemyReferences.NavMeshAgent.enabled = true;
+        this.isLookAtTarGet = false;
+        this.enemyReferences.Animator.SetBool("attack", this.isAttacking);
     }
+
+
+
+
+
     protected virtual void SwitchFarState()
     {
 
@@ -152,9 +341,5 @@ public class EnemyAIController : VuMonoBehaviour
     protected virtual void DontLookAtTarget()
     {
         this.isLookAtTarGet = false;
-    }
-    protected virtual void Death()
-    {
-        this.enemyReferences.NavMeshAgent.enabled = false;
     }
 }

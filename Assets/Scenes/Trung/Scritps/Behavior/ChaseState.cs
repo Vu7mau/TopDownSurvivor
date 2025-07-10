@@ -32,7 +32,7 @@ public class ChaseState : StateMachineBehaviour
         }
         if (this.agent == null) return;
         if (!this.agent.enabled) return;
-        if (!this.enemyAI.IsMoving) return;
+        //if (!this.enemyAI.IsMoving) return;
         this.agent.SetDestination(this.player.position);
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

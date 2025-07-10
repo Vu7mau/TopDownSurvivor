@@ -7,7 +7,7 @@ public class LightBullet : Projectitle
 {
     public override string GetName() => "LightBullet";
     [SerializeField] protected LightBulletDespawn lightBulletDespawn;
-    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected EffectFXSpawner explosionSpawner;
     [SerializeField] protected Explosion explosion;
 
     protected override void LoadComponents()
@@ -26,7 +26,7 @@ public class LightBullet : Projectitle
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+        this.explosionSpawner = FindAnyObjectByType<EffectFXSpawner>();
     }
     protected virtual void LoadExplosion()
     {
@@ -34,7 +34,7 @@ public class LightBullet : Projectitle
         List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
         foreach(var myComponent in allMyComponents)
         {
-            if(myComponent.GetComponent<Explosion>().Name == "Explode2")
+            if(myComponent.GetComponent<Explosion>().GetName() == "Explode2")
             {
                 this.explosion = myComponent;
                 break;
@@ -46,8 +46,8 @@ public class LightBullet : Projectitle
         if (!other.CompareTag("BulletEnemy") && !other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
         {
             this.lightBulletDespawn.DoDespawn();
-            Explosion newExplosde = this.explosionSpawner.Spawn(explosion, transform.position);
-            newExplosde.Hit.gameObject.SetActive(false);
+            EffectFX newExplosde = this.explosionSpawner.Spawn(explosion, transform.position);
+            newExplosde.GetComponent<Explosion>().Hit.gameObject.SetActive(false);
         }
     }
 }

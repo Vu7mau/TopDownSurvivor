@@ -5,7 +5,7 @@ using UnityEngine;
 public class AbyssProjectitle : Projectitle
 {
     [SerializeField] protected Explosion explosion;
-    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected EffectFXSpawner explosionSpawner;
 
     protected override void LoadComponents()
     {
@@ -25,7 +25,7 @@ public class AbyssProjectitle : Projectitle
         List<Explosion> allMyComponents = ComponentFinder.FindAllComponentsInScene<Explosion>();
         foreach (var myComponent in allMyComponents)
         {
-            if (myComponent.GetComponent<Explosion>().Name == "Explode3")
+            if (myComponent.GetComponent<Explosion>().GetName() == "Explode3")
             {
                 this.explosion = myComponent;
                 break;
@@ -35,7 +35,7 @@ public class AbyssProjectitle : Projectitle
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = FindAnyObjectByType<ExplosionSpawner>();
+        this.explosionSpawner = FindAnyObjectByType<EffectFXSpawner>();
     }
 
     
@@ -53,7 +53,7 @@ public class AbyssProjectitle : Projectitle
     protected virtual void SpawnExplosion3()
     {
         if (this.explosionSpawner == null) return;
-        Explosion newExplosion = this.explosionSpawner.Spawn(this.explosion, transform.position);
+        EffectFX newExplosion = this.explosionSpawner.Spawn(this.explosion, transform.position);
         if (newExplosion == null) return;
         newExplosion.transform.GetComponentInChildren<CreateHitEnemy>().GetComponent<SphereCollider>().radius = 12.5f;
         newExplosion.transform.localScale = new Vector3(1f, 1f, 1f);

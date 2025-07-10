@@ -2,43 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombiePoliceCtrl : ZombieCtrl
+public class ZombiePoliceCtrl : EShooting
 {
-    [SerializeField] protected BulletInvisbleSpawner bulletInvisibleSpawner;
     [SerializeField] protected BulletInvisible bulletInvisible;
-    [SerializeField] protected Transform gunFlashFX;
+
+    [SerializeField] protected int shootTime = 2;
+    [SerializeField] protected float timeDelay = 0.1f;
 
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadBulletInvisbleSpawner();
         this.LoadBulletInvisible();
-        this.LoadEndPoint();
-    }
-    protected virtual void LoadBulletInvisbleSpawner()
-    {
-        if (this.bulletInvisibleSpawner != null) return;
-        this.bulletInvisibleSpawner = FindAnyObjectByType<BulletInvisbleSpawner>();
-        Debug.Log(transform.name + ": LoadAbyssToxicSpawner");
     }
     protected virtual void LoadBulletInvisible()
     {
         if (this.bulletInvisible != null) return;
         List<BulletInvisible> allMyComponents = ComponentFinder.FindAllComponentsInScene<BulletInvisible>();
         this.bulletInvisible = allMyComponents[0];
-        Debug.Log(transform.name + ": LoadToxicAbyss");
-    }
-    protected virtual void LoadEndPoint()
-    {
-        if (this.endPoint != null) return;
-        this.endPoint = FindAnyObjectByType<CharacterAnimHandle>().transform;
-        Debug.Log(transform.name + ": Load EndPoint!", gameObject);
     }
 
-    protected override void Shooting()
+    protected virtual void Shoot()
     {
-        BulletInvisible newBulletInvisible = this.bulletInvisibleSpawner.Spawn(this.bulletInvisible, this.position.position);
-        if (newBulletInvisible == null) return;
-        newBulletInvisible.GetComponent<BulletInvisible>().ShootAt(this.endPoint.position + offSet);
+        StartCoroutine(ShootingRoutine());
+    }
+
+    private IEnumerator ShootingRoutine()
+    {
+        for (int i = 0; i < shootTime; i++)
+        {
+            yield return new WaitForSeconds(this.timeDelay);
+            this.Shooting(this.bulletInvisible, this.positionSpawn);
+            if (this.newProjectitle == null) yield break;
+            this.newProjectitle.GetComponent<BulletInvisible>().ShootAt(this.targetPosition.position);
+        }
     }
 }

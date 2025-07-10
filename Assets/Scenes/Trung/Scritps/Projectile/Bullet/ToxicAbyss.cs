@@ -4,22 +4,5 @@ using UnityEngine;
 
 public class ToxicAbyss : Projectitle
 {
-    public override string GetName() => "ToxicAbyss";
-    [SerializeField] protected ToxicAbyssDespawn toxicAbyssDespawn;
-
-    protected override void LoadComponents()
-    {
-        base.LoadComponents();
-        this.LoadToxicAbyssDespawn();
-    }
-    protected virtual void LoadToxicAbyssDespawn()
-    {
-        if (this.toxicAbyssDespawn != null) return;
-        this.toxicAbyssDespawn = GetComponentInChildren<ToxicAbyssDespawn>();
-    }
-    protected void OnTriggerEnter(Collider other)
-    {
-        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet")) this.toxicAbyssDespawn.DoDespawn();
-    }
 
 }

@@ -20,14 +20,14 @@ public class AgentTypeSwitcher : MonoBehaviour
 
     protected void Awake()
     {
-        AddNavMeshSurfaceTag();
-        this.LoadAgentTypeDatabase();
+        agent = GetComponent<NavMeshAgent>();
+        enemyAI = GetComponent<EnemyAI>();
         //CacheAgentTypeIDs(); // Khởi tạo ánh xạ
     }
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        enemyAI = GetComponent<EnemyAI>();
+        AddNavMeshSurfaceTag();
+        this.LoadAgentTypeDatabase();
     }
 
     void Update()
@@ -140,7 +140,7 @@ public class AgentTypeSwitcher : MonoBehaviour
     {
         Debug.Log($"Switching agent type to ID {newTypeID}");
         agent.agentTypeID = newTypeID;
-        this.enemyAI.IsMoving = true;
+        //this.enemyAI.IsMoving = true;
 
         //if (agent.isOnNavMesh)
         //{

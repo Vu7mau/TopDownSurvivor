@@ -79,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _basedDamage: 5
   canTakeDamage: 0
-  enemySO: {fileID: 11400000, guid: 0a9c6c47fe43679429e51c64292dd4df, type: 2}
+  enemySO: {fileID: 0}
 --- !u!135 &6621868272964531166
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -193,7 +193,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7942541870438358254}
-  - component: {fileID: 3738826446463078188}
+  - component: {fileID: 8578308272350487810}
   m_Layer: 0
   m_Name: Despawn
   m_TagString: Untagged
@@ -216,7 +216,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1868729732153658574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3738826446463078188
+--- !u!114 &8578308272350487810
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6908961276391611111}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e234e5cffab2b4b49af010b0d17a8b4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 01cf63a16a95e8142b67f8b3f4951c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 7128398318447362255}
@@ -283,7 +283,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -301,7 +301,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9f428f8452c6542aea3f05f297f6d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  despawn: {fileID: 3738826446463078188}
-  speed: 100
+  pool_Name: BulletInvisble
+  despawn: {fileID: 8578308272350487810}
+  speed: 10
+  offSet: {x: 0, y: 0.947, z: 0}
   createHitEnemy: {fileID: 8110195712471004693}
-  bulletInvisbleDespawn: {fileID: 3738826446463078188}

@@ -19,8 +19,20 @@ public class EnemyAI : VuMonoBehaviour
     public EnemySO EnemySO { get => enemySO; }
     public float PathUpdateDelay { get => pathUpdateDelay;}
 
-    [SerializeField] protected bool isMoving = false;
-    public bool IsMoving { get => isMoving; set => isMoving = value; }
+
+    protected virtual void OnValidate()
+    {
+        if(this.pathUpdateDelay < 0) this.pathUpdateDelay = 0.2f;
+    }
+
+
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.OnEnableNavMeshAgent();
+    }
+
 
     protected override void LoadComponents()
     {
@@ -29,11 +41,9 @@ public class EnemyAI : VuMonoBehaviour
         this.LoadAnimator();
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        this.OnEnableNavMeshAgent();
-    }
+
+
+
     protected virtual void LoadAnimator()
     {
         if (this.animator != null) return;

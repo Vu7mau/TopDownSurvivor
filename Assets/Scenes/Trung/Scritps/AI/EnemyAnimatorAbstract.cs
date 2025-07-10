@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class EnemyAnimatorAbstract : EnemyGeneral
+public abstract class EnemyAnimatorAbstract : EnemyBase
 {
     [SerializeField] protected Animator _enemyAnimator;
     [SerializeField] protected NavMeshAgent _agent;

@@ -5,34 +5,42 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyHealth : DamageReceiver,IEnemy
+public class EnemyHealth : DamageReceiver
 {
-    [SerializeField] protected EnemyAI enemyAI;
-    [SerializeField] protected bool _canTakeDamage = true;
-    public bool CanTakeDamage { get => CanTakeDamage; set => _canTakeDamage = value;}
+    [SerializeField] protected bool _canGetDamage = true;
+    public bool CanGetDamage { get => _canGetDamage; set => _canGetDamage = value;}
 
 
     [Header("These components would be loaded when run the game!")]
     //[SerializeField] protected EnemyDamageReceiver enemyDamageReceiver;
+    [SerializeField] protected EnemyAI enemyAI;
     [SerializeField] protected HpBarObj healthBarObj;
 
     [SerializeField] protected SpawnEnemies _spawnEnemies;
     [SerializeField] protected HitDamageSpawner hitDamageSpawner;
-    [SerializeField] protected EnemyCtrlDespawn enemyCtrlDespawn;
+
 
     [SerializeField] protected BloodSplash bloodSplash;
 
 
     protected float _amountIncrease = 0;
+
+
+
     public float Health
     {
-        get { return _hp; }
+        get => _hp;
     }
     public float MaxHealth
     {
-        get { return _hpMax; }
+        get => _hpMax;
     }
 
+    protected virtual void OnValidate()
+    {
+        if(this._hp < 0) this._hp = 0;
+        if(this._hpMax < 0) this._hpMax = 0;
+    }
 
 
     protected override void OnEnable()
@@ -52,7 +60,6 @@ public class EnemyHealth : DamageReceiver,IEnemy
         this.LoadEnemyAI();
         this.LoadSpawnEnemies();
         this.LoadHealthBar();
-        this.LoadEnemyCtrlDespawn();
         this.LoadHitDamageSpawner();
         this.LoadBloodSplash();
         //this.LoadEnemyDamageReceiver();
@@ -86,12 +93,6 @@ public class EnemyHealth : DamageReceiver,IEnemy
         this.enemyAI = GetComponentInChildren<EnemyAI>();
         if(this.enemyAI == null) return;
     }
-    protected virtual void LoadEnemyCtrlDespawn()
-    {
-        if (this.enemyCtrlDespawn != null) return;
-        this.enemyCtrlDespawn = GetComponentInChildren<EnemyCtrlDespawn>();
-        if (this.enemyCtrlDespawn == null) return;
-    }
     protected virtual void LoadHitDamageSpawner()
     {
         if (this.hitDamageSpawner != null) return;
@@ -109,8 +110,8 @@ public class EnemyHealth : DamageReceiver,IEnemy
     //Reset Components
     protected virtual void RebornEnemy()
     {
-        this.ResetHealthGeneral();
         this.ResetStateCollision();
+        this.ResetHealthGeneral();
         base.Reborn();
     }
     protected virtual void ResetHealthGeneral()
@@ -120,7 +121,7 @@ public class EnemyHealth : DamageReceiver,IEnemy
     }
     protected virtual void ResetStateCollision()
     {
-        this.gameObject.GetComponent<Collider>().enabled = true;
+        this._canGetDamage = true;
     }
     protected virtual void ResetValues()
     {
@@ -153,33 +154,40 @@ public class EnemyHealth : DamageReceiver,IEnemy
 
     public void TakeDamage(int damage)
     {
-        if (!_canTakeDamage) { return; }
+        if (!this._canGetDamage) { return; }
         this.Deduct(damage);
     }
     protected override void OnDead()
     {
         if(this._spawnEnemies != null) this._spawnEnemies.EnemyDefeated(1);
-        this.gameObject.GetComponent<Collider>().enabled = false;
-        this._canTakeDamage = false;
-        if (HasDeadState()) this.enemyAI.Animator.SetTrigger("die");
+        //this.gameObject.GetComponent<Collider>().enabled = false;
+
+
+        this._canGetDamage = false;
         if (!this._isDead) this._isDead = true;
     }
     public override void Deduct(int damage)
     {
         if(this._isDead) { OnDead(); return; }
-        if (!this._canTakeDamage) return;
-        base.Deduct(damage);
-        CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
-        Debug.Log("Máu quái còn " + this._hp);
-        if (this.enemyAI.Animator != null)
-        {
-            if (HasHurtState() && !this._isDead)
-                this.enemyAI.Animator.SetTrigger("damage");
+        if (!this._canGetDamage) return;
 
-        }
+
+
+        base.Deduct(damage);
+
+
+        CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
+
+
+        Debug.Log("Máu quái còn " + this._hp);
+        //if (this.enemyAI.Animator != null)
+        //{
+        //    if (HasHurtState() && !this._isDead)
+        //        this.enemyAI.Animator.SetTrigger("damage");
+
+        //}
     }
-    public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
-    public virtual bool HasDeadState() => this.enemyAI != null && this.enemyAI.Animator.HasState(0, Animator.StringToHash("die"));
+    //public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
     protected override void HurtEffect()
     {
         if(this.beastHurtSFXs.Count > 0)
@@ -208,31 +216,16 @@ public class EnemyHealth : DamageReceiver,IEnemy
 
 
 
-    //Others
-    public void RewardPlayerAfterEnemyDead()
-    {
-        Rewards.Instance.RewardGemsPlayerWhenKillEnemy(this.enemyAI.EnemySO.amount_Gems, transform);
-    }
-    public void DeleteEnemyRoutine()
-    {
-        //if(this.enemyCtrlDespawn != null)
-        //{
-        //    this.enemyCtrlDespawn.DoDespawn();
-        //    return;
-        //}
-        this.gameObject.SetActive(false);
-    }
-    public void Victory()
-    {
-       UIManager.Instance.DisplayPanelWhenPlayerKillBoss();
-        //MissonTracker.Instance.BossKilled(this.gameObject);
-    }
-    public void DeleteEnemyWhileHpEqual0()
-    {
-        if (!GetComponent<Collider>().enabled && gameObject.activeInHierarchy)
-        {
-            DeleteEnemyRoutine();
-            RewardPlayerAfterEnemyDead();
-        }
-    }
+    ////Others
+    //public void RewardPlayerAfterEnemyDead()
+    //{
+    //    Rewards.Instance.RewardGemsPlayerWhenKillEnemy(this.enemyAI.EnemySO.amount_Gems, transform);
+    //}
+
+
+    //public void Victory()
+    //{
+    //   UIManager.Instance.DisplayPanelWhenPlayerKillBoss();
+    //    //MissonTracker.Instance.BossKilled(this.gameObject);
+    //}
 }

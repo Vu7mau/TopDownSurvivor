@@ -5,23 +5,14 @@ using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Drawing;
 using UnityEngine;
 
-public class ZombieSuitManCtrl : ZombieCtrl
+public class ZombieSuitManCtrl : EShooting
 {
-    [SerializeField] protected AbyssToxicSpawner spawner;
     [SerializeField] protected ToxicAbyss toxicAbyss;
 
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadSpawner();
         this.LoadToxicAbyss();
-        this.LoadEndPoint();
-    }
-    protected virtual void LoadSpawner()
-    {
-        if (this.spawner != null) return;
-        this.spawner = FindAnyObjectByType<AbyssToxicSpawner>();
-        Debug.Log(transform.name + ": LoadAbyssToxicSpawner");
     }
     protected virtual void LoadToxicAbyss()
     {
@@ -30,17 +21,14 @@ public class ZombieSuitManCtrl : ZombieCtrl
         this.toxicAbyss = allMyComponents[0];
         Debug.Log(transform.name + ": LoadToxicAbyss");
     }
-    protected virtual void LoadEndPoint()
-    {
-        if (this.endPoint != null) return;
-        this.endPoint = FindAnyObjectByType<CharacterAnimHandle>().transform;
-        Debug.Log(transform.name + ": Load EndPoint!", gameObject);
-    }
 
-    protected override void Shooting()
+    protected virtual void Shoot()
     {
-        ToxicAbyss newToxicAbyss = this.spawner.Spawn(this.toxicAbyss,this.position.position);
-        if (newToxicAbyss == null) return;
-        newToxicAbyss.GetComponent<ToxicAbyss>().ShootAt(this.endPoint.position + offSet);
+        this.Shooting(this.toxicAbyss, this.positionSpawn);
+        
+        //Transform holdParent = GameObject.Find("ProjectitleHolder").transform;
+        //if (holdParent != null) this.spawner.SetHoldParent(holdParent);
+        if (this.newProjectitle == null) return;
+        this.newProjectitle.GetComponent<ToxicAbyss>().ShootAt(this.targetPosition.position);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DestroyProjectitle : VuMonoBehaviour
 {
-    [SerializeField] protected ExplosionSpawner explosionSpawner;
+    [SerializeField] protected EffectFXSpawner explosionSpawner;
     [SerializeField] protected Explosion explosion;
 
     [SerializeField] protected Projectitle projectitle;
@@ -19,7 +19,7 @@ public class DestroyProjectitle : VuMonoBehaviour
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = GetComponentInChildren<ExplosionSpawner>();
+        this.explosionSpawner = GetComponentInChildren<EffectFXSpawner>();
         if(this.explosionSpawner == null) return;
     }
     protected virtual void LoadExplosion()

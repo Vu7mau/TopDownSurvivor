@@ -182,7 +182,7 @@ public abstract class Boss : EnemyAnimatorAbstract
         //transform.LookAt(playerPosition.position);
     }
 
-    protected virtual void Attack()
+    protected override void Attack()
     {
         if (!this.isAttackPlayer)
         {

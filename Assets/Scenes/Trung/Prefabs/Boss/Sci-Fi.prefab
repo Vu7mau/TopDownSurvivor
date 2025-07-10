@@ -114570,7 +114570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 6332309920971640827}
-  spawner: {fileID: 6383677555439826351}
+  spawner: {fileID: 0}
   timeLife: 1
   currentTime: 1
 --- !u!1 &2919127458033770804
@@ -203451,7 +203451,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 399347169747745127}
-  - component: {fileID: 6383677555439826351}
   m_Layer: 0
   m_Name: ExplosionSpawner
   m_TagString: Untagged
@@ -203474,22 +203473,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1578066224728274779}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6383677555439826351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4579793168137775637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f48ad099b137ca64a947d84f86a63593, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnCount: 0
-  inPoolObjs: []
-  holderParent: {fileID: 399347169747745127}
-  limitObjsInPool: 50
 --- !u!1 &4653763998422317489
 GameObject:
   m_ObjectHideFlags: 0
@@ -243095,7 +243078,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pool_Name: Explode1
   despawn: {fileID: 7965954326803992465}
-  _name: Explode1
   hit: {fileID: 5857539885122118742}
   force: 0
 --- !u!65 &2976672636273388580
@@ -287082,8 +287064,9 @@ MonoBehaviour:
   pool_Name: MinigunBullet
   despawn: {fileID: 7913561169231238544}
   speed: 70
+  offSet: {x: 0, y: 0.947, z: 0}
   createHitEnemy: {fileID: 6441804931377678399}
-  explosionSpawner: {fileID: 1544073544804440914}
+  explosionSpawner: {fileID: 0}
   explosion: {fileID: 914946442943082217}
 --- !u!135 &1440998628854099041
 SphereCollider:
@@ -301713,7 +301696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ae109fb4d95104b90e3b8b9ff49bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionSpawner: {fileID: 1544073544804440914}
+  explosionSpawner: {fileID: 0}
   explosion: {fileID: 914946442943082217}
   projectitle: {fileID: 4533113652296387554}
 --- !u!135 &7212364327785907704
@@ -306731,9 +306714,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1465765996903552383}
+  - component: {fileID: 1736917205587141660}
   - component: {fileID: 3069434650877598129}
   - component: {fileID: 3090728379338189459}
-  - component: {fileID: 1736917205587141660}
   - component: {fileID: 1706870251239788282}
   - component: {fileID: 7334931529703991533}
   - component: {fileID: 3289389880929443539}
@@ -306770,6 +306753,27 @@ Transform:
   - {fileID: 7783878352958149019}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1736917205587141660
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888495746247662378}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e22b9272a4caadb41b6e877f4c0ce21e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!65 &3069434650877598129
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -306813,27 +306817,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!95 &1736917205587141660
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6888495746247662378}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e22b9272a4caadb41b6e877f4c0ce21e, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1706870251239788282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306846,15 +306829,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2efefd145ce218b4a868a227619b1fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPosition: {fileID: 0}
   enemyReferences: {fileID: 7334931529703991533}
-  findTargets: {fileID: 125555891764102276}
-  isAttacking: 0
-  isLookAtTarGet: 0
-  isNearTarget: 0
   enemyHealth: {fileID: 4494286475033730284}
-  amountAnimationAttackNear: 1
-  amountAnimationAttackFar: 4
+  enemyCtrlDespawn: {fileID: 0}
+  targetPosition: {fileID: 0}
+  isLookAtTarGet: 0
+  isAttacking: 0
+  isNearTarget: 0
+  isMoving: 1
+  distanceNearest: 1
+  amountAttackNear: 1
+  amountAttackFar: 1
   e_Shooting: {fileID: 3289389880929443539}
   playerPosition: {fileID: 0}
   timeToReturnSwitch: 1
@@ -306880,7 +306865,7 @@ MonoBehaviour:
   minigunBulletSpawnPosition: {fileID: 4928661205214737069}
   shootingTime: 5
   timeDelay: 0.5
-  explosionSpawner: {fileID: 6383677555439826351}
+  explosionSpawner: {fileID: 0}
   explosion: {fileID: 6332309920971640827}
   explosionPoss:
   - {fileID: 401657023585415754}
@@ -306907,7 +306892,6 @@ MonoBehaviour:
   animator: {fileID: 1736917205587141660}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: ed854a190438f564fa56fde4a48e63e1, type: 2}
-  isMoving: 0
 --- !u!114 &3289389880929443539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306922,6 +306906,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectitleSpawner: {fileID: 3900573417359318280}
   projectitleHolder: {fileID: 0}
+  positionSpawn: {fileID: 0}
 --- !u!114 &4494286475033730284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306937,12 +306922,11 @@ MonoBehaviour:
   _hp: 1000
   _hpMax: 1000
   _isDead: 0
+  _canGetDamage: 1
   enemyAI: {fileID: 7334931529703991533}
-  _canTakeDamage: 0
   healthBarObj: {fileID: 5817977961525203220}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 4605496853950606552}
-  enemyCtrlDespawn: {fileID: 0}
   bloodSplash: {fileID: 0}
   beastHurtSFXs:
   - {fileID: 8300000, guid: d1935a80611c9bc47ae46da1e0e61d55, type: 3}
@@ -321773,7 +321757,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 648053443163649436}
-  - component: {fileID: 1544073544804440914}
   m_Layer: 0
   m_Name: ExplosionSpawner
   m_TagString: Untagged
@@ -321796,22 +321779,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3828707191925315814}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1544073544804440914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7090791286043517793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f48ad099b137ca64a947d84f86a63593, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnCount: 0
-  inPoolObjs: []
-  holderParent: {fileID: 0}
-  limitObjsInPool: 50
 --- !u!1 &7105316142444252607
 GameObject:
   m_ObjectHideFlags: 0
@@ -341355,7 +341322,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pool_Name: 
   despawn: {fileID: 9208263436220310547}
-  _name: Explode1
   hit: {fileID: 587417725174481966}
   force: 0
 --- !u!65 &4718439635628223759
@@ -439858,7 +439824,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6596009206774896101}
   - component: {fileID: 3010756363907928874}
-  - component: {fileID: 125555891764102276}
   m_Layer: 7
   m_Name: FindTargetNearest
   m_TagString: Untagged
@@ -439902,19 +439867,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.62
   m_Center: {x: 0, y: 0, z: 0.49}
---- !u!114 &125555891764102276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056664324122736821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a680b429fcda1864f82552f87103b384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetsNearest: []
 --- !u!1 &9082706475750329639
 GameObject:
   m_ObjectHideFlags: 0
