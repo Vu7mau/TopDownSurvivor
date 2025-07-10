@@ -306718,6 +306718,7 @@ GameObject:
   - component: {fileID: 3069434650877598129}
   - component: {fileID: 3090728379338189459}
   - component: {fileID: 1706870251239788282}
+  - component: {fileID: 8611992048639061803}
   - component: {fileID: 7334931529703991533}
   - component: {fileID: 3289389880929443539}
   - component: {fileID: 4494286475033730284}
@@ -306763,7 +306764,7 @@ Animator:
   m_GameObject: {fileID: 6888495746247662378}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e22b9272a4caadb41b6e877f4c0ce21e, type: 2}
+  m_Controller: {fileID: 9100000, guid: a11459a505322284ab39d4a170c6e301, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -306837,7 +306838,7 @@ MonoBehaviour:
   isAttacking: 0
   isNearTarget: 0
   isMoving: 1
-  distanceNearest: 1
+  distanceNearest: 5
   amountAttackNear: 1
   amountAttackFar: 1
   e_Shooting: {fileID: 3289389880929443539}
@@ -306876,6 +306877,21 @@ MonoBehaviour:
   - {fileID: 3549914378983247095}
   - {fileID: 3074392953078114870}
   fire: {fileID: 7718982683740652229}
+--- !u!114 &8611992048639061803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888495746247662378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be02b594c1cdac44b62f5a0f5375741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pool_Name: Sci-Fi
+  despawn: {fileID: 0}
+  nameEnemy: Sci-Fi
 --- !u!114 &7334931529703991533
 MonoBehaviour:
   m_ObjectHideFlags: 0
