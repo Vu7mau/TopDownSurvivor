@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour
 
         var scene = SceneManager.LoadSceneAsync(levelName);
         scene.allowSceneActivation = false;
-        loaderCanvas.SetActive(true);
+        loaderCanvas?.SetActive(true);
 
         do
         {
@@ -40,16 +40,15 @@ public class LevelManager : MonoBehaviour
         while(SceneManager.GetActiveScene().buildIndex != levelName)
         {
             await Task.Yield();
+            if (this == null) return;   
         }
-        if(loaderCanvas != null)
-        {
-            loaderCanvas.SetActive(false);
-        }
+        loaderCanvas?.SetActive(false);     
         isLoading = false;
         CountDownTimer.Instance.StartTimer();
     }
     private void Update()
     {
+        if(progressSlider == null) return;
         float currentValue = progressSlider != null ? progressSlider.value : 0f;
         float newValue = Mathf.MoveTowards(currentValue, target, Time.deltaTime * 3f);
         if (progressSlider != null)

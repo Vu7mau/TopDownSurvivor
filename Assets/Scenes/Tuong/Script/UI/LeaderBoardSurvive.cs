@@ -160,7 +160,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         if (cmp != 0) return cmp;
         timeMap.TryGetValue(a.PlayFabId, out int ta);
         timeMap.TryGetValue(b.PlayFabId, out int tb);
-        cmp = ta.CompareTo(tb);
+        cmp = tb.CompareTo(ta);
         if (cmp != 0) return cmp;
         createdMap.TryGetValue(a.PlayFabId, out DateTime ca);
         createdMap.TryGetValue(b.PlayFabId, out DateTime cb);
@@ -203,7 +203,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
             }
             bool shouldUpdateScore = currentScore == null || value > currentScore;
             bool shouldUpdateTime = false;
-            if (value == currentScore && (currentTime == null || sessionTime < currentTime))
+            if (value == currentScore && (currentTime == null || sessionTime > currentTime))
                 shouldUpdateTime = true;
             var stats = new List<StatisticUpdate>();
             if (shouldUpdateScore)
