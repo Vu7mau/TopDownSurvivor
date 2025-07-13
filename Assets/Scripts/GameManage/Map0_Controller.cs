@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Rendering;
 
 public class Map0_Controller : Map_Controller
 {
     [SerializeField] private Light light;
-   
+    [SerializeField] PlayableDirector director;
 
-   
+
+    
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -23,11 +25,27 @@ public class Map0_Controller : Map_Controller
             FadeOutLight(2);
         }
     }
+    private void OnCutsceneIn(PlayableDirector pd)
+    {
+        gameController.MoveCharacterPos(currentMapSpawnPoint);
+    }    
     protected override void OnEnable()
     {
         if (map.gameObject.activeSelf)
         {
             CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
+        }
+
+        if (director != null)
+        {
+            director.stopped += OnCutsceneIn;
+        }
+    }
+    protected override void OnDisable()
+    {
+        if (director != null)
+        {
+            director.stopped -= OnCutsceneIn;
         }
     }
 

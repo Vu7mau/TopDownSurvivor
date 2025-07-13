@@ -50,6 +50,6 @@ public class SoundFXManager : AudioManager
     protected override void Start()
     {
         base.Start();
-        bgMusic.Play();
+       // bgMusic.Play();
     }
 }
