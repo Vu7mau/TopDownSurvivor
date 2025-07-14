@@ -21,6 +21,7 @@ public class EnemyAIController : EnemyBase
 
     [SerializeField] protected bool isLookAtTarGet = false;
     [SerializeField] protected bool isAttacking = false;
+    [SerializeField] protected bool isAttackNear = false;
     [SerializeField] protected bool isNearTarget = false;
     [SerializeField] protected bool isMoving = true;
 
@@ -28,6 +29,7 @@ public class EnemyAIController : EnemyBase
     [Space]
     [Header("Properties")]
     [SerializeField] protected float distanceNearest = 1f;
+    [SerializeField] protected bool isBoss = false;
     public float DistanceNearest { get => distanceNearest; }
 
 
@@ -220,11 +222,6 @@ public class EnemyAIController : EnemyBase
     {
         this.enemyReferences.Animator.SetFloat("distance",this.distanceToTarget);
         this.AttackWhenNearPlayer();
-        this.AttackWhenFarPlayer();
-
-
-
-
     }
 
 
@@ -243,7 +240,7 @@ public class EnemyAIController : EnemyBase
 
         if(!HasState("Death")) return;
         this.enemyReferences.Animator.SetTrigger("Death");
-        this.enemyReferences.Animator.SetFloat("DeathState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.DeathAnimations));
+        this.enemyReferences.Animator.SetFloat("DeathState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.DeathAnimations)); 
     }
     protected virtual void DeleteEnemy()
     {
@@ -271,9 +268,12 @@ public class EnemyAIController : EnemyBase
     {
         if(this.targetPosition == null) return;
         if (!HasState("AttackNear")) return;
+        if (this.isBoss) return;
         if (this.distanceToTarget < this.distanceNearest)
         {
             this.isAttacking = true;
+            this.isAttackNear = true;
+            this.isMoving = false;
             this.enemyReferences.NavMeshAgent.enabled = false;
             this.isNearTarget = true;
             this.enemyReferences.Animator.SetFloat("AttackNearState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.AttackAnimations));
@@ -281,7 +281,9 @@ public class EnemyAIController : EnemyBase
         else
         {
             this.isNearTarget = false;
+            this.isAttackNear = false;
             this.isAttacking = false;
+            this.isMoving = true;
             this.enemyReferences.NavMeshAgent.enabled = true;
         }
         this.enemyReferences.Animator.SetBool("attack", this.isAttacking);
@@ -290,6 +292,8 @@ public class EnemyAIController : EnemyBase
     protected override void AttackWhenFarPlayer()
     {
         if(this.targetPosition == null) return;
+        if (!HasState("AttackFar")) return;
+        if (this.isAttackNear) return;
     }
 
 
@@ -319,10 +323,11 @@ public class EnemyAIController : EnemyBase
     public virtual void EndAttack()
     {
         this.isAttacking = false;
+        this.isAttackNear = false;
         this.isMoving = true;
         this.enemyReferences.NavMeshAgent.enabled = true;
         this.isLookAtTarGet = false;
-        this.enemyReferences.Animator.SetBool("attack", this.isAttacking);
+        //this.enemyReferences.Animator.SetBool("attack", this.isAttacking);
     }
 
 

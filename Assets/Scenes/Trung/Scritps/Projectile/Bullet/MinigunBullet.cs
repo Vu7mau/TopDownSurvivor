@@ -13,6 +13,9 @@ public class MinigunBullet : Projectitle
         this.LoadExplosionSpawner();
         this.LoadExplosion();
     }
+
+
+
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
@@ -26,14 +29,13 @@ public class MinigunBullet : Projectitle
         if (this.explosion == null) return;
     }
 
-    protected void OnCollisionEnter(Collision other)
+
+
+    protected override void DestroyProjectitle()
     {
-        if (!other.transform.CompareTag("BulletEnemy") && !other.transform.CompareTag("Enemy") && !other.transform.CompareTag("bullet"))
-        {
-            if (this.explosion == null) return;
-            if (this.explosionSpawner == null) return;
-            this.explosionSpawner.Spawn(this.explosion, this.transform.position);
-            this.Despawn.DoDespawn();
-        }
+        base.DestroyProjectitle();
+        if (this.explosion == null) return;
+        if (this.explosionSpawner == null) return;
+        this.explosionSpawner.Spawn(this.explosion, this.transform.position);
     }
 }

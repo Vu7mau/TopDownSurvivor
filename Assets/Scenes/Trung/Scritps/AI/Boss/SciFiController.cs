@@ -6,7 +6,7 @@ using UnityEngine;
 using static Cinemachine.CinemachineImpulseManager.ImpulseEvent;
 
 [RequireComponent(typeof(EShooting))]
-public class SciFiController : EnemyAIController
+public class SciFiController : EnemyAIController 
 {
     [SerializeField] protected EShooting e_Shooting;
 
@@ -127,7 +127,6 @@ public class SciFiController : EnemyAIController
     public override void EndAttack()
     {
         base.EndAttack();
-        this.enemyReferences.Animator.SetBool("attack", false);
         this.enemyReferences.Animator.SetBool("attackFar", false);
         this.farState = FarState.Chase;
     }
@@ -138,15 +137,17 @@ public class SciFiController : EnemyAIController
     }
     protected virtual void AttackFar1()
     {
-        base.Attack();
+        this.enemyReferences.NavMeshAgent.enabled = false;
+        this.isAttacking = true;
+        this.isMoving = false;
         this.RandomFarAttack();
     }
     protected virtual void RandomFarAttack()
     {
 
-        int attackIndex = Random.Range(0, this.amountAttackFar);
+        float attackIndex = Random.Range(0, this.amountAttackFar);
 
-        this.enemyReferences.Animator.SetFloat("AttackFar", attackIndex);
+        this.enemyReferences.Animator.SetFloat("AttackFarState", attackIndex);
         this.enemyReferences.Animator.SetBool("attackFar", true);
 
         //if (Vector3.Distance(transform.position, playerPosition.position) > attackBaseRange)
