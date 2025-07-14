@@ -119,7 +119,7 @@ public class SciFiController : EnemyAIController
     {
         while (true)
         {
-            yield return new WaitUntil(() => this.CanAttackTargetLongDistance && !this.isNearTarget);
+            //yield return new WaitUntil(() => this.CanAttackTargetLongDistance && !this.isNearTarget);
             this.CoolDownAttack();
             yield return new WaitUntil(() => this.farState == FarState.Chase);
         }
@@ -128,6 +128,7 @@ public class SciFiController : EnemyAIController
     {
         base.EndAttack();
         this.enemyReferences.Animator.SetBool("attackFar", false);
+        this.enemyReferences.Animator.SetBool("attackNear", false);
         this.farState = FarState.Chase;
     }
     protected override void UpdateEnemyPath()
@@ -140,7 +141,8 @@ public class SciFiController : EnemyAIController
         this.enemyReferences.NavMeshAgent.enabled = false;
         this.isAttacking = true;
         this.isMoving = false;
-        this.RandomFarAttack();
+        if(this.isNearTarget) this.RandomNearAttack();
+        else this.RandomFarAttack();
     }
     protected virtual void RandomFarAttack()
     {
@@ -149,6 +151,22 @@ public class SciFiController : EnemyAIController
 
         this.enemyReferences.Animator.SetFloat("AttackFarState", attackIndex);
         this.enemyReferences.Animator.SetBool("attackFar", true);
+
+        //if (Vector3.Distance(transform.position, playerPosition.position) > attackBaseRange)
+        //{
+        //    currentState = BossState.Chase;
+        //    this.isAttackPlayer = false;
+        //}
+        //else
+        //    currentState = BossState.Attack;
+    }
+    protected virtual void RandomNearAttack()
+    {
+
+        float attackIndex = Random.Range(0, this.amountAttackNear);
+
+        this.enemyReferences.Animator.SetFloat("AttackNearState", attackIndex);
+        this.enemyReferences.Animator.SetBool("attackNear", true);
 
         //if (Vector3.Distance(transform.position, playerPosition.position) > attackBaseRange)
         //{

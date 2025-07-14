@@ -209,6 +209,7 @@ public class EnemyAIController : EnemyBase
         if(this.targetPosition != null)
         {
             this.distanceToTarget = Vector3.Distance(this.transform.position, this.targetPosition.position);
+            this.isNearTarget = this.distanceToTarget <= this.distanceNearest;
             bool canChasePlayer = Vector3.Distance(transform.position, targetPosition.position) <= this.enemyReferences.EnemySO.ChaseRange;
             if (canChasePlayer)
             {
