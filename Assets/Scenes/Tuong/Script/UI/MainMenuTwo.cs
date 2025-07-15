@@ -17,6 +17,7 @@ public class MainMenuTwo : MonoBehaviour
     [SerializeField] private GameObject modePanel;
     [SerializeField] private GameObject leaderboardPanel;
     [SerializeField] private GameObject iconLeaderboard;
+    [SerializeField] private GameObject instructPanel;
     public EffectPanelSetting settingEffect;
     [SerializeField] private GameObject settingsPanel;
     private int previousPanelId;
@@ -50,6 +51,7 @@ public class MainMenuTwo : MonoBehaviour
         settingsPanel.SetActive(false);
         modePanel.SetActive(false);
         leaderboardPanel.SetActive(false);
+        instructPanel.SetActive(false);
     }
     public void OpenSettingFromMainMenu()
     {
@@ -224,5 +226,15 @@ public class MainMenuTwo : MonoBehaviour
         LeaderBoardSurvive.Instance?.GetLeaderBoardSurvive();
         LeaderBoardCampaign.Instance?.GetMyRank();
         LeaderBoardSurvive.Instance?.GetMyRank();
+    }
+    public void OpenInstructPanel()
+    {
+        playMenu.SetActive(false);
+        instructPanel.SetActive(true);
+    }
+    public void CloseInstructPanel()
+    {
+        instructPanel.SetActive(false);
+        playMenu.SetActive(true);
     }
 }
