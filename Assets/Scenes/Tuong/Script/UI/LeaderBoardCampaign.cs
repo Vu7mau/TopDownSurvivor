@@ -164,18 +164,55 @@ public class LeaderBoardCampaign : LeaderBoardManager
     {
         campaignNameText?.SetText("");
         campaignScoreText?.SetText("");
-        foreach (var e in entries)
+        campaignTimeText?.SetText("");
+        string currentId = PlayFabSettings.staticPlayer.PlayFabId;
+        int myIndex = -1;
+        for (int i = 0; i < entries.Count; i++)
         {
+            var e = entries[i];
             string name = string.IsNullOrEmpty(e.DisplayName) ? "No name" : e.DisplayName;
             string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
-            campaignNameText?.SetText(campaignNameText.text += name + "\n");
-            campaignScoreText?.SetText(campaignScoreText.text += $"{e.StatValue} điểm({time})\n");
+
+            campaignNameText.text += name + "\n";
+            campaignScoreText.text += e.StatValue + "\n";
+            campaignTimeText.text += time + "\n";
+
+            if (e.PlayFabId == currentId)
+                myIndex = i;
         }
+
+        StartCoroutine(MoveHighlightToLine(myIndex));
+    }
+    private IEnumerator MoveHighlightToLine(int lineIndex)
+    {
+        yield return null; 
+
+        if (lineIndex < 0 || lineIndex >= campaignNameText.textInfo.lineCount)
+        {
+            hightLightCampign.gameObject.SetActive(false);
+            yield break;
+        }
+
+        var lineInfo = campaignNameText.textInfo.lineInfo[lineIndex];
+        float centerY = (lineInfo.ascender + lineInfo.descender) / 2f;
+
+        Vector3 worldPos = campaignNameText.transform.TransformPoint(new Vector3(0, centerY, 0));
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            (RectTransform)hightLightCampign.parent,
+            RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, worldPos),
+            canvas.worldCamera,
+            out localPoint);
+        var anchored = hightLightCampign.anchoredPosition;
+        anchored.y = localPoint.y;
+        hightLightCampign.anchoredPosition = anchored;
+        hightLightCampign.gameObject.SetActive(true);
     }
     private string FormatTime(int totalSeconds)
     {
         int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
-        return $"{h:D2}:{m:D2}:{s:D2}";
+        //return $"{h:D2}:{m:D2}:{s:D2}";
+        return $"{m:D2}:{s:D2}";
     }
     public void SendScoreCampaign(int value)
     {

@@ -170,18 +170,57 @@ public class LeaderBoardSurvive : LeaderBoardManager
     {
         surviveNameText?.SetText("");
         surviveScoreText?.SetText("");
-        foreach (var e in entries)
+        surviveTimeText?.SetText("");
+        string currentId = PlayFabSettings.staticPlayer.PlayFabId;
+        int myIndex = -1;
+        for (int i = 0; i < entries.Count; i++)
         {
+            var e = entries[i];
             string name = string.IsNullOrEmpty(e.DisplayName) ? "No name" : e.DisplayName;
             string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
-            surviveNameText?.SetText(surviveNameText.text += name + "\n");
-            surviveScoreText?.SetText(surviveScoreText.text += $"{e.StatValue} điểm({time})\n");
+
+            surviveNameText.text += name + "\n";
+            surviveScoreText.text += e.StatValue + "\n";
+            surviveTimeText.text += time + "\n";
+
+            if (e.PlayFabId == currentId)
+                myIndex = i;
         }
+
+        StartCoroutine(MoveHighlightSurvive(myIndex));
+    }
+    private IEnumerator MoveHighlightSurvive(int lineIndex)
+    {
+        yield return null; 
+
+        if (lineIndex < 0 || lineIndex >= surviveNameText.textInfo.lineCount)
+        {
+            hightLightSurvive?.gameObject.SetActive(false);
+            yield break;
+        }
+
+        var lineInfo = surviveNameText.textInfo.lineInfo[lineIndex];
+
+        float centerY = (lineInfo.ascender + lineInfo.descender) / 2f;
+
+        Vector3 worldPos = surviveNameText.transform.TransformPoint(new Vector3(0, centerY, 0));
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            (RectTransform)hightLightSurvive.parent,
+            RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, worldPos),
+            canvas.worldCamera,
+            out Vector2 localPoint
+        );
+        var anchored = hightLightSurvive.anchoredPosition;
+        anchored.y = localPoint.y;
+        hightLightSurvive.anchoredPosition = anchored;
+        hightLightSurvive.gameObject.SetActive(true);
     }
     private string FormatTime(int totalSeconds)
     {
         int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
-        return $"{h:D2}:{m:D2}:{s:D2}";
+        //return $"{h:D2}:{m:D2}:{s:D2}";
+        return $"{m:D2}:{s:D2}";
     }
     public void SendScoreSurvive(int value)
     {
