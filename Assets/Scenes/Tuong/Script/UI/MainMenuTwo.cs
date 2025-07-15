@@ -211,6 +211,8 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void CloseLeaderBoardPanel()
     {
+        LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
+        LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
         iconLeaderboard.SetActive(true);
         playMenu.SetActive(true);
         leaderboardPanel.SetActive(false);
