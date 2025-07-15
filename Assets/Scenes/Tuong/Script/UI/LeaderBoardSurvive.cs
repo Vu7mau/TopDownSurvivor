@@ -4,9 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 public class LeaderBoardSurvive : LeaderBoardManager
 {
+    [SerializeField] private GameObject entryPrefabSurvive;
     public static LeaderBoardSurvive Instance;
     private Dictionary<string, DateTime> createdMapCache = new();
     private void Awake()
@@ -102,7 +105,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         {
             StatisticName = leaderboardSurvive,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 100
         },
         result => StartCoroutine(GetLeaderboardTime(result.Leaderboard)),
         error => Debug.LogError("Lỗi khi lấy bảng xếp hạng: " + error.GenerateErrorReport()));
@@ -117,7 +120,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         {
             StatisticName = timeSurvive,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 100
         },
         result =>
         {
@@ -168,20 +171,34 @@ public class LeaderBoardSurvive : LeaderBoardManager
     }
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
-        surviveNameText?.SetText("");
-        surviveScoreText?.SetText("");
-        foreach (var e in entries)
+        foreach (Transform child in contentSurvive)
+            Destroy(child.gameObject);
+
+        string currentId = PlayFabSettings.staticPlayer.PlayFabId;
+
+        for (int i = 0; i < entries.Count; i++)
         {
-            string name = string.IsNullOrEmpty(e.DisplayName) ? "No name" : e.DisplayName;
+            var e = entries[i];
+            GameObject go = Instantiate(entryPrefabSurvive, contentSurvive);
+            var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
+
             string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
-            surviveNameText?.SetText(surviveNameText.text += name + "\n");
-            surviveScoreText?.SetText(surviveScoreText.text += $"{e.StatValue} điểm({time})\n");
+
+            texts[0].text = (i + 1).ToString();
+            texts[1].text = e.DisplayName ?? "No name";
+            texts[2].text = e.StatValue.ToString();
+            texts[3].text = time;
+            if (e.PlayFabId == currentId)
+                go.GetComponent<Image>().color = new Color32(0xEF, 0xC9, 0x02, 0xFF);
+            else
+                go.GetComponent<Image>().color = Color.clear;
         }
     }
     private string FormatTime(int totalSeconds)
     {
         int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
-        return $"{h:D2}:{m:D2}:{s:D2}";
+        //return $"{h:D2}:{m:D2}:{s:D2}";
+        return $"{m:D2}:{s:D2}";
     }
     public void SendScoreSurvive(int value)
     {

@@ -64,8 +64,6 @@ public class AuthEmailSignUp : AuthManager
     private void OnSignUpSucces(RegisterPlayFabUserResult result)
 {
     PlayerPrefs.SetInt("HasLoggedIn", 1);
-    LeaderBoardCampaign.Instance?.EnsureDefaultScore();
-    LeaderBoardSurvive.Instance?.EnsureDefaultScore();
 
     NotificationUI.Instance.Show("Đăng ký người dùng mới thành công", 2f, () => {
         LinkDeviceAndProceed();

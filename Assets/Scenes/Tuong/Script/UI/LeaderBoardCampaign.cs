@@ -4,9 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
+using TMPro;
 public class LeaderBoardCampaign : LeaderBoardManager
 {
+    [SerializeField] private GameObject entryPrefabCampign;
     public static LeaderBoardCampaign Instance;
     private Dictionary<string, DateTime> createdMapCache = new(); // Dictionary là bảng ánh xạ, id - ngày tạo tài khoản
     private void Awake()
@@ -96,7 +99,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
         {
             StatisticName = leaderboardStat,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 100
         },
         result => StartCoroutine(GetLeaderboardTime(result.Leaderboard)),
         error => Debug.LogError("Lỗi khi lấy bảng xếp hạng: " + error.GenerateErrorReport()));
@@ -111,7 +114,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
         {
             StatisticName = timeStat,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 100
         },
         result =>
         {
@@ -159,23 +162,37 @@ public class LeaderBoardCampaign : LeaderBoardManager
         createdMap.TryGetValue(a.PlayFabId, out DateTime ca);
         createdMap.TryGetValue(b.PlayFabId, out DateTime cb);
         return ca.CompareTo(cb);
-    }
+    }     
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
-        campaignNameText?.SetText("");
-        campaignScoreText?.SetText("");
-        foreach (var e in entries)
+        foreach (Transform child in contentCampign)
+            Destroy(child.gameObject); 
+
+        string currentId = PlayFabSettings.staticPlayer.PlayFabId;
+
+        for (int i = 0; i < entries.Count; i++)
         {
-            string name = string.IsNullOrEmpty(e.DisplayName) ? "No name" : e.DisplayName;
+            var e = entries[i];
+            GameObject go = Instantiate(entryPrefabCampign, contentCampign);
+            var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
+
             string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
-            campaignNameText?.SetText(campaignNameText.text += name + "\n");
-            campaignScoreText?.SetText(campaignScoreText.text += $"{e.StatValue} điểm({time})\n");
+
+            texts[0].text = (i + 1).ToString();                  
+            texts[1].text = e.DisplayName ?? "No name";         
+            texts[2].text = e.StatValue.ToString();              
+            texts[3].text = time;
+            if (e.PlayFabId == currentId)
+                go.GetComponent<Image>().color = new Color32(0xEF, 0xC9, 0x02, 0xFF); 
+            else
+                go.GetComponent<Image>().color = Color.clear; 
         }
     }
     private string FormatTime(int totalSeconds)
     {
         int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
-        return $"{h:D2}:{m:D2}:{s:D2}";
+        //return $"{h:D2}:{m:D2}:{s:D2}";
+        return $"{m:D2}:{s:D2}";
     }
     public void SendScoreCampaign(int value)
     {
