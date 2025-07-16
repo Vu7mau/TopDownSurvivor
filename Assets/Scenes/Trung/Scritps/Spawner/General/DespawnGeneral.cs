@@ -13,6 +13,11 @@ public abstract class DespawnGeneral<T> : DespawnBase where T: PoolObj
     {
         this.DespawnChecking();
     }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.LoadCurrentTimeLife();
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();

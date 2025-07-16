@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +30,7 @@ public class Explosion : EffectFX
     {
         this._canTakeDamage = false;
         this.hit.gameObject.SetActive(true);
+        this.hit.CanTakeDamage = this._canTakeDamage;
     }
     protected override void Start()
     {

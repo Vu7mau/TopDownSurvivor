@@ -9,7 +9,7 @@ public class EShooting : VuMonoBehaviour
 
     [SerializeField] protected Transform projectitleHolder;
     
-    [SerializeField] protected Transform positionSpawn;
+    protected Transform positionSpawn;
 
 
     protected Projectitle projectitle;

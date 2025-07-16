@@ -103,7 +103,7 @@ public class MissonTracker : Singleton<MissonTracker>
     }
     public void StartMission()
     {
-        Debug.Log("Nhiệm vụ bắt đầu: Tiêu diệt Boss");
+        Debug.Log("Nhiệm vụ bắt đầu: Tiêu diệt BossController");
         progressText.gameObject.SetActive(true);
        // UpdateProgressText();
     }

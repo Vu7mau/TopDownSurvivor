@@ -24,6 +24,7 @@ public class Projectitle : PoolObj
         set { _direction = value; }
     }
 
+    [SerializeField] protected bool canDespawnByPlayer = true;
     
     protected override void OnEnable()
     {
@@ -94,18 +95,25 @@ public class Projectitle : PoolObj
 
 
 
-    protected void OnCollisionEnter(Collision other)
+    protected void OnTriggerStay(Collider other)
     {
         if (other.transform.CompareTag("Player") && this.createHitEnemy.CanTakeDamage)
         {
             this.createHitEnemy.CanTakeDamage = false;
-            this.DestroyProjectitle();
+            if (this.canDespawnByPlayer) this.Despawn.DoDespawn();
+            this.DestroyProjectitleByPlayer();
 
         }
-        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("BulletEnemy") && !other.transform.CompareTag("bullet")) this.DestroyProjectitle();
+        if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("BulletEnemy") && !other.transform.CompareTag("bullet") && !other.transform.CompareTag("Player"))
+        {
+            this.Despawn.DoDespawn();
+            this.DestroyProjectitle();
+        }
     }
     protected virtual void DestroyProjectitle()
     {
-        this.Despawn.DoDespawn();
+    }
+    protected virtual void DestroyProjectitleByPlayer()
+    {
     }
 }

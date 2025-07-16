@@ -151,10 +151,10 @@ public class EnemyAIController : EnemyBase
             this.Chase();
             //this.inRangeAttack = Vector3.Distance(transform.position,targetPosition.position) <= this.attackDistance;
             this.Attack();
+            this.LookAtTarGet();
 
 
 
-            
 
 
 
@@ -215,7 +215,6 @@ public class EnemyAIController : EnemyBase
             {
                 this.UpdateEnemyPath();
             }
-            this.LookAtTarGet();
         }
     }
 
