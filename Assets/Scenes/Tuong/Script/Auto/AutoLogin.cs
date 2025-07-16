@@ -2,11 +2,9 @@
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
-
 public class AutoLogin : MonoBehaviour
 {
     public static AutoLogin Instance;
-
     private void Awake()
     {
         if (Instance == null)
@@ -22,10 +20,10 @@ public class AutoLogin : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("AutoLoginDisable = " + PlayerPrefs.GetInt("AutoLoginDisable"));
-
+        Debug.Log("AutoLoginDisable = " + PlayerPrefs.GetInt("AutoLoginDisable"));        
         bool autoLoginDisable = PlayerPrefs.GetInt("AutoLoginDisable", 0) == 1;
-        if (!autoLoginDisable)
+        bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
+        if (!autoLoginDisable && !PlayFabClientAPI.IsClientLoggedIn())
         {
             LoginWithCustomID();
         }
@@ -34,6 +32,8 @@ public class AutoLogin : MonoBehaviour
     public void LoginWithCustomID()
     {
         string deviceId = SystemInfo.deviceUniqueIdentifier;
+        PlayerPrefs.SetString("CustomId", deviceId);
+        PlayerPrefs.Save();
         var request = new LoginWithCustomIDRequest
         {
             CustomId = deviceId,
@@ -45,7 +45,8 @@ public class AutoLogin : MonoBehaviour
 
     private void OnLoginSuccess(LoginResult result)
     {
-        Debug.Log("Auto Login thành công");
+        Debug.Log("Auto Login PlayFab thành công. PlayFabId = " + result.PlayFabId);
+        Debug.Log("IsClientLoggedIn SAU khi login = " + PlayFabClientAPI.IsClientLoggedIn());
         PlayerPrefs.SetInt("HasLoggedIn", 1);
         PlayerPrefs.Save();
 
@@ -57,7 +58,6 @@ public class AutoLogin : MonoBehaviour
             MainMenuTwo.Instance.PlayMenu.SetActive(true);
         }
 
-        // ✅ Di chuyển gọi BXH vào đây sau khi đăng nhập thành công
         StartCoroutine(DeleyAndLoadLeaderBoard());
     }
 
@@ -77,6 +77,7 @@ public class AutoLogin : MonoBehaviour
     private void OnLoginFailured(PlayFabError error)
     {
         Debug.Log("Lỗi Auto đăng nhập: " + error.GenerateErrorReport());
+        Debug.Log("Mã lỗi: " + error.Error.ToString());
         PlayerPrefs.SetInt("HasLoggedIn", 0);
         PlayerPrefs.Save();
     }

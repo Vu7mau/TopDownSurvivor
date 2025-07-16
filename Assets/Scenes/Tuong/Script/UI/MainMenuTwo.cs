@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using PlayFab;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
@@ -221,7 +222,7 @@ public class MainMenuTwo : MonoBehaviour
     }
     private IEnumerator LoadLeaderboardAfterUIReady()
     {
-        yield return null;
+        yield return new WaitUntil(() => PlayFabClientAPI.IsClientLoggedIn());
         LeaderBoardCampaign.Instance?.GetLeaderBoardCampaign();
         LeaderBoardSurvive.Instance?.GetLeaderBoardSurvive();
         LeaderBoardCampaign.Instance?.GetMyRank();
