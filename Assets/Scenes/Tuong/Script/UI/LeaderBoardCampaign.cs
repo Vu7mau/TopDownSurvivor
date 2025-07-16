@@ -23,6 +23,11 @@ public class LeaderBoardCampaign : LeaderBoardManager
     }
     public void GetMyRank()
     {
+        if (!PlayFabClientAPI.IsClientLoggedIn())
+        {
+            Debug.LogWarning("Chưa đăng nhập vào PlayFab, không thể lấy bảng xếp hạng.");
+            return;
+        }
         PlayFabClientAPI.GetLeaderboardAroundPlayer(new GetLeaderboardAroundPlayerRequest
         {
             StatisticName = leaderboardStat,
@@ -94,6 +99,11 @@ public class LeaderBoardCampaign : LeaderBoardManager
     }
     public void GetLeaderBoardCampaign()
     {
+        if(!PlayFabClientAPI.IsClientLoggedIn())
+        {
+            Debug.LogWarning("Chưa đăng nhập vào PlayFab, không thể lấy bảng xếp hạng.");
+            return;
+        }
         RebindText();
         PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
         {
