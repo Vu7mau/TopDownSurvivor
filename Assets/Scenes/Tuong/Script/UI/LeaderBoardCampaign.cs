@@ -10,7 +10,7 @@ using TMPro;
 public class LeaderBoardCampaign : LeaderBoardManager
 {
     [SerializeField] private GameObject entryPrefabCampign;
-    public static LeaderBoardCampaign Instance;
+    public new static LeaderBoardCampaign Instance;
     private Dictionary<string, DateTime> createdMapCache = new(); // Dictionary là bảng ánh xạ, id - ngày tạo tài khoản
     private void Awake()
     {
@@ -74,9 +74,11 @@ public class LeaderBoardCampaign : LeaderBoardManager
             PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest
             {
                 StatisticNames = new List<string> { timeStat }
-            }, res => { var stat = res.Statistics.FirstOrDefault(s => s.StatisticName == timeStat);
-                timeMap[myEntry.PlayFabId] = stat?.Value ?? int.MaxValue;doneSelfTime = true;
-            },err =>{timeMap[myEntry.PlayFabId] = int.MaxValue;doneSelfTime = true;});
+            }, res =>
+            {
+                var stat = res.Statistics.FirstOrDefault(s => s.StatisticName == timeStat);
+                timeMap[myEntry.PlayFabId] = stat?.Value ?? int.MaxValue; doneSelfTime = true;
+            }, err => { timeMap[myEntry.PlayFabId] = int.MaxValue; doneSelfTime = true; });
             yield return new WaitUntil(() => doneSelfTime);
         }
         int pending = topEntries.Count;
@@ -85,9 +87,13 @@ public class LeaderBoardCampaign : LeaderBoardManager
         {
             string id = entry.PlayFabId;
             PlayFabClientAPI.GetAccountInfo(new GetAccountInfoRequest { PlayFabId = id },
-            res => {createdMap[id] = res.AccountInfo.Created;createdMapCache[id] = res.AccountInfo.Created;
+            res =>
+            {
+                createdMap[id] = res.AccountInfo.Created; createdMapCache[id] = res.AccountInfo.Created;
                 if (--pending == 0) doneAccounts = true;
-            }, err =>{createdMap[id] = DateTime.MaxValue;
+            }, err =>
+            {
+                createdMap[id] = DateTime.MaxValue;
                 if (--pending == 0) doneAccounts = true;
             });
         }
@@ -99,7 +105,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
     }
     public void GetLeaderBoardCampaign()
     {
-        if(!PlayFabClientAPI.IsClientLoggedIn())
+        if (!PlayFabClientAPI.IsClientLoggedIn())
         {
             Debug.LogWarning("Chưa đăng nhập vào PlayFab, không thể lấy bảng xếp hạng.");
             return;
@@ -172,11 +178,11 @@ public class LeaderBoardCampaign : LeaderBoardManager
         createdMap.TryGetValue(a.PlayFabId, out DateTime ca);
         createdMap.TryGetValue(b.PlayFabId, out DateTime cb);
         return ca.CompareTo(cb);
-    }     
+    }
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
         foreach (Transform child in contentCampign)
-            Destroy(child.gameObject); 
+            Destroy(child.gameObject);
 
         string currentId = PlayFabSettings.staticPlayer.PlayFabId;
 
@@ -188,14 +194,14 @@ public class LeaderBoardCampaign : LeaderBoardManager
 
             string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
 
-            texts[0].text = (i + 1).ToString();                  
-            texts[1].text = e.DisplayName ?? "No name";         
-            texts[2].text = e.StatValue.ToString();              
+            texts[0].text = (i + 1).ToString();
+            texts[1].text = e.DisplayName ?? "No name";
+            texts[2].text = e.StatValue.ToString();
             texts[3].text = time;
             if (e.PlayFabId == currentId)
-                go.GetComponent<Image>().color = new Color32(0xEF, 0xC9, 0x02, 0xFF); 
+                go.GetComponent<Image>().color = new Color32(0xEF, 0xC9, 0x02, 0xFF);
             else
-                go.GetComponent<Image>().color = Color.clear; 
+                go.GetComponent<Image>().color = Color.clear;
         }
     }
     private string FormatTime(int totalSeconds)
@@ -206,7 +212,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
     }
     public void SendScoreCampaign(int value)
     {
-        int sessionTime = CountDownTimer.Instance.GetSessionDurationInSeconds();
+        int sessionTime = CountDownTimer.Instance?.GetSessionDurationInSeconds() ?? 0;
         PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest
         {
             StatisticNames = new List<string> { leaderboardStat, timeStat }

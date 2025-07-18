@@ -10,7 +10,7 @@ using TMPro;
 public class LeaderBoardSurvive : LeaderBoardManager
 {
     [SerializeField] private GameObject entryPrefabSurvive;
-    public static LeaderBoardSurvive Instance;
+    public new static LeaderBoardSurvive Instance;
     private Dictionary<string, DateTime> createdMapCache = new();
     private void Awake()
     {
@@ -212,7 +212,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
     }
     public void SendScoreSurvive(int value)
     {
-        int sessionTime = CountDownTimer.Instance.GetSessionDurationInSeconds();
+        int sessionTime = CountDownTimer.Instance?.GetSessionDurationInSeconds() ?? 0;
         PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest
         {
             StatisticNames = new List<string> { leaderboardSurvive, timeSurvive }
