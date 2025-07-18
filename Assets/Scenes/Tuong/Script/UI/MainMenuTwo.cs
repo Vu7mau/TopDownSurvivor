@@ -214,6 +214,7 @@ public class MainMenuTwo : MonoBehaviour
     {
         playMenu.SetActive(false);
         leaderboardPanel.SetActive(true);
+        iconGame.SetActive(false);
         iconLeaderboard.SetActive(false);
         StartCoroutine(LoadLeaderboardAfterUIReady());
     }
@@ -222,6 +223,7 @@ public class MainMenuTwo : MonoBehaviour
         LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
         LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
         iconLeaderboard.SetActive(true);
+        iconGame.SetActive(true);
         playMenu.SetActive(true);
         leaderboardPanel.SetActive(false);
     }
