@@ -6,7 +6,7 @@ using UnityEngine;
 using static Cinemachine.CinemachineImpulseManager.ImpulseEvent;
 
 [RequireComponent(typeof(EShooting))]
-public class SciFiController : BossController 
+public class SciFiController : BossController
 {
     [SerializeField] protected EShooting e_Shooting;
 
@@ -23,7 +23,6 @@ public class SciFiController : BossController
     [SerializeField] protected AudioClip snd_attack3;
     [SerializeField] protected AudioClip snd_attack4;
     //[SerializeField] protected AudioClip snd_attack5;
-    [SerializeField] protected AudioClip snd_attack6;
     [SerializeField] protected List<AudioClip> snd_deaths;
 
 
@@ -32,6 +31,7 @@ public class SciFiController : BossController
         base.LoadComponents();
         this.LoadPlayerPosition();
         this.LoadEShooting();
+        this.LoadEffectFXSpawner();
     }
     protected virtual void LoadPlayerPosition()
     {
@@ -46,27 +46,93 @@ public class SciFiController : BossController
 
 
 
+    [Space]
+    [Space]
+    [Space]
+    [Header("Attack 2")]
+    [SerializeField] protected Projectitle rocketLight;
+    [SerializeField] protected List<Transform> rocketLightPosition;
+    [SerializeField] protected List<Projectitle> rocketLightObj;
+    [SerializeField] protected float timeDelayAttack2 = 0.1f;
+    [SerializeField] protected float defaultSpeed = 50f;
 
-    [Header("Hit Splash")]
-    [SerializeField] protected HitSplash hitSplash;
-    [SerializeField] protected Transform hitSplashPosition;
+    [SerializeField] protected List<AudioClip> snd_shoot6_start;
+    [SerializeField] protected List<AudioClip> snd_shoot6_end;
 
     protected virtual void Attack2()
     {
-        this.e_Shooting.Shooting(hitSplash, hitSplashPosition);
-        Vector3 dir = this.targetPosition.position - new Vector3(this.hitSplashPosition.position.x, this.targetPosition.position.y, this.hitSplashPosition.position.z);
-        if (this.e_Shooting.NewProjectitle == null) return;
-        this.e_Shooting.NewProjectitle.GetComponent<Projectitle>().SetDirection(dir);
-        this.e_Shooting.NewProjectitle.gameObject.transform.rotation = this.transform.rotation;
+        StartCoroutine(Shoot2Routine());
+        //this.e_Shooting.Shooting(hitSplash, hitSplashPosition);
+        //Vector3 dir = this.targetPosition.position - new Vector3(this.hitSplashPosition.position.x, this.targetPosition.position.y, this.hitSplashPosition.position.z);
+        //if (this.e_Shooting.NewProjectitle == null) return;
+        //this.e_Shooting.NewProjectitle.GetComponent<Projectitle>().SetDirection(dir);
+        //this.e_Shooting.NewProjectitle.gameObject.transform.rotation = this.transform.rotation;
     }
 
+    private IEnumerator Shoot2Routine()
+    {
+        if (this.rocketLightPosition.Count == 0) yield break;
+        for (int i = 0; i < this.rocketLightPosition.Count; i++)
+        {
+            this.e_Shooting.Shooting(this.rocketLight, this.rocketLightPosition[i]);
+            if (this.e_Shooting.NewProjectitle == null) yield break;
+
+            Projectitle newRocket = this.e_Shooting.NewProjectitle;
+            this.rocketLightObj.Add(newRocket);
+            //if (this.snd_shoot2_start != null) SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot2_start, this.transform);
+            newRocket.GetComponentInChildren<Projectitle>().SetVelocity(0);
+            newRocket.GetComponentInChildren<Collider>().enabled = false;
+            yield return null;
+        }
+        if (this.snd_shoot6_start.Count > 0)
+        {
+            int random = Random.Range(0, this.snd_shoot6_start.Count);
+            SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot6_start[random], this.transform);
+        }
+
+        if (this.rocketLightObj.Count == 0) yield break;
+        Vector3 direct = (this.targetPosition.position - this.transform.position).normalized;
+
+        yield return new WaitForSeconds(this.timeDelayAttack2);
+        if (this.isDead) yield break;
+
+        for (int i = 0; i < this.rocketLightObj.Count; i++)
+        {
+            Vector3 tar = direct;
+            //if (this.snd_shoot2_end != null) SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot2_end, this.transform);
+            rocketLightObj[i].GetComponentInChildren<Collider>().enabled = true;
+            rocketLightObj[i].GetComponentInChildren<Projectitle>().SetVelocity(this.defaultSpeed);
+            rocketLightObj[i].GetComponentInChildren<Projectitle>().SetDirection(tar);
+        }
+        if (this.snd_shoot6_end.Count > 0)
+        {
+            int random = Random.Range(0, this.snd_shoot6_end.Count);
+            SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot6_end[random], this.transform);
+        }
+        this.rocketLightObj.Clear();
+    }
+
+
+
     [Space]
-    [Header("Shooting")]
+    [Space]
+    [Space]
+    [Header("Attack 6")]
     [SerializeField] protected MinigunBullet minigunBullet;
     [SerializeField] protected Transform minigunBulletSpawnPosition;
 
     [SerializeField] protected float shootingTime = 3; // Số lần bắn
     [SerializeField] protected float timeDelay = 0.2f;
+
+    [SerializeField] protected EffectFX circleWarning6;
+    [SerializeField] protected EffectFXSpawner effectFXSpawner;
+
+    [SerializeField] protected AudioClip snd_attack6;
+    protected virtual void LoadEffectFXSpawner()
+    {
+        if (this.effectFXSpawner != null) return;
+        this.effectFXSpawner = FindAnyObjectByType<EffectFXSpawner>();
+    }
 
     protected virtual void Attack6()
     {
@@ -76,12 +142,34 @@ public class SciFiController : BossController
     {
         for (int i = 0; i < this.shootingTime; i++)
         {
+            this.LookAtTartgetPlease();
             Vector3 target = this.targetPosition.position;
+
+
+            yield return new WaitForSeconds(0.1f);
+
+            this.DontLookAtTarget();
+            if (this.effectFXSpawner != null && this.circleWarning6 != null)
+            {
+                EffectFX newCirWarning = this.effectFXSpawner.Spawn(this.circleWarning6, target + new Vector3(0, 0.4f, 0));
+                newCirWarning.Rotate(new Vector3(-90, 0, 0));
+                Vector3 scale = this.circleWarning6.transform.localScale;
+                newCirWarning.Scale(scale);
+            }
+
+
+
+
             yield return new WaitForSeconds(this.timeDelay);
+
+            if (this.isDead) yield break;
             this.e_Shooting.Shooting(this.minigunBullet, this.minigunBulletSpawnPosition);
             if (this.e_Shooting.NewProjectitle == null) yield break;
             this.PlayerSFXAttack6();
+
+
             this.e_Shooting.NewProjectitle.GetComponent<Projectitle>().ShootAt(target);
+
             yield return new WaitForSeconds(this.timeDelay);
         }
         this.EndAttack();
@@ -114,33 +202,40 @@ public class SciFiController : BossController
         if(this.snd_attack3 == null) return;
         SoundFXManager.Instance.PlaySoundFXClip(snd_attack3, transform, 1);
     }
-
-    protected virtual void PlayerSFXDeath()
+    protected virtual void PlayerSFXAttack4()
     {
-        if (this.snd_deaths.Count > 0) return;
+        if (this.snd_attack4 == null) return;
+        SoundFXManager.Instance.PlaySoundFXClip(snd_attack4, transform, 1);
+    }
+
+    protected virtual void SFXDeath()
+    {
+        if (this.snd_deaths.Count == 0) return;
         this.PlaySoundFX(snd_deaths);
     }
 
-    [SerializeField] protected EffectFXSpawner explosionSpawner;
+
+
     [SerializeField] protected Explosion explosion;
     [SerializeField] protected List<Transform> explosionPoss;
     [SerializeField] protected Transform fire;
-    protected virtual void DestroyBossExplosion()
+
+    private void Distribution()
     {
-        if(this.explosionSpawner == null) return;
-        if(explosion == null) return;
         StartCoroutine(DestroyExplosionRoutine());
     }
     IEnumerator DestroyExplosionRoutine()
     {
-        if (this.explosionPoss.Count == 0) yield break;
-        for (int i = 0; i < this.explosionPoss.Count; i++)
-        {
-            this.explosionSpawner.Spawn(this.explosion, this.explosionPoss[i].position);
-            yield return new WaitForSeconds(1);
-        }
-        yield return new WaitForSeconds(1f);
-        EffectFX nbig = this.explosionSpawner.Spawn(this.explosion, transform.position);
+        //if (this.explosionPoss.Count == 0) yield break;
+        //for (int i = 0; i < this.explosionPoss.Count; i++)
+        //{
+        //    EffectFX nsmall =  this.effectFXSpawner.Spawn(this.explosion, this.explosionPoss[i].position);
+        //    nsmall.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        //    yield return new WaitForSeconds(1);
+        //}
+        //yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0);
+        EffectFX nbig = this.effectFXSpawner.Spawn(this.explosion, transform.position);
         nbig.transform.localScale = new Vector3(3, 3, 3);
         fire.transform.gameObject.SetActive(true);
     }

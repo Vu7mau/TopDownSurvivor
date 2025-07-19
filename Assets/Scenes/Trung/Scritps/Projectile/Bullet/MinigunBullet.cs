@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class MinigunBullet : Projectitle
@@ -19,7 +20,7 @@ public class MinigunBullet : Projectitle
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = GetComponentInChildren<EffectFXSpawner>();
+        this.explosionSpawner = FindAnyObjectByType<EffectFXSpawner>();
         if (this.explosionSpawner == null) return;
     }
     protected virtual void LoadExplosion()
@@ -30,10 +31,17 @@ public class MinigunBullet : Projectitle
     }
 
 
-
     protected override void DestroyProjectitle()
     {
         base.DestroyProjectitle();
+        this.Explosion();
+    }
+    protected override void DestroyProjectitleByPlayer()
+    {
+        this.Explosion();
+    }
+    private void Explosion()
+    {
         if (this.explosion == null) return;
         if (this.explosionSpawner == null) return;
         this.explosionSpawner.Spawn(this.explosion, this.transform.position);

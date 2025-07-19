@@ -345,7 +345,6 @@ GameObject:
   - component: {fileID: 1145717967426740530}
   - component: {fileID: 1628172709203377651}
   - component: {fileID: 6995483344072329064}
-  - component: {fileID: 9127054405021845340}
   m_Layer: 7
   m_Name: Olso
   m_TagString: Enemy
@@ -424,7 +423,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576827273632326026}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 3.5
   m_Acceleration: 8
@@ -556,21 +555,6 @@ MonoBehaviour:
   bloodSplash: {fileID: 0}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &9127054405021845340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 576827273632326026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycastDistance: 10000
-  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &611992831295997420
 GameObject:
   m_ObjectHideFlags: 0

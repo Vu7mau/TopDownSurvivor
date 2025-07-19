@@ -1003,7 +1003,6 @@ GameObject:
   - component: {fileID: 184486387661950844}
   - component: {fileID: 3525283734171740234}
   - component: {fileID: 1839239339941553881}
-  - component: {fileID: 7438491672114296847}
   - component: {fileID: 6687373002429375228}
   - component: {fileID: 2829545231204009166}
   m_Layer: 7
@@ -1062,7 +1061,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309567981146657082}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 0
   m_Acceleration: 0
@@ -1146,9 +1145,13 @@ MonoBehaviour:
   targetPosition: {fileID: 0}
   isLookAtTarGet: 1
   isAttacking: 0
+  isAttackNear: 0
   isNearTarget: 0
   isMoving: 1
+  stateMovingDefault: 1
   distanceNearest: 7.5
+  isBoss: 0
+  isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
 --- !u!114 &1839239339941553881
@@ -1174,21 +1177,6 @@ MonoBehaviour:
   bloodSplash: {fileID: 0}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &7438491672114296847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309567981146657082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycastDistance: 10000
-  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &6687373002429375228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,7 +1191,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectitleSpawner: {fileID: 2379398790302183615}
   projectitleHolder: {fileID: 1785068281318341835}
-  positionSpawn: {fileID: 5357058004746088795}
   listPositions:
   - {fileID: 701801873102785225}
   - {fileID: 7187947899525064642}

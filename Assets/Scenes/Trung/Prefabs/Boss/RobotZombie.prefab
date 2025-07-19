@@ -11900,7 +11900,6 @@ GameObject:
   - component: {fileID: 4251742550387661764}
   - component: {fileID: 5942814391917251440}
   - component: {fileID: 5672272745466711851}
-  - component: {fileID: 6106397633266535591}
   - component: {fileID: 5659162661074863030}
   - component: {fileID: 2611920777311534175}
   m_Layer: 0
@@ -11995,73 +11994,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.129303, y: 6.6034713, z: 2.7371368}
   m_Center: {x: -0.023483276, y: 2.1958034, z: -0.7192917}
---- !u!114 &6106397633266535591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8472762222010421764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cfe22f8085ab684aa95541eebb05fbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amountAttacksAnimation: 4
-  _enemyAnimator: {fileID: 5942814391917251440}
-  _agent: {fileID: 4251742550387661764}
-  detectionBaseRange: 7
-  attackBaseRange: 5
-  moveBaseSpeed: 8
-  stopDistance: 8
-  playerPosition: {fileID: 0}
-  isLookAtPlayer: 1
-  isAttackPlayer: 0
-  timeToReturnSwitch: 1.5
-  enemyHealth: {fileID: 0}
-  lightBulletSpawner: {fileID: 0}
-  missileSpawner: {fileID: 0}
-  energyBallSpawner: {fileID: 0}
-  circleWarningSpawner: {fileID: 0}
-  circleWarning: {fileID: 0}
-  lightBulletPrefab: {fileID: 0}
-  position: {fileID: 7916263124733338867}
-  listPositions:
-  - {fileID: 8292822933792043833}
-  - {fileID: 8554392572521582611}
-  - {fileID: 8449397653091332881}
-  - {fileID: 8824009384663546133}
-  - {fileID: 7023146568217212805}
-  - {fileID: 34950261212903319}
-  - {fileID: 91891588707986762}
-  - {fileID: 290572078417338040}
-  - {fileID: 1411419598849081841}
-  - {fileID: 323050555596791475}
-  - {fileID: 3045492958781289224}
-  - {fileID: 8004243099685724841}
-  - {fileID: 4527142333831243886}
-  - {fileID: 7047135471410026384}
-  lightBulletMoveSpeed: 100
-  timeBetweenEachShoot: 0.6
-  missilePrefab: {fileID: 3726290214769994924, guid: 4261ff5bb18a01a4cad2bac474db33e4, type: 3}
-  missilePositions:
-  - {fileID: 7916263124733338867}
-  - {fileID: 898047591080843568}
-  timeBetweenEachShoot2: 0.8
-  missileMoveSpeed: 30
-  energyBall: {fileID: 0}
-  energyBallSpawnCount: 20
-  energyBallSpawnRadius: 2
-  energyBallMoveSpeed: 15
-  snd_energyBall_Start: {fileID: 8300000, guid: 32db08c8a5997974a85a2e1a2f6c84e1, type: 3}
-  snd_energyBall: {fileID: 0}
-  listLazerSnds:
-  - {fileID: 8300000, guid: e6fdf8a8e1b56d1449f6b33329d28550, type: 3}
-  - {fileID: 8300000, guid: 4fe8b1514bc7b1844b9f92da724aac0f, type: 3}
-  bg_Boss1: {fileID: 0}
-  audioSourceBoss: {fileID: 0}
-  explosionSpawner: {fileID: 0}
-  explosion: {fileID: 0}
 --- !u!114 &5659162661074863030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12077,17 +12009,14 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 10
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: ed854a190438f564fa56fde4a48e63e1, type: 2}
-  _canTakeDamage: 1
+  _canGetDamage: 1
+  enemyAI: {fileID: 0}
   healthBarObj: {fileID: 0}
-  _animator: {fileID: 0}
   _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 0}
-  enemyCtrlDespawn: {fileID: 0}
   bloodSplash: {fileID: 0}
-  beastHurtSFX: {fileID: 0}
+  beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
-  hurtPositionOffset: {x: 0, y: 0, z: 0}
 --- !u!54 &2611920777311534175
 Rigidbody:
   m_ObjectHideFlags: 0

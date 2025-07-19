@@ -8,10 +8,6 @@ public class BossRise : VuMonoBehaviour
     [SerializeField] protected EnemyAI enemyAI;
     [SerializeField] protected EnemyAIController enemyCtrl;
     [SerializeField] protected EnemyHealth enemyHealth;
-
-    protected bool isStartFightBoss = false;
-    public bool IsStartFightBoss { get => this.isStartFightBoss; }
-    
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -31,9 +27,6 @@ public class BossRise : VuMonoBehaviour
         if(other.transform.GetComponentInChildren<CharacterAnimHandle>() != null)
         {
             this.enemyAI.Animator.SetBool("isStartFightBoss",true);
-            this.enemyHealth.CanGetDamage = true;
-            this.isStartFightBoss=true;
-            this.enemyCtrl.IsMoving = true;
             this.transform.gameObject.SetActive(false);
         }
     }

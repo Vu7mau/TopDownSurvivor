@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.AI;
+using System.Linq;
 
 public class AgentTypeSwitcher : MonoBehaviour
 {
@@ -26,13 +27,13 @@ public class AgentTypeSwitcher : MonoBehaviour
     }
     void Start()
     {
-        AddNavMeshSurfaceTag();
         this.LoadAgentTypeDatabase();
+        AddNavMeshSurfaceTag();
     }
 
     void Update()
     {
-        DetectSurfaceBelow();
+        //DetectSurfaceBelow();
         //CheckNavMeshBelow();
     }
 
@@ -72,16 +73,37 @@ public class AgentTypeSwitcher : MonoBehaviour
         }
     }
 
+    [ContextMenu("Add Enemy NavMeshSurfaces")]
     private void AddNavMeshSurfaceTag()
     {
-        var navSurfaces = FindObjectsOfType<NavMeshSurface>(false); // include inactive objects
+        // Tìm tất cả NavMeshSurface trong scene
+        var allSurfaces = FindObjectsOfType<NavMeshSurface>(true);
 
-        foreach (var surface in navSurfaces)
+        foreach (var surface in allSurfaces)
         {
-            if (surface.GetComponentInChildren<NavMeshSurface>() != null)
+            // Kiểm tra nếu surface hiện tại có default area là Walkable
+            if (surface.defaultArea == 0) // Walkable mặc định là 0
             {
-                surface.gameObject.AddComponent<NavMeshSurfaceTag>();
-                Debug.Log("Added to: " + surface.name);
+                var go = surface.gameObject;
+
+                // Kiểm tra đã có NavMeshSurface cho Enemy chưa (theo agentTypeID)
+                bool hasEnemySurface = go.GetComponents<NavMeshSurface>()
+                    .Any(s => NavMesh.GetSettingsNameFromID(s.agentTypeID) == "Enemy");
+
+                if (!hasEnemySurface)
+                {
+                    // Tạo thêm một NavMeshSurface cho agent type Enemy
+                    var enemySurface = go.AddComponent<NavMeshSurface>();
+                    enemySurface.agentTypeID = agentTypeDB.GetIDByName("Enemy");
+                    enemySurface.overrideTileSize = surface.overrideTileSize;
+                    enemySurface.tileSize = surface.tileSize;
+                    enemySurface.overrideVoxelSize = surface.overrideVoxelSize;
+                    enemySurface.voxelSize = surface.voxelSize;
+                    enemySurface.collectObjects = CollectObjects.Children;
+                    enemySurface.BuildNavMesh();
+
+                    Debug.Log($"Thêm Enemy NavMeshSurface vào {go.name}");
+                }
             }
         }
 

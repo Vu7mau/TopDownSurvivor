@@ -6,6 +6,10 @@ using UnityEngine;
 public class EnemyCtrl : PoolObj
 {
     [SerializeField] protected string nameEnemy;
+
+
+    [SerializeField] protected Localization _local;
+
     public override string GetName() => nameEnemy;
     protected override void LoadComponents()
     {

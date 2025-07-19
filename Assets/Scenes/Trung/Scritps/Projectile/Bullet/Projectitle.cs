@@ -100,8 +100,11 @@ public class Projectitle : PoolObj
         if (other.transform.CompareTag("Player") && this.createHitEnemy.CanTakeDamage)
         {
             this.createHitEnemy.CanTakeDamage = false;
-            if (this.canDespawnByPlayer) this.Despawn.DoDespawn();
-            this.DestroyProjectitleByPlayer();
+            if (this.canDespawnByPlayer)
+            {
+                this.DestroyProjectitleByPlayer();
+                this.Despawn.DoDespawn();
+            }
 
         }
         if (!other.transform.CompareTag("Enemy") && !other.transform.CompareTag("BulletEnemy") && !other.transform.CompareTag("bullet") && !other.transform.CompareTag("Player"))

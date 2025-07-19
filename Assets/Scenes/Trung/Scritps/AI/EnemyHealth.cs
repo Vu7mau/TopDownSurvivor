@@ -194,6 +194,7 @@ public class EnemyHealth : DamageReceiver
         {
             int random = Random.Range(0, this.beastHurtSFXs.Count);
             SoundFXManager.Instance.PlaySoundFXClip(this.beastHurtSFXs[random], this.transform);
+            Debug.Log("Hurt Scifi");
         }
         this.HurtFXRoutine();
     }
@@ -209,9 +210,11 @@ public class EnemyHealth : DamageReceiver
         if (this.hitDamageSpawner == null) return;
         if (this.bloodSplash == null) return;
         BloodSplash newBloodSplash = this.hitDamageSpawner.Spawn(this.bloodSplash, this.transform.position);
-        if (newBloodSplash == null) return;
+        if (newBloodSplash != null)
+        {
             newBloodSplash.transform.localScale = this.hurtScale;
-        newBloodSplash.gameObject.SetActive(true);
+            newBloodSplash.gameObject.SetActive(true);
+        }
     }
 
 

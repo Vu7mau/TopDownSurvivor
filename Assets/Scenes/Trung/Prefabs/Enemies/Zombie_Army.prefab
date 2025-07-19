@@ -618,6 +618,7 @@ MonoBehaviour:
   speed: 50
   offSet: {x: 0, y: 0.947, z: 0}
   createHitEnemy: {fileID: 5697100655205524657}
+  canDespawnByPlayer: 1
 --- !u!1 &1478269730784223724
 GameObject:
   m_ObjectHideFlags: 0
@@ -1530,7 +1531,6 @@ GameObject:
   - component: {fileID: 547781527811377823}
   - component: {fileID: 1635806981825184837}
   - component: {fileID: 3973153752197142690}
-  - component: {fileID: 236459627064406257}
   - component: {fileID: 8853420609213884692}
   m_Layer: 7
   m_Name: Zombie_Army
@@ -1547,7 +1547,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2836701863530952022}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.57, z: -72.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1588,7 +1588,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2836701863530952022}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 0
   m_Acceleration: 0
@@ -1672,9 +1672,13 @@ MonoBehaviour:
   targetPosition: {fileID: 0}
   isLookAtTarGet: 1
   isAttacking: 0
+  isAttackNear: 0
   isNearTarget: 0
   isMoving: 1
+  stateMovingDefault: 1
   distanceNearest: 10
+  isBoss: 0
+  isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
 --- !u!114 &1635806981825184837
@@ -1714,25 +1718,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectitleSpawner: {fileID: 4466494745506191498}
   projectitleHolder: {fileID: 7790755393372964865}
-  positionSpawn: {fileID: 8329653451153092767}
   bulletInvisible: {fileID: 5563945923188929752}
   shootTime: 1
   timeDelay: 0.3
---- !u!114 &236459627064406257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2836701863530952022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycastDistance: 10000
-  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &8853420609213884692
 MonoBehaviour:
   m_ObjectHideFlags: 0

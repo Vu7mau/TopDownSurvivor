@@ -9,11 +9,11 @@ public abstract class BossController : EnemyAIController
     [Header("Time to return swtich")]
     [SerializeField] protected float timeToReturnSwitch = 5f;
 
+    [SerializeField] protected bool CanAttackTargetLongDistance = false;
     protected enum FarState { Attack, Chase }
 
     protected FarState farState = FarState.Chase;
 
-    [SerializeField] protected bool CanAttackTargetLongDistance = false;
 
     protected float eclapse = 0f;
 
@@ -29,6 +29,7 @@ public abstract class BossController : EnemyAIController
         base.Start();
         this.AttackFromLongDistance();
     }
+
     protected virtual void AttackFromLongDistance()
     {
         StartCoroutine(SwitchStateAttack());
@@ -45,6 +46,7 @@ public abstract class BossController : EnemyAIController
 
     protected IEnumerator CooldownAttackStartRoutine()
     {
+        yield return new WaitUntil(() => this.isStartToFight);
         while (eclapse < this.timeToReturnSwitch)
         {
             eclapse += Time.deltaTime;
@@ -53,11 +55,13 @@ public abstract class BossController : EnemyAIController
         this.CanAttackTargetLongDistance = true;
         eclapse = 0f;
     }
+
+
     protected IEnumerator SwitchStateAttack()
     {
         while (true)
         {
-            yield return new WaitUntil(() => this.farState == FarState.Attack);
+            yield return new WaitUntil(() => this.farState == FarState.Attack && this.isStartToFight);
             this.AttackFar1();
             yield return new WaitUntil(() => this.farState == FarState.Chase);
         }
@@ -66,7 +70,7 @@ public abstract class BossController : EnemyAIController
     {
         while (true)
         {
-            //yield return new WaitUntil(() => this.CanAttackTargetLongDistance && !this.isNearTarget);
+            yield return new WaitUntil(() => this.isStartToFight);
             this.CoolDownAttack();
             yield return new WaitUntil(() => this.farState == FarState.Chase);
         }
@@ -76,8 +80,7 @@ public abstract class BossController : EnemyAIController
         this.enemyReferences.NavMeshAgent.enabled = false;
         this.isAttacking = true;
         this.isMoving = false;
-        if (this.isNearTarget) this.RandomNearAttack();
-        else this.RandomFarAttack();
+        this.RandomFarAttack();
     }
     protected virtual void RandomFarAttack()
     {
@@ -124,9 +127,12 @@ public abstract class BossController : EnemyAIController
     {
         if (!this.CanAttackTargetLongDistance) return;
         if (this.farState == FarState.Attack) return;
-        if (this.isNearTarget)
+        if (this.isNearTarget && eclapse > 0)
         {
-            this.farState = FarState.Chase;
+            this.RandomNearAttack();
+            this.eclapse = 0f;
+            this.farState = FarState.Attack;
+            return;
         }
         eclapse += Time.deltaTime;
         if (eclapse < this.timeToReturnSwitch) return;

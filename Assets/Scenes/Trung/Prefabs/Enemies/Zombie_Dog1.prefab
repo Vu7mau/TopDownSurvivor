@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 8545315262332792066}
   - component: {fileID: 5735576207912734618}
   - component: {fileID: 8271801894833053410}
-  - component: {fileID: 6653382322049936253}
   - component: {fileID: 3476427664041811284}
   m_Layer: 7
   m_Name: Zombie_Dog1
@@ -72,7 +71,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 400818574289811852}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1135425739
   m_Radius: 0.69
   m_Speed: 0
   m_Acceleration: 0
@@ -156,9 +155,13 @@ MonoBehaviour:
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
+  isAttackNear: 0
   isNearTarget: 0
   isMoving: 1
-  distanceNearest: 1.3
+  stateMovingDefault: 1
+  distanceNearest: 2
+  isBoss: 0
+  isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
 --- !u!114 &8271801894833053410
@@ -184,21 +187,6 @@ MonoBehaviour:
   bloodSplash: {fileID: 0}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &6653382322049936253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 400818574289811852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycastDistance: 10000
-  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
-  offset: {x: 0, y: -0.11, z: 0}
 --- !u!114 &3476427664041811284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -472,8 +460,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.0644531, y: 0.9262994, z: 1.9059601}
-  m_Center: {x: 0.0063323975, y: 0.47109726, z: 0.45298004}
+  m_Size: {x: 2.3, y: 0.9262994, z: 2.3}
+  m_Center: {x: 0.0063323975, y: 0.47109726, z: 0.66348267}
 --- !u!1 &2210278390131769150
 GameObject:
   m_ObjectHideFlags: 0

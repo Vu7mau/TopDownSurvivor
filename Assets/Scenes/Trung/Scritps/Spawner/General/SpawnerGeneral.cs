@@ -45,7 +45,7 @@ public abstract class SpawnerGeneral<T> : VuMonoBehaviour where T : PoolObj
     {
         this.holderParent = parent;
     }
-    protected virtual bool ReachLimitObjsInPool() => this.holderParent.gameObject.transform.childCount >= limitObjsInPool;
+    protected virtual bool ReachLimitObjsInPool() => this.holderParent.gameObject.transform.childCount > limitObjsInPool;
     public virtual T Spawn(T prefab, Vector3 position)
     {
         T newObject = this.Spawn(prefab);
@@ -80,7 +80,7 @@ public abstract class SpawnerGeneral<T> : VuMonoBehaviour where T : PoolObj
     }
     protected virtual T GetObjFromPool(T prefab)
     {
-        if(this.inPoolObjs.Count == 0) return null;
+        //if(this.inPoolObjs.Count == 0) return null;
         foreach(T inPoolObj in this.inPoolObjs)
         {
             if(prefab.GetName() == inPoolObj.GetName())

@@ -21857,7 +21857,6 @@ GameObject:
   - component: {fileID: 6683944329128436063}
   - component: {fileID: 5404592795245532362}
   - component: {fileID: 1487275684112206453}
-  - component: {fileID: 2906644603789886922}
   - component: {fileID: 6162223002101896053}
   m_Layer: 7
   m_Name: Zombie_FireFighter
@@ -21914,7 +21913,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9012152331269360993}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 0
   m_Acceleration: 0
@@ -21998,9 +21997,13 @@ MonoBehaviour:
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
+  isAttackNear: 0
   isNearTarget: 0
   isMoving: 1
+  stateMovingDefault: 1
   distanceNearest: 1.3
+  isBoss: 0
+  isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
 --- !u!114 &5404592795245532362
@@ -22039,21 +22042,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 4420307641942214562}
---- !u!114 &2906644603789886922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9012152331269360993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycastDistance: 10000
-  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &6162223002101896053
 MonoBehaviour:
   m_ObjectHideFlags: 0

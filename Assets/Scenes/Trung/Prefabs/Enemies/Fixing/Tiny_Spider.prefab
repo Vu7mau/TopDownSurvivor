@@ -5046,9 +5046,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec30276b9ef5b44ebe162f84c3a3d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basedDamage: 1
-  timeToDelete: 2
-  _damage: 10
+  pool_Name: 
+  despawn: {fileID: 0}
+  hit: {fileID: 0}
+  force: 5
 --- !u!65 &2051037482424999319
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5082,7 +5083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7bb4281136b4604c85f7aa529467436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snd_effect: {fileID: 8300000, guid: 7872b02787eb5b841888ed145a930b56, type: 3}
+  snd_Explosion_Effect: []
 --- !u!82 &5872826016165236751
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5373,7 +5374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 1
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 11400000, guid: c0673d2d53cf8734587f7ff185edc0ae, type: 2}
 --- !u!1 &2702313239958635778
 GameObject:
@@ -5592,7 +5593,6 @@ GameObject:
   - component: {fileID: 825840711509708178}
   - component: {fileID: 7126847261150774902}
   - component: {fileID: 3297977864655808083}
-  - component: {fileID: 2630046933833647887}
   - component: {fileID: 8801867342810179871}
   - component: {fileID: 1298211091219430315}
   - component: {fileID: 4174324332071103726}
@@ -5677,24 +5677,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41497cee96798a24a825c324630d7a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMeshagent: {fileID: 0}
+  animator: {fileID: 0}
+  pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: c0673d2d53cf8734587f7ff185edc0ae, type: 2}
-  _timeDelete: 2
-  type: 1
-  shootingAttack: {fileID: 2630046933833647887}
---- !u!114 &2630046933833647887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416982461094934106}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7285e9809a2da2046889c60fcc87209d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 2019822340371823853}
-  appearPosition: {fileID: 1806556217122222081}
+  explosionPrefab: {fileID: 0}
+  explosionSpawner: {fileID: 0}
+  spiderHealth: {fileID: 0}
+  _spiderIsDead: 0
 --- !u!54 &8801867342810179871
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5758,12 +5748,13 @@ MonoBehaviour:
   _hp: 0
   _hpMax: 0
   _isDead: 0
-  enemySO: {fileID: 11400000, guid: c0673d2d53cf8734587f7ff185edc0ae, type: 2}
-  _canTakeDamage: 1
-  _healthBar: {fileID: 0}
-  _bossHealthBar: {fileID: 0}
-  EnemyIsDead: 0
-  beastHurtSFX: {fileID: 0}
+  _canGetDamage: 1
+  enemyAI: {fileID: 0}
+  healthBarObj: {fileID: 0}
+  _spawnEnemies: {fileID: 0}
+  hitDamageSpawner: {fileID: 0}
+  bloodSplash: {fileID: 0}
+  beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!114 &4498437074991126332
 MonoBehaviour:

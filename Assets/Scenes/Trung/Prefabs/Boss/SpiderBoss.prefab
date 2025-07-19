@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 693073562193413853}
   - component: {fileID: 7882354658421185226}
   - component: {fileID: 6129613702358240452}
-  - component: {fileID: 2376361187452751710}
   - component: {fileID: 4688273280939665077}
   - component: {fileID: 9145691343033442658}
   m_Layer: 0
@@ -87,25 +86,6 @@ NavMeshAgent:
   m_BaseOffset: 0.08
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2376361187452751710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204238781949189223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 105c3db0863a96a4180d2daa85df50ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amountAttacksAnimation: 3
-  _enemyAnimator: {fileID: 7882354658421185226}
-  _agent: {fileID: 6129613702358240452}
-  chaseDistance: 100000
-  attackDistance: 5
-  moveSpeed: 3
-  _canMove: 1
 --- !u!65 &4688273280939665077
 BoxCollider:
   m_ObjectHideFlags: 0

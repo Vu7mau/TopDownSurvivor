@@ -29,8 +29,11 @@ public class Explosion : EffectFX
     protected virtual void LoadStateDefault()
     {
         this._canTakeDamage = false;
-        this.hit.gameObject.SetActive(true);
-        this.hit.CanTakeDamage = this._canTakeDamage;
+        if(this.Hit != null)
+        {
+            this.hit.gameObject.SetActive(true);
+            this.hit.CanTakeDamage = this._canTakeDamage;
+        }
     }
     protected override void Start()
     {

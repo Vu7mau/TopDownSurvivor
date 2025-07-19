@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Autodesk.Fbx;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAIController : EnemyBase
 {
@@ -23,13 +24,26 @@ public class EnemyAIController : EnemyBase
     [SerializeField] protected bool isAttacking = false;
     [SerializeField] protected bool isAttackNear = false;
     [SerializeField] protected bool isNearTarget = false;
+
     [SerializeField] protected bool isMoving = true;
+    [SerializeField] protected bool stateMovingDefault = true;
 
 
     [Space]
     [Header("Properties")]
     [SerializeField] protected float distanceNearest = 1f;
     [SerializeField] protected bool isBoss = false;
+
+
+
+    [Space]
+    [Space]
+    [Space]
+    [Space]
+    [Header("Control when boss is start fight!")]
+    [SerializeField] protected bool isStartToFight = true;
+    public bool IsStartToFight { set => this.isStartToFight = value; }
+
     public float DistanceNearest { get => distanceNearest; }
 
 
@@ -57,6 +71,7 @@ public class EnemyAIController : EnemyBase
     //protected float attackDistance;
     protected float pathUpdateDeadline;
     protected bool inRangeAttack = false;
+    protected bool isDead = false;
 
 
 
@@ -116,11 +131,14 @@ public class EnemyAIController : EnemyBase
 
     protected virtual void SetEnemyWhenAppear()
     {
+
+        SnapToNavMesh();
         this.enemyReferences.NavMeshAgent.enabled = true;
         this.isAttacking = false;
         this.isLookAtTarGet = false;
         this.isNearTarget = false;
-        this.isMoving = true;
+        this.isMoving = this.stateMovingDefault;
+        this.isDead = false;
 
 
         this.WaitingForEnemyDeath();
@@ -128,7 +146,20 @@ public class EnemyAIController : EnemyBase
 
 
     }
-
+    void SnapToNavMesh()
+    {
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
+        {
+            transform.position = hit.position;
+            this.enemyReferences.NavMeshAgent.Warp(hit.position);
+            Debug.Log("Snapped enemy to NavMesh at: " + hit.position);
+        }
+        else
+        {
+            Debug.LogWarning("No NavMesh found near enemy! Cannot place NavMeshAgent.");
+        }
+    }
 
     protected virtual void Update()
     {
@@ -146,8 +177,6 @@ public class EnemyAIController : EnemyBase
                     return;
                 }
             }
-
-
             this.Chase();
             //this.inRangeAttack = Vector3.Distance(transform.position,targetPosition.position) <= this.attackDistance;
             this.Attack();
@@ -177,7 +206,12 @@ public class EnemyAIController : EnemyBase
     protected bool HasState(string _state) => this.enemyReferences.Animator.HasState(0, Animator.StringToHash(_state));
 
 
-
+    protected virtual void Rise()
+    {
+        this.enemyHealth.CanGetDamage = true;
+        this.isStartToFight = true;
+        this.isMoving = true;
+    }
     protected override void Idle()
     {
         if (!HasState("Idle"))
@@ -237,8 +271,8 @@ public class EnemyAIController : EnemyBase
     protected override void Death()
     {
         this.enemyReferences.NavMeshAgent.enabled = false;
-
-        if(!HasState("Death")) return;
+        this.isDead = true;
+        if (!HasState("Death")) return;
         this.enemyReferences.Animator.SetTrigger("Death");
         this.enemyReferences.Animator.SetFloat("DeathState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.DeathAnimations)); 
     }
@@ -313,10 +347,14 @@ public class EnemyAIController : EnemyBase
     {
         if (Time.time >= this.pathUpdateDeadline)
         {
-          //  Debug.Log("Updating path!");
+            //  Debug.Log("Updating path!");
             this.pathUpdateDeadline = Time.time + this.enemyReferences.PathUpdateDelay;
-            this.enemyReferences.NavMeshAgent.enabled = true;
-            this.enemyReferences.NavMeshAgent.SetDestination(this.targetPosition.position);
+            //this.enemyReferences.NavMeshAgent.enabled = true;
+            if (this.isMoving && this.enemyReferences.NavMeshAgent.isOnNavMesh)
+            {
+                this.enemyReferences.NavMeshAgent.SetDestination(this.targetPosition.position);
+                //Debug.Log("SetDestination: " + this.targetPosition.position);
+            }
             this.enemyReferences.Animator.SetBool("isMoving", true);
         }
     }

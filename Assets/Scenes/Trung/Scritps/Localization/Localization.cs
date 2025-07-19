@@ -19,4 +19,7 @@ public class Localization:ScriptableObject
 
     [Header("Victory Bosss")]
     public string DLG_WHEN_KILL_BOSS = "BOSS IS DEAD!";
+
+    [Header("Bosses")]
+    public string BOSS_ROBOT_SCIFI = "Guard Machine";
 }

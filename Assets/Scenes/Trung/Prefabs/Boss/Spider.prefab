@@ -273,7 +273,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1067847285493187404}
-  - component: {fileID: 206968761364909089}
   m_Layer: 0
   m_Name: SpiderTinyPoolingList
   m_TagString: Untagged
@@ -296,22 +295,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1716032113174328122}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &206968761364909089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 363217913778093788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e56cb609cc1755e49ba15d4baf85f9ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  obj: {fileID: 2821330691289002893, guid: fb68abaa684681340b6a9a98a93b150c, type: 3}
-  amount: 0
-  maxAmountPoolingObj: 20
-  listPooling: []
 --- !u!1 &381133922994808546
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,7 +1248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 1
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 11400000, guid: c084c1643d098884e850d07f8b918914, type: 2}
 --- !u!1 &2692766844754795187
 GameObject:
@@ -1736,13 +1719,11 @@ GameObject:
   - component: {fileID: 1592834312644948292}
   - component: {fileID: 2070703189140360011}
   - component: {fileID: 1599864153576330027}
-  - component: {fileID: 5990349099624606336}
   - component: {fileID: 7565476586172569701}
-  - component: {fileID: 5175429907039424708}
-  - component: {fileID: 6820709886812504941}
+  - component: {fileID: 5990349099624606336}
+  - component: {fileID: 8061350220060118743}
   - component: {fileID: 4071966360115895655}
   - component: {fileID: 1569157788498765310}
-  - component: {fileID: 8061350220060118743}
   m_Layer: 7
   m_Name: Spider
   m_TagString: Untagged
@@ -1823,26 +1804,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!114 &5990349099624606336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3869398629769398400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ea8bc0012f89f3468f41907cdb85731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hp: 10
-  _hpMax: 10
-  _isDead: 0
-  enemySO: {fileID: 11400000, guid: c084c1643d098884e850d07f8b918914, type: 2}
-  _canTakeDamage: 1
-  beastHurtSFX: {fileID: 0}
-  hurtScale: {x: 0.5, y: 0.5, z: 0.5}
-  hurtPositionOffset: {x: 0, y: 3, z: 0}
 --- !u!195 &7565476586172569701
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1865,7 +1826,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &5175429907039424708
+--- !u!114 &5990349099624606336
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1874,12 +1835,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 3869398629769398400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7285e9809a2da2046889c60fcc87209d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ea8bc0012f89f3468f41907cdb85731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 1849187812618800798}
-  appearPosition: {fileID: 1592834312644948292}
---- !u!114 &6820709886812504941
+  _hp: 10
+  _hpMax: 10
+  _isDead: 0
+  _canGetDamage: 1
+  enemyAI: {fileID: 0}
+  healthBarObj: {fileID: 0}
+  _spawnEnemies: {fileID: 0}
+  hitDamageSpawner: {fileID: 0}
+  bloodSplash: {fileID: 0}
+  beastHurtSFXs: []
+  hurtScale: {x: 0.5, y: 0.5, z: 0.5}
+--- !u!114 &8061350220060118743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1888,9 +1858,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3869398629769398400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 105c3db0863a96a4180d2daa85df50ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 56db89750a5593f4c9e2f3b54a34f19f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StepSFX: {fileID: 8300000, guid: e96ceaa3b56e0b14683026ec40123915, type: 3}
+  beastAttackSFX: {fileID: 8300000, guid: ff4238ee6b990444697727f2a446f194, type: 3}
+  beastHurtSFX: {fileID: 8300000, guid: e6fd08b649911364ab72deafaf6e51f6, type: 3}
+  beastDeathSFX: {fileID: 8300000, guid: 9852d9434fa25d94cb99cd1f86ee2698, type: 3}
 --- !u!114 &4071966360115895655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1903,15 +1877,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99eadc5ae99cc3342a991addeb65b0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pool: {fileID: 206968761364909089}
-  listPosition:
-  - {fileID: 235955332079140178}
-  - {fileID: 5621223707437805339}
-  - {fileID: 1173601510954479044}
-  - {fileID: 6224961047783992565}
-  clipSpiderSFX:
-  - {fileID: 8300000, guid: d0ce4ef092817df4db9e40286b11ec89, type: 3}
-  - {fileID: 8300000, guid: afd723f96c1406d43822f55b8b1cf22e, type: 3}
 --- !u!136 &1569157788498765310
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1935,22 +1900,6 @@ CapsuleCollider:
   m_Height: 3.31
   m_Direction: 2
   m_Center: {x: -0.01, y: 0.81, z: 0}
---- !u!114 &8061350220060118743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3869398629769398400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56db89750a5593f4c9e2f3b54a34f19f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StepSFX: {fileID: 8300000, guid: e96ceaa3b56e0b14683026ec40123915, type: 3}
-  beastAttackSFX: {fileID: 8300000, guid: ff4238ee6b990444697727f2a446f194, type: 3}
-  beastHurtSFX: {fileID: 8300000, guid: e6fd08b649911364ab72deafaf6e51f6, type: 3}
-  beastDeathSFX: {fileID: 8300000, guid: 9852d9434fa25d94cb99cd1f86ee2698, type: 3}
 --- !u!1 &3909811423364264361
 GameObject:
   m_ObjectHideFlags: 0
@@ -2529,7 +2478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 1
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 11400000, guid: c084c1643d098884e850d07f8b918914, type: 2}
 --- !u!1 &5984638884894872595
 GameObject:
@@ -3689,7 +3638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basedDamage: 10
-  CanTakeDamage: 0
+  canTakeDamage: 0
   enemySO: {fileID: 0}
 --- !u!136 &2654551461021237085
 CapsuleCollider:
@@ -4529,11 +4478,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0404417d1eff98b4c944f1ec87122d52, type: 3}
---- !u!1 &1849187812618800798 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8510225781361347330, guid: 0404417d1eff98b4c944f1ec87122d52, type: 3}
-  m_PrefabInstance: {fileID: 8048996616390706588}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8528911751091112274 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1868729732153658574, guid: 0404417d1eff98b4c944f1ec87122d52, type: 3}

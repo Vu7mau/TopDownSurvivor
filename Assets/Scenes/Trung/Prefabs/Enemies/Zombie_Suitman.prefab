@@ -873,6 +873,7 @@ MonoBehaviour:
   speed: 30
   offSet: {x: 0, y: 0.947, z: 0}
   createHitEnemy: {fileID: 6268627013669842905}
+  canDespawnByPlayer: 1
 --- !u!135 &628736894183702635
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2281,7 +2282,6 @@ GameObject:
   - component: {fileID: -8813635221062628486}
   - component: {fileID: 7642784606122872646}
   - component: {fileID: 6269595595726266558}
-  - component: {fileID: 3315971249046066356}
   - component: {fileID: 7669554188586364842}
   - component: {fileID: 8137829564870594775}
   m_Layer: 7
@@ -2340,7 +2340,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7945127476044001139}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 0
   m_Acceleration: 0
@@ -2427,8 +2427,10 @@ MonoBehaviour:
   isAttackNear: 0
   isNearTarget: 0
   isMoving: 1
+  stateMovingDefault: 1
   distanceNearest: 10
   isBoss: 0
+  isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
 --- !u!114 &6269595595726266558
@@ -2454,21 +2456,6 @@ MonoBehaviour:
   bloodSplash: {fileID: 0}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &3315971249046066356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7945127476044001139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6427bd8e707794381fb23170c500ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycastDistance: 10000
-  agentTypeDB: {fileID: 11400000, guid: 253d8520e79b4b9489e68b322814f8dc, type: 2}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &7669554188586364842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2483,7 +2470,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectitleSpawner: {fileID: 1027022112995904595}
   projectitleHolder: {fileID: 3823802750400206770}
-  positionSpawn: {fileID: 5198923941638415748}
   toxicAbyss: {fileID: 2373408340544120078}
 --- !u!114 &8137829564870594775
 MonoBehaviour:

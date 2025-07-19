@@ -39,7 +39,7 @@ public class EnemyResponse : VuMonoBehaviour
     //Add any rewards when player kill enemy
     protected virtual void OnPlayerKillEnemy()
     {
-        StartCoroutine(this.RewardToPlayerWhenKillEnemy());
+        //StartCoroutine(this.RewardToPlayerWhenKillEnemy());
     }
     private IEnumerator RewardToPlayerWhenKillEnemy()
     {
