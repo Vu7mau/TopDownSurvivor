@@ -468,6 +468,7 @@ MonoBehaviour:
   pool_Name: Olso
   despawn: {fileID: 0}
   nameEnemy: Olso
+  _local: {fileID: 0}
 --- !u!114 &1145717967426740530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,8 +490,10 @@ MonoBehaviour:
   isAttackNear: 0
   isNearTarget: 0
   isMoving: 1
+  stateMovingDefault: 1
   distanceNearest: 10
   isBoss: 1
+  isStartToFight: 1
   amountAttackNear: 5
   amountAttackFar: 0
   timeToReturnSwitch: 3

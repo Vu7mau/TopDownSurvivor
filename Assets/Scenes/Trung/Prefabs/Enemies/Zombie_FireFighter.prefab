@@ -669,6 +669,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6411678519811821315}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2074200821936662307
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4916114226018449931}
+  - component: {fileID: 5898092956897115116}
+  m_Layer: 0
+  m_Name: EffectFXSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4916114226018449931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074200821936662307}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 19.59, y: 15.95, z: 97.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8094463112659779399}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5898092956897115116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074200821936662307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f9f830afcb7fe4397357b09660dbfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnCount: 0
+  inPoolObjs: []
+  holderParent: {fileID: 0}
+  limitObjsInPool: 50
 --- !u!1 &2100399229732804386
 GameObject:
   m_ObjectHideFlags: 0
@@ -21882,6 +21930,7 @@ Transform:
   - {fileID: 4978907010558756206}
   - {fileID: 5585474136668271740}
   - {fileID: 5054541471894709792}
+  - {fileID: 4916114226018449931}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8948856960787549404
@@ -21963,6 +22012,7 @@ MonoBehaviour:
   pool_Name: Zombie_FireFighter
   despawn: {fileID: 6068291363493833466}
   nameEnemy: Zombie_FireFighter
+  _local: {fileID: 0}
 --- !u!114 &-512246348687097727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22023,10 +22073,10 @@ MonoBehaviour:
   _isDead: 0
   _canGetDamage: 1
   enemyAI: {fileID: -512246348687097727}
-  healthBarObj: {fileID: 0}
+  healthBarObj: {fileID: 8426020736500096611}
   _spawnEnemies: {fileID: 0}
-  hitDamageSpawner: {fileID: 0}
-  bloodSplash: {fileID: 0}
+  hitDamageSpawner: {fileID: 4023262136868805261}
+  bloodSplash: {fileID: 7079028878722675419}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!114 &1487275684112206453
@@ -22042,6 +22092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPrefab: {fileID: 4420307641942214562}
+  explosionSpawner: {fileID: 5898092956897115116}
 --- !u!114 &6162223002101896053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22127,6 +22178,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8094463112659779399}
     m_Modifications:
+    - target: {fileID: 95559713003490256, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: enemyHealth
+      value: 
+      objectReference: {fileID: 5404592795245532362}
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
@@ -22192,8 +22247,41 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!114 &4023262136868805261 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3197168241599334551, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 1984926400345821722}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5585474136668271740 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
   m_PrefabInstance: {fileID: 1984926400345821722}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7079028878722675419 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8770236121378939073, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 1984926400345821722}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8426020736500096611 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8026783689419623545, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 1984926400345821722}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ee003039ae17045be945b9bba95461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

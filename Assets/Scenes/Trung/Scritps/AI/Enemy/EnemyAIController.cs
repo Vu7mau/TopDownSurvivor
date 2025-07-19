@@ -132,7 +132,7 @@ public class EnemyAIController : EnemyBase
     protected virtual void SetEnemyWhenAppear()
     {
 
-        SnapToNavMesh();
+        //SnapToNavMesh();
         this.enemyReferences.NavMeshAgent.enabled = true;
         this.isAttacking = false;
         this.isLookAtTarGet = false;

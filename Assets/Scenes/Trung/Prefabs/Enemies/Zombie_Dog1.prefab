@@ -72,7 +72,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 400818574289811852}
   m_Enabled: 1
   m_AgentTypeID: 1135425739
-  m_Radius: 0.69
+  m_Radius: 0.6
   m_Speed: 0
   m_Acceleration: 0
   avoidancePriority: 50
@@ -121,6 +121,7 @@ MonoBehaviour:
   pool_Name: Zombie_Dog
   despawn: {fileID: 8148708458041764003}
   nameEnemy: Zombie_Dog
+  _local: {fileID: 0}
 --- !u!114 &8545315262332792066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,12 +182,12 @@ MonoBehaviour:
   _isDead: 0
   _canGetDamage: 1
   enemyAI: {fileID: 8545315262332792066}
-  healthBarObj: {fileID: 0}
+  healthBarObj: {fileID: 5950316526850070114}
   _spawnEnemies: {fileID: 0}
-  hitDamageSpawner: {fileID: 0}
-  bloodSplash: {fileID: 0}
+  hitDamageSpawner: {fileID: 1272697858385580684}
+  bloodSplash: {fileID: 4918277341783669466}
   beastHurtSFXs: []
-  hurtScale: {x: 0.25, y: 0.25, z: 0.25}
+  hurtScale: {x: 0.01, y: 0.01, z: 0.01}
 --- !u!114 &3476427664041811284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2742,6 +2743,39 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!114 &1272697858385580684 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3197168241599334551, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 4465064382007171611}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4918277341783669466 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8770236121378939073, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 4465064382007171611}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5950316526850070114 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8026783689419623545, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 4465064382007171611}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ee003039ae17045be945b9bba95461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7782061067204525181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}

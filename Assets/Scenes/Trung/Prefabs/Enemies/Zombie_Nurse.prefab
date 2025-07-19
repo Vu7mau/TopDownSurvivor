@@ -1823,6 +1823,7 @@ MonoBehaviour:
   pool_Name: Zombie_Nurse_B
   despawn: {fileID: 6340907811078221847}
   nameEnemy: Zombie_Nurse_B
+  _local: {fileID: 0}
 --- !u!114 &1865566779252238403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1883,10 +1884,10 @@ MonoBehaviour:
   _isDead: 0
   _canGetDamage: 1
   enemyAI: {fileID: 1865566779252238403}
-  healthBarObj: {fileID: 0}
+  healthBarObj: {fileID: 869723074209335504}
   _spawnEnemies: {fileID: 0}
-  hitDamageSpawner: {fileID: 0}
-  bloodSplash: {fileID: 0}
+  hitDamageSpawner: {fileID: 5704831646822599742}
+  bloodSplash: {fileID: 1928419094082856040}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!114 &3411947445369975613
@@ -2274,6 +2275,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2437561688250717634}
     m_Modifications:
+    - target: {fileID: 95559713003490256, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: enemyHealth
+      value: 
+      objectReference: {fileID: 84378044030299002}
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
@@ -2339,8 +2344,41 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!114 &869723074209335504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8026783689419623545, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 7166702258820007081}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ee003039ae17045be945b9bba95461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1928419094082856040 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8770236121378939073, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 7166702258820007081}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3854318851120620239 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
   m_PrefabInstance: {fileID: 7166702258820007081}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5704831646822599742 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3197168241599334551, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 7166702258820007081}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

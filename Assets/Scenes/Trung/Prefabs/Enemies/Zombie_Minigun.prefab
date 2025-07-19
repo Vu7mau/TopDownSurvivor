@@ -1111,6 +1111,7 @@ MonoBehaviour:
   pool_Name: Zombie_Minigun_A
   despawn: {fileID: 5751218916542239875}
   nameEnemy: Zombie_Minigun_A
+  _local: {fileID: 0}
 --- !u!114 &184486387661950844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1171,10 +1172,10 @@ MonoBehaviour:
   _isDead: 0
   _canGetDamage: 1
   enemyAI: {fileID: 184486387661950844}
-  healthBarObj: {fileID: 0}
+  healthBarObj: {fileID: 6225225880074484558}
   _spawnEnemies: {fileID: 0}
-  hitDamageSpawner: {fileID: 0}
-  bloodSplash: {fileID: 0}
+  hitDamageSpawner: {fileID: 1539724592352444320}
+  bloodSplash: {fileID: 4663072249740171254}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!114 &6687373002429375228
@@ -14851,6 +14852,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5357058004746088795}
     m_Modifications:
+    - target: {fileID: 95559713003490256, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: enemyHealth
+      value: 
+      objectReference: {fileID: 1839239339941553881}
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
@@ -14916,6 +14921,39 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!114 &1539724592352444320 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3197168241599334551, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 4107472836978407223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4663072249740171254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8770236121378939073, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 4107472836978407223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6225225880074484558 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8026783689419623545, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 4107472836978407223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03ee003039ae17045be945b9bba95461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8000886498838696273 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}

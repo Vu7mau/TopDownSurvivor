@@ -7,7 +7,7 @@ public class Zombie_FireFighterCtrl : VuMonoBehaviour
 
 
     [SerializeField] protected Explosion explosionPrefab;
-    protected EffectFXSpawner explosionSpawner;
+    [SerializeField] protected EffectFXSpawner explosionSpawner;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -30,7 +30,7 @@ public class Zombie_FireFighterCtrl : VuMonoBehaviour
     protected virtual void LoadExplosionSpawner()
     {
         if (this.explosionSpawner != null) return;
-        this.explosionSpawner = FindAnyObjectByType<EffectFXSpawner>();
+        this.explosionSpawner = GetComponentInChildren<EffectFXSpawner>();
         if(this.explosionSpawner == null) return;
     }
     protected virtual void Explode()
