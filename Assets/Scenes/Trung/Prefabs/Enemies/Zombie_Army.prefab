@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 2150846617850605905}
   - component: {fileID: 3703268509128976923}
   - component: {fileID: 5563945923188929752}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: BulletInvisble
   m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -387,7 +387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6564657280885504203}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -683,7 +683,7 @@ GameObject:
   - component: {fileID: 2951837535574910892}
   - component: {fileID: 5541317155623043706}
   - component: {fileID: 1734994394528895644}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -835,8 +835,8 @@ GameObject:
   - component: {fileID: -23525964665716925}
   - component: {fileID: 547781527811377823}
   - component: {fileID: 1635806981825184837}
-  - component: {fileID: 3973153752197142690}
   - component: {fileID: 8853420609213884692}
+  - component: {fileID: 231619628142398064}
   m_Layer: 7
   m_Name: Zombie_Army
   m_TagString: Enemy
@@ -892,7 +892,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2836701863530952022}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 0
@@ -987,6 +987,9 @@ MonoBehaviour:
   isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
+  snd_roar: []
+  timeRoar: 10
+  snd_attack_1: []
 --- !u!114 &1635806981825184837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1010,23 +1013,6 @@ MonoBehaviour:
   bloodSplash: {fileID: 8873997392756932881}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &3973153752197142690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2836701863530952022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8260849e69122e644a269b066ccac26e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectitleSpawner: {fileID: 4466494745506191498}
-  projectitleHolder: {fileID: 7790755393372964865}
-  bulletInvisible: {fileID: 5563945923188929752}
-  shootTime: 1
-  timeDelay: 0.3
 --- !u!114 &8853420609213884692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,6 +1027,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: -23525964665716925}
   enemyHealth: {fileID: 1635806981825184837}
+--- !u!114 &231619628142398064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836701863530952022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a5b9501030dae4aac35c1c53305eb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectitleSpawner: {fileID: 4466494745506191498}
+  projectitleHolder: {fileID: 7790755393372964865}
+  bulletInvisible: {fileID: 5563945923188929752}
+  enemyAIController: {fileID: 547781527811377823}
+  shootTime: 3
+  timeDelay: 0.3
+  timeToNextShoot: 1
+  gunFlash: {fileID: 0}
+  snd_shoot: []
 --- !u!1 &2867569387392770009
 GameObject:
   m_ObjectHideFlags: 0
@@ -1731,7 +1738,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8329427387922662166}
   - component: {fileID: 757029770923975005}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Despawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12202,7 +12209,7 @@ GameObject:
   - component: {fileID: 8043797358659130574}
   - component: {fileID: 5697100655205524657}
   - component: {fileID: 7392520452876862999}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CreateHitEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}

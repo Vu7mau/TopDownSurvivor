@@ -422,7 +422,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576827273632326026}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 3.5
@@ -435,7 +435,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2.59
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 4
 --- !u!114 &900642797915387097
 MonoBehaviour:
@@ -494,8 +494,11 @@ MonoBehaviour:
   distanceNearest: 10
   isBoss: 1
   isStartToFight: 1
-  amountAttackNear: 5
-  amountAttackFar: 0
+  amountAttackNear: 0
+  amountAttackFar: 5
+  snd_roar: []
+  timeRoar: 10
+  snd_attack_1: []
   timeToReturnSwitch: 3
   CanAttackTargetLongDistance: 0
   minigunBullet: {fileID: 4711044699464570451}
@@ -793,10 +796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7bb4281136b4604c85f7aa529467436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snd_Explosion_Effect:
-  - {fileID: 8300000, guid: f7edbad94d35ddb4e9cad0d74833fd41, type: 3}
-  - {fileID: 8300000, guid: 45949ced4cdb1f2449f67a15bc4a8b11, type: 3}
-  - {fileID: 8300000, guid: 682050ac9e3af5a4cb9c3fc90cd4e804, type: 3}
+  snd_Effect: []
 --- !u!82 &7711393175956540108
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16467,8 +16467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7bb4281136b4604c85f7aa529467436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snd_Explosion_Effect:
-  - {fileID: 8300000, guid: 7872b02787eb5b841888ed145a930b56, type: 3}
+  snd_Effect: []
 --- !u!82 &7713482211080341888
 AudioSource:
   m_ObjectHideFlags: 0
@@ -48213,8 +48212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7bb4281136b4604c85f7aa529467436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snd_Explosion_Effect:
-  - {fileID: 8300000, guid: 19a7fad938b45164fb5d9bd882603a8a, type: 3}
+  snd_Effect: []
 --- !u!82 &5322344236434857001
 AudioSource:
   m_ObjectHideFlags: 0
@@ -58353,8 +58351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7bb4281136b4604c85f7aa529467436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snd_Explosion_Effect:
-  - {fileID: 8300000, guid: 92179c9fb6dd1914b81a68ffb5e77125, type: 3}
+  snd_Effect: []
 --- !u!1 &6700337828288673384
 GameObject:
   m_ObjectHideFlags: 0
@@ -82785,7 +82782,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3711765752959021179
 Transform:
   m_ObjectHideFlags: 0

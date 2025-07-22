@@ -158,7 +158,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3726290214769994924}
-  - component: {fileID: 2938664069221873749}
   - component: {fileID: 7963376914162860067}
   m_Layer: 0
   m_Name: MinigunBulletZombie
@@ -185,27 +184,6 @@ Transform:
   - {fileID: 1919577755190272752}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &2938664069221873749
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4550852323876629395}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7963376914162860067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +201,7 @@ MonoBehaviour:
   speed: 30
   offSet: {x: 0, y: 0.947, z: 0}
   createHitEnemy: {fileID: 7598835723555921611}
+  canDespawnByPlayer: 1
 --- !u!1 &8975965435834632384
 GameObject:
   m_ObjectHideFlags: 0

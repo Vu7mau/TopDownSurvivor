@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +8,8 @@ public class Zombie_FireFighterCtrl : VuMonoBehaviour
 
     [SerializeField] protected Explosion explosionPrefab;
     [SerializeField] protected EffectFXSpawner explosionSpawner;
+
+    [SerializeField] protected Transform positionExplosion;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -37,7 +39,12 @@ public class Zombie_FireFighterCtrl : VuMonoBehaviour
     {
         if(this.explosionSpawner == null) return;
         if (this.explosionPrefab == null) return;
-        EffectFX newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, transform.position);
+        if (this.positionExplosion == null)
+        {
+            Debug.LogWarning("Chưa có vị trí sinh ra vụ nổ kìa ba!");
+            return;
+        }
+        EffectFX newExplosion = this.explosionSpawner.Spawn(this.explosionPrefab, this.positionExplosion.position);
         if (newExplosion == null) return;
     }
 }

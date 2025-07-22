@@ -11,6 +11,7 @@ public class ProjectitleSpawner : SpawnerGeneral<Projectitle>
     }
     protected virtual void LoadProjectitleSpawnerHoldParent()
     {
+        if (this.holderParent != null) return;
         this.holderParent = GameObject.Find("ProjectitleHolderSpawner").transform;
     }
 }

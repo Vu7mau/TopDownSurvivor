@@ -64,7 +64,13 @@ public class EnemyAIController : EnemyBase
     [SerializeField] protected int amountAttackNear = 1;
     [SerializeField] protected int amountAttackFar = 1;
 
-
+    [Space]
+    [Space]
+    [Header("Roar")]
+    [SerializeField] protected List<AudioClip> snd_roar;
+    [SerializeField] protected float timeRoar = 10f;
+    protected float roarEclapse = 0f;
+    protected bool isRoar = false;
     //Hide in Hirachi variable
 
 
@@ -132,8 +138,8 @@ public class EnemyAIController : EnemyBase
     protected virtual void SetEnemyWhenAppear()
     {
 
-        //SnapToNavMesh();
-        this.enemyReferences.NavMeshAgent.enabled = true;
+        this.SnapToNavMesh();
+        //this.enemyReferences.NavMeshAgent.enabled = true;
         this.isAttacking = false;
         this.isLookAtTarGet = false;
         this.isNearTarget = false;
@@ -142,22 +148,51 @@ public class EnemyAIController : EnemyBase
 
 
         this.WaitingForEnemyDeath();
-
+        if(this.snd_roar.Count > 0) StartCoroutine(this.RoarRoutine());
+        
 
 
     }
-    void SnapToNavMesh()
+    public virtual void SnapToNavMesh()
     {
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(transform.position, out hit, 1000f, NavMesh.AllAreas))
         {
             transform.position = hit.position;
             this.enemyReferences.NavMeshAgent.Warp(hit.position);
             Debug.Log("Snapped enemy to NavMesh at: " + hit.position);
         }
-        else
+    }
+
+    protected virtual void Roar()
+    {
+        if (this.snd_roar.Count == 0) return;
+        this.roarEclapse += Time.deltaTime;
+        if (this.roarEclapse < this.timeRoar) return;
+        this.isRoar = true;
+        this.roarEclapse = 0;
+    }
+
+    protected IEnumerator RoarRoutine()
+    {
+        while (true)
         {
-            Debug.LogWarning("No NavMesh found near enemy! Cannot place NavMeshAgent.");
+            int isPlayingRoar = Random.Range(0, 5);
+            yield return new WaitUntil(() => this.isRoar);
+            if(isPlayingRoar == 1)
+            {
+                if (this.snd_roar.Count != 0)
+                {
+                    int random = Random.Range(0, this.snd_roar.Count);
+                    SoundFXManager.Instance.PlaySoundFXClip(this.snd_roar[random], this.transform);
+                    Debug.Log("Đã phát roar rồi nha!");
+                }
+            }
+            else
+            {
+                Debug.Log("Không phát roar đâu nha!");
+            }
+                this.isRoar = false;
         }
     }
 
@@ -178,6 +213,7 @@ public class EnemyAIController : EnemyBase
                 }
             }
             this.Chase();
+            this.Roar();
             //this.inRangeAttack = Vector3.Distance(transform.position,targetPosition.position) <= this.attackDistance;
             this.Attack();
             this.LookAtTarGet();
@@ -365,7 +401,7 @@ public class EnemyAIController : EnemyBase
         this.isMoving = true;
         this.enemyReferences.NavMeshAgent.enabled = true;
         this.isLookAtTarGet = false;
-        //this.enemyReferences.Animator.SetBool("attack", this.isAttacking);
+        this.enemyReferences.Animator.SetBool("attack", this.isAttacking);
     }
 
 
@@ -385,4 +421,24 @@ public class EnemyAIController : EnemyBase
     {
         this.isLookAtTarGet = false;
     }
+
+
+
+    //Sound FX
+    [Space]
+    [Space]
+    [Space]
+    [Space]
+    [Space]
+    [Header("Sound FX Attack General!")]
+    [SerializeField] protected List<AudioClip> snd_attack_1;
+
+    protected virtual void PlaySoundFXAttack1()
+    {
+        if (snd_attack_1.Count == 0) return;
+        int random = Random.Range(0, snd_attack_1.Count);
+        if (this.snd_attack_1[random] == null) return;
+        SoundFXManager.Instance.PlaySoundFXClip(this.snd_attack_1[random], this.transform);
+    }
+
 }
