@@ -23,7 +23,8 @@ public class CinemachineShake : CinemachineAbstract
 
    public virtual void ShakeCamera(float intensity , float time)
     {
-        cinemachineBasicMultiChannelPerlin = _cinemachineCtrl._cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        if(_cinemachineCtrl._currentCinemachine==null) return;
+        cinemachineBasicMultiChannelPerlin = _cinemachineCtrl._currentCinemachine.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
         shakeTimer=time;
     }

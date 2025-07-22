@@ -7,6 +7,7 @@ public class WeaponPickup : VuMonoBehaviour
 {
     [SerializeField] protected RayCastWeapon _weaponFab;
 
+
     protected override void Start()
     {
         base.Start();

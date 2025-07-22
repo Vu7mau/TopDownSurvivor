@@ -24,6 +24,7 @@ public class RayCastWeapon : ObjectShooting
 
 
     [SerializeField] public Transform model;
+
    // [SerializeField] public Transform flash;
     public WeaponSlot weaponSlot => weaponInfo.weaponSlot;
     public Transform GunPoint => _gunPoint;
@@ -42,6 +43,7 @@ public class RayCastWeapon : ObjectShooting
     protected override void OnEnable()
     {
         base.OnEnable();
+          
     }
     protected override void Awake()
     {
@@ -151,7 +153,7 @@ public class RayCastWeapon : ObjectShooting
     public virtual void SetIsWeaponActivate(bool isWeaponActivate)
     {
         _isWeaponActivate = isWeaponActivate;
-
+       
         //if (flash != null)
         //{
         //    this.flash.gameObject.SetActive(isWeaponActivate);

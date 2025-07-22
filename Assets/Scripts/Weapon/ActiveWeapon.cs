@@ -195,7 +195,7 @@ public class ActiveWeapon : VuMonoBehaviour
         weapon.model.gameObject.SetActive(true);
         if (weapon)
         {
-            // SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pickUp, this.transform);
+             SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.pickUp, this.transform);
             this._rigController.SetBool("holster_weapon", false);
             do
             {

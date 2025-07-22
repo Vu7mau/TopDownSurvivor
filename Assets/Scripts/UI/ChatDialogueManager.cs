@@ -59,7 +59,7 @@ public class ChatDialogueManager : VuMonoBehaviour
         if (chatContents[chatIndex] != null)
         {
             var chat = chatContents[chatIndex];
-            chatDialogue.ShowDialogue(chat.speakerName, chat.speakerAvatar, chat.chatLines);
+            chatDialogue.ShowDialogue(chat.speakerName, chat.speakerAvatar, chat.chatLines, chat.notificationAudio);
             yield return new WaitForSeconds(chat.chatDelatTimeBeforHide);
             chatDialogue.HideDialogue();
         }

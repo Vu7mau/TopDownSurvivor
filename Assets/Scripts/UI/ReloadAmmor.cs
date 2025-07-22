@@ -11,15 +11,15 @@ public class ReloadAmmor : Singleton<ReloadAmmor>
 
 
 
-    public virtual void AmmoReload(float reloadTime)
+    public virtual void AmmoReload(float reloadTime,int maxAmmour)
     {
         if (_loaded) return;
 
         this._loaded = true;
-        StartCoroutine(this.Reload(reloadTime));
+        StartCoroutine(this.Reload(reloadTime, maxAmmour));
     }
 
-    IEnumerator Reload(float reloadTime)
+    IEnumerator Reload(float reloadTime,int maxAmmour)
     {
 
         this._reloadSlider.gameObject.SetActive(true);
@@ -33,8 +33,10 @@ public class ReloadAmmor : Singleton<ReloadAmmor>
             this.UpdateReloadSlider(elapsedTime / reloadTime);
             yield return null;
         }
+
         _reloadSlider.gameObject.SetActive(false);
         this._reloadSlider.fillAmount = 0;
+        CharacterUIManager.OnWeaponReload?.Invoke(maxAmmour, maxAmmour);
         SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.reloadRiffle, this.transform);
         Invoke(nameof(this.ResetLoaded), .1f);
     }

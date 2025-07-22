@@ -8,7 +8,8 @@ public class CinemachineCtrl : VuMonoBehaviour
     public static CinemachineCtrl Instance;
     [Space]
     [Header("CinemachineCtrl")]
-    [SerializeField] public CinemachineVirtualCamera _cinemachineVirtualCamera;
+    [SerializeField] public CinemachineVirtualCamera _currentCinemachine;
+    [SerializeField] public CinemachineVirtualCamera _defaultCinemachine;
 
     [SerializeField] protected CinemachineShake _cinemachineShake;
     public CinemachineShake CinemachineShake => _cinemachineShake;
@@ -16,7 +17,7 @@ public class CinemachineCtrl : VuMonoBehaviour
     public CinemachineZoom CinemachineZoom => _cinemachineZoom;
 
 
-       [SerializeField] protected SwitchedCam _switchedCam;
+    [SerializeField] protected SwitchedCam _switchedCam;
     public SwitchedCam SwitchedCam => _switchedCam;
 
     protected override void Awake()
@@ -24,6 +25,11 @@ public class CinemachineCtrl : VuMonoBehaviour
         base.Awake();
         if(Instance == null)
             Instance = this;
+
+        if(_defaultCinemachine!=null)
+        {
+            _currentCinemachine = _defaultCinemachine;
+        }
     }
     protected override void LoadComponents()
     {
@@ -36,15 +42,15 @@ public class CinemachineCtrl : VuMonoBehaviour
 
     protected virtual void LoadCinemachineVirtual()
     {
-        if (_cinemachineVirtualCamera != null) return;
+        if (_defaultCinemachine != null) return;
 
-        this._cinemachineVirtualCamera= GetComponent<CinemachineVirtualCamera>();
+        this._defaultCinemachine = GetComponent<CinemachineVirtualCamera>();
         Debug.Log("CinemachineVirtualCamera");
 
     }
     protected virtual void LoadCinemachineShake()
     {
-        if( _cinemachineVirtualCamera != null) return;
+        if( _currentCinemachine != null) return;
 
         this._cinemachineShake = transform.GetComponentInChildren<CinemachineShake>();
         Debug.Log("CinemachineVirtualCamera");

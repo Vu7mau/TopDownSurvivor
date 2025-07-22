@@ -26,14 +26,14 @@ public class CinemachineZoom : CinemachineAbstract
     }    
     protected virtual void ZoomIn(float zoomSpeed)
     {
-        var lensSettings = _cinemachineCtrl._cinemachineVirtualCamera.m_Lens;
+        var lensSettings = _cinemachineCtrl._currentCinemachine.m_Lens;
         lensSettings.OrthographicSize= Mathf.Lerp(lensSettings.OrthographicSize, _zoomInFOV, zoomSpeed * Time.deltaTime);
-        _cinemachineCtrl._cinemachineVirtualCamera.m_Lens.OrthographicSize = lensSettings.OrthographicSize;
+        _cinemachineCtrl._currentCinemachine.m_Lens.OrthographicSize = lensSettings.OrthographicSize;
     }
     protected virtual void ZoomOut(float zoomSpeed)
     {
-        var lensSettings = _cinemachineCtrl._cinemachineVirtualCamera.m_Lens;
+        var lensSettings = _cinemachineCtrl._currentCinemachine.m_Lens;
         lensSettings.OrthographicSize = Mathf.Lerp(lensSettings.OrthographicSize, _defaultFOV, zoomSpeed * Time.deltaTime);
-        _cinemachineCtrl._cinemachineVirtualCamera.m_Lens.OrthographicSize = lensSettings.OrthographicSize;
+        _cinemachineCtrl._currentCinemachine.m_Lens.OrthographicSize = lensSettings.OrthographicSize;
     }
 }

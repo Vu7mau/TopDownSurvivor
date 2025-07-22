@@ -9,4 +9,6 @@ public class ChatContentSO : ScriptableObject
     public string chatLines;
 
     public int chatDelatTimeBeforHide = 2;
+
+    public AudioClip notificationAudio;
 }

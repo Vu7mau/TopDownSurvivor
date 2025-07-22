@@ -18,6 +18,7 @@ public class ChatDialogue : VuMonoBehaviour
     [Header("Dialogue effect")]
     [SerializeField] private float popupDuration = 0.3f;
     [SerializeField] private float typingSpeed = 0.3f;
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -52,7 +53,7 @@ public class ChatDialogue : VuMonoBehaviour
         speakerAvatar = this.transform.Find("BG").transform.Find("Nick").transform.Find("Avatar").transform.Find("Img").GetComponent<UnityEngine.UI.Image>();
     }
 
-    public void ShowDialogue(string speakerName, Sprite avatar, string content)
+    public void ShowDialogue(string speakerName, Sprite avatar, string content, AudioClip audioClip)
     {
         if (dialoguePanel == null)
         {
@@ -68,7 +69,8 @@ public class ChatDialogue : VuMonoBehaviour
 
         if (this.speakerAvatar != null)
             this.speakerAvatar.sprite = avatar;
-
+        if (audioClip != null)
+            SoundFXManager.Instance.PlaySoundFXClip(audioClip, this.transform);
         if (dialoguePanel.transform != null)
         {
             dialoguePanel.transform.DOScale(Vector3.one, popupDuration)
@@ -89,7 +91,7 @@ public class ChatDialogue : VuMonoBehaviour
         this.content.text = "";
 
         foreach (char c in fullText)
-        {
+        {        
             this.content.text += c;
             yield return new WaitForSeconds(typingSpeed);
         }

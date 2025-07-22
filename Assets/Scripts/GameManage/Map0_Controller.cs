@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
@@ -8,9 +9,9 @@ using UnityEngine.Rendering;
 public class Map0_Controller : Map_Controller
 {
     [SerializeField] private Light light;
-    [SerializeField] PlayableDirector director;
+    [SerializeField] PlayableDirector tutorial_1;
 
-
+    public static Action CalledTutorial;
     
     void OnTriggerEnter(Collider other)
     {
@@ -35,20 +36,20 @@ public class Map0_Controller : Map_Controller
         {
             CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
         }
+        CalledTutorial += TutorialIntro;
 
-        if (director != null)
-        {
-            director.stopped += OnCutsceneIn;
-        }
+
     }
+    
     protected override void OnDisable()
     {
-        if (director != null)
-        {
-            director.stopped -= OnCutsceneIn;
-        }
+        CalledTutorial -= TutorialIntro;
     }
 
+    private void TutorialIntro()
+    {
+        tutorial_1.Play();
+    }    
     public void FadeOutLight(float duration)
     {
         StartCoroutine(FadeOutCoroutine(duration));

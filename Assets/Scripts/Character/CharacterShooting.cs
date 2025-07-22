@@ -42,7 +42,7 @@ public class CharacterShooting : CharacterCtrlAbstract
         if (this._weapon != null)
             if (this._weapon.GetIsReloadingAmmo())
             {
-                ReloadAmmor.Instance.AmmoReload(this._weapon.ReloadAmmorTime);
+                ReloadAmmor.Instance.AmmoReload(this._weapon.ReloadAmmorTime, this._weapon.GetMaxAmmour());
             }
     }
 
