@@ -22,6 +22,7 @@ public class SpawnEnemies :VuMonoBehaviour
 
     [Header("Position Spawn")]
     [SerializeField] protected Transform playerPosition;
+    [SerializeField] protected Transform spawnPosition;
     [SerializeField] protected float offSetSpawn = 10f;
     [SerializeField] private List<Transform> listLimitPositionsSpawn;
 
@@ -33,6 +34,8 @@ public class SpawnEnemies :VuMonoBehaviour
 
     protected int amountWave;
     public int AmountWave { get => amountWave; }
+
+
 
     [Header("Change the time each wave (calculator by minutes)")]
     [SerializeField] private int maxEnemies = 20;
@@ -143,15 +146,11 @@ public class SpawnEnemies :VuMonoBehaviour
         while (waveNumber <= _waves.listWaves.Count)
         {
             this.SpawnEnemiesFight(waveNumber);
-            if (_waves.listWaves[_waves.WaveElement(waveNumber)].CalculatorAmountBosses() != 0)
-            {
-                amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].bossLists[0].Amount;
-                StartCoroutine(SpawnBosses(waveNumber, amountEnemiesMixed));
-            }
-            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
-            {
-                
-            }
+            //if (_waves.listWaves[_waves.WaveElement(waveNumber)].CalculatorAmountBosses() != 0)
+            //{
+            //    amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].bossLists[0].Amount;
+            //    StartCoroutine(SpawnBosses(waveNumber, amountEnemiesMixed));
+            //}
             //if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.Mixed)
             //{
             //    amountEnemiesMixed = _waves.listWaves[_waves.WaveElement(waveNumber)].Amount;
@@ -180,28 +179,19 @@ public class SpawnEnemies :VuMonoBehaviour
     }
     private IEnumerator SpawnEnemyAI(int wave,int amountEachWave)
     {
-        if (wave < 1) { yield return null; }
-        int amountEnemyWillSpawn = amountEachWave;
+        if (wave < 1) { yield break; }
+        int amountEnemyWillSpawn;
         this.totalAmountEnemiesEachWaves = amountEachWave;
         while (totalAmountEnemiesEachWaves > 0)
         {
-            if(amountEnemyWillSpawn > this.maxEnemies)
+            amountEnemyWillSpawn = this.totalAmountEnemiesEachWaves;
+            if (amountEnemyWillSpawn > this.maxEnemies)
             {
                 amountEnemyWillSpawn = this.maxEnemies;
-                this.totalAmountEnemiesEachWaves -= amountEnemyWillSpawn;
             }
-            else
-            {
-                this.totalAmountEnemiesEachWaves -= amountEnemyWillSpawn;
-            }
-            Vector3 spawnPosition = GetPositionSpawn();
-            //GameObject enemy = transform.GetChild(_waves.listWaves[_waves.WaveElement(wave)].EnemyTypeIndex - 1).gameObject.transform.GetChild(dem).gameObject;
-            //if(enemy != null)
-            //{
-            //    enemy.transform.position = spawnPosition;
-            //    enemy.SetActive(true);
-            //    enemy.gameObject.GetComponent<EnemyHealth>().CheckAmountIncreaseHealth(_waves.listWaves[_waves.WaveElement(wave)].amountHealthIncreasePercent);
-            //}
+            this.totalAmountEnemiesEachWaves -= amountEnemyWillSpawn;
+            Vector3 spawnPosition = SnapToNavMesh(GetPositionSpawn());
+
             EnemyCtrl enemyPrefab;
             for (int i = 0; i < this._waves.listWaves[this._waves.WaveElement(waveNumber)].enemiesAIList.Count; i++)
             {
@@ -215,45 +205,54 @@ public class SpawnEnemies :VuMonoBehaviour
                     EnemyCtrl newEnemy = this.enemiesSpawner.Spawn(enemyPrefab, spawnPosition);
                     ++this.enemiesLeft;
                     UIManager.Instance.UpdateWaveUI(wave, this.enemiesLeft);
-                    yield return new WaitForSeconds(1f);
+                    if(this.enemiesLeft == this.maxEnemies) yield return new WaitUntil(() => this.enemiesLeft <= 0);
+                    yield return new WaitForSeconds(1f); 
                 }
+                yield return new WaitForSeconds(1f);
             }
-            if (_waves.listWaves[_waves.WaveElement(waveNumber)].waveMode == Wave.ModeWave.EachType)
-            {
-                
-            }
-            for (int dem = 0; dem < amountEnemyWillSpawn; dem++)
-            {
-                
 
 
-                
-            }
-            while(this.amountEnemiesPlayerKilled < amountEnemyWillSpawn)
-            {
-                if (this.timeIsUp)
-                {
-                    this.totalAmountEnemiesEachWaves = 0;
-                    this.enemiesLeft = 0;
-                    break;
-                }
-                yield return null;
-            }
-            amountEnemyWillSpawn = this.totalAmountEnemiesEachWaves;
-            this.amountEnemiesPlayerKilled = 0;
+            //if (this.amountEnemiesPlayerKilled < this.totalAmountEnemiesEachWaves)
+            //{
+            //    if (this.timeIsUp)
+            //    {
+            //        this.totalAmountEnemiesEachWaves = 0;
+            //        this.enemiesLeft = 0;
+            //        this.amountEnemiesPlayerKilled = 0;
+            //        break;
+            //    }
+            //    yield return null;
+            //}
         }
+    }
+
+    protected virtual Vector3 SnapToNavMesh(Vector3 position)
+    {
+        Vector3 pos = Vector3.zero ;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(position, out hit, 1000f, NavMesh.AllAreas))
+        {
+            pos = hit.position;
+            Debug.Log("Snapped enemy to NavMesh at: " + hit.position);
+        }
+        else
+        {
+            Debug.LogWarning("No NavMesh found near enemy! Cannot place NavMeshAgent.");
+        }
+        return pos;
     }
 
     protected virtual Vector3 GetPositionSpawn()
     {
         Vector3 spawnPosition;
-        float positionSpawnX = Random.Range(this.playerPosition.position.x - offSetSpawn, this.playerPosition.position.x + offSetSpawn);
-        float positionSpawnZ = Random.Range(this.playerPosition.position.z - offSetSpawn, this.playerPosition.position.z + offSetSpawn);
-        spawnPosition = new Vector3(positionSpawnX, this.playerPosition.position.y, positionSpawnZ);
-        if(spawnPosition.x > listLimitPositionsSpawn[0].position.x) spawnPosition = listLimitPositionsSpawn[0].position;
-        if (spawnPosition.x < listLimitPositionsSpawn[1].position.x) spawnPosition = listLimitPositionsSpawn[1].position;
-        if (spawnPosition.z < listLimitPositionsSpawn[2].position.x) spawnPosition = listLimitPositionsSpawn[2].position;
-        if (spawnPosition.z > listLimitPositionsSpawn[3].position.x) spawnPosition = listLimitPositionsSpawn[3].position;
+        //float positionSpawnX = Random.Range(this.playerPosition.position.x - offSetSpawn, this.playerPosition.position.x + offSetSpawn);
+        //float positionSpawnZ = Random.Range(this.playerPosition.position.z - offSetSpawn, this.playerPosition.position.z + offSetSpawn);
+        //spawnPosition = new Vector3(positionSpawnX, this.playerPosition.position.y, positionSpawnZ);
+        //if(spawnPosition.x > listLimitPositionsSpawn[0].position.x) spawnPosition = listLimitPositionsSpawn[0].position;
+        //if (spawnPosition.x < listLimitPositionsSpawn[1].position.x) spawnPosition = listLimitPositionsSpawn[1].position;
+        //if (spawnPosition.z < listLimitPositionsSpawn[2].position.x) spawnPosition = listLimitPositionsSpawn[2].position;
+        //if (spawnPosition.z > listLimitPositionsSpawn[3].position.x) spawnPosition = listLimitPositionsSpawn[3].position;
+        spawnPosition = this.spawnPosition.position;
         return spawnPosition;
     }
     private static bool IsBossFight = false;

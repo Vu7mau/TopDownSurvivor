@@ -70,7 +70,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 400818574289811852}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 1135425739
   m_Radius: 0.6
   m_Speed: 0
@@ -165,6 +165,13 @@ MonoBehaviour:
   isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
+  snd_roar: []
+  timeRoar: 10
+  snd_attack_1:
+  - {fileID: 8300000, guid: cf67135275402d84caa7f0b362e60095, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &8271801894833053410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,7 +194,7 @@ MonoBehaviour:
   hitDamageSpawner: {fileID: 1272697858385580684}
   bloodSplash: {fileID: 4918277341783669466}
   beastHurtSFXs: []
-  hurtScale: {x: 0.01, y: 0.01, z: 0.01}
+  hurtScale: {x: 0.005, y: 0.005, z: 0.005}
 --- !u!114 &3476427664041811284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2678,6 +2685,18 @@ PrefabInstance:
       propertyPath: enemyHealth
       value: 
       objectReference: {fileID: 8271801894833053410}
+    - target: {fileID: 4096386538509914524, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4096386538509914524, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4096386538509914524, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay

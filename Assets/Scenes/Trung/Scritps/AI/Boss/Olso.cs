@@ -128,6 +128,7 @@ public class Olso : BossController
     public override void EndAttack()
     {
         base.EndAttack();
+        this.enemyReferences.Animator.SetBool("attack", false);
     }
 
     protected override void Death()

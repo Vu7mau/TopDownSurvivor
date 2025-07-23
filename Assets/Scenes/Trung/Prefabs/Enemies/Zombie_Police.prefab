@@ -693,7 +693,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8742375514343525295}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10528,7 +10528,7 @@ GameObject:
   - component: {fileID: 8947073127956505852}
   - component: {fileID: 7128989449036589932}
   - component: {fileID: 5298463219647868583}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CreateHitEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11231,7 +11231,7 @@ GameObject:
   - component: {fileID: 7648673929125035525}
   - component: {fileID: 2180611600728399669}
   - component: {fileID: 4205498152037002989}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11345,7 +11345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8961008333453164951}
   - component: {fileID: 7308836185308231803}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Despawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11747,7 +11747,7 @@ GameObject:
   - component: {fileID: 832455576688873911}
   - component: {fileID: 1197744294014371807}
   - component: {fileID: 8110805518112759222}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: BulletInvisble
   m_TagString: BulletEnemy
   m_Icon: {fileID: 0}
@@ -11787,7 +11787,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -12137,7 +12137,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8085040016616699974}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 0
@@ -12227,11 +12227,18 @@ MonoBehaviour:
   isNearTarget: 0
   isMoving: 1
   stateMovingDefault: 1
-  distanceNearest: 5
+  distanceNearest: 7
   isBoss: 0
   isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
+  snd_roar: []
+  timeRoar: 10
+  snd_attack_1:
+  - {fileID: 8300000, guid: 1d302824bd5da2a4b9e80c8b23b17ad9, type: 3}
+  - {fileID: 8300000, guid: 38ee530e1fc53c741b332644370aaf2b, type: 3}
+  - {fileID: 8300000, guid: 7f4c838a27bc1b84f8f79fcb769af218, type: 3}
+  - {fileID: 8300000, guid: 36f7ebe96b604c046944b1ff02fdcf55, type: 3}
 --- !u!114 &2159309267267697389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12270,8 +12277,16 @@ MonoBehaviour:
   projectitleSpawner: {fileID: 5812303041499195393}
   projectitleHolder: {fileID: 1484004457598121923}
   bulletInvisible: {fileID: 8110805518112759222}
+  enemyAIController: {fileID: 3307017565665538073}
   shootTime: 1
   timeDelay: 0
+  timeToNextShoot: 1
+  gunFlash: {fileID: 0}
+  snd_shoot:
+  - {fileID: 8300000, guid: 1d302824bd5da2a4b9e80c8b23b17ad9, type: 3}
+  - {fileID: 8300000, guid: 38ee530e1fc53c741b332644370aaf2b, type: 3}
+  - {fileID: 8300000, guid: 7f4c838a27bc1b84f8f79fcb769af218, type: 3}
+  - {fileID: 8300000, guid: 36f7ebe96b604c046944b1ff02fdcf55, type: 3}
 --- !u!114 &2235039527990555615
 MonoBehaviour:
   m_ObjectHideFlags: 0

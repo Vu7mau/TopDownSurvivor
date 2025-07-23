@@ -2339,7 +2339,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7945127476044001139}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 1135425739
   m_Radius: 0.51
   m_Speed: 0
@@ -2434,6 +2434,10 @@ MonoBehaviour:
   isStartToFight: 1
   amountAttackNear: 1
   amountAttackFar: 1
+  snd_roar:
+  - {fileID: 8300000, guid: cf67135275402d84caa7f0b362e60095, type: 3}
+  timeRoar: 10
+  snd_attack_1: []
 --- !u!114 &6269595595726266558
 MonoBehaviour:
   m_ObjectHideFlags: 0

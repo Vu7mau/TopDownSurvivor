@@ -30,7 +30,7 @@ public class EnemyAI : VuMonoBehaviour
     protected override void OnEnable()
     {
         base.OnEnable();
-        this.OnEnableNavMeshAgent();
+        //this.OnEnableNavMeshAgent();
     }
 
 

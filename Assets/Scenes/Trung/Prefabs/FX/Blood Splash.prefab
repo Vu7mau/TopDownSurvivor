@@ -4773,6 +4773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b084ef41d16b0164ab43fe1608a35123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pool_Name: 
   despawn: {fileID: 0}
 --- !u!199 &3548588485384254795
 ParticleSystemRenderer:
@@ -4860,7 +4861,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7bb4281136b4604c85f7aa529467436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  snd_Explosion_Effect:
+  snd_Effect:
+  - {fileID: 8300000, guid: d5865faae4f031143be3c3c20037eb09, type: 3}
   - {fileID: 8300000, guid: aec9aff0f8cd26444a8b86aeb1070ee1, type: 3}
 --- !u!82 &7824689481500193055
 AudioSource:

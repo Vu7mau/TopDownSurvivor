@@ -58,7 +58,19 @@ public class SciFiController : BossController
 
     [SerializeField] protected List<AudioClip> snd_shoot6_start;
     [SerializeField] protected List<AudioClip> snd_shoot6_end;
+    [SerializeField] protected Vector3 rocketLightScale;
 
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.ResetScifi();
+
+    }
+    protected virtual void ResetScifi()
+    {
+        this.fire.transform.gameObject.SetActive(false);
+    }
     protected virtual void Attack2()
     {
         StartCoroutine(Shoot2Routine());
@@ -78,6 +90,10 @@ public class SciFiController : BossController
             if (this.e_Shooting.NewProjectitle == null) yield break;
 
             Projectitle newRocket = this.e_Shooting.NewProjectitle;
+            if(this.rocketLightScale != Vector3.zero)
+            {
+                newRocket.transform.localScale = this.transform.localScale;
+            }
             this.rocketLightObj.Add(newRocket);
             //if (this.snd_shoot2_start != null) SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot2_start, this.transform);
             newRocket.GetComponentInChildren<Projectitle>().SetVelocity(0);
@@ -215,10 +231,14 @@ public class SciFiController : BossController
     }
 
 
-
+    [Space]
+    [Space]
+    [Space]
+    [Header("Death")]
     [SerializeField] protected Explosion explosion;
     [SerializeField] protected List<Transform> explosionPoss;
     [SerializeField] protected Transform fire;
+    [SerializeField] protected AudioClip snd_shutdownRobot;
 
     private void Distribution()
     {
@@ -239,7 +259,13 @@ public class SciFiController : BossController
         nbig.transform.localScale = new Vector3(3, 3, 3);
         fire.transform.gameObject.SetActive(true);
     }
+    private void Shutdown()
+    {
+        if(this.snd_shutdownRobot == null) return;
 
+
+        SoundFXManager.Instance.PlaySoundFXClip(this.snd_shutdownRobot, this.transform);
+    }
 
 
 
