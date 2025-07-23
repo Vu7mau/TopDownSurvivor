@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
@@ -10,6 +10,7 @@ public class Map0_Controller : Map_Controller
 {
     [SerializeField] private Light light;
     [SerializeField] PlayableDirector tutorial_1;
+    [SerializeField] float skipTime;
 
     public static Action CalledTutorial;
     
@@ -25,6 +26,27 @@ public class Map0_Controller : Map_Controller
             CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
             FadeOutLight(2);
         }
+    }
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            SkipForward(skipTime);
+        }
+    }
+    public void SkipForward(float skipTime)
+    {
+        if (tutorial_1 == null || tutorial_1.state != PlayState.Playing)
+            return;
+
+        float currentTime = (float)tutorial_1.time;
+        float newTime = currentTime + skipTime;
+
+        // Clamp để không vượt quá duration
+        newTime = Mathf.Clamp(newTime, 0f, (float)tutorial_1.duration - 0.01f);
+
+        tutorial_1.time = newTime;
+        tutorial_1.Evaluate();
     }
     private void OnCutsceneIn(PlayableDirector pd)
     {
