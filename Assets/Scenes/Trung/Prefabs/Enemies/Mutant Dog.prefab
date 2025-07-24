@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8271801894833053410}
   - component: {fileID: 3476427664041811284}
   m_Layer: 7
-  m_Name: Zombie_Dog1
+  m_Name: Mutant Dog
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: 8545315262332792066}
   enemyHealth: {fileID: 8271801894833053410}
-  enemyCtrlDespawn: {fileID: 8148708458041764003}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
@@ -190,7 +189,6 @@ MonoBehaviour:
   _canGetDamage: 1
   enemyAI: {fileID: 8545315262332792066}
   healthBarObj: {fileID: 5950316526850070114}
-  _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 1272697858385580684}
   bloodSplash: {fileID: 4918277341783669466}
   beastHurtSFXs: []
@@ -209,6 +207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 8545315262332792066}
   enemyHealth: {fileID: 8271801894833053410}
+  enemyCtrlDespawn: {fileID: 8148708458041764003}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &752536297193990415
 GameObject:
   m_ObjectHideFlags: 0
@@ -2700,6 +2700,10 @@ PrefabInstance:
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x

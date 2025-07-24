@@ -834,11 +834,11 @@ GameObject:
   - component: {fileID: 5856058978959243039}
   - component: {fileID: -23525964665716925}
   - component: {fileID: 547781527811377823}
+  - component: {fileID: 231619628142398064}
   - component: {fileID: 1635806981825184837}
   - component: {fileID: 8853420609213884692}
-  - component: {fileID: 231619628142398064}
   m_Layer: 7
-  m_Name: Zombie_Army
+  m_Name: Zombie SWAT
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -974,7 +974,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: -23525964665716925}
   enemyHealth: {fileID: 1635806981825184837}
-  enemyCtrlDespawn: {fileID: 6937122837625186742}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 1
   isAttacking: 0
@@ -990,43 +989,6 @@ MonoBehaviour:
   snd_roar: []
   timeRoar: 10
   snd_attack_1: []
---- !u!114 &1635806981825184837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2836701863530952022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ea8bc0012f89f3468f41907cdb85731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hp: 0
-  _hpMax: 10
-  _isDead: 0
-  _canGetDamage: 1
-  enemyAI: {fileID: -23525964665716925}
-  healthBarObj: {fileID: 7923023518492781993}
-  _spawnEnemies: {fileID: 0}
-  hitDamageSpawner: {fileID: 3372766512797591879}
-  bloodSplash: {fileID: 8873997392756932881}
-  beastHurtSFXs: []
-  hurtScale: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &8853420609213884692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2836701863530952022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c57c771de079a04a9215ddff0d81cf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyAI: {fileID: -23525964665716925}
-  enemyHealth: {fileID: 1635806981825184837}
 --- !u!114 &231619628142398064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,6 +1010,44 @@ MonoBehaviour:
   timeToNextShoot: 1
   gunFlash: {fileID: 0}
   snd_shoot: []
+--- !u!114 &1635806981825184837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836701863530952022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea8bc0012f89f3468f41907cdb85731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hp: 0
+  _hpMax: 10
+  _isDead: 0
+  _canGetDamage: 1
+  enemyAI: {fileID: -23525964665716925}
+  healthBarObj: {fileID: 7923023518492781993}
+  hitDamageSpawner: {fileID: 3372766512797591879}
+  bloodSplash: {fileID: 8873997392756932881}
+  beastHurtSFXs: []
+  hurtScale: {x: 0.25, y: 0.25, z: 0.25}
+--- !u!114 &8853420609213884692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836701863530952022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c57c771de079a04a9215ddff0d81cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAI: {fileID: -23525964665716925}
+  enemyHealth: {fileID: 1635806981825184837}
+  enemyCtrlDespawn: {fileID: 6937122837625186742}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &2867569387392770009
 GameObject:
   m_ObjectHideFlags: 0
@@ -12569,6 +12569,10 @@ PrefabInstance:
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x

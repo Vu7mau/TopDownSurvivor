@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class UpdateListWavesSO : MonoBehaviour
 {
-    [SerializeField] private WaveManager listWaveSO;
-    private void Update()
-    {
-        UpdateEnemyWaveIndex();
-    }
-    private void UpdateEnemyWaveIndex()
-    {
-        for (int i = 0; i < listWaveSO.listWaves.Count; i++)
-        {
-            listWaveSO.listWaves[i].WaveIndex = i + 1;
-        }
-    }
+    //[SerializeField] private WaveData listWaveSO;
+    //private void Update()
+    //{
+    //    UpdateEnemyWaveIndex();
+    //}
+    //private void UpdateEnemyWaveIndex()
+    //{
+    //    for (int i = 0; i < listWaveSO.listWaves.Count; i++)
+    //    {
+    //        listWaveSO.listWaves[i].WaveIndex = i + 1;
+    //    }
+    //}
 }

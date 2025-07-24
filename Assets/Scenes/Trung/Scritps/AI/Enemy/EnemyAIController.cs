@@ -10,7 +10,6 @@ public class EnemyAIController : EnemyBase
     [Header("All custom components when need to ref!")]
     [SerializeField] protected EnemyAI enemyReferences;
     [SerializeField] protected EnemyHealth enemyHealth;
-    [SerializeField] protected EnemyCtrlDespawn enemyCtrlDespawn;
 
     [Space]
     [Header("Default Components nessessary!")]
@@ -87,7 +86,6 @@ public class EnemyAIController : EnemyBase
         this.LoadTargetPosition();
         this.LoadEnemyHealth();
         this.LoadEnemyReferences();
-        this.LoadEnemyCtrlDespawn();
     }
     protected override void Start()
     {
@@ -121,12 +119,6 @@ public class EnemyAIController : EnemyBase
     {
         if (this.enemyReferences != null) return;
         this.enemyReferences = GetComponentInChildren<EnemyAI>();
-    }
-    protected virtual void LoadEnemyCtrlDespawn()
-    {
-        if (this.enemyCtrlDespawn != null) return;
-        this.enemyCtrlDespawn = GetComponentInChildren<EnemyCtrlDespawn>();
-        if (this.enemyCtrlDespawn == null) return;
     }
     protected virtual void LoadEnemyHealth()
     {
@@ -311,23 +303,6 @@ public class EnemyAIController : EnemyBase
         if (!HasState("Death")) return;
         this.enemyReferences.Animator.SetTrigger("Death");
         this.enemyReferences.Animator.SetFloat("DeathState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.DeathAnimations)); 
-    }
-    protected virtual void DeleteEnemy()
-    {
-        //if(this.enemyCtrlDespawn != null)
-        //{
-        //    this.enemyCtrlDespawn.DoDespawn();
-        //    return;
-        //}
-        this.gameObject.SetActive(false);
-    }
-    protected virtual void DeleteEnemyWhileHpEqual0()
-    {
-        if (!GetComponent<Collider>().enabled && gameObject.activeInHierarchy)
-        {
-            this.DeleteEnemy();
-            //RewardPlayerAfterEnemyDead();
-        }
     }
 
 

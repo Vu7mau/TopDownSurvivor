@@ -417,7 +417,7 @@ GameObject:
   - component: {fileID: 2512060544070953057}
   - component: {fileID: 3266761247596851181}
   m_Layer: 7
-  m_Name: SpiderTiny
+  m_Name: Spider
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -554,7 +554,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: 9031176900792687987}
   enemyHealth: {fileID: 2512060544070953057}
-  enemyCtrlDespawn: {fileID: 6059239260207831010}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
@@ -586,6 +585,10 @@ MonoBehaviour:
   explosionPrefab: {fileID: 5007519168247567572}
   explosionSpawner: {fileID: 2016265074100169359}
   positionExplosion: {fileID: 4013822869813238042}
+  meshRenderer: {fileID: 0}
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.1
+  flashCount: 5
 --- !u!114 &2512060544070953057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,7 +607,6 @@ MonoBehaviour:
   _canGetDamage: 1
   enemyAI: {fileID: 9031176900792687987}
   healthBarObj: {fileID: 6153681604401367540}
-  _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 1611169911978249498}
   bloodSplash: {fileID: 4878729514330744140}
   beastHurtSFXs: []
@@ -623,6 +625,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 9031176900792687987}
   enemyHealth: {fileID: 2512060544070953057}
+  enemyCtrlDespawn: {fileID: 6059239260207831010}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &2641513686884297095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1724,6 +1728,10 @@ PrefabInstance:
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x

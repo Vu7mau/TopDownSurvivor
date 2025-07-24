@@ -69,10 +69,6 @@ public class Timer : MonoBehaviour
         else
         {
             time = 0;
-            if (SpawnEnemies.Instance.WaveNumber > SpawnEnemies.Instance.AmountWave)
-            {
-                SpawnEnemies.Instance.FinishTheBattle(true);
-            }
         }
     }
     public void CountUp(bool _isStartCountTime, bool _isCountUp)

@@ -10,24 +10,24 @@ public class EnemySO : ScriptableObject
     [Header("Chase")]
     public float ChaseRange;
     public float ChaseSpeed;
-    public int RunAnimations = 1;
+    [HideInInspector] public int RunAnimations = 1;
 
 
     [Header("Attack")]
     public float AttackRange;
     public int Damage;
-    public int AttackAnimations = 1;
+    [HideInInspector] public int AttackAnimations = 1;
 
     [Header("Death")]
-    public int DeathAnimations = 1;
+    [HideInInspector] public int DeathAnimations = 1;
 
 
     [Header("Health")]
     public float Health;
 
     [Header("Rewards Player Can Receive")]
-    public int amount_Gems;
-    public float amount_Experiences;
+    public int Gems;
+    public float Exp;
     public int Score = 10;
 
     private void OnValidate()

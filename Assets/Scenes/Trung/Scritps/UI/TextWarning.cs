@@ -31,7 +31,6 @@ public class TextWarning : MonoBehaviour
             .SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 //Bắt đầu đánh boss
-                SpawnEnemies.StartFightBossRightNow(true);
                 transform.parent.gameObject.SetActive(false);
             });
     }

@@ -12,11 +12,9 @@ public class EnemyHealth : DamageReceiver
 
 
     [Header("These components would be loaded when run the game!")]
-    //[SerializeField] protected EnemyDamageReceiver enemyDamageReceiver;
     [SerializeField] protected EnemyAI enemyAI;
     [SerializeField] protected HpBarObj healthBarObj;
 
-    [SerializeField] protected SpawnEnemies _spawnEnemies;
     [SerializeField] protected HitDamageSpawner hitDamageSpawner;
 
 
@@ -58,7 +56,6 @@ public class EnemyHealth : DamageReceiver
         ///Load All Components
         base.LoadComponents();
         this.LoadEnemyAI();
-        this.LoadSpawnEnemies();
         this.LoadHealthBar();
         this.LoadHitDamageSpawner();
         this.LoadBloodSplash();
@@ -80,12 +77,6 @@ public class EnemyHealth : DamageReceiver
         this.healthBarObj = GetComponentInChildren<HpBarObj>();
         if(this.healthBarObj == null) return;
         this.healthBarObj.gameObject.SetActive(true);
-    }
-    protected virtual void LoadSpawnEnemies()
-    {
-        if (this._spawnEnemies != null) return;
-        this._spawnEnemies = FindAnyObjectByType<SpawnEnemies>();
-        if (this._spawnEnemies == null) return;
     }
     protected virtual void LoadEnemyAI()
     {
@@ -159,7 +150,6 @@ public class EnemyHealth : DamageReceiver
     }
     protected override void OnDead()
     {
-        if(this._spawnEnemies != null) this._spawnEnemies.EnemyDefeated(1);
         //this.gameObject.GetComponent<Collider>().enabled = false;
 
 

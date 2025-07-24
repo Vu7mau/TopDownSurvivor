@@ -20354,8 +20354,9 @@ GameObject:
   - component: {fileID: 3289389880929443539}
   - component: {fileID: 4494286475033730284}
   - component: {fileID: 1486308570073083465}
+  - component: {fileID: 8220965524458399847}
   m_Layer: 7
-  m_Name: Sci-Fi
+  m_Name: Guard Machine
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20382,6 +20383,7 @@ Transform:
   - {fileID: 2189481075629388130}
   - {fileID: 7614032219708491027}
   - {fileID: 7783878352958149019}
+  - {fileID: 6601859513765789594}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1736917205587141660
@@ -20510,7 +20512,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: 7334931529703991533}
   enemyHealth: {fileID: 4494286475033730284}
-  enemyCtrlDespawn: {fileID: 0}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
@@ -20607,7 +20608,6 @@ MonoBehaviour:
   _canGetDamage: 0
   enemyAI: {fileID: 7334931529703991533}
   healthBarObj: {fileID: 5817977961525203220}
-  _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 4605496853950606552}
   bloodSplash: {fileID: 0}
   beastHurtSFXs:
@@ -20627,6 +20627,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossRise: {fileID: 8624228770370788792}
   isAppear: 1
+--- !u!114 &8220965524458399847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888495746247662378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c57c771de079a04a9215ddff0d81cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAI: {fileID: 7334931529703991533}
+  enemyHealth: {fileID: 4494286475033730284}
+  enemyCtrlDespawn: {fileID: 7059864618205017890}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &6892555393454805946
 GameObject:
   m_ObjectHideFlags: 0
@@ -20955,6 +20971,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5336660303088718775}
   m_LocalEulerAnglesHint: {x: -0.012271864, y: 2.153291, z: 0.32637823}
+--- !u!1 &7092187786212329851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6601859513765789594}
+  - component: {fileID: 7059864618205017890}
+  m_Layer: 0
+  m_Name: DespawnEnemy
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6601859513765789594
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7092187786212329851}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -68.23594, y: 0.06499958, z: -79.283485}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1465765996903552383}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7059864618205017890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7092187786212329851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0f1ff3fbb40554f9bee80e9ab0c6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 5397443597338323126}
+  spawner: {fileID: 0}
+  timeLife: 1000000
+  currentTime: 1000000
 --- !u!1 &7105316142444252607
 GameObject:
   m_ObjectHideFlags: 0
@@ -38920,6 +38984,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.67469
+      objectReference: {fileID: 0}
+    - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.67469
+      objectReference: {fileID: 0}
+    - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.67469
+      objectReference: {fileID: 0}
     - target: {fileID: 3091852949514988864, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: enemyHealth
       value: 
@@ -38943,6 +39019,30 @@ PrefabInstance:
     - target: {fileID: 4412285843058525100, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594977881106452695, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4904577
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594977881106452695, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4904577
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594977881106452695, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4904577
+      objectReference: {fileID: 0}
+    - target: {fileID: 5507968452617426689, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4904577
+      objectReference: {fileID: 0}
+    - target: {fileID: 5507968452617426689, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4904577
+      objectReference: {fileID: 0}
+    - target: {fileID: 5507968452617426689, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4904577
       objectReference: {fileID: 0}
     - target: {fileID: 6312021090175114642, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_fontColor.g

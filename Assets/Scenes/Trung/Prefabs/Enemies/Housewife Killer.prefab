@@ -1675,7 +1675,7 @@ GameObject:
   - component: {fileID: 260230857824875663}
   - component: {fileID: 6086530639262004257}
   m_Layer: 7
-  m_Name: Zombie_Woman_B
+  m_Name: Housewife Killer
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1809,7 +1809,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: 558692222296622959}
   enemyHealth: {fileID: 260230857824875663}
-  enemyCtrlDespawn: {fileID: 18531453551674062}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
@@ -1849,7 +1848,6 @@ MonoBehaviour:
   _canGetDamage: 1
   enemyAI: {fileID: 558692222296622959}
   healthBarObj: {fileID: 6970005474649203126}
-  _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 2558094768623035736}
   bloodSplash: {fileID: 8532229443688107278}
   beastHurtSFXs: []
@@ -1868,6 +1866,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 558692222296622959}
   enemyHealth: {fileID: 260230857824875663}
+  enemyCtrlDespawn: {fileID: 18531453551674062}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &8420607598804203226
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,6 +2112,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2154,19 +2158,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6592392401733574153, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6592392401733574153, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7422396490767872542, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7422396490767872542, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

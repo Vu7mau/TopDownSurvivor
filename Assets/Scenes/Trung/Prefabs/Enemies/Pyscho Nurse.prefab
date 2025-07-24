@@ -1720,7 +1720,7 @@ GameObject:
   - component: {fileID: 84378044030299002}
   - component: {fileID: 3411947445369975613}
   m_Layer: 7
-  m_Name: Zombie_Nurse
+  m_Name: Pyscho Nurse
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1854,7 +1854,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: 1865566779252238403}
   enemyHealth: {fileID: 84378044030299002}
-  enemyCtrlDespawn: {fileID: 6340907811078221847}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
@@ -1894,7 +1893,6 @@ MonoBehaviour:
   _canGetDamage: 1
   enemyAI: {fileID: 1865566779252238403}
   healthBarObj: {fileID: 869723074209335504}
-  _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 5704831646822599742}
   bloodSplash: {fileID: 1928419094082856040}
   beastHurtSFXs: []
@@ -1913,6 +1911,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 1865566779252238403}
   enemyHealth: {fileID: 84378044030299002}
+  enemyCtrlDespawn: {fileID: 6340907811078221847}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &6367248545651256795
 GameObject:
   m_ObjectHideFlags: 0
@@ -2291,6 +2291,10 @@ PrefabInstance:
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_Name
       value: UIDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x

@@ -8,11 +8,25 @@ public class EnemyResponse : VuMonoBehaviour
 
     [SerializeField] protected EnemyHealth enemyHealth;
 
+    [Space]
+    [Space]
+    [Header("This component use for despawn enemy when player kill them!")]
+    [Space]
+    [Space]
+    [Space]
+    [Header("This component need ref!")]
+    [SerializeField] protected EnemyCtrlDespawn enemyCtrlDespawn;
+
+    [Header("This component can be null if you don't need despawn in wave!")]
+    [SerializeField] protected EnemiesSpawner enemiesSpawner;
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadEnemyHealth();
         this.LoadEnemyAI();
+        this.LoadEnemyCtrlDespawn();
+        this.LoadEnemiesSpawner();
     }
 
     protected override void OnEnable()
@@ -21,7 +35,19 @@ public class EnemyResponse : VuMonoBehaviour
         this.OnPlayerKillEnemy();
     }
 
-
+    private void Update()
+    {
+        
+    }
+    protected virtual void OnEnemyDeath()
+    {
+        if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
+        {
+            this.enemyCtrlDespawn.DoDespawn();
+            return;
+        }
+        this.transform.gameObject.SetActive(false);
+    }
 
     protected virtual void LoadEnemyHealth()
     {
@@ -33,7 +59,16 @@ public class EnemyResponse : VuMonoBehaviour
         if (this.enemyAI != null) return;
         this.enemyAI = GetComponent<EnemyAI>();
     }
-
+    protected virtual void LoadEnemyCtrlDespawn()
+    {
+        if (this.enemyCtrlDespawn != null) return;
+        this.enemyCtrlDespawn = GetComponentInChildren<EnemyCtrlDespawn>();
+    }
+    protected virtual void LoadEnemiesSpawner()
+    {
+        if (this.enemiesSpawner != null) return;
+        this.enemiesSpawner = FindAnyObjectByType<EnemiesSpawner>();
+    }
 
 
     //Add any rewards when player kill enemy

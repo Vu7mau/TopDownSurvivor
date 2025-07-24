@@ -21310,7 +21310,7 @@ GameObject:
   - component: {fileID: 1487275684112206453}
   - component: {fileID: 6162223002101896053}
   m_Layer: 7
-  m_Name: Zombie_FireFighter
+  m_Name: Firetrap
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21446,7 +21446,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: -512246348687097727}
   enemyHealth: {fileID: 5404592795245532362}
-  enemyCtrlDespawn: {fileID: 6068291363493833466}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
@@ -21487,7 +21486,6 @@ MonoBehaviour:
   _canGetDamage: 1
   enemyAI: {fileID: -512246348687097727}
   healthBarObj: {fileID: 8426020736500096611}
-  _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 4023262136868805261}
   bloodSplash: {fileID: 7079028878722675419}
   beastHurtSFXs: []
@@ -21521,6 +21519,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: -512246348687097727}
   enemyHealth: {fileID: 5404592795245532362}
+  enemyCtrlDespawn: {fileID: 6068291363493833466}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &9020629919445531096
 GameObject:
   m_ObjectHideFlags: 0
@@ -21600,6 +21600,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -21642,19 +21646,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6592392401733574153, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6592392401733574153, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7422396490767872542, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7422396490767872542, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
