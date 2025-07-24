@@ -207,6 +207,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 8545315262332792066}
   enemyHealth: {fileID: 8271801894833053410}
+  textDisplayParentHolder: {fileID: 1411438241005518263}
+  playerLevelSystem: {fileID: 0}
+  waveSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 8148708458041764003}
   enemiesSpawner: {fileID: 0}
 --- !u!1 &752536297193990415
@@ -2777,6 +2780,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63979ce4e81103141b5b77df60e9bca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1411438241005518263 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3342084323326060460, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 4465064382007171611}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4918277341783669466 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8770236121378939073, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}

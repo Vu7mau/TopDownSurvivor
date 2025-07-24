@@ -112,11 +112,14 @@ public class EnemyResponse : VuMonoBehaviour
 
     protected virtual void DespawnAllText()
     {
-        if(this.textDisplayParentHolder.childCount > 0)
+        if(this.textDisplayParentHolder != null)
         {
-            foreach (Transform child in textDisplayParentHolder.transform)
+            if (this.textDisplayParentHolder.childCount > 0)
             {
-                child.gameObject.GetComponentInChildren<TextDisplayDespawn>().DoDespawn();
+                foreach (Transform child in textDisplayParentHolder.transform)
+                {
+                    child.gameObject.GetComponentInChildren<TextDisplayDespawn>().DoDespawn();
+                }
             }
         }
     }
