@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 1145717967426740530}
   - component: {fileID: 1628172709203377651}
   - component: {fileID: 6995483344072329064}
+  - component: {fileID: 5501075053275494324}
   m_Layer: 7
   m_Name: Olso
   m_TagString: Enemy
@@ -371,6 +372,7 @@ Transform:
   - {fileID: 4746559498453819969}
   - {fileID: 5214079338531628275}
   - {fileID: 3900503651549527453}
+  - {fileID: 4906072787752947985}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5705715815416770259
@@ -483,7 +485,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyReferences: {fileID: 900642797915387097}
   enemyHealth: {fileID: 6995483344072329064}
-  enemyCtrlDespawn: {fileID: 0}
   targetPosition: {fileID: 0}
   isLookAtTarGet: 0
   isAttacking: 0
@@ -556,11 +557,28 @@ MonoBehaviour:
   _canGetDamage: 1
   enemyAI: {fileID: 900642797915387097}
   healthBarObj: {fileID: 1096268827817240986}
-  _spawnEnemies: {fileID: 0}
   hitDamageSpawner: {fileID: 6944872153607312470}
   bloodSplash: {fileID: 0}
   beastHurtSFXs: []
   hurtScale: {x: 0.25, y: 0.25, z: 0.25}
+--- !u!114 &5501075053275494324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576827273632326026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c57c771de079a04a9215ddff0d81cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyAI: {fileID: 900642797915387097}
+  enemyHealth: {fileID: 6995483344072329064}
+  playerLevelSystem: {fileID: 0}
+  waveSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 9111616009386989993}
+  enemiesSpawner: {fileID: 0}
 --- !u!1 &611992831295997420
 GameObject:
   m_ObjectHideFlags: 0
@@ -107836,6 +107854,54 @@ Transform:
   - {fileID: 3668183885959752790}
   m_Father: {fileID: 6049232681320263977}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9072457727489320944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4906072787752947985}
+  - component: {fileID: 9111616009386989993}
+  m_Layer: 0
+  m_Name: DespawnEnemy
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4906072787752947985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9072457727489320944}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -68.23594, y: 0.06499958, z: -79.283485}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6049232681320263977}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9111616009386989993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9072457727489320944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0f1ff3fbb40554f9bee80e9ab0c6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 1776799232698003228}
+  spawner: {fileID: 0}
+  timeLife: 1000000
+  currentTime: 1000000
 --- !u!1 &9073926593338200357
 GameObject:
   m_ObjectHideFlags: 0

@@ -1866,6 +1866,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 558692222296622959}
   enemyHealth: {fileID: 260230857824875663}
+  textDisplayParentHolder: {fileID: 2431879804497136227}
+  playerLevelSystem: {fileID: 0}
+  waveSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 18531453551674062}
   enemiesSpawner: {fileID: 0}
 --- !u!1 &8420607598804203226
@@ -2114,7 +2117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4850350821858532513, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6199335906123851366, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2158,25 +2161,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6592392401733574153, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6592392401733574153, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422396490767872542, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7422396490767872542, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+--- !u!224 &2431879804497136227 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3342084323326060460, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}
+  m_PrefabInstance: {fileID: 1143547274865929679}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2558094768623035736 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3197168241599334551, guid: 1098b3713ff72cc4ba2fb9d8907ce950, type: 3}

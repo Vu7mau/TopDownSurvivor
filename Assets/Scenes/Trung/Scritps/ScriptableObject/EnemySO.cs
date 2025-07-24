@@ -27,7 +27,7 @@ public class EnemySO : ScriptableObject
 
     [Header("Rewards Player Can Receive")]
     public int Gems;
-    public float Exp;
+    public int Exp;
     public int Score = 10;
 
     private void OnValidate()

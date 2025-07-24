@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
+[CreateAssetMenu(fileName = "WaveConfig",menuName = "Wave/Survivals")]
 [System.Serializable]
-public class WaveConfig : MonoBehaviour
+public class WaveConfig : ScriptableObject
 {
     public List<WaveData> waves;
 }

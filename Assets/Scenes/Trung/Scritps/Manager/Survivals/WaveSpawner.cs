@@ -10,23 +10,38 @@ public class WaveSpawner :VuMonoBehaviour
 {
     [SerializeField] private WaveConfig waveConfig;
     [SerializeField] private EnemiesSpawner enemiesSpawner;
+    [SerializeField] private Timer timer;
     [SerializeField] private Transform[] spawnPoints;
 
     [SerializeField] protected Transform waveHolder;
+    [SerializeField] protected Transform winPanel;
+    [SerializeField] protected Transform losePanel;
 
     [SerializeField] protected float timeDelayEachSpawn = 0.1f;
 
-    private int currentWaveIndex = 0;
-    private bool isSpawning = false;
     [SerializeField] private bool canSpawnContinue = false;
+
+
+    private int currentWaveIndex = 0;
+    private int enemyLefts = 0;
+
+
+    private int currentWaveEnemiesAlive = 0;
+    private bool waveClearedEarly = false;
+
+
+    private bool isSpawning = false;
+    private bool isFinish = false;
+
+
+    private enum Mode { TimedWave, Adventure }
+    private Mode mode = Mode.TimedWave;
 
     protected override void Start()
     {
         base.Start();
         this.StartWaves();
     }
-
-
 
     protected override void LoadComponents()
     {
@@ -53,21 +68,45 @@ public class WaveSpawner :VuMonoBehaviour
     private IEnumerator HandleWaves()
     {
         isSpawning = true;
-
+        this.isFinish = false;
         while (currentWaveIndex < waveConfig.waves.Count)
         {
             this.canSpawnContinue = true;
             yield return StartCoroutine(SpawnWave(waveConfig.waves[currentWaveIndex]));
             currentWaveIndex++;
         }
+        this.FinishBattle();
+
 
         isSpawning = false;
+    }
+
+    protected virtual void FinishBattle()
+    {
+        if (this.timer.TimeIsUp && this.enemyLefts > 0)
+        {
+            if (this.losePanel != null)
+            {
+                StartCoroutine(UIManager.Instance.VictoryRoutine(this.losePanel.gameObject));
+                return;
+            }
+        }
+        else
+        {
+            if (this.winPanel != null)
+            {
+                {
+                    if (this.losePanel != null) StartCoroutine(UIManager.Instance.VictoryRoutine(this.winPanel.gameObject)); return;
+                }
+            }
+        }
     }
 
     private IEnumerator SpawnWave(WaveData wave)
     {
         int waveCount = wave.timeSpawnEachWave;
-        float spawnInterval = wave.waveDuration / waveCount;
+        float spawnInterval = (float) wave.waveDuration / waveCount;
+        UIManager.Instance.UpdateTimeToNextWave(wave.waveDuration);
 
         //Tạo dictionary để theo dõi mỗi loại quái đã spawn được bao nhiêu.
         Dictionary<GameObject, int> spawnedSoFar = new Dictionary<GameObject, int>();
@@ -95,7 +134,7 @@ public class WaveSpawner :VuMonoBehaviour
                         if (!this.canSpawnContinue) break;
                         if(newEnemy != null)
                         {
-
+                            this.AddEnemyToUI();
                         }
                     }
                     yield return new WaitForSeconds(this.timeDelayEachSpawn);
@@ -107,5 +146,63 @@ public class WaveSpawner :VuMonoBehaviour
             yield return new WaitForSeconds(spawnInterval);
         }
         if (!this.canSpawnContinue) yield break;
+    }
+
+    public virtual void SubstractEnemyToUI()
+    {
+        --this.enemyLefts;
+        //--this.currentWaveEnemiesAlive;
+        if (this.currentWaveIndex < this.waveConfig.waves.Count) UIManager.Instance.UpdateWaveUI(this.currentWaveIndex + 1, this.enemyLefts);
+
+        //// Kiểm tra nếu đã giết hết enemy
+        //if (this.currentWaveEnemiesAlive <= 0 && !this.timer.TimeIsUp)
+        //{
+        //    StartCoroutine(OnWaveClearedEarly());
+        //}
+    }
+    public virtual void AddEnemyToUI()
+    {
+        ++this.enemyLefts;
+        //++this.currentWaveEnemiesAlive;
+        if(this.currentWaveIndex < this.waveConfig.waves.Count) UIManager.Instance.UpdateWaveUI(this.currentWaveIndex + 1, this.enemyLefts);
+    }
+
+    private IEnumerator ShowWaveClearUIAndCountdown()
+    {
+        //UIManager.Instance.ShowMessage("Wave Cleared!", 3f); // hiển thị 3 giây
+        Debug.Log("Toàn bộ quái vật đã bị tiêu diệt");
+
+        yield return new WaitForSeconds(3f);
+
+        int countdown = 5;
+        while (countdown > 0)
+        {
+            //UIManager.Instance.ShowMessage($"Next wave in: {countdown}", 1f);
+            Debug.Log("Chuẩn bị đợt mới: " + countdown);
+            yield return new WaitForSeconds(1f);
+            countdown--;
+        }
+
+        //UIManager.Instance.HideMessage(); // ẩn thông báo nếu muốn
+    }
+
+    private IEnumerator OnWaveClearedEarly()
+    {
+        if (waveClearedEarly) yield break; // tránh chạy nhiều lần
+        waveClearedEarly = true;
+
+        this.canSpawnContinue = false; // dừng các vòng spawn tiếp theo trong wave hiện tại
+
+        //yield return StartCoroutine(ShowWaveClearUIAndCountdown());
+
+        //currentWaveIndex++;
+        //if (currentWaveIndex < waveConfig.waves.Count)
+        //{
+        //    yield return StartCoroutine(SpawnWave(waveConfig.waves[currentWaveIndex]));
+        //}
+        //else
+        //{
+        //    Debug.Log("All waves completed!");
+        //}
     }
 }

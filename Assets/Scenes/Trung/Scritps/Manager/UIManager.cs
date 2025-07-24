@@ -47,14 +47,18 @@ public class UIManager : Singleton<UIManager>
         titleTimeToNextWave.text = localization.TITLE_TIME_TO_NEXT_WAVE;
         timer.StartCountDown(true, true, _time);
     }
+
+
+
     public void DisplayPanelWhenPlayerKillBoss()
     {
         panel1.gameObject.SetActive(true);
         dlgPlayerKillBoss.text = localization.DLG_WHEN_KILL_BOSS;
         StartCoroutine(VictoryRoutine(panel1.gameObject));
     }
-    private IEnumerator VictoryRoutine(GameObject obj)
+    public IEnumerator VictoryRoutine(GameObject obj)
     {
+        obj.SetActive(true);
         yield return new WaitForSeconds(3f);
         HideGeneralGameObject(obj);
     }

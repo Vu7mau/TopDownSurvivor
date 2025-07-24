@@ -6,6 +6,7 @@ public abstract class SpawnerGeneral<T> : VuMonoBehaviour where T : PoolObj
 {
     [SerializeField] protected int spawnCount = 0;
     [SerializeField] protected List<T> inPoolObjs;
+    public List<T> InPoolObjs { get => this.inPoolObjs; }
     [SerializeField] protected Transform holderParent;
 
     [SerializeField] protected int limitObjsInPool = 50;

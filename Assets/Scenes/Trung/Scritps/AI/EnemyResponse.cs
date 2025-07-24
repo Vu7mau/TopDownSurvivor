@@ -7,6 +7,10 @@ public class EnemyResponse : VuMonoBehaviour
     [SerializeField] protected EnemyAI enemyAI;
 
     [SerializeField] protected EnemyHealth enemyHealth;
+    [SerializeField] protected Transform textDisplayParentHolder;
+
+    [SerializeField] protected PlayerLevelSystem playerLevelSystem;
+    [SerializeField] protected WaveSpawner waveSpawner;
 
     [Space]
     [Space]
@@ -20,6 +24,8 @@ public class EnemyResponse : VuMonoBehaviour
     [Header("This component can be null if you don't need despawn in wave!")]
     [SerializeField] protected EnemiesSpawner enemiesSpawner;
 
+    //[SerializeField] protected bool isCountLevel = false;
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -27,11 +33,14 @@ public class EnemyResponse : VuMonoBehaviour
         this.LoadEnemyAI();
         this.LoadEnemyCtrlDespawn();
         this.LoadEnemiesSpawner();
+        this.LoadCharacterLeveUp();
+        this.LoadWaveSpawner();
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
+        this.DespawnAllText();
         this.OnPlayerKillEnemy();
     }
 
@@ -69,20 +78,48 @@ public class EnemyResponse : VuMonoBehaviour
         if (this.enemiesSpawner != null) return;
         this.enemiesSpawner = FindAnyObjectByType<EnemiesSpawner>();
     }
+    protected virtual void LoadCharacterLeveUp()
+    {
+        if (this.playerLevelSystem != null) return;
+        this.playerLevelSystem = FindAnyObjectByType<PlayerLevelSystem>();
+    }
 
+    protected virtual void LoadWaveSpawner()
+    {
+        if (this.waveSpawner != null) return;
+        this.waveSpawner = FindAnyObjectByType<WaveSpawner>();
+    }
 
     //Add any rewards when player kill enemy
     protected virtual void OnPlayerKillEnemy()
     {
-        //StartCoroutine(this.RewardToPlayerWhenKillEnemy());
+        StartCoroutine(this.RewardToPlayerWhenKillEnemy());
     }
     private IEnumerator RewardToPlayerWhenKillEnemy()
     {
         yield return new WaitUntil(() => this.enemyHealth.Health <= 0);
-        PlayerScoreManager.Instance.AddScore(this.enemyAI.EnemySO.Score);
+
+        //Rewards to Players
+        if(this.playerLevelSystem != null) this.playerLevelSystem.AddEXP(this.enemyAI.EnemySO.Exp);
+
+
+        //Update UI (only apply to survivals)
+        if(this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
+
+
+        //PlayerScoreManager.Instance.AddScore(this.enemyAI.EnemySO.Score);
     }
 
-
+    protected virtual void DespawnAllText()
+    {
+        if(this.textDisplayParentHolder.childCount > 0)
+        {
+            foreach (Transform child in textDisplayParentHolder.transform)
+            {
+                child.gameObject.GetComponentInChildren<TextDisplayDespawn>().DoDespawn();
+            }
+        }
+    }
 
 
 
