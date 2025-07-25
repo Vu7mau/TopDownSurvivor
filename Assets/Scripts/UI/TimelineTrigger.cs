@@ -7,8 +7,10 @@ public class TimelineTrigger : VuMonoBehaviour
 {
     [SerializeField] private string timeLineName;
     [SerializeField] private bool isPlayOneTime = true;
+    [SerializeField] private bool isPlayMusic = true;
     [SerializeField] private PlayableDirector timeLine;
 
+    [SerializeField] private AudioClip audio;
     private bool played = false;
     protected override void LoadComponents()
     {
@@ -36,6 +38,8 @@ public class TimelineTrigger : VuMonoBehaviour
             timeLine.Play();
             if (isPlayOneTime)
                 played = true;
+            if (isPlayMusic)
+                BackgroundMusicManager.Instance.PlayMusic(audio);
             Debug.Log("Play tutorial");
         }
     }

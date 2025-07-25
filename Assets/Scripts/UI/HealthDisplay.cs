@@ -49,7 +49,10 @@ public class HealthDisplay : VuMonoBehaviour
     }
     private IEnumerator SmoothHealth(float targetHp, float maxHp)
     {
-   
+
+        if (maxHp <= 0f) maxHp = 1f; // Tránh chia 0
+        if (smoothDuration <= 0f) smoothDuration = 0.1f; // Không cho duration = 0
+
         float elapsed = 0f;
 
         float startFill = healthBarFill.fillAmount;
@@ -65,14 +68,16 @@ public class HealthDisplay : VuMonoBehaviour
 
             float newFill = Mathf.Lerp(startFill, targetFill, t);
             healthBarFill.fillAmount = newFill;
+
             this.UpdateHealthColor(targetHp, maxHp);
+
             float displayVal = Mathf.Lerp(startValue, targetValue, t);
             textValue.text = Mathf.CeilToInt(displayVal).ToString();
 
             yield return null;
         }
-
-        // Đảm bảo chính xác 100%
+        Debug.Log($"SmoothHealth called with targetHp={targetHp}, maxHp={maxHp}");
+        // Đảm bảo kết thúc chính xác
         healthBarFill.fillAmount = targetFill;
         textValue.text = Mathf.RoundToInt(targetHp).ToString();
 
@@ -99,8 +104,9 @@ public class HealthDisplay : VuMonoBehaviour
 
     private float GetCurrentDisplayValue()
     {
+        string text = textValue.text;
         int currentVal;
-        if (int.TryParse(textValue.text, out currentVal))
+        if (int.TryParse(text, out currentVal))
             return currentVal;
         else
             return 0f;

@@ -1,43 +1,56 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class MonsterSpawnerTrigger : MonoBehaviour
 {
-    public GameObject monsterPrefab;
+    [SerializeField] private List<GameObject> monsterPrefabs;
+    [SerializeField] private float delayBetweenWaves = 2f;
     public int spawnAmount = 3;
     public bool spawnOnlyOnce = true;
 
     private bool hasSpawned = false;
+    private BoxCollider colliders;
 
-    private void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if (spawnOnlyOnce && hasSpawned) return;
-
-        if (other.CompareTag("Player"))
-        {
-            SpawnMonsters();
-        }
+        colliders = GetComponent<BoxCollider>();
     }
 
-    public void SpawnNow()
+    public void SpawnWave(int waveCount)
     {
         if (spawnOnlyOnce && hasSpawned) return;
+        StartCoroutine(SpawnByWave(waveCount));
+    }
 
-        SpawnMonsters();
+    private IEnumerator SpawnByWave(int waveCount)
+    {
+        if (colliders == null || monsterPrefabs.Count == 0) yield break;
+
+        for (int wave = 0; wave < waveCount; wave++)
+        {
+            Debug.Log($"▶ Wave {wave + 1}/{waveCount}");
+            SpawnMonsters();
+            yield return new WaitForSeconds(delayBetweenWaves);
+        }
+
+        hasSpawned = true;
     }
 
     private void SpawnMonsters()
     {
         for (int i = 0; i < spawnAmount; i++)
         {
-            Vector3 offset = new Vector3(
-                Random.Range(-1.5f, 1.5f),
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-colliders.size.x / 2f, colliders.size.x / 2f),
                 0f,
-                Random.Range(-1.5f, 1.5f)
+                Random.Range(-colliders.size.z / 2f, colliders.size.z / 2f)
             );
-            Vector3 spawnPos = transform.position + offset;
-            Instantiate(monsterPrefab, spawnPos, Quaternion.identity);
-        }
 
-        hasSpawned = true;
+            Vector3 spawnPos = transform.position + colliders.center + randomOffset;
+
+            GameObject prefab = monsterPrefabs[Random.Range(0, monsterPrefabs.Count)];
+            Instantiate(prefab, spawnPos, Quaternion.identity);
+        }
     }
 }

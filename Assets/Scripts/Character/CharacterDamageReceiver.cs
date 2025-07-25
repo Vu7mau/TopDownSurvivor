@@ -36,7 +36,9 @@ public class CharacterDamageReceiver : DamageReceiver
         characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsDead");
         characterCtrl.InputManager.DetachInputEvents();
         characterCtrl.DisableAllComponet();
-        _pnl.pnlDie.gameObject.SetActive(true);
+        CharacterUIManager.OnUpdateHealth?.Invoke(0, 0);
+
+        //  _pnl.pnlDie.gameObject.SetActive(true);
 
     }
     protected virtual void SetMaxHealth()

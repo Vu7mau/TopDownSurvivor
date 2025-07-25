@@ -19,6 +19,9 @@ public class ChatDialogue : VuMonoBehaviour
     [SerializeField] private float popupDuration = 0.3f;
     [SerializeField] private float typingSpeed = 0.3f;
 
+
+    private Coroutine typingCoroutine;
+    private Coroutine autoHideCoroutine;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -53,7 +56,7 @@ public class ChatDialogue : VuMonoBehaviour
         speakerAvatar = this.transform.Find("BG").transform.Find("Nick").transform.Find("Avatar").transform.Find("Img").GetComponent<UnityEngine.UI.Image>();
     }
 
-    public void ShowDialogue(string speakerName, Sprite avatar, string content, AudioClip audioClip)
+    public void ShowDialogue(string content, float time, AudioClip audioClip = null, string speakerName = "Player", Sprite avatar = null)
     {
         if (dialoguePanel == null)
         {
@@ -67,22 +70,34 @@ public class ChatDialogue : VuMonoBehaviour
         if (this.speakerName != null)
             this.speakerName.text = speakerName;
 
-        if (this.speakerAvatar != null)
+        if (this.speakerAvatar != null && avatar != null)
             this.speakerAvatar.sprite = avatar;
+
         if (audioClip != null)
             SoundFXManager.Instance.PlaySoundFXClip(audioClip, this.transform);
-        if (dialoguePanel.transform != null)
-        {
-            dialoguePanel.transform.DOScale(Vector3.one, popupDuration)
-                .SetEase(Ease.OutBack)
-                .OnComplete(() =>
-                {
-                    if (this.content != null)
-                        StartCoroutine(TypeText(content));
-                });
-        }
-    }
 
+        // Ngắt coroutine cũ nếu có
+        if (typingCoroutine != null)
+            StopCoroutine(typingCoroutine);
+        if (autoHideCoroutine != null)
+            StopCoroutine(autoHideCoroutine);
+
+        dialoguePanel.transform.DOScale(Vector3.one, popupDuration)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                if (this.content != null)
+                    typingCoroutine = StartCoroutine(TypeText(content));
+
+                if (time > 0)
+                    autoHideCoroutine = StartCoroutine(AutoHideAfter(time));
+            });
+    }
+    private IEnumerator AutoHideAfter(float time)
+    {
+        yield return new WaitForSeconds(time);
+        HideDialogue();
+    }
     private IEnumerator TypeText(string fullText)
     {
         if (this.content == null)
@@ -98,9 +113,19 @@ public class ChatDialogue : VuMonoBehaviour
     }
     public void HideDialogue()
     {
-        // Thu nhỏ và ẩn
+        if (typingCoroutine != null)
+            StopCoroutine(typingCoroutine);
+        if (autoHideCoroutine != null)
+            StopCoroutine(autoHideCoroutine);
+
         dialoguePanel.transform.DOScale(Vector3.zero, popupDuration)
-        .SetEase(Ease.InBack)
-            .OnComplete(() => { content.text = string.Empty; dialoguePanel.SetActive(false); }); 
+            .SetEase(Ease.InBack)
+            .OnComplete(() =>
+            {
+                if (content != null)
+                    content.text = string.Empty;
+
+                dialoguePanel.SetActive(false);
+            });
     }
 }

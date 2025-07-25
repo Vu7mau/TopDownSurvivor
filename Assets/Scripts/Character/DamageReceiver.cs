@@ -71,8 +71,7 @@ public abstract class DamageReceiver : VuMonoBehaviour
         if (!this.IsDead()) return;
 
         this._isDead = true;
-        this.OnDead();
-        Debug.Log("death");
+        this.OnDead(); 
         //CharacterCtrl.Instance.CharacterLeveUp.AddExp(2);
         //SetCoin.Instance.SetCoinToUI(10);
 

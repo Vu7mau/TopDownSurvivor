@@ -16,7 +16,7 @@ public class CharacterUIManager : VuMonoBehaviour
 
     public static Action<int> OnWeaponSelected;
 
-    public static Action<float,float> OnUpdateHealth;
+    public static Action<float, float> OnUpdateHealth;
 
 
     public static Action OnScreenFadeIn;
