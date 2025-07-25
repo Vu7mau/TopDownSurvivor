@@ -101,7 +101,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
         topEntries.Sort((a, b) => CompareRank(a, b, timeMap, createdMap));
         int myIndex = topEntries.FindIndex(e => e.PlayFabId == myEntry.PlayFabId);
         string name = string.IsNullOrEmpty(myEntry.DisplayName) ? "Bạn" : myEntry.DisplayName;
-        playerRankCampignText.text = $"{name} đang đứng hạng: {myIndex + 1}";
+        playerRankCampignText.text = $"{name} đang đứng hạng: {myIndex + 1}/{topEntries.Count}";
     }
     public void GetLeaderBoardCampaign()
     {

@@ -64,7 +64,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         {
             StatisticName = timeSurvive,
             StartPosition = 0,
-            MaxResultsCount = 100
+            MaxResultsCount = 10
         }, res => { foreach (var e in res.Leaderboard) timeMap[e.PlayFabId] = e.StatValue; doneTimes = true; },
         err => { Debug.LogWarning(err.GenerateErrorReport()); doneTimes = true; });
         yield return new WaitUntil(() => doneTimes);
@@ -101,7 +101,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         topEntries.Sort((a, b) => CompareRank(a, b, timeMap, createdMap));
         int myIndex = topEntries.FindIndex(e => e.PlayFabId == myEntry.PlayFabId);
         string name = string.IsNullOrEmpty(myEntry.DisplayName) ? "Bạn" : myEntry.DisplayName;
-        playerRankSurviveText.text = $"{name} đang đứng hạng: {myIndex + 1}";
+        playerRankSurviveText.text = $"{name} đang đứng hạng: {myIndex + 1}/{topEntries.Count}";
     }
     public void GetLeaderBoardSurvive()
     {
@@ -130,7 +130,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         {
             StatisticName = timeSurvive,
             StartPosition = 0,
-            MaxResultsCount = 100
+            MaxResultsCount = 10
         },
         result =>
         {

@@ -11,4 +11,16 @@ public class TestUnlock : MonoBehaviour
             panelUnlock.SetActive(!panelUnlock.activeSelf);
         }
     }
+    public void OpenMode()
+    {
+        ModeUnlockManager.UnlockSurviveMode();
+        ModePanel.Instance.RefreshUIInstant();
+        Debug.Log("Survive mode unlocked!");
+    }
+    public void CloseMode()
+    {
+        ModeUnlockManager.ResetUnlocks();
+        ModePanel.Instance.RefreshUIInstant();
+        Debug.Log("Survive locked!");
+    }
 }

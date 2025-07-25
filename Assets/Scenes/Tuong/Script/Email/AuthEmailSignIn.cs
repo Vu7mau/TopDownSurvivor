@@ -5,7 +5,21 @@ using System.Text.RegularExpressions;
 using System.Collections;
 public class AuthEmailSignIn : AuthManager
 {
+    public static AuthEmailSignIn Instance;
     private string currentEmail;
+    [SerializeField] private CanvasGroup loginCanvasGroup;
+    public CanvasGroup LoginCanvasGroup => loginCanvasGroup;
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void SignInGame()
     {
         if (string.IsNullOrEmpty(signInEmail.text))
@@ -34,6 +48,7 @@ public class AuthEmailSignIn : AuthManager
     {
         currentEmail = signInEmail.text;
         PlayerPrefs.SetInt("HasLoggedIn", 1);
+        loginCanvasGroup.blocksRaycasts = false;
         NotificationUI.Instance.Show("Đăng nhập thành công", 2f, () =>
         {
             LinkDeviceAndProceed();

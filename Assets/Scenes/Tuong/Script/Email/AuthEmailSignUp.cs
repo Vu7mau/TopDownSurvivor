@@ -6,6 +6,20 @@ using System;
 using System.Collections;
 public class AuthEmailSignUp : AuthManager
 {
+    public static AuthEmailSignUp Instance;
+    [SerializeField] private CanvasGroup registerCanvasGroup;
+    public CanvasGroup RegisterCanvasGroup => registerCanvasGroup;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void SignUpWithEmail()
     {
         var request = new RegisterPlayFabUserRequest
@@ -26,10 +40,15 @@ public class AuthEmailSignUp : AuthManager
         }
         if (signUpUserName.text.Length < 5)
         {
-            NotificationUI.Instance.Show("Tên người dùng phải có ít nhất 5 ký tự");
+            NotificationUI.Instance.Show("Tên người dùng phải có ít nhất 3 ký tự");
             return;
         }
-        if(signUpUserName.text.Contains(" "))
+        if(signUpUserName.text.Length > 7)
+        {
+            NotificationUI.Instance.Show("Tên người dùng không được quá 7 ký tự");
+            return;
+        }
+        if (signUpUserName.text.Contains(" "))
         {
             NotificationUI.Instance.Show("Tên người dùng không được chứa khoảng trắng");
             return;
@@ -59,30 +78,36 @@ public class AuthEmailSignUp : AuthManager
             NotificationUI.Instance.Show("Mật khẩu phải có ít nhất 6 ký tự");
             return;
         }
+        if(signUpPassword.text.Length > 20)
+        {
+            NotificationUI.Instance.Show("Mật khẩu không được quá 20 ký tự");
+            return;
+        }
         PlayFabClientAPI.RegisterPlayFabUser(request, OnSignUpSucces, OnErrorSignUp);
     }
     private void OnSignUpSucces(RegisterPlayFabUserResult result)
-{
-    PlayerPrefs.SetInt("HasLoggedIn", 1);
-
-    NotificationUI.Instance.Show("Đăng ký người dùng mới thành công", 2f, () => {
-        LinkDeviceAndProceed();
-        MainMenuTwo.Instance.ExitPanelRegister();
-        LeaderBoardCampaign.Instance?.GetLeaderBoardCampaign();
-        LeaderBoardSurvive.Instance?.GetLeaderBoardSurvive();
-        StartCoroutine(ClearInput(0.5f));
-    });
-
-    CharacterInformation.Instance.ShowCharacters();
-    PlayFabClientAPI.UpdateUserTitleDisplayName(
-        new UpdateUserTitleDisplayNameRequest
+    {
+        registerCanvasGroup.blocksRaycasts = false;
+        PlayerPrefs.SetInt("HasLoggedIn", 1);
+        NotificationUI.Instance.Show("Đăng ký người dùng mới thành công", 2f, () =>
         {
-            DisplayName = signUpUserName.text
-        },
-        result => Debug.Log("Cập nhật tên người dùng thành công"),
-        error => Debug.LogError("Lỗi cập nhật tên người dùng: " + error.GenerateErrorReport())
-    );
-}
+            LinkDeviceAndProceed();
+            MainMenuTwo.Instance.ExitPanelRegister();
+            LeaderBoardCampaign.Instance?.GetLeaderBoardCampaign();
+            LeaderBoardSurvive.Instance?.GetLeaderBoardSurvive();
+            StartCoroutine(ClearInput(0.5f));
+        });
+
+        CharacterInformation.Instance.ShowCharacters();
+        PlayFabClientAPI.UpdateUserTitleDisplayName(
+            new UpdateUserTitleDisplayNameRequest
+            {
+                DisplayName = signUpUserName.text
+            },
+            result => Debug.Log("Cập nhật tên người dùng thành công"),
+            error => Debug.LogError("Lỗi cập nhật tên người dùng: " + error.GenerateErrorReport())
+        );
+    }
 
     private void LinkDeviceAndProceed()
     {

@@ -49,6 +49,8 @@ public class AuthManager : TuongMonobehaviour
     }
     public void LogOut()
     {
+        AuthEmailSignIn.Instance.LoginCanvasGroup.blocksRaycasts = true;
+        AuthEmailSignUp.Instance.RegisterCanvasGroup.blocksRaycasts = true;
         CharacterInformation.Instance.ClearCharacterInfo();
         PlayFabClientAPI.ForgetAllCredentials();
         PlayerPrefs.SetInt("HasLoggedIn", 0);

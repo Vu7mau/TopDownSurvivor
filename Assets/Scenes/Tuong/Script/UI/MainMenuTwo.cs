@@ -42,7 +42,6 @@ public class MainMenuTwo : MonoBehaviour
         bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
         logoutButton.SetActive(hasLoggedIn);
         iconLeaderboard.SetActive(hasLoggedIn);
-        iconGame.SetActive(hasLoggedIn);
         HidePanel();
     }
     public void HidePanel()
@@ -71,6 +70,8 @@ public class MainMenuTwo : MonoBehaviour
         if(previousPanelId == 0)
             playMenu.SetActive(false);
         settingsPanel.SetActive(true);
+        iconGame.SetActive(false);
+        iconLeaderboard.SetActive(false);
         settingEffect.ShowPanel();
     }
     public void CloseSetingPanel()
@@ -81,6 +82,8 @@ public class MainMenuTwo : MonoBehaviour
             if(previousPanelId == 0)
             {
                 playMenu.SetActive(true);
+                iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+                iconGame.SetActive(true);
             }
         });
     }
@@ -117,7 +120,7 @@ public class MainMenuTwo : MonoBehaviour
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
-            iconGame.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            iconGame.SetActive(true);
             StartCoroutine(ClearInputLogin(0.5f));
         });
     }
@@ -140,6 +143,7 @@ public class MainMenuTwo : MonoBehaviour
         else
         {
             loginPanel.SetActive(true);
+            iconGame.SetActive(false);
         }
         playMenu.SetActive(false);
     }
@@ -151,7 +155,7 @@ public class MainMenuTwo : MonoBehaviour
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
-            iconGame.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            iconGame.SetActive(true);
             StartCoroutine(ClearInputRegister(0.5f));
         });
     }
@@ -189,7 +193,7 @@ public class MainMenuTwo : MonoBehaviour
             PlayMenu.SetActive(true);
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
-            iconGame.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
+            iconGame.SetActive(true);
         });
     }
     public void OpenPanelLogin()
@@ -220,8 +224,8 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void CloseLeaderBoardPanel()
     {
-        LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
-        LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
+        //LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
+        //LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
         iconLeaderboard.SetActive(true);
         iconGame.SetActive(true);
         playMenu.SetActive(true);

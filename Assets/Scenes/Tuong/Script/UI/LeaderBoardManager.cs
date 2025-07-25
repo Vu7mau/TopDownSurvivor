@@ -12,8 +12,8 @@ public class LeaderBoardManager : MonoBehaviour
     [SerializeField] protected Canvas canvas;
     [SerializeField] protected Transform contentCampign;
     [SerializeField] protected Transform contentSurvive;
-    public ScrollRect scrollRectCampign; 
-    public ScrollRect scrollRectSurvive; 
+    //public ScrollRect scrollRectCampign; 
+    //public ScrollRect scrollRectSurvive; 
     protected const string leaderboardStat = "CampaignManual";
     protected const string timeStat = "CampaignTime";
     protected const string leaderboardSurvive = "SurviveManual";
@@ -44,7 +44,7 @@ public class LeaderBoardManager : MonoBehaviour
         contentCampign = allTransforms.FirstOrDefault(t => t.name == "ContentCampign");
         contentSurvive = allTransforms.FirstOrDefault(t => t.name == "ContentSurvive");
         var allScrollRects = Resources.FindObjectsOfTypeAll<ScrollRect>();
-        scrollRectCampign = allScrollRects.FirstOrDefault(t => t.name == "ScrollRectCampign");
-        scrollRectSurvive = allScrollRects.FirstOrDefault(t => t.name == "ScrollRectSurvive");
+        //scrollRectCampign = allScrollRects.FirstOrDefault(t => t.name == "ScrollRectCampign");
+        //scrollRectSurvive = allScrollRects.FirstOrDefault(t => t.name == "ScrollRectSurvive");
     }
 }
