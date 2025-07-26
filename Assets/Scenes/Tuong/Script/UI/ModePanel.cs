@@ -1,9 +1,7 @@
 ﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.UI;
-
 public class ModePanel : MonoBehaviour
 {
     public static ModePanel Instance;
@@ -67,7 +65,6 @@ public class ModePanel : MonoBehaviour
     {
         modeText.text = currentMode == Mode.Campaign ? "Chiến dịch" : "Sinh tồn";
         modeDescriptionText.text = currentMode == Mode.Campaign ? campaignDescription : surviveDescription;
-        (usingA ? backgroundImageA : backgroundImageB).sprite = currentMode == Mode.Campaign ? campaignBackground : surviveBackground;
         UpdateLockStateUI();
     }
 
@@ -78,7 +75,6 @@ public class ModePanel : MonoBehaviour
         usingA = true;
         backgroundImageA.gameObject.SetActive(true);
         backgroundImageB.gameObject.SetActive(false);
-        backgroundImageA.sprite = currentMode == Mode.Campaign ? campaignBackground : surviveBackground;
     }
 
     public void OnPrevMode() { if (!isTransitioning) AnimateTransition(-1); }
@@ -111,7 +107,6 @@ public class ModePanel : MonoBehaviour
         Image from = usingA ? backgroundImageA : backgroundImageB;
         Image to = usingA ? backgroundImageB : backgroundImageA;
         usingA = !usingA;
-        to.sprite = currentMode == Mode.Campaign ? campaignBackground : surviveBackground;
 
         bool willBelocked = (currentMode == Mode.Survive && !IsSurviveUnlocked());
         if (willBelocked)
@@ -170,7 +165,6 @@ public class ModePanel : MonoBehaviour
         backgroundImageB.rectTransform.anchoredPosition = Vector2.zero;
         backgroundImageA.gameObject.SetActive(true);
         backgroundImageB.gameObject.SetActive(false);
-        backgroundImageA.sprite = campaignBackground;
 
         modeText.text = "Chiến dịch";
         modeDescriptionText.text = campaignDescription;

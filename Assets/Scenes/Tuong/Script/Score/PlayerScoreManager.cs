@@ -54,7 +54,7 @@ public class PlayerScoreManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SendFinalScore();
-            Instance.ResetScore();
+            ResetScore();
         }
     }
 }

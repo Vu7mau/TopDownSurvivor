@@ -115,7 +115,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         {
             StatisticName = leaderboardSurvive,
             StartPosition = 0,
-            MaxResultsCount = 100
+            MaxResultsCount = 10
         },
         result => StartCoroutine(GetLeaderboardTime(result.Leaderboard)),
         error => Debug.LogError("Lỗi khi lấy bảng xếp hạng: " + error.GenerateErrorReport()));

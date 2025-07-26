@@ -11,14 +11,8 @@ public class AuthEmailSignUp : AuthManager
     public CanvasGroup RegisterCanvasGroup => registerCanvasGroup;
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
     public void SignUpWithEmail()
     {
@@ -38,12 +32,12 @@ public class AuthEmailSignUp : AuthManager
             NotificationUI.Instance.Show("Vui lòng nhập tên người dùng");
             return;
         }
-        if (signUpUserName.text.Length < 5)
+        if (signUpUserName.text.Length < 3)
         {
             NotificationUI.Instance.Show("Tên người dùng phải có ít nhất 3 ký tự");
             return;
         }
-        if(signUpUserName.text.Length > 7)
+        if (signUpUserName.text.Length > 7)
         {
             NotificationUI.Instance.Show("Tên người dùng không được quá 7 ký tự");
             return;
@@ -78,7 +72,7 @@ public class AuthEmailSignUp : AuthManager
             NotificationUI.Instance.Show("Mật khẩu phải có ít nhất 6 ký tự");
             return;
         }
-        if(signUpPassword.text.Length > 20)
+        if (signUpPassword.text.Length > 20)
         {
             NotificationUI.Instance.Show("Mật khẩu không được quá 20 ký tự");
             return;
