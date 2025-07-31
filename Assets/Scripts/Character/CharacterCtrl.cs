@@ -124,7 +124,7 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
         if (this._characterAnimHandle != null) return;
 
         this._characterAnimHandle = transform.GetComponentInChildren<CharacterAnimHandle>();
-        Debug.Log("LoadCharacterAnimHandle success " + this._characterStats.transform.name);
+        Debug.Log("LoadCharacterAnimHandle success " + this._characterAnimHandle.transform.name);
     }
     protected virtual void LoadCharacterDamageReceiver()
     {

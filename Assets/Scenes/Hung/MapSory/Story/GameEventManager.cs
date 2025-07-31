@@ -1,4 +1,7 @@
-﻿using PlayFab.EconomyModels;
+﻿using System.Collections.Generic;
+using System.Linq;
+using PlayFab.EconomyModels;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameEventManager : MonoBehaviour
@@ -9,7 +12,7 @@ public class GameEventManager : MonoBehaviour
     public PowerStartupSequence powerStartupSequence;
 
     [SerializeField] private AudioClip notificationAudi;
-
+    [SerializeField] private List<WarningLightBlink> lights ;
     private bool powerIsOn = false;
 
     public bool IsPowerOn() => powerIsOn;
@@ -18,7 +21,6 @@ public class GameEventManager : MonoBehaviour
     {
         if (!powerIsOn)
         {
-            lightObject.SetActive(false);
             string content = "Khu vực này đã bị mất điện, cần phải khởi động lại nguồn điện!";
             ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content, 7, notificationAudi);
             BackgroundMusicManager.Instance.PlayMusic(BackgroundMusicManager.Instance.musicClip_2);
@@ -40,7 +42,7 @@ public class GameEventManager : MonoBehaviour
         {
             string content = "Cần khởi động lại nguồn điện";
             //dialogManager.ShowDialog("Cần khởi động lại nguồn điện");
-            ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content, 7, notificationAudi);
+            ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content, 5, notificationAudi);
 
         }
     }
@@ -49,14 +51,21 @@ public class GameEventManager : MonoBehaviour
     {
         if (!powerIsOn && powerStartupSequence != null)
         {
+            lights = lightObject.GetComponentsInChildren<WarningLightBlink>().ToList();
+            foreach (var light in lights)
+            {
+                light.gameObject.SetActive(true);
+                light.StartBlinking(powerStartupSequence.startupTime); // có thể truyền thời gian nếu muốn
+            }
             powerStartupSequence.StartSequence();
+            FinishPowerActivation();
         }
     }
 
     public void FinishPowerActivation()
     {
         powerIsOn = true;
-        lightObject.SetActive(true);
+      
     }
 
     public void StartMap2()

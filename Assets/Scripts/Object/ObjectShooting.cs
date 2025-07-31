@@ -29,6 +29,10 @@ public abstract class ObjectShooting : VuMonoBehaviour
 
     protected virtual void Update()
     {
+        if(Input.GetKeyUp(KeyCode.R)&&_bulletsCount<weaponInfo.maxBulletCount)
+        {
+            _isReloadAmmour=true;
+        }    
         this.IsFireInputPresse();
     }
     protected virtual void FixedUpdate()
@@ -62,11 +66,11 @@ public abstract class ObjectShooting : VuMonoBehaviour
     protected virtual bool IsReloadingAmmo()
     {
         // Kiểm tra nếu còn đạn trong kho
-        if (_totalBulletTemp < 1) return true;
+        if (_totalBulletTemp < 1&& _isReloadAmmour==false) return true;
         // Nếu thời gian reload chưa hết, tiếp tục reload
 
         // Kiểm tra nếu còn đạn trong băng đạn
-        if (this._bulletsCount > 0) return false;
+        if (this._bulletsCount > 0 && _isReloadAmmour == false) return false;
 
 
 

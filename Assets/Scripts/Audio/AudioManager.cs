@@ -16,7 +16,7 @@ public class AudioManager : VuMonoBehaviour
 
         this.LoadHolder();
     }
-    public virtual void PlaySoundFXClip(AudioClip clip, Transform transformSpawn, bool isMusic, float volume)
+    public virtual AudioSource PlaySoundFXClip(AudioClip clip, Transform transformSpawn, bool isMusic, float volume)
     {
         AudioSource objSpawn = (isMusic) ? backgroundMusic : soundFXObject;
         AudioSource audi = GetObjectFromPool(objSpawn, transformSpawn);
@@ -30,11 +30,12 @@ public class AudioManager : VuMonoBehaviour
         float _clipLenght = audi.clip.length;
         // Destroy(audi.gameObject, clipLenght);
         StartCoroutine(Despawn(audi.transform, _clipLenght));
+        return audi;
     }
 
-    public virtual void PlaySoundFXClip(AudioClip clip, Transform transformSpawn, float volume=1)
+    public virtual AudioSource PlaySoundFXClip(AudioClip clip, Transform transformSpawn, float volume=1)
     {
-        this.PlaySoundFXClip(clip, transformSpawn, false,volume);
+       return this.PlaySoundFXClip(clip, transformSpawn, false,volume);
     }
   
 
@@ -70,4 +71,6 @@ public class AudioManager : VuMonoBehaviour
         this.poolSoundFX.Add(obj);
         obj.gameObject.SetActive(false);
     }
+
+   
 }

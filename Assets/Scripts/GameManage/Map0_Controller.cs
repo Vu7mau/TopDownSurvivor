@@ -18,11 +18,8 @@ public class Map0_Controller : Map_Controller
     {
         if (other.CompareTag("Player"))
         {
-            gameController.SwitchMap(mapIndexNextTo);
+            gameController.SwitchMap(mapIndex);
             this.processing.gameObject.SetActive(false);
-            //CharacterUIManager.OnScreenFadeOut?.Invoke();
-            //mapDisable.gameObject.SetActive(false);
-            //Debug.Log("Enter map");
             CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
             FadeOutLight(2);
         }

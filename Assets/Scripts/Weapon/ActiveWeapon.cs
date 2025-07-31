@@ -145,11 +145,15 @@ public class ActiveWeapon : VuMonoBehaviour
     IEnumerator SwitchWeapon(int holsterIndex, int activateIndex)
     {
         activateWeaponIndex = activateIndex;
+     
         if (equipped_Weapons.Count > 0 && equipped_Weapons.Count >= activateWeaponIndex)
         {
             if (equipped_Weapons[activateWeaponIndex] != null)
             {
-                this.equipped_Weapons[activateWeaponIndex].SetIsWeaponActivate(false);
+                var wepon = this.equipped_Weapons[activateWeaponIndex];
+                if (wepon.GetIsReloadingAmmo())
+                    yield break;
+                wepon.SetIsWeaponActivate(false);
             }
         }
         yield return StartCoroutine(this.HolsterWeapon(holsterIndex));

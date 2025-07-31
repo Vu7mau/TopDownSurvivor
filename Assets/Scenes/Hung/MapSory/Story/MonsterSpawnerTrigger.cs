@@ -10,7 +10,7 @@ public class MonsterSpawnerTrigger : MonoBehaviour
     public bool spawnOnlyOnce = true;
 
     private bool hasSpawned = false;
-    private BoxCollider colliders;
+   private BoxCollider colliders;
 
     private void Awake()
     {
@@ -36,7 +36,13 @@ public class MonsterSpawnerTrigger : MonoBehaviour
 
         hasSpawned = true;
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            SpawnWave(1);
+        }
+    }
     private void SpawnMonsters()
     {
         for (int i = 0; i < spawnAmount; i++)

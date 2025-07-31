@@ -31,7 +31,7 @@ public class GunDisplayPanel : VuMonoBehaviour
     {
         if (ammoText == null) return;
 
-        ammoText.text = $"{ammoCount-1}/{maxAmmo}";
+        ammoText.text = $"{ammoCount}/{maxAmmo}";
        // Debug.Log($"Ammo count updated");
         // Cập nhật thanh đạn, số đạn, v.v.
     }  

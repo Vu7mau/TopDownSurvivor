@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +35,15 @@ public class GameController : Singleton<GameController>
     {
         base.LoadComponents();
         this.LoadCharacter();
+        LoadAllMap();
+    }
+   private void LoadAllMap()
+    {
+        if (maps.Count != 0) return;
+
+        maps=this.transform.GetComponentsInChildren<Map_Controller>().ToList();
+
+     
     }
     private void LoadCharacter()
     {
@@ -47,6 +57,8 @@ public class GameController : Singleton<GameController>
         if(currentMap == null)
         {
             currentMap = maps.FirstOrDefault();
+            MoveCharacterPos(currentMap.currentMapSpawnPoint);
+
         }
     }
     public void MoveCharacterPos(Transform pos)

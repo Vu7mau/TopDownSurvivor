@@ -15,7 +15,7 @@ public class Map1_Controller : Map_Controller
     {
         if (other.CompareTag("Player"))
         {
-            gameController.SwitchMap(mapIndexNextTo);
+            gameController.SwitchMap(mapIndex);
             this.processing.gameObject.SetActive(false);
             //_map0.gameObject.SetActive(false);
         }

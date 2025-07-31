@@ -107,7 +107,7 @@ public class CharacterAim : CharacterCtrlAbstract
             target = _characterCtrl.InputManager.GetMouseHitInfo().transform;
            
         }
-        return target;
+        return null;
     }
 
     private void UpdateCameraPosition()

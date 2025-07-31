@@ -14,11 +14,10 @@ public class Map_Controller : GameControllerAbstract
     [SerializeField] public Transform currentMapSpawnPoint;
     [SerializeField] public Transform map;
     [SerializeField] protected Volume processing;
-    [SerializeField] protected int mapIndexNextTo;   
-
-    
+    [SerializeField] protected int mapIndex;
 
 
+ 
     public  void EnableProcessing()
     {
         if (processing != null)

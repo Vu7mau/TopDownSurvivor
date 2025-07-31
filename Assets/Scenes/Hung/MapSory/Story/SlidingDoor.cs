@@ -10,6 +10,7 @@ public class SlidingDoor : MonoBehaviour
 
     public float openDistance = 2f;
     public float moveSpeed = 2f;
+    [SerializeField] private AudioClip doorOpenAudio;
 
     private Vector3 leftClosedPos;
     private Vector3 rightClosedPos;
@@ -38,7 +39,10 @@ public class SlidingDoor : MonoBehaviour
     public void OpenDoor()
     {
         Vector3 offset;
-
+        if (doorOpenAudio != null)
+        {
+            SoundFXManager.Instance.PlaySoundFXClip(doorOpenAudio, this.transform);
+        } 
         // Chọn hướng mở
         if (direction == DoorDirection.LeftRight)
             offset = new Vector3(openDistance, 0f, 0f); // X
