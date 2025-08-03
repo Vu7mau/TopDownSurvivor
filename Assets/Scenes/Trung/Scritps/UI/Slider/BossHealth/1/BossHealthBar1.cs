@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Autodesk.Fbx;
 using UnityEngine;
 using UnityEngine.UI;
 

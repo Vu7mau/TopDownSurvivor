@@ -39,6 +39,7 @@ public class SoundFXManager : AudioManager
     [SerializeField] public  AudioClip shellDrop;
     [SerializeField] public  AudioClip handlingGun;
     [SerializeField] public  AudioSource bgMusic;
+    [SerializeField] public AudioClip clickAudio;
   
 
     protected override void Awake()

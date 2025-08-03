@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Drawing;
 using UnityEngine;
 
 public class ZombieSuitManCtrl : EShooting

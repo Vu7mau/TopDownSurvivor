@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
@@ -26,7 +25,7 @@ public class Map0_Controller : Map_Controller
     }
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.S))
+        if (Input.GetKeyUp(KeyCode.Q))
         {
             SkipForward(skipTime);
         }
@@ -53,7 +52,7 @@ public class Map0_Controller : Map_Controller
     {
         if (map.gameObject.activeSelf)
         {
-            CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
+            //CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
         }
         CalledTutorial += TutorialIntro;
 

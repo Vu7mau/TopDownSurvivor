@@ -89,8 +89,11 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void ExitGame()
     {
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
     private IEnumerator ClearInputLogin(float delay)
     {

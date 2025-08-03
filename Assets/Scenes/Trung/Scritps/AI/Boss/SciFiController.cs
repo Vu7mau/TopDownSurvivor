@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Autodesk.Fbx;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Cinemachine.CinemachineImpulseManager.ImpulseEvent;

@@ -18,6 +18,7 @@ public class AudioManager : VuMonoBehaviour
     }
     public virtual AudioSource PlaySoundFXClip(AudioClip clip, Transform transformSpawn, bool isMusic, float volume)
     {
+        if (clip == null) return null;
         AudioSource objSpawn = (isMusic) ? backgroundMusic : soundFXObject;
         AudioSource audi = GetObjectFromPool(objSpawn, transformSpawn);
 
