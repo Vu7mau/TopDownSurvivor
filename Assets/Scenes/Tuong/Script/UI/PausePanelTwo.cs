@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 public class PausePanelTwo : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class PausePanelTwo : MonoBehaviour
     private bool isInSettingPanel = false;
     private void Start()
     {
-        if(CountDownTimer.Instance == null)
+        if (CountDownTimer.Instance == null)
         {
             Instantiate(timerPrefab);
         }
@@ -25,7 +26,7 @@ public class PausePanelTwo : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !isTransitioning 
+        if (Input.GetKeyDown(KeyCode.Escape) && !isTransitioning
             && !isInSettingPanel
             && !DOTween.IsTweening(effectPausePanel.transform))
         {
@@ -38,7 +39,7 @@ public class PausePanelTwo : MonoBehaviour
                 DOVirtual.DelayedCall(0.01f, () =>
                 {
                     Time.timeScale = 0f;
-                }).SetUpdate(true); 
+                }).SetUpdate(true);
                 DOVirtual.DelayedCall(transitionDelay, () =>
                 {
                     isTransitioning = false;
@@ -75,11 +76,19 @@ public class PausePanelTwo : MonoBehaviour
     public void BackToMainMenu(int sceneIndex)
     {
         Time.timeScale = 1f;
-        CountDownTimer.Instance.ResetTimer();
-        CountDownTimer.Instance.PauseTimer();
-        pausePanel.SetActive(false);
+        CountDownTimer.Instance?.ResetTimer();
+        CountDownTimer.Instance?.PauseTimer();
+        pausePanel?.SetActive(false);
         DOTween.KillAll();
         LevelManager.Instance.LoadLevel(sceneIndex);
+    }
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
     public void Settings()
     {
@@ -101,7 +110,7 @@ public class PausePanelTwo : MonoBehaviour
             settingsPanel.SetActive(false);
             pausePanel.SetActive(true);
             effectPausePanel.ShowPanel();
-            isTransitioning = false; 
+            isTransitioning = false;
         });
     }
 }

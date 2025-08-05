@@ -2,7 +2,7 @@
 public class PlayerScoreManager : MonoBehaviour
 {
     public static PlayerScoreManager Instance;
-    private int totalScore = 0;
+    public int totalScore = 0;
     private void Awake()
     {
         if (Instance == null)
