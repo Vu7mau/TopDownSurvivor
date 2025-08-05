@@ -7,10 +7,6 @@ public class EnemyResponse : VuMonoBehaviour
     [SerializeField] protected EnemyAI enemyAI;
 
     [SerializeField] protected EnemyHealth enemyHealth;
-    [SerializeField] protected Transform textDisplayParentHolder;
-
-    [SerializeField] protected PlayerLevelSystem playerLevelSystem;
-    [SerializeField] protected WaveSpawner waveSpawner;
 
     [Space]
     [Space]
@@ -20,9 +16,15 @@ public class EnemyResponse : VuMonoBehaviour
     [Space]
     [Header("This component need ref!")]
     [SerializeField] protected EnemyCtrlDespawn enemyCtrlDespawn;
+    [SerializeField] protected Transform textDisplayParentHolder;
 
-    [Header("This component can be null if you don't need despawn in wave!")]
-    [SerializeField] protected EnemiesSpawner enemiesSpawner;
+    //[Header("This component can be null if you don't need despawn in wave!")]
+    /*[SerializeField] */protected CharacterLeveUp playerLevelSystem;
+    /*[SerializeField] */protected PickUpSpawner pickUpSpawner;
+
+    //For Survival
+    /*[SerializeField] */protected EnemiesSpawner enemiesSpawner;
+    /*[SerializeField] */protected WaveSpawner waveSpawner;
 
     //[SerializeField] protected bool isCountLevel = false;
 
@@ -35,6 +37,7 @@ public class EnemyResponse : VuMonoBehaviour
         this.LoadEnemiesSpawner();
         this.LoadCharacterLeveUp();
         this.LoadWaveSpawner();
+        this.LoadPickUpSpawner();
     }
 
     protected override void OnEnable()
@@ -50,6 +53,10 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void OnEnemyDeath()
     {
+        if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null)
+        {
+            this.DropItem(this.transform, this.pickUpSpawner);
+        }
         if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
         {
             this.enemyCtrlDespawn.DoDespawn();
@@ -81,13 +88,18 @@ public class EnemyResponse : VuMonoBehaviour
     protected virtual void LoadCharacterLeveUp()
     {
         if (this.playerLevelSystem != null) return;
-        this.playerLevelSystem = FindAnyObjectByType<PlayerLevelSystem>();
+        this.playerLevelSystem = FindAnyObjectByType<CharacterLeveUp>();
     }
 
     protected virtual void LoadWaveSpawner()
     {
         if (this.waveSpawner != null) return;
         this.waveSpawner = FindAnyObjectByType<WaveSpawner>();
+    }
+    protected virtual void LoadPickUpSpawner()
+    {
+        if (this.pickUpSpawner != null) return;
+        this.pickUpSpawner = FindAnyObjectByType<PickUpSpawner>();
     }
 
     //Add any rewards when player kill enemy
@@ -100,7 +112,7 @@ public class EnemyResponse : VuMonoBehaviour
         yield return new WaitUntil(() => this.enemyHealth.Health <= 0);
 
         //Rewards to Players
-        if(this.playerLevelSystem != null) this.playerLevelSystem.AddEXP(this.enemyAI.EnemySO.Exp);
+        if(this.playerLevelSystem != null) this.playerLevelSystem.AddExp(this.enemyAI.EnemySO.Exp);
 
 
         //Update UI (only apply to survivals)
@@ -123,7 +135,29 @@ public class EnemyResponse : VuMonoBehaviour
             }
         }
     }
+    protected virtual void DropItem(Transform position, PickUpSpawner spawner)
+    {
+        foreach (ItemDrop drop in this.enemyAI.ItemDropSO.ItemDrops)
+        {
+            float rollItem = Random.Range(0f, 100f);
+            if (rollItem <= drop.dropChance)
+            {
+                int amount = Random.Range(1, drop.maxAmount);
+                for(int i = 0; i < amount; i++)
+                {
+                    float positionX = Random.Range(position.position.x - 2f, position.position.x + 2f);
+                    float positionY = position.position.y + 5f;
+                    float positionZ = Random.Range(position.position.z - 2f, position.position.z + 2f);
+                    Vector3 positionSpawnItem = new Vector3(positionX, positionY, positionZ);
+                    spawner.Spawn(drop.itemPrefab, positionSpawnItem);
+                    if (drop.itemPrefab != null)
+                    {
 
+                    }
+                }
+            }
+        }
+    }
 
 
 }
