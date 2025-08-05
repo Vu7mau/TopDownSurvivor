@@ -1,98 +1,59 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.AI.Navigation;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.AI;
 using System.Linq;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class AgentTypeSwitcher : MonoBehaviour
 {
     public float raycastDistance = 2f;
 
-    [SerializeField] AgentTypeDatabase agentTypeDB;
-    protected EnemyAI enemyAI;
+    [SerializeField] private AgentTypeDatabase agentTypeDB;
     private NavMeshAgent agent;
+    private EnemyAI enemyAI;
 
-    // Tạo danh sách ánh xạ giữa tên và ID agent
-    private Dictionary<string, int> agentTypeLookup = new Dictionary<string, int>();
-
-
-    protected void Awake()
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         enemyAI = GetComponent<EnemyAI>();
-        //CacheAgentTypeIDs(); // Khởi tạo ánh xạ
-    }
-    void Start()
-    {
-        this.LoadAgentTypeDatabase();
-        AddNavMeshSurfaceTag();
     }
 
-    void Update()
+    private void Start()
     {
-        //DetectSurfaceBelow();
-        //CheckNavMeshBelow();
+#if UNITY_EDITOR
+        LoadAgentTypeDatabaseAndAddSurfaces();
+#endif
     }
 
-    protected virtual void LoadAgentTypeDatabase()
+#if UNITY_EDITOR
+    [ContextMenu("Thêm Enemy NavMeshSurface ( chỉ trong chế độ Editor)")]
+    private void AddEnemyNavMeshSurfaces()
     {
-        Addressables.LoadAssetAsync<AgentTypeDatabase>("Assets/AgentTypeDatabase.asset").Completed += handle =>
+        if (agentTypeDB == null)
         {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                agentTypeDB = handle.Result;
-                Debug.Log("✅ Loaded AgentTypeDatabase");
-                
-                // Bắt đầu sử dụng agentTypeDB ở đây
-            }
-            else
-            {
-                Debug.LogError("❌ Failed to load AgentTypeDatabase from Addressables.");
-            }
-        };
-    }
-
-    void CacheAgentTypeIDs()
-    {
-        int count = this.agentTypeDB.agentTypes.Count;
-        for (int i = 0; i < count; i++)
-        {
-            var settings = this.agentTypeDB.agentTypes[i].agentTypeID;
-            // Tự định nghĩa ánh xạ agentTypeName → ID
-            // Bạn cần cập nhật tên này đúng với Project Settings > Navigation > Agents
-            switch (settings)
-            {
-                case 0: agentTypeLookup["map1"] = 0; break;
-                case 658490984: agentTypeLookup["map2"] = 658490984; break;
-                case -629701670: agentTypeLookup["map0"] = -629701670; break;
-                    // Thêm agent khác ở đây nếu có
-            }
+            Debug.LogError("agentTypeDB chưa được load. Không thể thêm NavMeshSurface cho Enemy.");
+            return;
         }
-    }
 
-    [ContextMenu("Add Enemy NavMeshSurfaces")]
-    private void AddNavMeshSurfaceTag()
-    {
-        // Tìm tất cả NavMeshSurface trong scene
         var allSurfaces = FindObjectsOfType<NavMeshSurface>(true);
 
         foreach (var surface in allSurfaces)
         {
-            // Kiểm tra nếu surface hiện tại có default area là Walkable
-            if (surface.defaultArea == 0) // Walkable mặc định là 0
+            if (surface.defaultArea == 0)
             {
                 var go = surface.gameObject;
 
-                // Kiểm tra đã có NavMeshSurface cho Enemy chưa (theo agentTypeID)
                 bool hasEnemySurface = go.GetComponents<NavMeshSurface>()
                     .Any(s => NavMesh.GetSettingsNameFromID(s.agentTypeID) == "Enemy");
 
                 if (!hasEnemySurface)
                 {
-                    // Tạo thêm một NavMeshSurface cho agent type Enemy
                     var enemySurface = go.AddComponent<NavMeshSurface>();
                     enemySurface.agentTypeID = agentTypeDB.GetIDByName("Enemy");
                     enemySurface.overrideTileSize = surface.overrideTileSize;
@@ -102,90 +63,31 @@ public class AgentTypeSwitcher : MonoBehaviour
                     enemySurface.collectObjects = CollectObjects.Children;
                     enemySurface.BuildNavMesh();
 
-                    Debug.Log($"Thêm Enemy NavMeshSurface vào {go.name}");
+                    Debug.Log($"✅ Thêm Enemy NavMeshSurface vào {go.name}");
                 }
             }
         }
 
-        Debug.Log("Finished adding script to all NavMeshSurfaces.");
+        Debug.Log("✅ Hoàn tất thêm Enemy NavMeshSurface.");
     }
 
-    public Vector3 offset;
-
-    //public float checkDistance = 1.0f;
-    //public LayerMask navMeshLayerMask;
-    //public int agentTypeID;
-
-
-    //void CheckNavMeshBelow()
-    //{
-    //    Vector3 origin = transform.position + Vector3.up * 0.5f;
-    //    Vector3 direction = Vector3.down;
-
-    //    if (NavMesh.SamplePosition(origin, out NavMeshHit hit, checkDistance, NavMesh.AllAreas))
-    //    {
-    //        // Kiểm tra agent type nếu cần
-    //        if (agentTypeID == -1 || NavMesh.GetAreaFromName("Walkable") == hit.mask)
-    //        {
-    //            Debug.Log("Có NavMesh phía dưới tại: " + hit.position);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Không có NavMesh bên dưới.");
-    //    }
-    //}
-
-
-
-    void DetectSurfaceBelow()
+    private void LoadAgentTypeDatabaseAndAddSurfaces()
     {
-        Ray ray = new Ray(transform.position + offset, Vector3.down);
-        int groundLayerMask = LayerMask.GetMask("Ground");
-
-        if (Physics.Raycast(ray, out RaycastHit hit, raycastDistance, groundLayerMask))
+        Addressables.LoadAssetAsync<AgentTypeDatabase>("Assets/AgentTypeDatabase.asset").Completed += handle =>
         {
-            Debug.Log("Hit: " + hit.transform.name);
-            var surfaceTag = hit.collider.GetComponentInChildren<NavMeshSurfaceTag>();
-            if (surfaceTag != null)
+            if (handle.Status == AsyncOperationStatus.Succeeded)
             {
-                int newTypeID = this.agentTypeDB.GetIDByName(surfaceTag.agentTypeName);
-                if (agent.agentTypeID != newTypeID)
-                {
-                    SwitchAgentType(newTypeID);
-                }
+                agentTypeDB = handle.Result;
+                Debug.Log("✅ Loaded AgentTypeDatabase từ Addressables");
+
+                AddEnemyNavMeshSurfaces(); // Gọi sau khi đã load xong
             }
-        }
+            else
+            {
+                Debug.LogError("❌ Không thể load AgentTypeDatabase từ Addressables.");
+            }
+        };
     }
-
-    void SwitchAgentType(int newTypeID)
-    {
-        Debug.Log($"Switching agent type to ID {newTypeID}");
-        agent.agentTypeID = newTypeID;
-        //this.enemyAI.IsMoving = true;
-
-        //if (agent.isOnNavMesh)
-        //{
-        //    agent.ResetPath();
-        //}
-        //else
-        //{
-        //    NavMeshHit navHit;
-        //    if (NavMesh.SamplePosition(transform.position, out navHit, 2f, NavMesh.AllAreas))
-        //    {
-        //        agent.Warp(navHit.position); // Đặt lại lên NavMesh phù hợp
-        //    }
-        //}
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-
-        Vector3 origin = transform.position + offset;
-        Vector3 direction = Vector3.down * raycastDistance;
-
-        Gizmos.DrawLine(origin, origin + direction);
-        Gizmos.DrawSphere(origin, 0.05f); // Vị trí bắt đầu ray
-    }
+#endif
 }
+
