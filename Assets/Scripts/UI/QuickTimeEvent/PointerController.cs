@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +9,13 @@ public class PointerController : VuMonoBehaviour
 {
 
     [Header("Pointer Settings")]
+    [SerializeField] public TMP_Text logPass;
     public Transform pointA;
     public Transform pointB;
     public RectTransform safeZone; // Gắn vùng safe
     public float moveSpeed = 100f;
 
+    
     private RectTransform pointerTransform;
     private Vector3 targetPosition;
     private bool isActive = false;
@@ -50,9 +53,9 @@ public class PointerController : VuMonoBehaviour
             //isActive = false;
         }
     }
-    public void IncreaseSpeed(float amount = 0.1f)
+    public void IncreaseSpeed(float amount = 1.5f)
     {
-        speedMultiplier += amount;
+        speedMultiplier *= amount;
     }
     public void ResetState()
     {

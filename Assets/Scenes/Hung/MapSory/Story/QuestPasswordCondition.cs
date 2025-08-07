@@ -14,14 +14,17 @@ public class QuestPasswordCondition : VuMonoBehaviour
     [SerializeField] private InputField passwordInput;
     [SerializeField] private TMP_Text log;
     [SerializeField] private Transform passwordInputPanel;
- 
-    private SlidingDoor SlidingDoor;
+
+    [SerializeField] private SlidingDoor SlidingDoor;
 
     private int failedAttempts = 0;
     [SerializeField] private int maxFailedAttempts = 3;
 
     [SerializeField] private AudioClip incorrectAudio;
     [SerializeField] private AudioClip correctAudio;
+
+
+    public int DoorPassword => password;
     protected override void LoadComponents()
     {
         LoadInput();
@@ -31,7 +34,7 @@ public class QuestPasswordCondition : VuMonoBehaviour
     {
         if (passwordInput == null)
         {
-            passwordInput = GameObject.Find("InputField_Num").GetComponent<InputField>();
+          passwordInput = GameObject.Find("InputField_Num").GetComponent<InputField>();
         }
 
     }
@@ -45,7 +48,8 @@ public class QuestPasswordCondition : VuMonoBehaviour
     }
     private void LoadSlidingDoor()
     {
-        if(SlidingDoor == null) SlidingDoor=GetComponent<SlidingDoor>();
+        if(SlidingDoor == null)
+            SlidingDoor=this.GetComponent<SlidingDoor>();
     }
     private int GeneratePass()
     {
@@ -53,6 +57,7 @@ public class QuestPasswordCondition : VuMonoBehaviour
     }
     protected override void Awake()
     {
+        base.Awake();
        password = GeneratePass();
     }
     private void CheckPassCondition(string _)

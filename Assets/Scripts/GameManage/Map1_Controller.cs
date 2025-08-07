@@ -17,6 +17,7 @@ public class Map1_Controller : Map_Controller
         {
             gameController.SwitchMap(mapIndex);
             this.processing.gameObject.SetActive(false);
+            CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
             //_map0.gameObject.SetActive(false);
         }
     }

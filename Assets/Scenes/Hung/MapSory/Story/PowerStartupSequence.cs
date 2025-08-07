@@ -56,7 +56,7 @@ public class PowerStartupSequence : MonoBehaviour
         {
             yield return wait;
             if (spawner != null)
-                spawner.SpawnWave(4);
+                spawner.Spawn(2);
         }
 
         float elapsed = 0f;
@@ -73,14 +73,15 @@ public class PowerStartupSequence : MonoBehaviour
             yield return null;
         }
 
+        string content2 = "Nguồn điện đã được khởi động lại!";
+        ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content2, 10, notificationAudi, "Hệ thống");
+        CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
         if (countdownSlider != null)
             countdownSlider.gameObject.SetActive(false);
         audi.volume = 0;
-        string content2 = "Nguồn điện đã được khởi động lại!";
-        ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content2, 10, notificationAudi, "Hệ thống");
         isRunning = false;
-        BackgroundMusicManager.Instance.PlayMusic(BackgroundMusicManager.Instance.musicClip_3);
         wave2.gameObject.SetActive(true);
+        BackgroundMusicManager.Instance.PlayMusic(BackgroundMusicManager.Instance.musicClip_3);
 
     }
 

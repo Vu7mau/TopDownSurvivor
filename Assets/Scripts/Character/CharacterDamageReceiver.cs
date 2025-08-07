@@ -68,21 +68,18 @@ public class CharacterDamageReceiver : DamageReceiver
         characterCtrl.CharacterAnimHandle.ChracterAnimator.SetTrigger("IsHit");
         // DamagerScreen.Instance.ActivateDamageScreen();
 
-        if (enumeratorDamageScreen != null)
-        {
-            StopCoroutine(enumeratorDamageScreen);
-        }
-        enumeratorDamageScreen = this.DamageScreenEffect();
-        StartCoroutine(enumeratorDamageScreen);
+      
+       this.DamageScreenEffect();
+      
     }
-    protected virtual IEnumerator DamageScreenEffect()
+    protected void DamageScreenEffect()
     {
-        float remainingHealthPercent = this._hp / this._hpMax * 100;
-        float duration = .7f;
-        WaitForSeconds durationTurn = new WaitForSeconds(duration);
+        //float remainingHealthPercent = this._hp / this._hpMax * 100;
+        //float duration = .7f;
+       // WaitForSeconds durationTurn = new WaitForSeconds(duration);
         DamagerScreen.Instance.ActivateDamageScreen();
-        enumeratorDamageScreen = null;
-        yield return durationTurn;
+        //enumeratorDamageScreen = null;
+        //yield return durationTurn;
 
     }
 
