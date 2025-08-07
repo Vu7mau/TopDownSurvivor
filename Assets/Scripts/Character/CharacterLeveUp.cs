@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -10,9 +10,9 @@ public class CharacterLeveUp : ObjectLeveUp
 {
     [Space]
     [Header("CharacterLeveUp")]
-    [SerializeField] protected Slider _expSlider;
+    [SerializeField] protected Image _expFillImage; // Thay vì Slider
     [SerializeField] protected TMP_Text levelText;
-
+    [SerializeField] protected TMP_Text progressText;
 
 
 
@@ -27,65 +27,80 @@ public class CharacterLeveUp : ObjectLeveUp
     {
 
         base.AddExp(amount);
-        if (expCoroutine == null)
-            StartCoroutine(this.UpdateExpBar(amount));
+        this.SetProgressUI(this._currentExp, this._expToNextLevel);
 
     }
 
 
 
-    protected virtual IEnumerator UpdateExpBar(float amount)
+    protected virtual IEnumerator UpdateExpBar(float currentExp, float maxCurrentLevelExp)
     {
-        this._expSlider.maxValue = this._expToNextLevel;
-        float duration = .75f;
-        float elapsed = 0;
-        float startValue = this._expSlider.value;
-        float targetValue = _currentExp;
+        float duration = 0.75f;
+        float elapsed = 0f;
+
+        float startValue = this._expFillImage.fillAmount;
+        float targetValue = currentExp / maxCurrentLevelExp;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
             float value = Mathf.Lerp(startValue, targetValue, elapsed / duration);
-            this._expSlider.value = value;
+            this._expFillImage.fillAmount = value;
             yield return null;
         }
-
         expCoroutine = null;
     }
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadExpSlider();
+        this.LoadExpImage();
     }
     protected override void Start()
     {
         base.Start();
         this.SetLevelUI(this._level);
+        this.SetProgressUI(this._currentExp, this._expToNextLevel);
+    }
+
+    protected virtual void Update()
+    {
 
 
     }
-    protected virtual void LoadExpSlider()
+    protected virtual void LoadExpImage()
     {
-        if (this._expSlider != null) return;
+        if (this._expFillImage != null) return;
 
-        this._expSlider = GameObject.Find("ExpSlider").GetComponent<Slider>();
-        Debug.Log("LoadExpSlider success " + this._expSlider.transform.name);
-        this.levelText = this._expSlider.GetComponentInChildren<TMP_Text>();
-        Debug.Log("LoadExpSlider success " + this.levelText.transform.name);
-
-
+        Transform obj = GameObject.Find("EXPBar_Fill").transform; // tên object bạn đặt trong Hierarchy
+        this._expFillImage = obj.GetComponent<Image>();
+        Debug.Log("LoadExpImage success " + this._expFillImage.transform.name);
     }
     protected virtual void SetLevelUI(int level)
     {
-        this.levelText.text = "Level " + this._level.ToString();
+        if (this.levelText != null)
+        {
+            this.levelText.text = "Level: " + this._level.ToString();
+        }
+    }
+    protected virtual void SetProgressUI(float currentExp, float maxCurrentLevelExp)
+    {
+        if (this.progressText != null)
+        {
+            this.progressText.text = currentExp.ToString() + " / " + maxCurrentLevelExp.ToString();
+        }
+        this.SetEXPBarUI(this._currentExp, this._expToNextLevel);
     }
 
+    protected virtual void SetEXPBarUI(float currentExp, float maxCurrentLevelExp)
+    {
+        if (this._expFillImage != null)
+        {
+            if (expCoroutine == null)
+                StartCoroutine(this.UpdateExpBar(currentExp, maxCurrentLevelExp));
+        }
+    }
     protected override void ProcessLevelUp()
     {
-        DamagerScreen.Instance.SetLeveUpScreen();
-        SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.leveUp, this.transform);
-        CharacterStats.Instance.levelUpUI.ShowSkillChoices();
-        this._expSlider.value = 0;
         this.SetLevelUI(this._level);
         this.SetProgressUI(this._currentExp, this._expToNextLevel);
         //DamagerScreen.Instance.SetLeveUpScreen();
@@ -96,6 +111,8 @@ public class CharacterLeveUp : ObjectLeveUp
             CharacterStats.Instance.levelUpUI.ShowSkillChoices();
             Time.timeScale = 0;
         }
+        CharacterStats.Instance.levelUpUI.ShowSkillChoices();
+        Time.timeScale = 0;
 
     }
 }

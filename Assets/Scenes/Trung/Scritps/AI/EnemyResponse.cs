@@ -31,6 +31,7 @@ public class EnemyResponse : VuMonoBehaviour
     protected Coroutine coroutine;
 
     [Header("Rewards")]
+    [SerializeField] protected PickUpSpawner pickUpSpawner;
     [SerializeField] protected bool isReward = false;
     public bool IsReward { set => this.isReward = value; }
 
@@ -75,7 +76,6 @@ public class EnemyResponse : VuMonoBehaviour
             if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
             return;
         }
->>>>>>> Stashed changes
         this.transform.gameObject.SetActive(false);
     }
 
@@ -134,7 +134,7 @@ public class EnemyResponse : VuMonoBehaviour
         yield return new WaitUntil(() => this.enemyHealth.IsDead());
 
         //Rewards to Players
-        if (this.playerLevelSystem != null) this.playerLevelSystem.AddExp(this.enemyAI.EnemySO.Exp);
+        //if (this.playerLevelSystem != null) this.playerLevelSystem.AddExp(this.enemyAI.EnemySO.Exp);
 
 
         //Update UI (only apply to survivals)

@@ -39,8 +39,8 @@ public class ItemPickUp : VuMonoBehaviour
         if(other.TryGetComponent<CharacterDamageReceiver>(out CharacterDamageReceiver damageReceiver))
         {
             damageReceiver.Add(_healingAmount);
-            this.PlaySoundFXPickUpItem(snd_pickup);
-            this.Despawn.DoDespawn();
+            //this.PlaySoundFXPickUpItem(snd_pickup);
+            //this.Despawn.DoDespawn();
 
         }
     }
@@ -50,8 +50,8 @@ public class ItemPickUp : VuMonoBehaviour
         {
             CharacterCurrencies characterCurrencies = other.GetComponentInChildren<CharacterCurrencies>();
             if(characterCurrencies != null) characterCurrencies.AddCoins(this._coinAmount);
-            this.PlaySoundFXPickUpItem(snd_pickup);
-            this.Despawn.DoDespawn();
+            //this.PlaySoundFXPickUpItem(snd_pickup);
+            //this.Despawn.DoDespawn();
 
         }
     }
