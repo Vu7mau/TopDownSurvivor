@@ -110,6 +110,11 @@ public class EnemyResponse : VuMonoBehaviour
         //if (this.waveSpawner != null) return;
         //this.waveSpawner = FindAnyObjectByType<WaveSpawner>();
     }
+    protected virtual void LoadPickUpSpawner()
+    {
+        if (this.pickUpSpawner != null) return;
+        this.pickUpSpawner = FindAnyObjectByType<PickUpSpawner>();
+    }
 
     //Add any rewards when player kill enemy
     public virtual void OnPlayerKillEnemy()
