@@ -25,8 +25,8 @@ public class EnemyResponse : VuMonoBehaviour
     [SerializeField] protected EnemiesSpawner enemiesSpawner;
 
     //For Survival
-    /*[SerializeField] */protected EnemiesSpawner enemiesSpawner;
-    /*[SerializeField] */protected WaveSpawner waveSpawner;
+    ///*[SerializeField] */protected EnemiesSpawner enemiesSpawner;
+    ///*[SerializeField] */protected WaveSpawner waveSpawner;
 
     protected Coroutine coroutine;
 
@@ -60,21 +60,21 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void OnEnemyDeath()
     {
-        if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
-        {
-            this.DropItem(this.transform, this.pickUpSpawner);
-        }
+        //if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
+        //{
+        //    this.DropItem(this.transform, this.pickUpSpawner);
+        //}
         this.DespawnEnemy();
     }
     protected virtual void DespawnEnemy()
     {
-        if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
-        {
-            this.enemyCtrlDespawn.DoDespawn();
-            //Update UI (only apply to survivals)
-            if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
-            return;
-        }
+        //if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
+        //{
+        //    this.enemyCtrlDespawn.DoDespawn();
+        //    //Update UI (only apply to survivals)
+        //    if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
+        //    return;
+        //}
         this.transform.gameObject.SetActive(false);
     }
 
@@ -95,8 +95,8 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void LoadEnemiesSpawner()
     {
-        if (this.enemiesSpawner != null) return;
-        this.enemiesSpawner = FindAnyObjectByType<EnemiesSpawner>();
+        //if (this.enemiesSpawner != null) return;
+        //this.enemiesSpawner = FindAnyObjectByType<EnemiesSpawner>();
     }
     protected virtual void LoadCharacterLeveUp()
     {
@@ -106,8 +106,8 @@ public class EnemyResponse : VuMonoBehaviour
 
     protected virtual void LoadWaveSpawner()
     {
-        if (this.waveSpawner != null) return;
-        this.waveSpawner = FindAnyObjectByType<WaveSpawner>();
+        //if (this.waveSpawner != null) return;
+        //this.waveSpawner = FindAnyObjectByType<WaveSpawner>();
     }
 
     //Add any rewards when player kill enemy
