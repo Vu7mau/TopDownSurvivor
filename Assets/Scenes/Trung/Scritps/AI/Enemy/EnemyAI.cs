@@ -7,16 +7,20 @@ using UnityEngine.AI;
 public class EnemyAI : VuMonoBehaviour
 {
     [SerializeField] protected NavMeshAgent navMeshagent;
-    public NavMeshAgent NavMeshAgent {  get =>  navMeshagent; }
 
 
     [SerializeField] protected Animator animator;
-    public Animator Animator { get => animator; }
 
     [Header("Stats")]
     [SerializeField] protected float pathUpdateDelay = 0.2f;
     [SerializeField] protected EnemySO enemySO;
+    [SerializeField] protected ItemDropSO itemDropSO;
+
+
+    public Animator Animator { get => animator; }
     public EnemySO EnemySO { get => enemySO; }
+    public ItemDropSO ItemDropSO { get => itemDropSO; }
+    public NavMeshAgent NavMeshAgent {  get =>  navMeshagent; }
     public float PathUpdateDelay { get => pathUpdateDelay;}
 
 
