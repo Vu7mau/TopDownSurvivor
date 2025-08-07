@@ -34,6 +34,12 @@ public class EnemyResponse : VuMonoBehaviour
     [SerializeField] protected bool isReward = false;
     public bool IsReward { set => this.isReward = value; }
 
+    protected Coroutine coroutine;
+
+    [Header("Rewards")]
+    [SerializeField] protected bool isReward = false;
+    public bool IsReward { set => this.isReward = value; }
+
     //[SerializeField] protected bool isCountLevel = false;
 
     protected override void LoadComponents()
@@ -60,14 +66,22 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void OnEnemyDeath()
     {
+<<<<<<< Updated upstream
         //if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
         //{
         //    this.DropItem(this.transform, this.pickUpSpawner);
         //}
+=======
+        if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
+        {
+            this.DropItem(this.transform, this.pickUpSpawner);
+        }
+>>>>>>> Stashed changes
         this.DespawnEnemy();
     }
     protected virtual void DespawnEnemy()
     {
+<<<<<<< Updated upstream
         //if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
         //{
         //    this.enemyCtrlDespawn.DoDespawn();
@@ -75,6 +89,15 @@ public class EnemyResponse : VuMonoBehaviour
         //    if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
         //    return;
         //}
+=======
+        if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
+        {
+            this.enemyCtrlDespawn.DoDespawn();
+            //Update UI (only apply to survivals)
+            if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
+            return;
+        }
+>>>>>>> Stashed changes
         this.transform.gameObject.SetActive(false);
     }
 
