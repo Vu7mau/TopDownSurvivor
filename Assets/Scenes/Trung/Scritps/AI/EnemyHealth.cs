@@ -152,9 +152,11 @@ public class EnemyHealth : DamageReceiver
     {
         //this.gameObject.GetComponent<Collider>().enabled = false;
 
-
         this._canGetDamage = false;
-        if (!this._isDead) this._isDead = true;
+        if (!this._isDead)
+        {
+            this._isDead = true;
+        }
     }
     public override void Deduct(int damage)
     {

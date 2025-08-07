@@ -15,6 +15,7 @@ public class WaveSpawner :VuMonoBehaviour
     [SerializeField] protected Transform waveHolder;
     [SerializeField] protected Transform winPanel;
     [SerializeField] protected Transform losePanel;
+    [SerializeField] protected Transform bg;
 
     [SerializeField] protected float timeDelayEachSpawn = 0.1f;
 
@@ -86,6 +87,7 @@ public class WaveSpawner :VuMonoBehaviour
         {
             if (this.losePanel != null)
             {
+                if(this.bg != null) bg.gameObject.SetActive(false);
                 StartCoroutine(UIManager.Instance.VictoryRoutine(this.losePanel.gameObject));
                 return;
             }
@@ -95,6 +97,7 @@ public class WaveSpawner :VuMonoBehaviour
             if (this.winPanel != null)
             {
                 {
+                    if (this.bg != null) bg.gameObject.SetActive(false);
                     if (this.losePanel != null) StartCoroutine(UIManager.Instance.VictoryRoutine(this.winPanel.gameObject)); return;
                 }
             }
@@ -134,6 +137,7 @@ public class WaveSpawner :VuMonoBehaviour
                         if(newEnemy != null)
                         {
                             this.AddEnemyToUI();
+                            newEnemy.GetComponentInChildren<EnemyResponse>().IsReward = true;
                         }
                     }
                     yield return new WaitForSeconds(this.timeDelayEachSpawn);

@@ -18,6 +18,22 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI titleTimeToNextWave;
     [SerializeField] private TextMeshProUGUI txtTimeToNextWave;
 
+    [Space]
+    [Space]
+    [Header("Panel on the top Gameplay Screen!")]
+    [SerializeField] private TextMeshProUGUI title_ATK;
+    [SerializeField] private TextMeshProUGUI txt_ATK;
+    [SerializeField] private TextMeshProUGUI title_Defense;
+    [SerializeField] private TextMeshProUGUI txt_Defense;
+    [SerializeField] private TextMeshProUGUI title_CritRate;
+    [SerializeField] private TextMeshProUGUI txt_CritRate;
+    [SerializeField] private TextMeshProUGUI title_CritDamage;
+    [SerializeField] private TextMeshProUGUI txt_CritDamage;
+    [SerializeField] private TextMeshProUGUI title_BonusDamage;
+    [SerializeField] private TextMeshProUGUI txt_BonusDamage;
+
+    [Space]
+    [Space]
     [Header("Panel when playerPosition kill boss!")]
     [SerializeField] private TextMeshProUGUI dlgPlayerKillBoss;
 
@@ -48,7 +64,29 @@ public class UIManager : Singleton<UIManager>
         timer.StartCountDown(true, true, _time);
     }
 
-
+    public void UpdateCharacterStatsUI(float _atk, float _defense, float _critRate, float _critDamage, float _bonusDamage)
+    {
+        if(this.txt_ATK != null)
+        {
+            this.txt_ATK.text = _atk.ToString();
+        }
+        if (this.txt_Defense != null)
+        {
+            this.txt_Defense.text = _defense.ToString();
+        }
+        if (this.txt_CritRate != null)
+        {
+            this.txt_CritRate.text = _critRate.ToString();
+        }
+        if (this.txt_CritDamage != null)
+        {
+            this.txt_CritDamage.text = _critDamage.ToString();
+        }
+        if (this.txt_BonusDamage != null)
+        {
+            this.txt_BonusDamage.text = _bonusDamage.ToString();
+        }
+    }
 
     public void DisplayPanelWhenPlayerKillBoss()
     {

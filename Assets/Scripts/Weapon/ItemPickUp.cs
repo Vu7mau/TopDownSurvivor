@@ -7,6 +7,7 @@ public class ItemPickUp : VuMonoBehaviour
 {
     [SerializeField] private PickUpType _type;
     [SerializeField] private int _healingAmount;
+    [SerializeField] private int _coinAmount;
     [SerializeField] private int _bulletAmount;
     protected override void Start()
     {
@@ -38,7 +39,19 @@ public class ItemPickUp : VuMonoBehaviour
         if(other.TryGetComponent<CharacterDamageReceiver>(out CharacterDamageReceiver damageReceiver))
         {
             damageReceiver.Add(_healingAmount);
-            this.gameObject.SetActive(false);
+            this.PlaySoundFXPickUpItem(snd_pickup);
+            this.Despawn.DoDespawn();
+
+        }
+    }
+    public void AddCoin(Collider other)
+    {
+        if (other.TryGetComponent<CharacterDamageReceiver>(out CharacterDamageReceiver damageReceiver))
+        {
+            CharacterCurrencies characterCurrencies = other.GetComponentInChildren<CharacterCurrencies>();
+            if(characterCurrencies != null) characterCurrencies.AddCoins(this._coinAmount);
+            this.PlaySoundFXPickUpItem(snd_pickup);
+            this.Despawn.DoDespawn();
 
         }
     }

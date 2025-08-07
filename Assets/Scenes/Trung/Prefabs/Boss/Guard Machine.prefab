@@ -20482,6 +20482,7 @@ MonoBehaviour:
   animator: {fileID: 1736917205587141660}
   pathUpdateDelay: 0.2
   enemySO: {fileID: 11400000, guid: ed854a190438f564fa56fde4a48e63e1, type: 2}
+  itemDropSO: {fileID: 0}
 --- !u!114 &8611992048639061803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20641,10 +20642,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 7334931529703991533}
   enemyHealth: {fileID: 4494286475033730284}
-  playerLevelSystem: {fileID: 0}
-  waveSpawner: {fileID: 0}
   enemyCtrlDespawn: {fileID: 7059864618205017890}
-  enemiesSpawner: {fileID: 0}
+  textDisplayParentHolder: {fileID: 0}
 --- !u!1 &6892555393454805946
 GameObject:
   m_ObjectHideFlags: 0
@@ -38939,6 +38938,10 @@ PrefabInstance:
       value: UIDisplay
       objectReference: {fileID: 0}
     - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1693.1902
+      objectReference: {fileID: 0}
+    - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.67469
       objectReference: {fileID: 0}
@@ -38949,6 +38952,14 @@ PrefabInstance:
     - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.67469
+      objectReference: {fileID: 0}
+    - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2951328488456557688, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.0219
       objectReference: {fileID: 0}
     - target: {fileID: 3091852949514988864, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: enemyHealth

@@ -87,7 +87,15 @@ public class CharacterLeveUp : ObjectLeveUp
         CharacterStats.Instance.levelUpUI.ShowSkillChoices();
         this._expSlider.value = 0;
         this.SetLevelUI(this._level);
-        Time.timeScale = 0;
-        
+        this.SetProgressUI(this._currentExp, this._expToNextLevel);
+        //DamagerScreen.Instance.SetLeveUpScreen();
+        //SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.leveUp, this.transform);
+        CharacterStats characterStats = this.transform.parent.GetComponentInChildren<CharacterStats>();
+        if (characterStats != null)
+        {
+            CharacterStats.Instance.levelUpUI.ShowSkillChoices();
+            Time.timeScale = 0;
+        }
+
     }
 }

@@ -24,6 +24,16 @@ public class EnemyResponse : VuMonoBehaviour
     [Header("This component can be null if you don't need despawn in wave!")]
     [SerializeField] protected EnemiesSpawner enemiesSpawner;
 
+    //For Survival
+    /*[SerializeField] */protected EnemiesSpawner enemiesSpawner;
+    /*[SerializeField] */protected WaveSpawner waveSpawner;
+
+    protected Coroutine coroutine;
+
+    [Header("Rewards")]
+    [SerializeField] protected bool isReward = false;
+    public bool IsReward { set => this.isReward = value; }
+
     //[SerializeField] protected bool isCountLevel = false;
 
     protected override void LoadComponents()
@@ -50,9 +60,19 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void OnEnemyDeath()
     {
+        if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
+        {
+            this.DropItem(this.transform, this.pickUpSpawner);
+        }
+        this.DespawnEnemy();
+    }
+    protected virtual void DespawnEnemy()
+    {
         if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
         {
             this.enemyCtrlDespawn.DoDespawn();
+            //Update UI (only apply to survivals)
+            if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
             return;
         }
         this.transform.gameObject.SetActive(false);
@@ -91,23 +111,33 @@ public class EnemyResponse : VuMonoBehaviour
     }
 
     //Add any rewards when player kill enemy
-    protected virtual void OnPlayerKillEnemy()
+    public virtual void OnPlayerKillEnemy()
     {
-        StartCoroutine(this.RewardToPlayerWhenKillEnemy());
+        if(this.coroutine == null)
+        {
+            StartCoroutine(this.RewardToPlayerWhenKillEnemy());
+        }
+        else
+        {
+            StopCoroutine(this.coroutine);
+            StartCoroutine(this.RewardToPlayerWhenKillEnemy());
+        }
     }
     private IEnumerator RewardToPlayerWhenKillEnemy()
     {
-        yield return new WaitUntil(() => this.enemyHealth.Health <= 0);
+        yield return new WaitUntil(() => this.enemyHealth.IsDead());
 
         //Rewards to Players
-        if(this.playerLevelSystem != null) this.playerLevelSystem.AddEXP(this.enemyAI.EnemySO.Exp);
+        if (this.playerLevelSystem != null) this.playerLevelSystem.AddExp(this.enemyAI.EnemySO.Exp);
 
 
         //Update UI (only apply to survivals)
-        if(this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
+       // if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
 
 
         //PlayerScoreManager.Instance.AddScore(this.enemyAI.EnemySO.Score);
+
+        this.coroutine = null;
     }
 
     protected virtual void DespawnAllText()

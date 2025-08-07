@@ -113,10 +113,10 @@ public class CharacterStats : Singleton<CharacterStats>
 
         // Cộng chỉ số từ Passive Skill + Skill thẻ
         currentHP = baseHP + bonusHP + bonusFromSkillsHP;
-        currentAtk = bonusAtk + bonusFromSkillsAtk;
+        currentAtk = baseAtk + bonusAtk + bonusFromSkillsAtk;
         currentDef = baseDef + bonusDef + bonusFromSkillsDef;
         currentCritRate = baseCritRate + bonusCritRate + bonusFromSkillsCritRate;
-        currentCritDamage = baseCritDamage + bonusCritDamage;
+        currentCritDamage = baseCritDamage +bonusCritDamage;
 
         Debug.Log($"🔹 Cập nhật chỉ số: HP: {currentHP}, Atk: {currentAtk}, Def: {currentDef}, CritRate: {currentCritRate}%");
 
