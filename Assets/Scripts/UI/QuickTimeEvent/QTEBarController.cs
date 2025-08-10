@@ -12,9 +12,6 @@ public class QTEBarController : VuMonoBehaviour
     [SerializeField] private AudioClip successClip;
     [SerializeField] private AudioClip failClip;
     [SerializeField] private QTEResultPopup resultPopup;
-   
-
-
 
     [Header("Trigger")]
     [SerializeField] private KeyCode triggerKey = KeyCode.E;
@@ -28,26 +25,55 @@ public class QTEBarController : VuMonoBehaviour
     [SerializeField] private float duration = 6f;
     [SerializeField] private float increaseSpeed = 1f;
 
+    [Header("QTE Canvas FX")]
+    [SerializeField] private float popupDuration = 0.25f;
+    [SerializeField] private float hideDuration = 0.2f;
+    [SerializeField] private float startScale = 0.8f;
+    [SerializeField] private bool useFade = true;
+
+    [Header("QTE BGM")]
+    [SerializeField] private AudioClip qteMusic;          // Nhạc khi QTE bật
+    [SerializeField] private bool stopMusicOnHide = true; // Tắt nhạc khi QTE ẩn
+    [SerializeField] private float qteMusicVolume = 1f;
+
     private Coroutine qteCoroutine;
     private int currentFails = 0;
     private QuestPasswordCondition quest;
     private List<char> revealedDigits = new();
     private bool isQteCompleted = false;
-    int successCount = 0;
-    protected override void Start()
+    private int successCount = 0;
+
+    private CanvasGroup qteCanvasGroup;
+    private RectTransform qteRoot;
+    private Tween showTween, hideTween;
+
+    private void Start()
     {
         if (quest == null)
             quest = GameObject.FindObjectOfType<QuestPasswordCondition>();
+
+        if (qteCanvas != null)
+        {
+            qteRoot = qteCanvas.GetComponent<RectTransform>();
+            qteCanvasGroup = qteCanvas.GetComponent<CanvasGroup>();
+            if (qteCanvasGroup == null)
+                qteCanvasGroup = qteCanvas.gameObject.AddComponent<CanvasGroup>();
+
+            // Trạng thái ban đầu
+            qteCanvas.enabled = false;
+            qteRoot.localScale = Vector3.one;
+            qteCanvasGroup.alpha = 0f;
+        }
     }
+
     private void OnTriggerEnter(Collider other)
     {
-
         if (!other.CompareTag("Player")) return;
+
         if (isQteCompleted)
         {
-           
             if (resultPopup != null)
-                resultPopup.Show(quest.DoorPassword.ToString());
+                resultPopup.Show("Giải thành công", quest.DoorPassword.ToString());
         }
         else
         {
@@ -56,7 +82,6 @@ public class QTEBarController : VuMonoBehaviour
                 qteCoroutine = StartCoroutine(HandleQTE());
             }
         }
-       
     }
 
     private void OnTriggerStay(Collider other)
@@ -79,16 +104,16 @@ public class QTEBarController : VuMonoBehaviour
 
     private IEnumerator HandleQTE()
     {
-
         CharacterCtrl.Instance.CharacterShooting.SetCancel(true);
         currentFails = 0;
         revealedDigits.Clear();
         pointer.logPass.text = "";
 
-        qteCanvas.enabled = true;
+        // Hiệu ứng xuất hiện (và play nhạc)
+        bool ready = false;
+        AnimateShowQTE(() => { ready = true; });
+        while (!ready) yield return null;
 
-
-       
         pointer.ResetState();
         pointer.StartQTE();
         pointer.OnQTEResult += OnQTEResult;
@@ -101,17 +126,15 @@ public class QTEBarController : VuMonoBehaviour
         }
 
         Debug.Log("QTE Timeout!");
-        StopQTE(); 
+        StopQTE();
     }
 
     private void OnQTEResult(bool success)
     {
         string fullPass = quest.DoorPassword.ToString();
 
-
         if (revealedDigits.Count >= fullPass.Length)
         {
-         
             StopQTE();
             return;
         }
@@ -124,6 +147,8 @@ public class QTEBarController : VuMonoBehaviour
             if (currentFails >= maxFailAttempts)
             {
                 Debug.Log("QTE failed too many times!");
+                if (resultPopup != null)
+                    resultPopup.Show("Giải thất bại", "Bạn đã sai quá số lần cho phép!");
                 StopQTE();
             }
             else
@@ -141,12 +166,11 @@ public class QTEBarController : VuMonoBehaviour
         revealedDigits.Add(fullPass[revealedDigits.Count]);
         pointer.logPass.text = string.Join(" ", revealedDigits);
 
-        // Kiểm tra lại sau khi thêm
         if (revealedDigits.Count >= fullPass.Length)
         {
             StopQTE();
             if (resultPopup != null)
-                resultPopup.Show(quest.DoorPassword.ToString());
+                resultPopup.Show("Giải thành công", quest.DoorPassword.ToString());
             isQteCompleted = true;
             Debug.Log("Người chơi đã lấy đủ mật khẩu!");
             return;
@@ -165,7 +189,58 @@ public class QTEBarController : VuMonoBehaviour
 
         pointer.StopQTE();
         pointer.OnQTEResult -= OnQTEResult;
-        qteCanvas.enabled = false;
 
+        // Ẩn canvas bằng hiệu ứng (và dừng nhạc nếu chọn)
+        AnimateHideQTE();
+    }
+
+    private void AnimateShowQTE(System.Action onComplete = null)
+    {
+        if (qteCanvas == null) { onComplete?.Invoke(); return; }
+
+        showTween?.Kill();
+        hideTween?.Kill();
+
+        qteCanvas.enabled = true;
+
+        if (useFade) qteCanvasGroup.alpha = 0f;
+        if (qteRoot != null) qteRoot.localScale = Vector3.one * startScale;
+
+        // Play nhạc nền khi QTE bật
+        if (qteMusic != null && BackgroundMusicManager.Instance != null)
+            BackgroundMusicManager.Instance.PlayMusic(qteMusic, loop: true, volume: qteMusicVolume);
+
+        var seq = DOTween.Sequence().SetUpdate(true);
+        if (qteRoot != null)
+            seq.Join(qteRoot.DOScale(1f, popupDuration).SetEase(Ease.OutBack));
+        if (useFade)
+            seq.Join(qteCanvasGroup.DOFade(1f, popupDuration).SetEase(Ease.OutQuad));
+
+        showTween = seq.OnComplete(() => onComplete?.Invoke());
+    }
+
+    private void AnimateHideQTE(System.Action onComplete = null)
+    {
+        if (qteCanvas == null) { onComplete?.Invoke(); return; }
+
+        showTween?.Kill();
+        hideTween?.Kill();
+
+        var seq = DOTween.Sequence().SetUpdate(true);
+        if (qteRoot != null)
+            seq.Join(qteRoot.DOScale(startScale, hideDuration).SetEase(Ease.InBack));
+        if (useFade)
+            seq.Join(qteCanvasGroup.DOFade(0f, hideDuration).SetEase(Ease.OutQuad));
+
+        hideTween = seq.OnComplete(() =>
+        {
+            // Tắt nhạc khi QTE ẩn (nếu chọn)
+            if (stopMusicOnHide && BackgroundMusicManager.Instance != null)
+                BackgroundMusicManager.Instance.StopMusic();
+
+            qteCanvas.enabled = false;
+            if (qteRoot != null) qteRoot.localScale = Vector3.one;
+            onComplete?.Invoke();
+        });
     }
 }

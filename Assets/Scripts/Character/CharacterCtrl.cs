@@ -32,9 +32,9 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
 
 
     [SerializeField] protected CharacterLeveUp _characterLeveUp;
-    public CharacterLeveUp CharacterLeveUp => _characterLeveUp; 
-    
-    
+    public CharacterLeveUp CharacterLeveUp => _characterLeveUp;
+
+
     [SerializeField] protected CharacterEffect _characterEffect;
     public CharacterEffect CharacterEffect => _characterEffect;
 
@@ -43,12 +43,12 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     {
         _inputManager.gameObject.SetActive(false);
         _characterMove.gameObject.SetActive(false);
-       _characterAim.gameObject.SetActive(false);
+        _characterAim.gameObject.SetActive(false);
         _characterShooting.gameObject.SetActive(false);
-       // _activeWeapon.gameObject.SetActive(false);
+        // _activeWeapon.gameObject.SetActive(false);
         //_characterStats.gameObject.SetActive(false);
-     //   _characterAnimHandle.gameObject.SetActive(false);
-      //  _characterDamageReceiver.gameObject.SetActive(false);
+        //   _characterAnimHandle.gameObject.SetActive(false);
+        //  _characterDamageReceiver.gameObject.SetActive(false);
         _characterLeveUp.gameObject.SetActive(false);
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
     }
@@ -116,8 +116,8 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
     {
         if (this._characterStats != null) return;
 
-       // this._characterStats = GameObject.FindObjectOfType<CharacterStats>();
-      //  Debug.Log("LoadCharacterStats success " + this._characterStats.transform.name);
+        // this._characterStats = GameObject.FindObjectOfType<CharacterStats>();
+        //  Debug.Log("LoadCharacterStats success " + this._characterStats.transform.name);
     }
     protected virtual void LoadCharacterAnimHandle()
     {
@@ -149,10 +149,14 @@ public class CharacterCtrl : Singleton<CharacterCtrl>
 
     public int GetDamageFromStats()
     {
-        return this._characterStats.AttackEnemy();
+        if (this._characterStats != null)
+            return this._characterStats.AttackEnemy();
+        else
+            return 0;
+
     }
 
-}
+}   
 
 
 
