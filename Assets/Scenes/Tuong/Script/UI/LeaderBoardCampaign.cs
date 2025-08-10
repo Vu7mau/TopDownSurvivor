@@ -289,7 +289,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
                                   .SetLoops(2, LoopType.Yoyo);
                     break;
 
-                case 2: // Flip horizontally
+                case 2: 
                     tween = target.DORotate(new Vector3(0, 180, 0), 0.5f)
                                   .SetEase(Ease.InOutSine)
                                   .SetLoops(2, LoopType.Yoyo);
@@ -304,15 +304,6 @@ public class LeaderBoardCampaign : LeaderBoardManager
             }
         }
         DoRandomEffect();
-    }
-
-
-    private void ApplyRankTween(Transform target)
-    {
-        target.DOScale(1.05f, 1f)
-            .SetLoops(-1, LoopType.Yoyo)
-            .SetEase(Ease.InOutSine)
-            .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
     }
     private string FormatTime(int totalSeconds)
     {
