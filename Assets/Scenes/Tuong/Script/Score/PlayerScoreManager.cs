@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 public class PlayerScoreManager : MonoBehaviour
 {
     public static PlayerScoreManager Instance;
     public int totalScore = 0;
+    private HashSet<int> scoredEnemies = new HashSet<int>();
+
     private void Awake()
     {
         if (Instance == null)
@@ -12,10 +15,12 @@ public class PlayerScoreManager : MonoBehaviour
         }
         else Destroy(gameObject);
     }
-    public void AddScore(int value)
+    public void AddScore(GameObject enemy, int value)
     {
+        if (scoredEnemies.Contains(enemy.GetInstanceID()))
+            return; Debug.Log("Điểm hiện tại: " + totalScore);
+        scoredEnemies.Add(enemy.GetInstanceID());
         totalScore += value;
-        Debug.Log("Điểm hiện tại: " + totalScore);
     }
     public void ResetScore()
     {

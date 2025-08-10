@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using PlayFab;
 using UnityEditor;
+using DG.Tweening;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
@@ -224,16 +226,26 @@ public class MainMenuTwo : MonoBehaviour
         leaderboardPanel.SetActive(true);
         iconGame.SetActive(false);
         iconLeaderboard.SetActive(false);
-        StartCoroutine(LoadLeaderboardAfterUIReady());
+        LeaderboardVFX.Instance.PrepareHide();
+
+        LeaderboardVFX.Instance.ShowPanels(() =>
+        {
+            StartCoroutine(LoadLeaderboardAfterUIReady());
+        });
     }
     public void CloseLeaderBoardPanel()
     {
         //LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
         //LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
-        iconLeaderboard.SetActive(true);
-        iconGame.SetActive(true);
-        playMenu.SetActive(true);
-        leaderboardPanel.SetActive(false);
+        LeaderboardVFX.Instance.HidePanels(() =>
+        {
+            iconLeaderboard.SetActive(true);
+            iconGame.SetActive(true);
+            playMenu.SetActive(true);
+            leaderboardPanel.SetActive(false);
+            LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
+            LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
+        });
     }
     private IEnumerator LoadLeaderboardAfterUIReady()
     {

@@ -7,11 +7,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using DG.Tweening;
 public class LeaderBoardCampaign : LeaderBoardManager
 {
     [SerializeField] private GameObject entryPrefabCampign;
     public new static LeaderBoardCampaign Instance;
     private Dictionary<string, DateTime> createdMapCache = new(); // Dictionary là bảng ánh xạ, id - ngày tạo tài khoản
+    [SerializeField] private Sprite goldIcon;
+    [SerializeField] private Sprite silverIcon;
+    [SerializeField] private Sprite bronzeIcon;
+
     private void Awake()
     {
         if (Instance == null)
@@ -115,7 +120,7 @@ public class LeaderBoardCampaign : LeaderBoardManager
         {
             StatisticName = leaderboardStat,
             StartPosition = 0,
-            MaxResultsCount = 100
+            MaxResultsCount = 10
         },
         result => StartCoroutine(GetLeaderboardTime(result.Leaderboard)),
         error => Debug.LogError("Lỗi khi lấy bảng xếp hạng: " + error.GenerateErrorReport()));
@@ -182,10 +187,14 @@ public class LeaderBoardCampaign : LeaderBoardManager
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
         foreach (Transform child in contentCampign)
-            Destroy(child.gameObject);
-
+        {
+            if(child != null)
+            {
+                child.DOKill();
+                Destroy(child.gameObject);
+            }
+        }
         string currentId = PlayFabSettings.staticPlayer.PlayFabId;
-
         for (int i = 0; i < entries.Count; i++)
         {
             var e = entries[i];
@@ -194,15 +203,116 @@ public class LeaderBoardCampaign : LeaderBoardManager
 
             string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
 
-            texts[0].text = (i + 1).ToString();
+            var rankImage = go.transform.Find("RankIcon")?.GetComponent<Image>();
+            var rankText = texts[0];
+
+            switch (i)
+            {
+                case 0:
+                    rankImage.sprite = goldIcon;
+                    rankImage.gameObject.SetActive(true);
+                    rankText.gameObject.SetActive(false);
+                    PlayIconEffect(rankImage.rectTransform, rankImage);
+                    break;
+                case 1:
+                    rankImage.sprite = silverIcon;
+                    rankImage.gameObject.SetActive(true);
+                    rankText.gameObject.SetActive(false);
+                    PlayIconEffect(rankImage.rectTransform, rankImage);
+                    break;
+                case 2:
+                    rankImage.sprite = bronzeIcon;
+                    rankImage.gameObject.SetActive(true);
+                    rankText.gameObject.SetActive(false);
+                    PlayIconEffect(rankImage.rectTransform, rankImage);
+                    break;
+                default:
+                    rankImage.gameObject.SetActive(false);
+                    rankText.text = (i + 1).ToString();
+                    rankText.gameObject.SetActive(true);
+                    break;
+            }
+
             texts[1].text = e.DisplayName ?? "No name";
             texts[2].text = e.StatValue.ToString();
             texts[3].text = time;
-            if (e.PlayFabId == currentId)
-                go.GetComponent<Image>().color = new Color32(0xEF, 0xC9, 0x02, 0xFF);
-            else
-                go.GetComponent<Image>().color = Color.clear;
+            Image bg = go.GetComponent<Image>();
+
+            switch (i)
+            {
+                case 0:
+                    bg.color = new Color32(254, 183, 0, 255);
+                    break;
+                case 1:
+                    bg.color = new Color32(192, 192, 192, 255);
+                    break;
+                case 2:
+                    bg.color = new Color32(205, 127, 50, 255);
+                    break;
+                default: bg.color = new Color32(113, 110, 110, 255); break;
+            }
+            if (e.PlayFabId == currentId && i < 10 && i != 0 && i != 2)
+            {
+                bg.color = new Color32(0, 150, 255, 255);
+            }
         }
+    }
+    void PlayIconEffect(Transform target, Image img)
+    {
+        if (target == null) return;
+
+        target.DOKill();
+        img.DOKill();
+
+        void DoRandomEffect()
+        {
+            target.localScale = Vector3.one;
+            target.localRotation = Quaternion.identity;
+            img.color = Color.white;
+
+            int effectType = UnityEngine.Random.Range(0, 3);
+            Tween tween = null;
+
+            switch (effectType)
+            {
+                case 0: 
+                    tween = target.DOScale(1.2f, 0.5f)
+                                  .SetEase(Ease.OutQuad)
+                                  .SetLoops(2, LoopType.Yoyo);
+                    break;
+
+                case 1: 
+                    tween = target.DORotate(
+                                new Vector3(0, 0, UnityEngine.Random.Range(-15f, 15f)),
+                                0.5f)
+                                  .SetEase(Ease.InOutSine)
+                                  .SetLoops(2, LoopType.Yoyo);
+                    break;
+
+                case 2: // Flip horizontally
+                    tween = target.DORotate(new Vector3(0, 180, 0), 0.5f)
+                                  .SetEase(Ease.InOutSine)
+                                  .SetLoops(2, LoopType.Yoyo);
+                    break;
+            }
+            img.DOColor(new Color(1.2f, 1.2f, 1.2f), 0.25f)
+               .SetLoops(2, LoopType.Yoyo);
+
+            if (tween != null)
+            {
+                tween.OnComplete(DoRandomEffect); 
+            }
+        }
+        DoRandomEffect();
+    }
+
+
+    private void ApplyRankTween(Transform target)
+    {
+        target.DOScale(1.05f, 1f)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetEase(Ease.InOutSine)
+            .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
     }
     private string FormatTime(int totalSeconds)
     {
