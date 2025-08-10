@@ -9,7 +9,7 @@ public class EnemyResponse : VuMonoBehaviour
     [SerializeField] protected EnemyHealth enemyHealth;
     [SerializeField] protected Transform textDisplayParentHolder;
 
-    [SerializeField] protected PlayerLevelSystem playerLevelSystem;
+    [SerializeField] protected CharacterLeveUp characterLeveUp;
     [SerializeField] protected WaveSpawner waveSpawner;
 
     [Space]
@@ -46,6 +46,7 @@ public class EnemyResponse : VuMonoBehaviour
         this.LoadEnemiesSpawner();
         this.LoadCharacterLeveUp();
         this.LoadWaveSpawner();
+        this.LoadPickUpSpawner();
     }
 
     protected override void OnEnable()
@@ -61,10 +62,10 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void OnEnemyDeath()
     {
-        //if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
-        //{
-        //    this.DropItem(this.transform, this.pickUpSpawner);
-        //}
+        if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
+        {
+            this.DropItem(this.transform, this.pickUpSpawner);
+        }
         this.DespawnEnemy();
     }
     protected virtual void DespawnEnemy()
@@ -96,19 +97,19 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void LoadEnemiesSpawner()
     {
-        //if (this.enemiesSpawner != null) return;
-        //this.enemiesSpawner = FindAnyObjectByType<EnemiesSpawner>();
+        if (this.enemiesSpawner != null) return;
+        this.enemiesSpawner = FindAnyObjectByType<EnemiesSpawner>();
     }
     protected virtual void LoadCharacterLeveUp()
     {
-        if (this.playerLevelSystem != null) return;
-        this.playerLevelSystem = FindAnyObjectByType<PlayerLevelSystem>();
+        if (this.characterLeveUp != null) return;
+        this.characterLeveUp = FindAnyObjectByType<CharacterLeveUp>();
     }
 
     protected virtual void LoadWaveSpawner()
     {
-        //if (this.waveSpawner != null) return;
-        //this.waveSpawner = FindAnyObjectByType<WaveSpawner>();
+        if (this.waveSpawner != null) return;
+        this.waveSpawner = FindAnyObjectByType<WaveSpawner>();
     }
     protected virtual void LoadPickUpSpawner()
     {
@@ -134,11 +135,11 @@ public class EnemyResponse : VuMonoBehaviour
         yield return new WaitUntil(() => this.enemyHealth.IsDead());
 
         //Rewards to Players
-        //if (this.playerLevelSystem != null) this.playerLevelSystem.AddExp(this.enemyAI.EnemySO.Exp);
+        if (this.characterLeveUp != null) this.characterLeveUp.AddExp(this.enemyAI.EnemySO.Exp);
 
 
         //Update UI (only apply to survivals)
-       // if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
+       //if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
 
 
         //PlayerScoreManager.Instance.AddScore(this.enemyAI.EnemySO.Score);
@@ -159,7 +160,25 @@ public class EnemyResponse : VuMonoBehaviour
             }
         }
     }
+    public virtual void DropItem(Transform position, PickUpSpawner spawner)
+    {
+        foreach (ItemDrop drop in this.enemyAI.ItemDropSO.ItemDrops)
+        {
+            float rollItem = Random.Range(0f, 100f);
+            if (rollItem <= drop.dropChance)
+            {
+                float positionX = Random.Range(position.position.x - 2f, position.position.x + 2f);
+                float positionY = position.position.y + 5f;
+                float positionZ = Random.Range(position.position.z - 2f, position.position.z + 2f);
+                Vector3 positionSpawnItem = new Vector3(positionX, positionY, positionZ);
+                spawner.Spawn(drop.itemPrefab, positionSpawnItem);
+                if (drop.itemPrefab != null)
+                {
 
+                }
+            }
+        }
+    }
 
 
 }

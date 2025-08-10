@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class ItemPickUp : VuMonoBehaviour
+public class ItemPickUp : PowerUpItem
 {
     [SerializeField] private PickUpType _type;
     [SerializeField] private int _healingAmount;
     [SerializeField] private int _coinAmount;
     [SerializeField] private int _bulletAmount;
+
+    [Header("SoundFX")]
+    [SerializeField] protected List<AudioClip> snd_pickup;
     protected override void Start()
     {
         base.Start();
@@ -27,6 +30,11 @@ public class ItemPickUp : VuMonoBehaviour
                     this.AddHealth(other);
                     break;
                 }
+            case PickUpType.coin:
+                {
+                    this.AddCoin(other);
+                    break;
+                }
             case PickUpType.ammount:
                 {
                     this.AddAmmour(other);
@@ -39,8 +47,8 @@ public class ItemPickUp : VuMonoBehaviour
         if(other.TryGetComponent<CharacterDamageReceiver>(out CharacterDamageReceiver damageReceiver))
         {
             damageReceiver.Add(_healingAmount);
-            //this.PlaySoundFXPickUpItem(snd_pickup);
-            //this.Despawn.DoDespawn();
+            this.PlaySoundFXPickUpItem(snd_pickup);
+            this.Despawn.DoDespawn();
 
         }
     }
@@ -50,8 +58,8 @@ public class ItemPickUp : VuMonoBehaviour
         {
             CharacterCurrencies characterCurrencies = other.GetComponentInChildren<CharacterCurrencies>();
             if(characterCurrencies != null) characterCurrencies.AddCoins(this._coinAmount);
-            //this.PlaySoundFXPickUpItem(snd_pickup);
-            //this.Despawn.DoDespawn();
+            this.PlaySoundFXPickUpItem(snd_pickup);
+            this.Despawn.DoDespawn();
 
         }
     }
@@ -67,10 +75,19 @@ public class ItemPickUp : VuMonoBehaviour
 
     }    
 
+    protected virtual void PlaySoundFXPickUpItem(List<AudioClip> snd)
+    {
+        if(snd.Count == 0) return;
+        int randomSound = Random.Range(0, snd.Count);
+        if (snd[randomSound] == null) return;
+        SoundFXManager.Instance.PlaySoundFXClip(snd[randomSound], this.transform);
+    }
+
 }
 public enum PickUpType
 {
     none = 0,
     health = 1,
-    ammount = 2
+    coin = 2,
+    ammount = 3
 }

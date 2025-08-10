@@ -111,8 +111,6 @@ public class CharacterLeveUp : ObjectLeveUp
             CharacterStats.Instance.levelUpUI.ShowSkillChoices();
             Time.timeScale = 0;
         }
-        CharacterStats.Instance.levelUpUI.ShowSkillChoices();
-        Time.timeScale = 0;
 
     }
 }
