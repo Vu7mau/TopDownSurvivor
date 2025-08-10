@@ -9,6 +9,7 @@ public class QTEResultPopup : VuMonoBehaviour
 {
     [SerializeField] private GameObject popupPanel;
     [SerializeField] private TMP_Text popupMessage;
+    [SerializeField] private TMP_Text title;
     [SerializeField] private Button popupCloseButton;
 
     private RectTransform panelRect;
@@ -26,18 +27,23 @@ public class QTEResultPopup : VuMonoBehaviour
         popupCloseButton.onClick.AddListener(HidePopup);
     }
 
-    public void Show(string message)
+    public void Show(string titleText, string message)
     {
-        Debug.Log(message);
+        Debug.Log($"Title: {titleText} | Message: {message}");
+
         if (popupPanel == null || panelRect == null) return;
+
+        if (title != null)
+            title.text = titleText;
+
         popupMessage.characterSpacing = 10f;
         popupMessage.text = message;
+
         popupPanel.SetActive(true);
         panelRect.localScale = Vector3.zero;
         panelRect.DOScale(Vector3.one, 0.4f)
                  .SetEase(Ease.OutBack);
     }
-
     public void HidePopup()
     {
         if (popupPanel == null || panelRect == null) return;
