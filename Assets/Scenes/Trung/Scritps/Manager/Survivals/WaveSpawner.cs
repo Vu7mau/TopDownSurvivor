@@ -7,19 +7,26 @@ using UnityEngine.AI;
 
 public class WaveSpawner :VuMonoBehaviour
 {
+    [Header("Survival!")]
     [SerializeField] private WaveConfig waveConfig;
     [SerializeField] private EnemiesSpawner enemiesSpawner;
     [SerializeField] private Timer timer;
     [SerializeField] private Transform[] spawnPoints;
-
     [SerializeField] protected Transform waveHolder;
-    [SerializeField] protected Transform winPanel;
-    [SerializeField] protected Transform losePanel;
+    [SerializeField] protected float timeDelayEachSpawn = 0.1f;
+    [SerializeField] private bool canSpawnContinue = false;
+
+    [Space]
+    [Header("Finish the battle Survival!")]
+    [SerializeField] protected Transform f_winPanel;
+    [SerializeField] protected Transform f_losePanel;
+    [SerializeField] protected float timeWaitToEndGame;
+
+    [SerializeField] protected Transform e_winPanel;
+    [SerializeField] protected Transform e_losePanel;
     [SerializeField] protected Transform bg;
 
-    [SerializeField] protected float timeDelayEachSpawn = 0.1f;
 
-    [SerializeField] private bool canSpawnContinue = false;
 
 
     private int currentWaveIndex = 0;
@@ -61,6 +68,7 @@ public class WaveSpawner :VuMonoBehaviour
 
     public void StartWaves()
     {
+        Time.timeScale = 1.0f;
         if (!isSpawning)
             StartCoroutine(HandleWaves());
     }
@@ -83,24 +91,34 @@ public class WaveSpawner :VuMonoBehaviour
 
     protected virtual void FinishBattle()
     {
+        if (this.bg != null) bg.gameObject.SetActive(false);
         if (this.timer.TimeIsUp && this.enemyLefts > 0)
         {
-            if (this.losePanel != null)
-            {
-                if(this.bg != null) bg.gameObject.SetActive(false);
-                StartCoroutine(UIManager.Instance.VictoryRoutine(this.losePanel.gameObject));
-                return;
-            }
+            StartCoroutine(this.EndGamePlayRoutine(false));
+            return;
         }
         else
         {
-            if (this.winPanel != null)
-            {
-                {
-                    if (this.bg != null) bg.gameObject.SetActive(false);
-                    if (this.losePanel != null) StartCoroutine(UIManager.Instance.VictoryRoutine(this.winPanel.gameObject)); return;
-                }
-            }
+            StartCoroutine(this.EndGamePlayRoutine(true));
+            return;
+        }
+    }
+    protected IEnumerator EndGamePlayRoutine(bool isWin)
+    {
+        if (this.f_losePanel != null && this.f_winPanel != null)
+        {
+            Transform obj = isWin ? this.f_winPanel : this.f_losePanel;
+            obj.gameObject.SetActive(true);
+            yield return new WaitForSeconds(3f);
+            obj.gameObject.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(this.timeWaitToEndGame);
+
+        if (this.e_winPanel != null && this.e_losePanel != null)
+        {
+            Transform objEndGame = isWin ? this.e_winPanel : this.e_losePanel;
+            if (objEndGame != null) objEndGame.gameObject.SetActive(true);
         }
     }
 

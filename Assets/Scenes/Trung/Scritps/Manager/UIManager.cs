@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -92,15 +94,7 @@ public class UIManager : Singleton<UIManager>
     {
         panel1.gameObject.SetActive(true);
         dlgPlayerKillBoss.text = localization.DLG_WHEN_KILL_BOSS;
-        StartCoroutine(VictoryRoutine(panel1.gameObject));
     }
-    public IEnumerator VictoryRoutine(GameObject obj)
-    {
-        obj.SetActive(true);
-        yield return new WaitForSeconds(3f);
-        HideGeneralGameObject(obj);
-    }
-
 
     public void HideGeneralGameObject(GameObject obj)
     {

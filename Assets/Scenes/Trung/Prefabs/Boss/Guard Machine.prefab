@@ -20528,7 +20528,7 @@ MonoBehaviour:
   snd_roar: []
   timeRoar: 10
   snd_attack_1: []
-  timeToReturnSwitch: 2
+  timeToReturnSwitch: 1
   CanAttackTargetLongDistance: 0
   e_Shooting: {fileID: 3289389880929443539}
   playerPosition: {fileID: 0}
@@ -20642,8 +20642,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 7334931529703991533}
   enemyHealth: {fileID: 4494286475033730284}
-  enemyCtrlDespawn: {fileID: 7059864618205017890}
   textDisplayParentHolder: {fileID: 0}
+  characterLeveUp: {fileID: 0}
+  waveSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 7059864618205017890}
+  enemiesSpawner: {fileID: 0}
+  pickUpSpawner: {fileID: 0}
+  isReward: 0
 --- !u!1 &6892555393454805946
 GameObject:
   m_ObjectHideFlags: 0

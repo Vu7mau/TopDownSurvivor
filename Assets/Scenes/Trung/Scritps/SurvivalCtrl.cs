@@ -16,6 +16,9 @@ public class SurvivalCtrl : VuMonoBehaviour
 
     protected override void OnEnable()
     {
+        this.panelWave.transform.gameObject.SetActive(true);
+        this.panelStats.transform.gameObject.SetActive(true);
+
         // Lưu vị trí mặc định
         waveDefaultPos = panelWave.anchoredPosition;
         statsDefaultPos = panelStats.anchoredPosition; // Panel Stats sẽ vào đúng chỗ Panel Wave
