@@ -10,6 +10,7 @@ public class EnemyResponse : VuMonoBehaviour
     [SerializeField] protected Transform textDisplayParentHolder;
 
     [SerializeField] protected CharacterLeveUp characterLeveUp;
+    [SerializeField] protected CharacterCurrencies characterCurrencies;
     [SerializeField] protected WaveSpawner waveSpawner;
 
     [Space]
@@ -47,6 +48,7 @@ public class EnemyResponse : VuMonoBehaviour
         this.LoadCharacterLeveUp();
         this.LoadWaveSpawner();
         this.LoadPickUpSpawner();
+        this.LoadCharacterCurrencies();
     }
 
     protected override void OnEnable()
@@ -65,6 +67,11 @@ public class EnemyResponse : VuMonoBehaviour
         if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
         {
             this.DropItem(this.transform, this.pickUpSpawner);
+        }
+        if (this.characterCurrencies != null)
+        {
+            this.characterCurrencies.AddKills(1);
+            this.characterCurrencies.AddScore(1);
         }
         this.DespawnEnemy();
     }
@@ -115,6 +122,11 @@ public class EnemyResponse : VuMonoBehaviour
     {
         if (this.pickUpSpawner != null) return;
         this.pickUpSpawner = FindAnyObjectByType<PickUpSpawner>();
+    }
+    protected virtual void LoadCharacterCurrencies()
+    {
+        if (this.characterCurrencies != null) return;
+        this.characterCurrencies = FindAnyObjectByType<CharacterCurrencies>();
     }
 
     //Add any rewards when player kill enemy

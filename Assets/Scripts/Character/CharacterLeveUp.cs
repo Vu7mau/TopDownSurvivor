@@ -103,6 +103,8 @@ public class CharacterLeveUp : ObjectLeveUp
     {
         this.SetLevelUI(this._level);
         this.SetProgressUI(this._currentExp, this._expToNextLevel);
+        PlayerPrefs.SetInt("currentLevel",this._level);
+        PlayerPrefs.Save();
         //DamagerScreen.Instance.SetLeveUpScreen();
         //SoundFXManager.Instance.PlaySoundFXClip(SoundFXManager.Instance.leveUp, this.transform);
         CharacterStats characterStats = this.transform.parent.GetComponentInChildren<CharacterStats>();

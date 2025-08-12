@@ -6,23 +6,28 @@ using UnityEngine.EventSystems;
 
 public class HoverScale3D : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private float scaleFactor = 1.2f; // Tỷ lệ phóng to khi hover
-    [SerializeField] private float duration = 0.2f;    // Thời gian tween
+    [SerializeField] private float hoverScale = 1.2f;   // Tỉ lệ phóng to khi hover
+    [SerializeField] private float duration = 0.2f;     // Thời gian tween
+    [SerializeField] private Ease easeType = Ease.OutBack;
 
+    private RectTransform rectTransform;
     private Vector3 originalScale;
 
-    private void Start()
+    private void Awake()
     {
-        originalScale = transform.localScale;
+        rectTransform = GetComponent<RectTransform>();
+        originalScale = rectTransform.localScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        transform.DOScale(originalScale * scaleFactor, duration).SetEase(Ease.OutBack);
+        Debug.Log("Hover!");
+        rectTransform.DOScale(originalScale * hoverScale, duration).SetEase(easeType).SetUpdate(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        transform.DOScale(originalScale, duration).SetEase(Ease.InBack);
+        Debug.Log("Not Hover!");
+        rectTransform.DOScale(originalScale, duration).SetEase(easeType).SetUpdate(true);
     }
 }
