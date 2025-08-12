@@ -98,10 +98,12 @@ public class SlidingDoor : MonoBehaviour
             rightTargetPos = rightClosedPos + offset; // cánh phải đi +offset
             isMoving = true;
         }
+        
     }
     private void OnTriggerExit(Collider other)
     {
         if (!other.gameObject.CompareTag("Player") )return;
+
         if (requireCondition && conditionMet)
         {
             CloseDoor();

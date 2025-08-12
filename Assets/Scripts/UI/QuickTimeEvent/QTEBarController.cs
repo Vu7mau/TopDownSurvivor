@@ -33,8 +33,17 @@ public class QTEBarController : VuMonoBehaviour
 
     [Header("QTE BGM")]
     [SerializeField] private AudioClip qteMusic;          // Nhạc khi QTE bật
+    [SerializeField] private AudioClip qteOutMusic;
     [SerializeField] private bool stopMusicOnHide = true; // Tắt nhạc khi QTE ẩn
     [SerializeField] private float qteMusicVolume = 1f;
+
+    [Header("Fail Spawn")]
+    [SerializeField] private List<MonsterSpawnerTrigger> monsterSpawners = new(); // Kéo list spawner vào đây
+    [SerializeField] private int spawnPerFail = 1;            // Số quái spawn mỗi lần fail
+    [SerializeField] private int spawnIncreasePerFail = 0;    // Tăng thêm mỗi lần fail (0 = không tăng)
+    [SerializeField] private bool randomSpawner = true;       // True: chọn 1 spawner ngẫu nhiên; False: spawn khắp tất cả
+    [SerializeField] private float spawnDelay = 0.15f;        // Trễ nhỏ giữa các lần spawn 
+
 
     private Coroutine qteCoroutine;
     private int currentFails = 0;
@@ -47,7 +56,7 @@ public class QTEBarController : VuMonoBehaviour
     private RectTransform qteRoot;
     private Tween showTween, hideTween;
 
-    private void Start()
+    protected override void Start()
     {
         if (quest == null)
             quest = GameObject.FindObjectOfType<QuestPasswordCondition>();
@@ -109,7 +118,7 @@ public class QTEBarController : VuMonoBehaviour
         revealedDigits.Clear();
         pointer.logPass.text = "";
 
-        // Hiệu ứng xuất hiện (và play nhạc)
+
         bool ready = false;
         AnimateShowQTE(() => { ready = true; });
         while (!ready) yield return null;
@@ -144,12 +153,18 @@ public class QTEBarController : VuMonoBehaviour
             currentFails++;
             pointer.PlayFailEffect(audioSource, failClip);
 
+
+
+
             if (currentFails >= maxFailAttempts)
             {
                 Debug.Log("QTE failed too many times!");
                 if (resultPopup != null)
                     resultPopup.Show("Giải thất bại", "Bạn đã sai quá số lần cho phép!");
                 StopQTE();
+                if (qteOutMusic)
+                    BackgroundMusicManager.Instance.PlayMusic(qteOutMusic);
+                SpawnOnFail(currentFails);
             }
             else
             {
@@ -172,6 +187,7 @@ public class QTEBarController : VuMonoBehaviour
             if (resultPopup != null)
                 resultPopup.Show("Giải thành công", quest.DoorPassword.ToString());
             isQteCompleted = true;
+          //  UIMissionManager.Instance.AddMessage("kkk", "Hay tieu diet bosss");
             Debug.Log("Người chơi đã lấy đủ mật khẩu!");
             return;
         }
@@ -190,7 +206,7 @@ public class QTEBarController : VuMonoBehaviour
         pointer.StopQTE();
         pointer.OnQTEResult -= OnQTEResult;
 
-        // Ẩn canvas bằng hiệu ứng (và dừng nhạc nếu chọn)
+        // Ẩn canvas bằng hiệu ứng
         AnimateHideQTE();
     }
 
@@ -234,7 +250,7 @@ public class QTEBarController : VuMonoBehaviour
 
         hideTween = seq.OnComplete(() =>
         {
-            // Tắt nhạc khi QTE ẩn (nếu chọn)
+
             if (stopMusicOnHide && BackgroundMusicManager.Instance != null)
                 BackgroundMusicManager.Instance.StopMusic();
 
@@ -243,4 +259,68 @@ public class QTEBarController : VuMonoBehaviour
             onComplete?.Invoke();
         });
     }
+
+    private void SpawnOnFail(int failIndex)
+    {
+        if (monsterSpawners == null || monsterSpawners.Count == 0) return;
+
+        // Số lượng quái cần spawn ở lần fail này
+        int count = Mathf.Max(0, spawnPerFail + (failIndex - 1) * spawnIncreasePerFail);
+        if (count <= 0) return;
+
+        StartCoroutine(SpawnFailWave(count));
+    }
+
+    private IEnumerator SpawnFailWave(int totalToSpawn)
+    {
+        if (randomSpawner)
+        {
+            // Chọn một spawner ngẫu nhiên cho cả đợt
+            var spawner = PickRandomSpawner();
+            if(!spawner.gameObject.activeSelf)
+                spawner.gameObject.SetActive(true);
+            if (spawner != null)
+            {
+                yield return SpawnBurst(spawner, totalToSpawn);
+            }
+        }
+        else
+        {
+            // Chia đều qua tất cả spawners
+            int perSpawner = Mathf.Max(1, totalToSpawn / monsterSpawners.Count);
+            int remainder = Mathf.Max(0, totalToSpawn - perSpawner * monsterSpawners.Count);
+
+            for (int i = 0; i < monsterSpawners.Count; i++)
+            {
+                var spawner = monsterSpawners[i];
+                if (spawner == null) continue;
+
+                int thisCount = perSpawner + (i < remainder ? 1 : 0);
+                if (thisCount > 0)
+                    yield return SpawnBurst(spawner, thisCount);
+            }
+        }
+    }
+
+    private IEnumerator SpawnBurst(MonsterSpawnerTrigger spawner, int amount)
+    {
+
+        if (spawner == null) yield break;
+        if (!spawner.gameObject.activeSelf)
+            spawner.gameObject.SetActive(true); 
+        spawner.Spawn(amount);
+        if (spawnDelay > 0f) yield return new WaitForSeconds(spawnDelay);
+
+        yield break;
+    }
+
+    private MonsterSpawnerTrigger PickRandomSpawner()
+    {
+        // Lấy spawner hợp lệ
+        List<MonsterSpawnerTrigger> pool = monsterSpawners.FindAll(s => s != null);
+        if (pool.Count == 0) return null;
+        int idx = Random.Range(0, pool.Count);
+        return pool[idx];
+    }
+
 }

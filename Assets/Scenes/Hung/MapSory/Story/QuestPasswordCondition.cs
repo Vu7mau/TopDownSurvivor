@@ -22,6 +22,7 @@ public class QuestPasswordCondition : VuMonoBehaviour
 
     [SerializeField] private AudioClip incorrectAudio;
     [SerializeField] private AudioClip correctAudio;
+    [SerializeField] private AudioClip lockedAudio;
 
 
     public int DoorPassword => password;
@@ -121,6 +122,8 @@ public class QuestPasswordCondition : VuMonoBehaviour
 
         if (!isSuccess)
         {
+            if(lockedAudio)
+                SoundFXManager.Instance.PlaySoundFXClip(lockedAudio, this.transform);
             OpenPasswordInput();
         }
     }
