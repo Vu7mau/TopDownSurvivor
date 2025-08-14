@@ -83,17 +83,17 @@ public class CharacterStats : Singleton<CharacterStats>
 
         switch (skill.skillName)
         {
-            case "BonusDefend":
+            case "Defense Boost":
                 bonusFromSkillsDef += effectValue;
                 break;
-            case "BonusDamage":
+            case "Power Surge":
                 bonusFromSkillsAtk += effectValue;
                 break;
             case "BonusHp":
                 bonusFromSkillsHP += effectValue;
                 CharacterCtrl.Instance.CharacterDamageReceiver.Add(effectValue);
                 break;
-            case "BonusCrit":
+            case "Crit Boost":
                 bonusFromSkillsCritRate += effectValue;
                 break;
         }

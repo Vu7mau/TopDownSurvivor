@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CursorManager : VuMonoBehaviour
+public class CursorManagers : VuMonoBehaviour
 {
-    public static CursorManager Instance;
+    public static CursorManagers Instance;
     // [SerializeField] protected Texture2D cursorTexture;
     //[SerializeField] protected float blinkInterval = 0.1f;
     //[SerializeField] protected bool isReloading = false;
