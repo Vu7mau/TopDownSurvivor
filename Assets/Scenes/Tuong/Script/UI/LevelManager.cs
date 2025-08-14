@@ -1,59 +1,88 @@
-﻿using DG.Tweening;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
     [SerializeField] private GameObject loaderCanvas;
     [SerializeField] private Slider progressSlider;
+    [SerializeField] private TextMeshProUGUI progressText;
+
     private float target;
-    private bool isLoading = false; 
+    private bool isLoading = false;
+
     private void Awake()
     {
         if (Instance != null) Destroy(gameObject);
-        else
-        {
-            Instance = this;
-        }
+        else Instance = this;
     }
-    public async void LoadLevel(int levelName)
+
+    public async Task LoadLevelAsync(int levelIndex)
     {
-        if(isLoading) return;
+        if (isLoading) return;
         isLoading = true;
         target = 0f;
-        if(progressSlider != null) progressSlider.value = 0f;
 
-        var scene = SceneManager.LoadSceneAsync(levelName);
-        scene.allowSceneActivation = false;
+        if (progressSlider != null) progressSlider.value = 0f;
         loaderCanvas?.SetActive(true);
 
-        do
+        for (int i = 0; i < 3; i++)  
+            await Task.Yield();
+
+        var scene = SceneManager.LoadSceneAsync(levelIndex);
+        scene.allowSceneActivation = false;
+
+        while (scene.progress < 0.9f)
         {
-            await Task.Delay(100);
             target = scene.progress;
-        } while (scene.progress < 0.9f);
-        target = 1f; 
-        await Task.Delay(1000);
+            await Task.Yield();
+        }
+
+        float smoothTimer = 0f;
+        float smoothDuration = 0.5f;
+
+        while (smoothTimer < smoothDuration)
+        {
+            smoothTimer += Time.deltaTime;
+            target = Mathf.Lerp(0.9f, 1f, smoothTimer / smoothDuration);
+            await Task.Yield();
+        }
+
+        target = 1f;
+
+        float extraDelay = 0.3f;
+        float delayTimer = 0f;
+        while (delayTimer < extraDelay)
+        {
+            delayTimer += Time.deltaTime;
+            await Task.Yield();
+        }
         scene.allowSceneActivation = true;
-        while(SceneManager.GetActiveScene().buildIndex != levelName)
+
+        while (SceneManager.GetActiveScene().buildIndex != levelIndex)
         {
             await Task.Yield();
-            if (this == null) return;   
+            if (this == null) return;
         }
-        loaderCanvas?.SetActive(false);     
+
+        loaderCanvas?.SetActive(false);
         isLoading = false;
     }
-
     private void Update()
     {
-        if(progressSlider == null) return;
-        float currentValue = progressSlider != null ? progressSlider.value : 0f;
+        if (progressSlider == null) return;
+
+        float currentValue = progressSlider.value;
         float newValue = Mathf.MoveTowards(currentValue, target, Time.deltaTime * 3f);
-        if (progressSlider != null)
+        progressSlider.value = newValue;
+
+        if (progressText != null)
         {
-            progressSlider.value = newValue;
+            int percent = Mathf.RoundToInt(newValue * 100f);
+            progressText.text = percent + "%";
         }
     }
 }

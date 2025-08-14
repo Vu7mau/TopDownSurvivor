@@ -3,20 +3,36 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 public class LeaderBoardManager : MonoBehaviour
 {
     public static LeaderBoardManager Instance;
-    [SerializeField] protected TextMeshProUGUI playerRankCampignText;
-    [SerializeField] protected TextMeshProUGUI playerRankSurviveText;
-    [SerializeField] protected RectTransform hightLightCampign;
-    [SerializeField] protected RectTransform hightLightSurvive;
     [SerializeField] protected Canvas canvas;
     [SerializeField] protected Transform contentCampign;
     [SerializeField] protected Transform contentSurvive;
     public ScrollRect scrollRectCampign;
     public ScrollRect scrollRectSurvive;
-    protected const string leaderboardStat = "CampaignManual";
-    protected const string timeStat = "CampaignTime";
+    [SerializeField] protected TextMeshProUGUI top1CampaignNameText;
+    [SerializeField] protected TextMeshProUGUI top1CampaignScoreText;
+    [SerializeField] protected TextMeshProUGUI top2CampaignNameText;
+    [SerializeField] protected TextMeshProUGUI top2CampaignScoreText;
+    [SerializeField] protected TextMeshProUGUI top3CampaignNameText;
+    [SerializeField] protected TextMeshProUGUI top3CampaignScoreText;
+    [SerializeField] protected TextMeshProUGUI rankCampaign;
+    [SerializeField] protected TextMeshProUGUI nameCampaign;
+    [SerializeField] protected TextMeshProUGUI scoreCampaign;
+    [SerializeField] protected TextMeshProUGUI top1SurviveNameText;
+    [SerializeField] protected TextMeshProUGUI top1SurviveScoreText;
+    [SerializeField] protected TextMeshProUGUI top2SurviveNameText;
+    [SerializeField] protected TextMeshProUGUI top2SurviveScoreText;
+    [SerializeField] protected TextMeshProUGUI top3SurviveNameText;
+    [SerializeField] protected TextMeshProUGUI top3SurviveScoreText;
+    [SerializeField] protected TextMeshProUGUI rankSurvive;
+    [SerializeField] protected TextMeshProUGUI nameSurvive;
+    [SerializeField] protected TextMeshProUGUI scoreSurvive;
+
+    protected const string leaderboardCampign = "CampaignManual";
+    protected const string timeCampign = "CampaignTime";
     protected const string leaderboardSurvive = "SurviveManual";
     protected const string timeSurvive = "SurviveTime";
     protected int lastMyIndex = -1;
@@ -32,19 +48,40 @@ public class LeaderBoardManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex == 0)
+        {
+            RebindText();
+        }
+    }
     protected void RebindText()
     {
         var allTexts = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
-        playerRankCampignText = allTexts.FirstOrDefault(t => t.name == "PlayerRankCampaignText");
-        playerRankSurviveText = allTexts.FirstOrDefault(t => t.name == "PlayerRankSurviveText");
+        top1CampaignNameText = allTexts.FirstOrDefault(t => t.name == "Top1CampaignNameText");
+        top1CampaignScoreText = allTexts.FirstOrDefault(t => t.name == "Top1CampaignScoreText");
+        top2CampaignNameText = allTexts.FirstOrDefault(t => t.name == "Top2CampaignNameText");
+        top2CampaignScoreText = allTexts.FirstOrDefault(t => t.name == "Top2CampaignScoreText");
+        top3CampaignNameText = allTexts.FirstOrDefault(t => t.name == "Top3CampaignNameText");
+        top3CampaignScoreText = allTexts.FirstOrDefault(t => t.name == "Top3CampaignScoreText");
+        rankCampaign = allTexts.FirstOrDefault(t => t.name == "RankCampaign");
+        nameCampaign = allTexts.FirstOrDefault(t => t.name == "NameCampaign");
+        scoreCampaign = allTexts.FirstOrDefault(t => t.name == "ScoreCampaign");
+        top1SurviveNameText = allTexts.FirstOrDefault(t => t.name == "Top1SurviveNameText");
+        top1SurviveScoreText = allTexts.FirstOrDefault(t => t.name == "Top1SurviveScoreText");
+        top2SurviveNameText = allTexts.FirstOrDefault(t => t.name == "Top2SurviveNameText");
+        top2SurviveScoreText = allTexts.FirstOrDefault(t => t.name == "Top2SurviveScoreText");
+        top3SurviveNameText = allTexts.FirstOrDefault(t => t.name == "Top3SurviveNameText");
+        top3SurviveScoreText = allTexts.FirstOrDefault(t => t.name == "Top3SurviveScoreText");
+        rankSurvive = allTexts.FirstOrDefault(t => t.name == "RankSurvive");
+        nameSurvive = allTexts.FirstOrDefault(t => t.name == "NameSurvive");
+        scoreSurvive = allTexts.FirstOrDefault(t => t.name == "ScoreSurvive");
         var allRects = Resources.FindObjectsOfTypeAll<RectTransform>();
-        hightLightCampign = allRects.FirstOrDefault(t => t.name == "HightLightCampign");
-        hightLightSurvive = allRects.FirstOrDefault(t => t.name == "HightLightSurvive");
         var allCanvases = Resources.FindObjectsOfTypeAll<Canvas>();
         canvas = allCanvases.FirstOrDefault(t => t.name == "Canvas");
         var allTransforms = Resources.FindObjectsOfTypeAll<Transform>();
-        contentCampign = allTransforms.FirstOrDefault(t => t.name == "ContentCampign");
-        contentSurvive = allTransforms.FirstOrDefault(t => t.name == "ContentSurvive");
+        contentCampign = allTransforms.FirstOrDefault(t => t.name == "ContentCampign" && t.gameObject.scene.IsValid());
+        contentSurvive = allTransforms.FirstOrDefault(t => t.name == "ContentSurvive" && t.gameObject.scene.IsValid());
         var allScrollRects = Resources.FindObjectsOfTypeAll<ScrollRect>();
         scrollRectCampign = allScrollRects.FirstOrDefault(t => t.name == "ScrollRectCampign");
         scrollRectSurvive = allScrollRects.FirstOrDefault(t => t.name == "ScrollRectSurvive");

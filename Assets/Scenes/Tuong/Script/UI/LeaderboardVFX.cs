@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 
 public class LeaderboardVFX : MonoBehaviour
@@ -7,9 +7,9 @@ public class LeaderboardVFX : MonoBehaviour
     public Vector2[] offscreenOffsets = new Vector2[2] { new Vector2(-500, 0), new Vector2(500, 0) };
 
     public float moveDuration = 0.6f;
-    public float scaleDuration = 0.4f;
     private Vector2[] originalPositions;
     public static LeaderboardVFX Instance;
+
     void Awake()
     {
         if (Instance == null)
@@ -30,7 +30,6 @@ public class LeaderboardVFX : MonoBehaviour
     {
         for (int i = 0; i < panelTransforms.Length; i++)
         {
-            panelTransforms[i].localScale = Vector3.zero;
             panelTransforms[i].anchoredPosition = originalPositions[i] + offscreenOffsets[i];
         }
     }
@@ -43,7 +42,6 @@ public class LeaderboardVFX : MonoBehaviour
             int index = i;
             Sequence seq = DOTween.Sequence();
             seq.Append(panelTransforms[i].DOAnchorPos(originalPositions[i], moveDuration).SetEase(Ease.OutExpo));
-            seq.Join(panelTransforms[i].DOScale(Vector3.one, scaleDuration).SetEase(Ease.OutBack));
             seq.OnComplete(() =>
             {
                 completed++;

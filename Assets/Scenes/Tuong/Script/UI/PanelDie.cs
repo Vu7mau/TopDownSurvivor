@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class PanelDie : Singleton<VuMonoBehaviour>
@@ -20,16 +21,16 @@ public class PanelDie : Singleton<VuMonoBehaviour>
     //{
     //    Time.timeScale = 0f;
     //}
-    public void Restart()
+    public async void Restart()
     {
         Time.timeScale = 1f;
         pnlDie.SetActive(false);
-        LevelManager.Instance.LoadLevel(SceneManager.GetActiveScene().buildIndex);
+        await LevelManager.Instance.LoadLevelAsync(SceneManager.GetActiveScene().buildIndex);
     }
-    public void MainMenu()
+    public async void MainMenu()
     {
         Time.timeScale = 1f;
         pnlDie.SetActive(false);
-        LevelManager.Instance.LoadLevel(0);
+        await LevelManager.Instance.LoadLevelAsync(0);
     }
 }

@@ -16,6 +16,11 @@ public class AuthEmailSignUp : AuthManager
     }
     public void SignUpWithEmail()
     {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            NotificationUI.Instance.Show("Không có kết nối mạng. Vui lòng kiểm tra lại.");
+            return;
+        }
         var request = new RegisterPlayFabUserRequest
         {
             Username = signUpUserName.text,

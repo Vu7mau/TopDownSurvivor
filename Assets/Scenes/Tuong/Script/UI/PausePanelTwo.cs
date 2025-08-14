@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 public class PausePanelTwo : MonoBehaviour
@@ -66,21 +67,21 @@ public class PausePanelTwo : MonoBehaviour
             isTransitioning = false;
         });
     }
-    public void Restart(int sceneIndex)
+    public async void Restart(int sceneIndex)
     {
         Time.timeScale = 1f;
         pausePanel.SetActive(false);
         DOTween.KillAll();
-        LevelManager.Instance.LoadLevel(sceneIndex);
+        await LevelManager.Instance.LoadLevelAsync(sceneIndex);
     }
-    public void BackToMainMenu(int sceneIndex)
+    public async void BackToMainMenu(int sceneIndex)
     {
         Time.timeScale = 1f;
         CountDownTimer.Instance?.ResetTimer();
         CountDownTimer.Instance?.PauseTimer();
         pausePanel?.SetActive(false);
         DOTween.KillAll();
-        LevelManager.Instance.LoadLevel(sceneIndex);
+        await LevelManager.Instance.LoadLevelAsync(sceneIndex);
     }
     public void ExitGame()
     {

@@ -6,6 +6,11 @@ public class ResetPassword : AuthManager
 {
     public void SendRecoveryEmail()
     {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            NotificationUI.Instance.Show("Không có kết nối mạng. Vui lòng kiểm tra lại.");
+            return;
+        }
         if (string.IsNullOrEmpty(resetPasswordInput.text))
         {
             NotificationUI.Instance.Show("Vui lòng nhập địa chỉ email");
