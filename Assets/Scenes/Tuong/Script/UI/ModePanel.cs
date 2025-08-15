@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -80,9 +81,9 @@ public class ModePanel : MonoBehaviour
     public void OnPrevMode() { if (!isTransitioning) AnimateTransition(-1); }
     public void OnNextMode() { if (!isTransitioning) AnimateTransition(1); }
 
-    public void OnPlay()
+    public async void OnPlay()
     {
-        if(isTransitioning) return;
+        if (isTransitioning) return;
         if (currentMode == Mode.Survive && !IsSurviveUnlocked())
         {
             PlayLockFeedBack();
@@ -93,8 +94,10 @@ public class ModePanel : MonoBehaviour
         PlayerPrefs.Save();
         transitionSequence?.Kill();
         DOTween.Kill(gameObject, true);
-        LevelManager.Instance.LoadLevel(currentMode == Mode.Campaign ? campaignSceneIndex : surviveSceneIndex);
+
+        await LevelManager.Instance.LoadLevelAsync(currentMode == Mode.Campaign ? campaignSceneIndex : surviveSceneIndex);
     }
+
 
     private void AnimateTransition(int direction)
     {

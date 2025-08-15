@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using PlayFab;
 using DG.Tweening;
+using System.Threading.Tasks;
 public class PanelWin : MonoBehaviour
 {
     public GameObject panelWin;
@@ -44,19 +45,19 @@ public class PanelWin : MonoBehaviour
         PlayTime();
         Time.timeScale = 0f;
     }
-    public void Restart()
+    public async void Restart()
     {
         panelWin.SetActive(false);
         PlayerScoreManager.Instance.ResetScore();
         CountDownTimer.Instance.ResetTimer();
-        LevelManager.Instance.LoadLevel(SceneManager.GetActiveScene().buildIndex);
+        await LevelManager.Instance.LoadLevelAsync(SceneManager.GetActiveScene().buildIndex);
     }
-    public void BackToMainMenu()
+    public async void BackToMainMenu()
     {
         panelWin.SetActive(false);
         PlayerScoreManager.Instance.ResetScore();
         CountDownTimer.Instance.ResetTimer();
-        LevelManager.Instance.LoadLevel(0);
+        await LevelManager.Instance.LoadLevelAsync(0);
     }
     public void LastScore()
     {

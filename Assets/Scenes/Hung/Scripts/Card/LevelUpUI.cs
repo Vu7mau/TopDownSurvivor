@@ -11,6 +11,7 @@ public class LevelUpUI : MonoBehaviour
     [Header("Animation When Display")]
     //[SerializeField] protected float duration = 0.5f;
     [SerializeField] protected Ease animEaseOn = Ease.OutBack;
+    [SerializeField] protected Ease animEaseOff = Ease.OutBack;
     [SerializeField] protected bool isEaseOn = true;
     [Space]
     [Header("SoundFX")]
@@ -27,6 +28,17 @@ public class LevelUpUI : MonoBehaviour
 
     Vector3 defaultBtnScale = Vector3.one;
 
+    [Space]
+    [Space]
+    [Header("Color Cards Skill Header")]
+    [SerializeField] protected List<Image> headerImageSkill;
+    [SerializeField] protected List<Image> bodyImageSkill;
+    [SerializeField] protected RectTransform notice;
+
+    [Space]
+    [Header("Cursors!")]
+    [SerializeField] protected CursorType cursorTypeWhenSelectSkills;
+
     private void Start()
     {
         levelUpPanel.SetActive(false);
@@ -36,14 +48,24 @@ public class LevelUpUI : MonoBehaviour
     public void ShowSkillChoices()
     {
         levelUpPanel.SetActive(true);
+        CursorManager.Instance.SetCurrentCursor(CursorConfig.GetStartCursor(cursorTypeWhenSelectSkills));
         List<SkillCardData> skillChoices = SkillCardManager.instance.GetRandomSkillChoices();
+
+
+
+        if(this.skillButtons.Length > 0)
+        {
+            this.SetAllSkillButtonState(this.skillButtons,true);
+        }
+
 
         for (int i = 0; i < 3; i++)
         {
             currentSkills[i] = skillChoices[i];
             skillIcons[i].sprite = skillChoices[i].skillIcon;
             skillNames[i].text = skillChoices[i].skillName;
-
+            headerImageSkill[i].color = skillChoices[i].headerColor;
+            bodyImageSkill[i].color=skillChoices[i].bodyColor;
             if (skillChoices[i] == SkillCardManager.instance.backupSkill)
             {
                 skillDescriptions[i].text = "Một kỹ năng đặc biệt giúp bạn mạnh hơn!";
@@ -75,7 +97,15 @@ public class LevelUpUI : MonoBehaviour
             CharacterStats.Instance.ApplySkill(skill);
         }
 
+
         CharacterStats.Instance.UpdateCharacterStats();
+        Notification();
+
+        if (this.skillButtons.Length > 0)
+        {
+            this.SetAllSkillButtonState(this.skillButtons, false);
+        }
+
         if (!this.isEaseOn)
         {
             levelUpPanel.SetActive(false);
@@ -94,15 +124,37 @@ public class LevelUpUI : MonoBehaviour
         Vector3 newVector = btnDefaultScale + Vector3.one;
         rectBtn.DOScale(newVector, 0.3f).SetEase(this.animEaseOn).SetUpdate(true).OnComplete(() =>
         {
-            rectBtn.DOScale(Vector3.zero, 0.2f).SetEase(this.animEaseOn).SetUpdate(true).OnComplete(() =>
+            rectBtn.DOScale(Vector3.zero, 0.3f).SetEase(this.animEaseOn).SetUpdate(true).OnComplete(() =>
             {
-                rectObj.DOScale(Vector3.zero, 0.1f).SetEase(this.animEaseOn).SetUpdate(true).OnComplete(() =>
+                rectObj.DOScale(Vector3.zero, 0.1f).SetEase(this.animEaseOff).SetUpdate(true).OnComplete(() =>
                 {
                     levelUpPanel.SetActive(false);
                     Time.timeScale = 1f;
+                    CursorManager.Instance.SetCurrentCursor(CursorConfig.StartCursor);
                 });
             });
         });
         //Time.timeScale = 1; 
+    }
+
+    protected virtual void SetAllSkillButtonState(Button[] btns, bool isClick)
+    {
+        foreach(var button in btns)
+        {
+            button.GetComponent<Button>().enabled = isClick;
+            button.GetComponent<HoverScale3D>().CanHover = isClick;
+        }
+    }
+
+    protected virtual void Notification()
+    {
+        // Đảm bảo bắt đầu từ vị trí ẩn
+        this.notice.anchoredPosition = new Vector2(this.notice.anchoredPosition.x, 700);
+
+        // Chuỗi animation
+        Sequence seq = DOTween.Sequence();
+        seq.Append(this.notice.DOAnchorPosY(-327, 0.5f).SetEase(Ease.OutQuad).SetUpdate(true)) // Trượt xuống
+        .AppendInterval(1f).SetUpdate(true) // Giữ yên
+           .Append(this.notice.DOAnchorPosY(700, 0.5f).SetEase(Ease.InQuad).SetUpdate(true)); // Trượt lên lại
     }
 }

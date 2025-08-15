@@ -246,12 +246,13 @@ public class EnemyAIController : EnemyBase
             return;
         }
         this.enemyReferences.Animator.SetFloat("IdleState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.IdleAnimations));
-        
+        this.enemyReferences.NavMeshAgent.enabled = false;
         this.enemyReferences.Animator.SetBool("isMoving", false);
         this.isMoving = false;
 
         this.enemyReferences.Animator.SetBool("attack", false);
         this.isAttacking = false;
+        if (this.distanceToTarget <= this.enemyReferences.EnemySO.ChaseRange) this.Chase();
     }
 
 
@@ -275,6 +276,8 @@ public class EnemyAIController : EnemyBase
             {
                 this.UpdateEnemyPath();
             }
+            this.enemyReferences.NavMeshAgent.enabled = true;
+            if (this.distanceToTarget > this.enemyReferences.EnemySO.ChaseRange) this.Idle();
         }
     }
 

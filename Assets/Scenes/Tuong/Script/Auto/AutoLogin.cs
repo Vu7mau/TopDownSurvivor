@@ -70,6 +70,7 @@ public class AutoLogin : MonoBehaviour
         LeaderBoardCampaign.Instance.GetLeaderBoardCampaign();
         LeaderBoardCampaign.Instance.GetMyRank();
         LeaderBoardSurvive.Instance.GetLeaderBoardSurvive();
+        LeaderBoardSurvive.Instance.GetMyRank();
     }
 
     private void OnLoginFailured(PlayFabError error)

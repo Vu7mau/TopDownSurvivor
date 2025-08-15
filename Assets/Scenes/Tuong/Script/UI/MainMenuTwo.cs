@@ -227,7 +227,7 @@ public class MainMenuTwo : MonoBehaviour
         iconGame.SetActive(false);
         iconLeaderboard.SetActive(false);
         LeaderboardVFX.Instance.PrepareHide();
-
+        CrownEffect.Instance?.Show();
         LeaderboardVFX.Instance.ShowPanels(() =>
         {
             StartCoroutine(LoadLeaderboardAfterUIReady());
@@ -235,14 +235,13 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void CloseLeaderBoardPanel()
     {
-        //LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
-        //LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
+        CrownEffect.Instance?.Close();
         LeaderboardVFX.Instance.HidePanels(() =>
         {
-            iconLeaderboard.SetActive(true);
-            iconGame.SetActive(true);
-            playMenu.SetActive(true);
-            leaderboardPanel.SetActive(false);
+            iconLeaderboard?.SetActive(true);
+            iconGame?.SetActive(true);
+            playMenu?.SetActive(true);
+            leaderboardPanel?.SetActive(false);
             LeaderBoardManager.Instance.scrollRectCampign.verticalNormalizedPosition = 1f;
             LeaderBoardManager.Instance.scrollRectSurvive.verticalNormalizedPosition = 1f;
         });

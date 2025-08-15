@@ -25,6 +25,9 @@ public class EnemySO : ScriptableObject
     [Header("Health")]
     public float Health;
 
+    [Header("Defense")]
+    public float Defense;
+
     [Header("Rewards Player Can Receive")]
     public int Gems;
     public int Exp;

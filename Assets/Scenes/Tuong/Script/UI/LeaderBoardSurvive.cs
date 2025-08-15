@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
 using TMPro;
 using DG.Tweening;
@@ -13,9 +12,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
     [SerializeField] private GameObject entryPrefabSurvive;
     public new static LeaderBoardSurvive Instance;
     private Dictionary<string, DateTime> createdMapCache = new();
-    [SerializeField] private Sprite goldIcon;
-    [SerializeField] private Sprite silverIcon;
-    [SerializeField] private Sprite bronzeIcon;
+
     private void Awake()
     {
         if (Instance == null)
@@ -39,10 +36,10 @@ public class LeaderBoardSurvive : LeaderBoardManager
         }, result =>
         {
             if (result.Leaderboard?.Count > 0) StartCoroutine(LoadRank(result.Leaderboard[0]));
-            else playerRankSurviveText.text = "Không tìm thấy thứ hạng.";
+            else rankSurvive.text = "Không tìm thấy thứ hạng.";
         }, error =>
         {
-            playerRankSurviveText.text = "Lỗi khi lấy hạng.";
+            rankSurvive.text = "Lỗi khi lấy hạng.";
             Debug.LogError("Lỗi lấy bảng xếp hạng xung quanh người chơi: " + error.GenerateErrorReport());
         });
     }
@@ -68,7 +65,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         {
             StatisticName = timeSurvive,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 100
         }, res => { foreach (var e in res.Leaderboard) timeMap[e.PlayFabId] = e.StatValue; doneTimes = true; },
         err => { Debug.LogWarning(err.GenerateErrorReport()); doneTimes = true; });
         yield return new WaitUntil(() => doneTimes);
@@ -105,7 +102,11 @@ public class LeaderBoardSurvive : LeaderBoardManager
         topEntries.Sort((a, b) => CompareRank(a, b, timeMap, createdMap));
         int myIndex = topEntries.FindIndex(e => e.PlayFabId == myEntry.PlayFabId);
         string name = string.IsNullOrEmpty(myEntry.DisplayName) ? "Bạn" : myEntry.DisplayName;
-        playerRankSurviveText.text = $"{name} đang đứng hạng: {myIndex + 1}/{topEntries.Count}";
+        nameSurvive.text = $"{name}";
+        rankSurvive.text = $"{myIndex + 1}";
+        var foundEntry = topEntries.Find(e => e.PlayFabId == myEntry.PlayFabId);
+        int score = foundEntry != null ? foundEntry.StatValue : 0;
+        scoreSurvive.text = $"{myEntry.StatValue}";
     }
     public void GetLeaderBoardSurvive()
     {
@@ -119,7 +120,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         {
             StatisticName = leaderboardSurvive,
             StartPosition = 0,
-            MaxResultsCount = 10
+            MaxResultsCount = 20
         },
         result => StartCoroutine(GetLeaderboardTime(result.Leaderboard)),
         error => Debug.LogError("Lỗi khi lấy bảng xếp hạng: " + error.GenerateErrorReport()));
@@ -186,119 +187,45 @@ public class LeaderBoardSurvive : LeaderBoardManager
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
         foreach (Transform child in contentSurvive)
-            Destroy(child.gameObject);
-
+        {
+            if (child != null)
+            {
+                child.DOKill();
+                Destroy(child.gameObject);
+            }
+        }
         string currentId = PlayFabSettings.staticPlayer.PlayFabId;
-        int myIndex = -1;
-        for (int i = 0; i < entries.Count; i++)
+        if (entries.Count > 0)
+        {
+            top1SurviveNameText.text = entries[0].DisplayName ?? "No name";
+            top1SurviveScoreText.text = entries[0].StatValue.ToString();
+        }
+        if (entries.Count > 1)
+        {
+            top2SurviveNameText.text = entries[1].DisplayName ?? "No name";
+            top2SurviveScoreText.text = entries[1].StatValue.ToString();
+        }
+        if (entries.Count > 2)
+        {
+            top3SurviveNameText.text = entries[2].DisplayName ?? "No name";
+            top3SurviveScoreText.text = entries[2].StatValue.ToString();
+        }
+        for (int i = 3; i < entries.Count; i++)
         {
             var e = entries[i];
+
             GameObject go = Instantiate(entryPrefabSurvive, contentSurvive);
             var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
-
-            string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
-
-            var rankImage = go.transform.Find("RankIcon")?.GetComponent<Image>();
-            var rankText = texts[0];
-
-            switch (i)
-            {
-                case 0:
-                    rankImage.sprite = goldIcon;
-                    rankImage.gameObject.SetActive(true);
-                    rankText.gameObject.SetActive(false);
-                    PlayIconEffect(rankImage.rectTransform, rankImage);
-                    break;
-                case 1:
-                    rankImage.sprite = silverIcon;
-                    rankImage.gameObject.SetActive(true);
-                    rankText.gameObject.SetActive(false);
-                    PlayIconEffect(rankImage.rectTransform, rankImage);
-                    break;
-                case 2:
-                    rankImage.sprite = bronzeIcon;
-                    rankImage.gameObject.SetActive(true);
-                    rankText.gameObject.SetActive(false);
-                    PlayIconEffect(rankImage.rectTransform, rankImage);
-                    break;
-                default:
-                    rankImage.gameObject.SetActive(false);
-                    rankText.text = (i + 1).ToString();
-                    rankText.gameObject.SetActive(true);
-                    break;
-            }
-
+            texts[0].text = (i + 1).ToString();
             texts[1].text = e.DisplayName ?? "No name";
             texts[2].text = e.StatValue.ToString();
-            texts[3].text = time;
-            Image bg = go.GetComponent<Image>();
-            switch (i)
-            {
-                case 0: bg.color = new Color32(254, 183, 0, 255); break;
-                case 1: bg.color = new Color32(192, 192, 192, 255); break;
-                case 2: bg.color = new Color32(205, 127, 50, 255); break;
-                default: bg.color = new Color32(113, 110, 110, 255); break;
-            }
-            if (e.PlayFabId == currentId && i < 10 && i > 2)
-            {
-                bg.color = new Color32(0, 150, 255, 255);
-            }
         }
     }
-    void PlayIconEffect(Transform target, Image img)
-    {
-        if (target == null) return;
-
-        target.DOKill();
-        img.DOKill();
-
-        void DoRandomEffect()
-        {
-            target.localScale = Vector3.one;
-            target.localRotation = Quaternion.identity;
-            img.color = Color.white;
-
-            int effectType = UnityEngine.Random.Range(0, 3);
-            Tween tween = null;
-
-            switch (effectType)
-            {
-                case 0:
-                    tween = target.DOScale(1.2f, 0.5f)
-                                  .SetEase(Ease.OutQuad)
-                                  .SetLoops(2, LoopType.Yoyo);
-                    break;
-
-                case 1:
-                    tween = target.DORotate(
-                                new Vector3(0, 0, UnityEngine.Random.Range(-15f, 15f)),
-                                0.5f)
-                                  .SetEase(Ease.InOutSine)
-                                  .SetLoops(2, LoopType.Yoyo);
-                    break;
-
-                case 2:
-                    tween = target.DORotate(new Vector3(0, 180, 0), 0.5f)
-                                  .SetEase(Ease.InOutSine)
-                                  .SetLoops(2, LoopType.Yoyo);
-                    break;
-            }
-            img.DOColor(new Color(1.2f, 1.2f, 1.2f), 0.25f)
-               .SetLoops(2, LoopType.Yoyo);
-
-            if (tween != null)
-            {
-                tween.OnComplete(DoRandomEffect);
-            }
-        }
-        DoRandomEffect();
-    }
-    private string FormatTime(int totalSeconds)
-    {
-        int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
-        //return $"{h:D2}:{m:D2}:{s:D2}";
-        return $"{m:D2}:{s:D2}";
-    }
+    //private string FormatTime(int totalSeconds)
+    //{
+    //    int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
+    //    return $"{m:D2}:{s:D2}";
+    //}
     public void SendScoreSurvive(int value)
     {
         int sessionTime = CountDownTimer.Instance?.GetSessionDurationInSeconds() ?? 0;
