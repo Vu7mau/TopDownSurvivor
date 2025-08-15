@@ -1,32 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿// File: Map1_Controller.cs
 using UnityEngine;
 
 public class Map1_Controller : Map_Controller
 {
+    private BoxCollider boxCol;
 
-
-    private BoxCollider collider;
     protected override void Start()
     {
-        collider=this.transform.GetComponentInChildren<BoxCollider>();
+        base.Start();
+        boxCol = GetComponentInChildren<BoxCollider>();
     }
-    void OnTriggerEnter(Collider other)
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             gameController.SwitchMap(mapIndex);
-            this.processing.gameObject.SetActive(false);
             CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
-            //_map0.gameObject.SetActive(false);
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            collider.isTrigger = false;
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && boxCol)
+        {
+            // nếu muốn chặn quay lại:
+            // boxCol.isTrigger = false;
+        }
+    }
 }

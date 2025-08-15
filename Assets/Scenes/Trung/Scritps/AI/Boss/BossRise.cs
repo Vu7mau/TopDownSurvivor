@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class BossRise : VuMonoBehaviour
 {
@@ -8,6 +9,8 @@ public class BossRise : VuMonoBehaviour
     [SerializeField] protected EnemyAI enemyAI;
     [SerializeField] protected EnemyAIController enemyCtrl;
     [SerializeField] protected EnemyHealth enemyHealth;
+
+    [SerializeField] protected PlayableDirector bossRoom;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -27,7 +30,9 @@ public class BossRise : VuMonoBehaviour
         if(other.transform.GetComponentInChildren<CharacterAnimHandle>() != null)
         {
             this.enemyAI.Animator.SetBool("isStartFightBoss",true);
+            bossRoom.Play();
             this.transform.gameObject.SetActive(false);
+
         }
     }
 }

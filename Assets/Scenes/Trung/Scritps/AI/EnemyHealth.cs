@@ -24,7 +24,7 @@ public class EnemyHealth : DamageReceiver
     protected float _amountIncrease = 0;
 
 
-
+    private KillProgressSlider killProgressSlider;
     public float Health
     {
         get => _hp;
@@ -45,6 +45,7 @@ public class EnemyHealth : DamageReceiver
     {
         base.OnEnable();
         this.RebornEnemy();
+        killProgressSlider = GameObject.FindAnyObjectByType<KillProgressSlider>();
     }
     protected override void OnDisable()
     {
@@ -63,6 +64,10 @@ public class EnemyHealth : DamageReceiver
 
         ///Load Enemies
         this.RebornEnemy();
+
+ 
+
+
 
     }
 
@@ -155,12 +160,19 @@ public class EnemyHealth : DamageReceiver
         this._canGetDamage = false;
         if (!this._isDead)
         {
+     
+
             this._isDead = true;
         }
     }
     public override void Deduct(int damage)
     {
-        if(this._isDead) { OnDead(); return; }
+        if(this._isDead) 
+        {
+            OnDead();
+            killProgressSlider.AddKill();
+            return;
+        }
         if (!this._canGetDamage) return;
 
 

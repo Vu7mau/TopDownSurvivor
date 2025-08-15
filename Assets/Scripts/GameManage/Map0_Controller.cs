@@ -1,95 +1,74 @@
-﻿using System;
+﻿// File: Map0_Controller.cs
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Rendering;
 
 public class Map0_Controller : Map_Controller
 {
     [SerializeField] private Light light;
-    [SerializeField] PlayableDirector tutorial_1;
-    [SerializeField] float skipTime;
+    [SerializeField] private PlayableDirector tutorial_1;
+    [SerializeField] private float skipTime = 2f;
 
     public static Action CalledTutorial;
-    
-    void OnTriggerEnter(Collider other)
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             gameController.SwitchMap(mapIndex);
-            this.processing.gameObject.SetActive(false);
             CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
-            FadeOutLight(2);
+            FadeOutLight(2f);
         }
     }
+
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Q))
-        {
-            SkipForward(skipTime);
-        }
+        if (Input.GetKeyUp(KeyCode.Q)) SkipForward(skipTime);
     }
-    public void SkipForward(float skipTime)
+
+    public void SkipForward(float delta)
     {
-        if (tutorial_1 == null || tutorial_1.state != PlayState.Playing)
-            return;
-
-        float currentTime = (float)tutorial_1.time;
-        float newTime = currentTime + skipTime;
-
-        // Clamp để không vượt quá duration
-        newTime = Mathf.Clamp(newTime, 0f, (float)tutorial_1.duration - 0.01f);
-
+        if (!tutorial_1 || tutorial_1.state != PlayState.Playing) return;
+        float newTime = Mathf.Clamp((float)tutorial_1.time + delta, 0f, (float)tutorial_1.duration - 0.01f);
         tutorial_1.time = newTime;
         tutorial_1.Evaluate();
     }
+
     private void OnCutsceneIn(PlayableDirector pd)
     {
         gameController.MoveCharacterPos(currentMapSpawnPoint);
-    }    
+    }
+
     protected override void OnEnable()
     {
-        if (map.gameObject.activeSelf)
-        {
-            //CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
-        }
+        base.OnEnable();
         CalledTutorial += TutorialIntro;
-
-
+        // nếu cần: tutorial_1.played += OnCutsceneIn;
     }
-    
+
     protected override void OnDisable()
     {
+        base.OnDisable();
         CalledTutorial -= TutorialIntro;
+        // nếu cần: tutorial_1.played -= OnCutsceneIn;
     }
 
-    private void TutorialIntro()
-    {
-        tutorial_1.Play();
-    }    
-    public void FadeOutLight(float duration)
-    {
-        StartCoroutine(FadeOutCoroutine(duration));
-    }
+    private void TutorialIntro() => tutorial_1?.Play();
+
+    public void FadeOutLight(float duration) => StartCoroutine(FadeOutCoroutine(duration));
 
     private IEnumerator FadeOutCoroutine(float duration)
     {
+        if (!light) yield break;
         float startIntensity = light.intensity;
-        float time = 0f;
-
-        while (time < duration)
+        float t = 0f;
+        while (t < duration)
         {
-            time += Time.deltaTime;
-            float t = time / duration;
-            light.intensity = Mathf.Lerp(startIntensity, 0f, t);
+            t += Time.deltaTime;
+            light.intensity = Mathf.Lerp(startIntensity, 0f, t / duration);
             yield return null;
         }
-
         light.intensity = 0f;
-    }
-    void OnTriggerExit(Collider other)
-    {
-
     }
 }

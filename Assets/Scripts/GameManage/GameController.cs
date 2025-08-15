@@ -1,116 +1,121 @@
-﻿using System;
+﻿// File: GameController.cs
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
 {
-    [SerializeField] private List<Map_Controller> maps; // Danh sách map
-                                                   
-    [SerializeField] private Map_Controller currentMap; // Map hiện tại
-    [SerializeField] private Map_Controller lastMap; // Map hiện tại
+    [SerializeField] private List<Map_Controller> maps;
+    [SerializeField] private Map_Controller currentMap;
+    [SerializeField] private Map_Controller lastMap;
 
-
-    public Action OnMapSwitched; // Sự kiện thông báo chuyển map
-    public Action OnWaveStarted; // Sự kiện thông báo bắt đầu wave
+    public Action OnMapSwitched;
+    public Action OnWaveStarted;
 
     [SerializeField] private Transform character;
+    public Transform Character => character;
+    public Map_Controller CurrentMap => currentMap;
 
+    [Header("Screen Fade")]
+    [SerializeField] private Image fadeImage;
+    [SerializeField, Min(0f)] private float fadeDuration = 1.0f;
+    public float FadeDuration => fadeDuration;
 
-    [SerializeField] private Image fadeImage; // kéo Image vào đây từ Inspector
-    [SerializeField] private float fadeDuration = 1.0f;
-
-    private bool isFadeInComplete = false;
+    [Header("Options")]
+    [Tooltip("Tự động thêm checkpoint tại spawn của map mới sau khi SwitchMap xong")]
+    [SerializeField] private bool autosaveCheckpointAtSpawn = true;
 
     protected override void Start()
     {
         base.Start();
-        StartCoroutine(FadeIn());
-
     }
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadCharacter();
+        LoadCharacter();
         LoadAllMap();
     }
-   private void LoadAllMap()
+
+    private void LoadAllMap()
     {
-        if (maps.Count != 0) return;
-
-        maps=this.transform.GetComponentsInChildren<Map_Controller>().ToList();
-
-     
+        if (maps != null && maps.Count > 0) return;
+        maps = this.transform.GetComponentsInChildren<Map_Controller>(true).ToList();
+        // đảm bảo mapIndex hợp lệ theo thứ tự
+        for (int i = 0; i < maps.Count; i++) maps[i].EditorSetMapIndex(i);
     }
+
     private void LoadCharacter()
     {
-        if (character == null)
-        {
+        if (!character)
             character = GameObject.FindObjectOfType<CharacterCtrl>()?.transform;
-        }
     }
+
     protected override void OnEnable()
     {
-        if(currentMap == null)
-        {
-            currentMap = maps.FirstOrDefault();
-            MoveCharacterPos(currentMap.currentMapSpawnPoint);
+        base.OnEnable();
+        if (maps == null || maps.Count == 0) LoadAllMap();
+        if (!currentMap) currentMap = maps.FirstOrDefault();
 
-        }
-    }
-    public void MoveCharacterPos(Transform pos)
-    {
-        if (character != null && pos != null)
+        // Nếu có vị trí đơn lẻ cũ thì khôi phục, không thì về spawn map đầu
+        if (character)
         {
-            character.SetPositionAndRotation(pos.position, pos.rotation);
-        }
-        else
-        {
-            Debug.LogError("Character hoặc pos không được gán!");
+            if (!(PositionSave.TryLoad(out var pos, out var rot)))
+            {
+                if (currentMap) MoveCharacterPos(currentMap.currentMapSpawnPoint);
+            }
+            else TeleportSafe(pos, rot);
         }
     }
 
-    public void ScreenFadeIn()
+    // ===== Teleport an toàn (CC/RB/NavMeshAgent) =====
+    public void TeleportSafe(Vector3 pos, Quaternion rot)
     {
-        StartCoroutine(FadeIn());
+        if (!character) { Debug.LogError("[GameController] Character is null!"); return; }
 
-    }
-    public void ScreenFadeOut()
-    {
-        StartCoroutine(FadeOut());
-    }
-    public void SwitchMap(int mapIndex)
-    {
+        var cc = character.GetComponent<CharacterController>();
+        var rb = character.GetComponent<Rigidbody>();
+        var agent = character.GetComponent<NavMeshAgent>();
 
-        if (mapIndex < 0 || mapIndex >= maps.Count)
+        if (agent && agent.enabled)
         {
-            Debug.LogError($"Map index {mapIndex} không hợp lệ!");
+            agent.Warp(pos);
+            character.rotation = rot; // Warp không set rotation
+            agent.ResetPath();
             return;
         }
 
-        lastMap=currentMap;
-        // Bật map mới
-        currentMap = maps[mapIndex];
-        currentMap.map.gameObject.SetActive(true);
-        currentMap.EnableProcessing();
-        StartCoroutine(FadeOut());
+        if (cc) cc.enabled = false;
+        if (rb) { rb.isKinematic = true; rb.velocity = Vector3.zero; rb.angularVelocity = Vector3.zero; }
 
+        character.SetPositionAndRotation(pos, rot);
 
-        // Thông báo chuyển map
-        OnMapSwitched?.Invoke();
-        CharacterUIManager.OnScreenFadeIn?.Invoke();
-         StartCoroutine(FadeIn());
-
-
+        if (cc) cc.enabled = true;
+        if (rb) rb.isKinematic = false;
     }
+
+    public void MoveCharacterPos(Transform pos)
+    {
+        if (!character || !pos)
+        {
+            Debug.LogError("Character hoặc pos không được gán!");
+            return;
+        }
+        TeleportSafe(pos.position, pos.rotation);
+    }
+
+    // ===== Fade =====
+    public void ScreenFadeIn() { if (fadeImage && fadeDuration > 0f) StartCoroutine(FadeIn()); }
+    public void ScreenFadeOut() { if (fadeImage && fadeDuration > 0f) StartCoroutine(FadeOut()); }
+
     private IEnumerator FadeIn()
     {
-        yield return new WaitUntil(() => isFadeInComplete); // Chờ FadeIn hoàn thành
-        float t = 0f;
-        Color color = fadeImage.color;
+        float t = 0f; var color = fadeImage.color;
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
@@ -118,15 +123,12 @@ public class GameController : Singleton<GameController>
             fadeImage.color = color;
             yield return null;
         }
-        color.a = 0f;
-        fadeImage.color = color;
+        color.a = 0f; fadeImage.color = color;
     }
 
     private IEnumerator FadeOut()
     {
-        isFadeInComplete = false;
-        float t = 0f;
-        Color color = fadeImage.color;
+        float t = 0f; var color = fadeImage.color;
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
@@ -134,19 +136,75 @@ public class GameController : Singleton<GameController>
             fadeImage.color = color;
             yield return null;
         }
+        color.a = 1f; fadeImage.color = color;
+    }
 
-        color.a = 1f;
-        fadeImage.color = color;
-        isFadeInComplete = true;
-        yield return isFadeInComplete;
-        MoveCharacterPos(currentMap.currentMapSpawnPoint);
-        // Tắt map cũ
-        if (lastMap != null)
+    private IEnumerator FadeOutThen(Action afterBlack)
+    {
+        if (fadeImage && fadeDuration > 0f) yield return StartCoroutine(FadeOut());
+        afterBlack?.Invoke();
+        yield return null; // ổn định 1 frame
+        if (fadeImage && fadeDuration > 0f) yield return StartCoroutine(FadeIn());
+    }
+
+    // ===== Map Switch (trong 1 scene) =====
+    public void SwitchMap(int mapIndex)
+    {
+        if (maps == null || maps.Count == 0)
         {
-            lastMap.map.gameObject.SetActive(false);
-            lastMap.DisableProcessing();
+            Debug.LogError("[GameController] No maps configured.");
+            return;
+        }
+        if (mapIndex < 0 || mapIndex >= maps.Count)
+        {
+            Debug.LogError($"Map index {mapIndex} không hợp lệ!");
+            return;
         }
 
+        lastMap = currentMap;
+        var next = maps[mapIndex];
 
+        // lưu vị trí đơn lẻ trước khi chuyển (tùy chọn của bạn)
+        if (character) PositionSave.Save(character);
+
+        StartCoroutine(FadeOutThen(() =>
+        {
+            // bật map mới
+            currentMap = next;
+            if (currentMap.map) currentMap.map.gameObject.SetActive(true);
+            currentMap.EnableProcessing();
+
+            // teleport về spawn map mới
+            MoveCharacterPos(currentMap.currentMapSpawnPoint);
+
+            // tắt map cũ
+            if (lastMap != null)
+            {
+                if (lastMap.map) lastMap.map.gameObject.SetActive(false);
+                lastMap.DisableProcessing();
+            }
+
+            // thông báo & autosave CP tại spawn
+            OnMapSwitched?.Invoke();
+            CharacterUIManager.OnScreenFadeIn?.Invoke();
+
+            if (autosaveCheckpointAtSpawn && character != null)
+            {
+                var idx = CurrentMap ? CurrentMap.MapIndex : mapIndex;
+                CheckpointStore.Add(character, idx, $"Spawn Map {idx}");
+            }
+        }));
     }
+
+    // ===== tiện ích Editor =====
+#if UNITY_EDITOR
+    [ContextMenu("Rebuild Maps From Children")]
+    private void EditorRebuildMaps()
+    {
+        maps = this.transform.GetComponentsInChildren<Map_Controller>(true).ToList();
+        for (int i = 0; i < maps.Count; i++) maps[i].EditorSetMapIndex(i);
+        UnityEditor.EditorUtility.SetDirty(this);
+        Debug.Log($"[GameController] Rebuilt maps list: {maps.Count} entries.");
+    }
+#endif
 }

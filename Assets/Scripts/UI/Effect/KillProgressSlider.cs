@@ -10,11 +10,11 @@ public class KillProgressSlider : Singleton<KillProgressSlider>
 {
     [Header("Refs")]
     [SerializeField] private Slider slider;
-    [SerializeField] private RectTransform popTarget;     // Kéo Fill (RectTransform) của Slider vào đây để pop đẹp
-    [SerializeField] private TMP_Text valueText;          // Hiển thị "current/max"
+    [SerializeField] private RectTransform popTarget;     // Fill (RectTransform)
+    [SerializeField] private TMP_Text valueText;          // "current/max"
 
     [Header("Value Tween")]
-    [SerializeField] private float durationPerUnit = 0.12f; // giây cho mỗi 1 đơn vị (1 kill)
+    [SerializeField] private float durationPerUnit = 0.12f;
     [SerializeField] private float minDuration = 0.05f;
     [SerializeField] private float maxDuration = 0.25f;
     [SerializeField] private Ease valueEase = Ease.OutQuad;
@@ -33,50 +33,50 @@ public class KillProgressSlider : Singleton<KillProgressSlider>
     [SerializeField, Range(0f, 1f)] private float tickVolume = 1f;
     [SerializeField] private bool randomizePitch = true;
     [SerializeField] private Vector2 pitchRange = new Vector2(0.96f, 1.06f);
-    [SerializeField] private float minTickInterval = 0.05f;  // chống spam
+    [SerializeField] private float minTickInterval = 0.05f;
+    private static float s_lastGlobalTickTime = -999f; // rate limit toàn cục
+    [SerializeField] private float minGlobalTickInterval = 0.02f;
 
     [Header("Events")]
-    public UnityEvent onFilled; // gọi khi chạm max lần đầu
+    public UnityEvent onFilled;
 
     // State
     private float targetValue;
     private Tween valueTween, popTween;
     private float lastTickTime = -999f;
     private bool firedFilledEvent = false;
+    private int lastDisplayedValue = int.MinValue;
 
-    void Awake()
+    protected override void Awake()
     {
         if (!slider) slider = GetComponentInChildren<Slider>();
-        if (!popTarget) popTarget = slider != null ? slider.fillRect as RectTransform : (transform as RectTransform);
+        if (!popTarget && slider) popTarget = slider.fillRect as RectTransform;
         if (!sfxSource) sfxSource = GetComponent<AudioSource>();
 
-        // mặc định dùng số nguyên cho kill
         if (slider) slider.wholeNumbers = true;
 
-        targetValue = slider ? Mathf.Clamp(slider.value, slider.minValue, slider.maxValue) : 0f;
+        targetValue = slider ? slider.value : 0f;
         if (popTarget) popTarget.localScale = Vector3.one;
         UpdateLabel();
+        SetMax(999, resetCurrent: true);
     }
 
-    /* ---------------------- API cấu hình ---------------------- */
+    // ===== API =====
 
-    /// <summary>Đặt max (goal). min = 0. Có thể reset current.</summary>
     public void SetMax(int max, bool resetCurrent = true, int startValue = 0)
     {
         if (!slider) return;
         slider.minValue = 0;
         slider.maxValue = Mathf.Max(1, max);
         firedFilledEvent = false;
-
         if (resetCurrent) SetImmediate(startValue);
         else UpdateLabel();
     }
 
-    /// <summary>Đặt ngay mà không tween (sync trước trận).</summary>
     public void SetImmediate(int absoluteValue)
     {
         if (!slider) return;
-        targetValue = Mathf.Clamp(absoluteValue, (int)slider.minValue, (int)slider.maxValue);
+        targetValue = Mathf.Clamp(absoluteValue, slider.minValue, slider.maxValue);
         KillValueTween();
         slider.value = targetValue;
         KillPopTween();
@@ -85,53 +85,87 @@ public class KillProgressSlider : Singleton<KillProgressSlider>
         CheckFilledEvent();
     }
 
-    /* ---------------------- API cộng tiến độ ---------------------- */
+    public void AddKill(int count = 1) => Add(count);
 
-    /// <summary>Cộng theo số kill (đơn vị tuyệt đối). Gọi khi 1 con quái bị giết.</summary>
-    public void AddKill(int count = 1)
-    {
-        Add(count);
-    }
-
-    /// <summary>Cộng delta tuyệt đối.</summary>
     public void Add(float delta)
     {
         if (!slider || Mathf.Approximately(delta, 0f)) return;
 
-        float newTarget = Mathf.Clamp(targetValue + delta, slider.minValue, slider.maxValue);
-        ApplyTarget(newTarget, playSfx: delta > 0f, playPop: delta > 0f);
+        // Cộng vào targetValue
+        targetValue = Mathf.Clamp(targetValue + delta, slider.minValue, slider.maxValue);
+
+        // Kill tween cũ và tween từ giá trị hiện tại
+        KillValueTween();
+        float from = slider.value;
+        float dur = Mathf.Clamp(Mathf.Abs(targetValue - from) * durationPerUnit, minDuration, maxDuration);
+
+        valueTween = DOTween.To(
+            () => slider.value,
+            v =>
+            {
+                slider.value = v;
+                int curInt = Mathf.RoundToInt(v);
+                if (curInt != lastDisplayedValue)
+                {
+                    lastDisplayedValue = curInt;
+                    UpdateLabelFast(curInt, Mathf.RoundToInt(slider.maxValue));
+                }
+                if (!firedFilledEvent && Mathf.Approximately(slider.value, slider.maxValue))
+                    CheckFilledEvent();
+            },
+            targetValue,
+            dur
+        ).SetEase(valueEase)
+         .SetUpdate(useUnscaledTime)
+         .OnComplete(CheckFilledEvent);
+
+        if (delta > 0f) PlayPop();
+        if (delta > 0f) PlayTick();
     }
 
-    /* ---------------------- Core ---------------------- */
+    // ===== FX =====
 
-    private void ApplyTarget(float newTarget, bool playSfx, bool playPop)
+    private void PlayPop()
     {
-        if (!slider) return;
+        if (!popTarget) return;
+        KillPopTween();
+        popTween = DOTween.Sequence().SetUpdate(useUnscaledTime)
+            .Append(popTarget.DOScale(popScale, popOut).SetEase(popOutEase))
+            .Append(popTarget.DOScale(1f, popBack).SetEase(popBackEase));
+    }
 
-        float from = slider.value;
-        targetValue = newTarget;
-        float deltaAbs = Mathf.Abs(targetValue - from);
-        float dur = Mathf.Clamp(deltaAbs * durationPerUnit, minDuration, maxDuration);
+    private void PlayTick()
+    {
+        if (!tickClip || !sfxSource) return;
+        float now = useUnscaledTime ? Time.unscaledTime : Time.time;
 
-        KillValueTween();
-        valueTween = DOTween.To(
-                () => slider.value,
-                v => { slider.value = v; UpdateLabel(); },
-                targetValue,
-                dur)
-            .SetEase(valueEase)
-            .SetUpdate(useUnscaledTime)
-            .OnComplete(CheckFilledEvent);
+        if (now - lastTickTime < minTickInterval) return;
+        if (now - s_lastGlobalTickTime < minGlobalTickInterval) return;
 
-        if (playPop && popTarget)
-        {
-            KillPopTween();
-            popTween = DOTween.Sequence().SetUpdate(useUnscaledTime)
-                .Append(popTarget.DOScale(popScale, popOut).SetEase(popOutEase))
-                .Append(popTarget.DOScale(1f, popBack).SetEase(popBackEase));
-        }
+        float oldPitch = sfxSource.pitch;
+        if (randomizePitch) sfxSource.pitch = Random.Range(pitchRange.x, pitchRange.y);
+        sfxSource.PlayOneShot(tickClip, tickVolume);
+        if (randomizePitch) sfxSource.pitch = oldPitch;
 
-        if (playSfx) PlayTick();
+        lastTickTime = now;
+        s_lastGlobalTickTime = now;
+    }
+
+    // ===== Helpers =====
+
+    private void UpdateLabel()
+    {
+        if (!valueText || !slider) return;
+        int cur = Mathf.RoundToInt(slider.value);
+        int max = Mathf.RoundToInt(slider.maxValue);
+        valueText.text = $"{cur}/{max}";
+        lastDisplayedValue = cur;
+    }
+
+    private void UpdateLabelFast(int cur, int max)
+    {
+        if (!valueText) return;
+        valueText.text = cur.ToString() + "/" + max.ToString();
     }
 
     private void CheckFilledEvent()
@@ -142,28 +176,6 @@ public class KillProgressSlider : Singleton<KillProgressSlider>
             firedFilledEvent = true;
             onFilled?.Invoke();
         }
-    }
-
-    private void PlayTick()
-    {
-        if (!tickClip || !sfxSource) return;
-        float now = useUnscaledTime ? Time.unscaledTime : Time.time;
-        if (now - lastTickTime < minTickInterval) return;
-
-        float oldPitch = sfxSource.pitch;
-        if (randomizePitch) sfxSource.pitch = Random.Range(pitchRange.x, pitchRange.y);
-        sfxSource.PlayOneShot(tickClip, tickVolume);
-        if (randomizePitch) sfxSource.pitch = oldPitch;
-
-        lastTickTime = now;
-    }
-
-    private void UpdateLabel()
-    {
-        if (!valueText || !slider) return;
-        int cur = Mathf.RoundToInt(slider.value);
-        int max = Mathf.RoundToInt(slider.maxValue);
-        valueText.text = $"{cur}/{max}";
     }
 
     private void KillValueTween()
@@ -177,8 +189,6 @@ public class KillProgressSlider : Singleton<KillProgressSlider>
         if (popTween != null && popTween.IsActive()) popTween.Kill();
         popTween = null;
     }
-
-    /* ---------------------- tiện ích ---------------------- */
 
     public int Current => slider ? Mathf.RoundToInt(slider.value) : 0;
     public int Max => slider ? Mathf.RoundToInt(slider.maxValue) : 0;

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+// File: Map2_Controller.cs
 using UnityEngine;
 
 public class Map2_Controller : Map_Controller
@@ -9,10 +8,6 @@ public class Map2_Controller : Map_Controller
         if (other.CompareTag("Player"))
         {
             gameController.SwitchMap(mapIndex);
-            this.processing.gameObject.SetActive(false);
-            //CharacterUIManager.OnScreenFadeOut?.Invoke();
-            //mapDisable.gameObject.SetActive(false);
-            //Debug.Log("Enter map");
             CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
         }
     }
