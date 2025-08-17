@@ -15,7 +15,7 @@ public class Map1_Controller : Map_Controller
     {
         if (other.CompareTag("Player"))
         {
-            gameController.SwitchMap(mapIndex);
+            gameController.SwitchMap(MapIndex);
             CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
         }
     }

@@ -30,6 +30,8 @@ public class GameController : Singleton<GameController>
     [SerializeField] private bool autosaveCheckpointAtSpawn = true;
     [SerializeField] private bool ignoreSavedPositionOnStart = false;
     [SerializeField] private bool allowRespawnWhenSameMap = false;
+    [Tooltip("Ưu tiên khôi phục Checkpoint đã chọn khi vào game. Nếu không có thì mới dùng PositionSave.")]
+    [SerializeField] private bool preferCheckpointOnStart = true;
 
     public int CurrentMapIndex => currentMap ? currentMap.MapIndex : 0;
     public int MapsCount
@@ -48,31 +50,54 @@ public class GameController : Singleton<GameController>
         if (maps == null || maps.Count == 0)
         {
             maps = this.transform.GetComponentsInChildren<Map_Controller>(true).ToList();
-            for (int i = 0; i < maps.Count; i++) maps[i].EditorSetMapIndex(i);
+            for (int i = 0; i < maps.Count; i++) maps[i].SetMapIndex(i); // runtime-safe
         }
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        if (!currentMap) currentMap = maps.FirstOrDefault();
+
+        // 1) Quyết định map khởi động dựa trên Checkpoint (nếu có) trước khi bật/tắt map
+        CPItem startCp = null;
+        if (preferCheckpointOnStart && CheckpointStore.TryGetCurrent(out var cp))
+            startCp = cp;
+
+        if (startCp != null)
+        {
+            var idx = Mathf.Clamp(startCp.mapIndex, 0, maps.Count - 1);
+            currentMap = maps[idx];
+        }
+        else if (!currentMap)
+        {
+            currentMap = maps.FirstOrDefault();
+        }
+
+        // 2) Bật đúng map hiện tại rồi mới dịch chuyển để tránh "rơi vô tận"
         InitializeMapsAtStartup();
 
+        // 3) Dịch chuyển nhân vật theo ưu tiên: Checkpoint -> PositionSave -> Spawn map
         if (!character) return;
 
-        if (ignoreSavedPositionOnStart || !PositionSave.TryLoad(out var pos, out var rot))
+        if (startCp != null)
         {
-            if (currentMap) MoveCharacterPos(currentMap.currentMapSpawnPoint);
+            TeleportSafe(startCp.Pos, startCp.Rot);
+            return;
         }
-        else
+
+        if (!ignoreSavedPositionOnStart && PositionSave.TryLoad(out var pos, out var rot))
         {
             TeleportSafe(pos, rot);
+            return;
         }
+
+        if (currentMap) MoveCharacterPos(currentMap.currentMapSpawnPoint);
     }
 
     private void InitializeMapsAtStartup()
     {
         if (maps == null) return;
+
         for (int i = 0; i < maps.Count; i++)
         {
             bool isCurrent = (currentMap != null && maps[i] == currentMap) || (currentMap == null && i == 0);
@@ -80,6 +105,7 @@ public class GameController : Singleton<GameController>
             if (isCurrent) maps[i].EnableProcessing(); else maps[i].DisableProcessing();
         }
         if (currentMap == null && maps.Count > 0) currentMap = maps[0];
+
         var enterHooks = HooksOf(currentMap);
         enterHooks?.InvokeEnter();
     }
@@ -180,7 +206,6 @@ public class GameController : Singleton<GameController>
             MoveCharacterPos(currentMap.currentMapSpawnPoint);
 
             var enterHooks = HooksOf(currentMap);
-            Debug.Log("-----------------------------------------------------");
             enterHooks?.InvokeEnter();
 
             OnMapSwitched?.Invoke();

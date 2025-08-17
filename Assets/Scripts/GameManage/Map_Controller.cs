@@ -7,7 +7,7 @@ public class Map_Controller : GameControllerAbstract
     [SerializeField] public Transform currentMapSpawnPoint;
     [SerializeField] public Transform map;
     [SerializeField] protected Volume processing;
-    [SerializeField] protected int mapIndex;
+    [SerializeField] private int mapIndex;
 
     public int MapIndex => mapIndex;
 
@@ -19,6 +19,7 @@ public class Map_Controller : GameControllerAbstract
             processing.priority = 1f;
         }
     }
+
     public void DisableProcessing()
     {
         if (processing != null)
@@ -28,7 +29,5 @@ public class Map_Controller : GameControllerAbstract
         }
     }
 
-#if UNITY_EDITOR
-    public void EditorSetMapIndex(int idx) { mapIndex = idx; }
-#endif
+    public void SetMapIndex(int idx) { mapIndex = idx; }
 }
