@@ -60,7 +60,7 @@ public class AudioManagerTwo : MonoBehaviour
 
         if (buttonSFXDict.TryGetValue(type, out var clip) && clip != null)
         {
-            buttonSource.PlayOneShot(clip);
+            buttonSource?.PlayOneShot(clip);
         }
     }
 }

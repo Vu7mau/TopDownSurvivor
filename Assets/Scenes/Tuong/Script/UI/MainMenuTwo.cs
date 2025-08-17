@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using PlayFab;
-using UnityEditor;
-using DG.Tweening;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
@@ -14,8 +11,6 @@ public class MainMenuTwo : MonoBehaviour
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private GameObject registerPanel;
     [SerializeField] private GameObject resetPanel;
-    [SerializeField] private GameObject playButton;
-    [SerializeField] private GameObject settingButton;
     [SerializeField] private GameObject logoutButton;
     [SerializeField] private GameObject playMenu;
     [SerializeField] private GameObject modePanel;
@@ -23,12 +18,13 @@ public class MainMenuTwo : MonoBehaviour
     [SerializeField] private GameObject iconLeaderboard;
     [SerializeField] private GameObject iconGame;
     [SerializeField] private GameObject instructPanel;
+    [SerializeField] private GameObject panelNotification;
+    public GameObject PlayMenuTwo;
     public EffectPanelSetting settingEffect;
     [SerializeField] private GameObject settingsPanel;
     private int previousPanelId;
     public GameObject PlayMenu => playMenu;
     public GameObject LogoutButton => logoutButton;
-    public GameObject PlayButton => playButton;
     public GameObject SettingPanel => settingsPanel;
     public GameObject ResetPanel => resetPanel;
     public EffectSignIn EffectLogin => effectLogin;
@@ -36,20 +32,17 @@ public class MainMenuTwo : MonoBehaviour
     public GameObject LoginPanel => loginPanel;
     public GameObject ModePanelPublic => modePanel;
     public GameObject IconLeaderBoard => iconLeaderboard;
+    public GameObject IconGame => iconGame;
     private void Start()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         authManager = FindObjectOfType<AuthManager>();
         settingsPanel.SetActive(true);
-        bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
-        logoutButton.SetActive(hasLoggedIn);
-        iconLeaderboard.SetActive(hasLoggedIn);
         HidePanel();
     }
     public void HidePanel()
     {
-        playMenu.SetActive(true);
         loginPanel.SetActive(false);
         registerPanel.SetActive(false);
         resetPanel.SetActive(false);
@@ -70,7 +63,7 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void ShowSettings()
     {
-        if(previousPanelId == 0)
+        if (previousPanelId == 0)
             playMenu.SetActive(false);
         settingsPanel.SetActive(true);
         iconGame.SetActive(false);
@@ -82,7 +75,7 @@ public class MainMenuTwo : MonoBehaviour
         settingEffect.HidePanel(() =>
         {
             settingsPanel.SetActive(false);
-            if(previousPanelId == 0)
+            if (previousPanelId == 0)
             {
                 playMenu.SetActive(true);
                 iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
@@ -222,16 +215,26 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void OpenLeaderBoardPanel()
     {
-        playMenu.SetActive(false);
-        leaderboardPanel.SetActive(true);
-        iconGame.SetActive(false);
-        iconLeaderboard.SetActive(false);
-        LeaderboardVFX.Instance.PrepareHide();
-        CrownEffect.Instance?.Show();
-        LeaderboardVFX.Instance.ShowPanels(() =>
+        if(Application.internetReachability == NetworkReachability.NotReachable)
         {
-            StartCoroutine(LoadLeaderboardAfterUIReady());
-        });
+            panelNotification.SetActive(true);
+            playMenu.SetActive(false);
+            iconGame.SetActive(false);
+            iconLeaderboard.SetActive(false);
+        }
+        else
+        {
+            playMenu.SetActive(false);
+            leaderboardPanel.SetActive(true);
+            iconGame.SetActive(false);
+            iconLeaderboard.SetActive(false);
+            LeaderboardVFX.Instance.PrepareHide();
+            CrownEffect.Instance?.Show();
+            LeaderboardVFX.Instance.ShowPanels(() =>
+            {
+                StartCoroutine(LoadLeaderboardAfterUIReady());
+            });
+        }
     }
     public void CloseLeaderBoardPanel()
     {
@@ -256,8 +259,8 @@ public class MainMenuTwo : MonoBehaviour
     }
     public void OpenInstructPanel()
     {
-        playMenu.SetActive(false);
         instructPanel.SetActive(true);
+        playMenu.SetActive(false);
     }
     public void CloseInstructPanel()
     {

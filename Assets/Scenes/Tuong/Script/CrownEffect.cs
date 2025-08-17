@@ -27,7 +27,6 @@ public class CrownEffect : MonoBehaviour
     private Vector3 crownOriginalScale;
     private Vector2 panelOriginalPos;
 
-    // Để lưu trữ các Tween để dừng/kill khi cần
     private Tween crownScaleTween;
     private Tween lightStripeRotateTween;
     private Tween lightStripeFadeTween;
@@ -46,7 +45,6 @@ public class CrownEffect : MonoBehaviour
         if (parentPanel != null)
             panelOriginalPos = parentPanel.anchoredPosition;
     }
-
     public void Show()
     {
         gameObject.SetActive(true);
@@ -59,7 +57,6 @@ public class CrownEffect : MonoBehaviour
 
         StartEffects();
     }
-
     public void Close()
     {
         if (parentPanel != null)

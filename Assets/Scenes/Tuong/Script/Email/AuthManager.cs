@@ -56,7 +56,6 @@ public class AuthManager : TuongMonobehaviour
         PlayerPrefs.SetInt("HasLoggedIn", 0);
         PlayerPrefs.SetInt("AutoLoginDisable", 1);
         PlayerPrefs.Save();
-        MainMenuTwo.Instance.PlayMenu.SetActive(true);
         MainMenuTwo.Instance.LogoutButton.SetActive(false);
         MainMenuTwo.Instance.IconLeaderBoard.SetActive(false);
         Debug.Log("Đăng xuất thành công.");

@@ -50,11 +50,11 @@ public class AutoLogin : MonoBehaviour
         PlayerPrefs.SetInt("HasLoggedIn", 1);
         CharacterInformation.Instance.ShowCharacters();
 
-        if (MainMenuTwo.Instance != null)
-        {
-            MainMenuTwo.Instance.LogoutButton.SetActive(true);
-            MainMenuTwo.Instance.PlayMenu.SetActive(true);
-        }
+        //if (MainMenuTwo.Instance != null)
+        //{
+        //    MainMenuTwo.Instance.LogoutButton.SetActive(true);
+        //    MainMenuTwo.Instance.PlayMenu.SetActive(true);
+        //}
 
         StartCoroutine(DeleyAndLoadLeaderBoard());
     }

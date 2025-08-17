@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class LevelManager : MonoBehaviour
 {
@@ -18,6 +19,23 @@ public class LevelManager : MonoBehaviour
     {
         if (Instance != null) Destroy(gameObject);
         else Instance = this;
+    }
+    private void OnEnable()
+    {
+        if (progressSlider != null) progressSlider.value = 0f;
+        else
+        {
+            RebindText();
+        }
+        if (progressText != null) progressText.text = "0%";
+        target = 0f;
+    }
+    public void RebindText()
+    {
+        var allTexts = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>();
+        progressText = allTexts.FirstOrDefault(t => t.name == "ProgressText");
+        var allSliders = Resources.FindObjectsOfTypeAll<Slider>();
+        progressSlider = allSliders.FirstOrDefault(s => s.name == "ProgressSlider");
     }
 
     public async Task LoadLevelAsync(int levelIndex)

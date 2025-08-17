@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using PlayFab;
 using DG.Tweening;
-using System.Threading.Tasks;
 public class PanelWin : MonoBehaviour
 {
     public GameObject panelWin;
@@ -55,9 +53,9 @@ public class PanelWin : MonoBehaviour
     public async void BackToMainMenu()
     {
         panelWin.SetActive(false);
-        PlayerScoreManager.Instance.ResetScore();
-        CountDownTimer.Instance.ResetTimer();
-        await LevelManager.Instance.LoadLevelAsync(0);
+        PlayerScoreManager.Instance?.ResetScore();
+        CountDownTimer.Instance?.ResetTimer();
+        await LevelManager.Instance?.LoadLevelAsync(0);
     }
     public void LastScore()
     {
