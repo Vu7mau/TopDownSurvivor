@@ -47,6 +47,7 @@ public class CharacterEffect : VuMonoBehaviour
         if (light==null) return;
 
         light.gameObject.SetActive(true);
+        Debug.Log("TurnOnLight");
     }
     public void TurnOffLight()
     {

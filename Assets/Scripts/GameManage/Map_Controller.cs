@@ -1,10 +1,9 @@
-// File: Map_Controller.cs
+﻿// File: Map_Controller.cs
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class Map_Controller : GameControllerAbstract
 {
-    [Header("Map_Controller")]
     [SerializeField] public Transform currentMapSpawnPoint;
     [SerializeField] public Transform map;
     [SerializeField] protected Volume processing;
@@ -14,16 +13,15 @@ public class Map_Controller : GameControllerAbstract
 
     public void EnableProcessing()
     {
-        if (processing)
+        if (processing != null)
         {
             processing.gameObject.SetActive(true);
             processing.priority = 1f;
         }
     }
-
     public void DisableProcessing()
     {
-        if (processing)
+        if (processing != null)
         {
             processing.gameObject.SetActive(false);
             processing.priority = 0f;
@@ -31,11 +29,6 @@ public class Map_Controller : GameControllerAbstract
     }
 
 #if UNITY_EDITOR
-    public void EditorSetMapIndex(int idx)
-    {
-        mapIndex = idx;
-        UnityEditor.EditorUtility.SetDirty(this);
-        gameObject.name = $"Map_{mapIndex:00}";
-    }
+    public void EditorSetMapIndex(int idx) { mapIndex = idx; }
 #endif
 }

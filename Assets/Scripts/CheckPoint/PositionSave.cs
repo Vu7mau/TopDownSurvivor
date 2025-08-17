@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+// File: PositionSave.cs
 using UnityEngine;
 
 public static class PositionSave
@@ -14,7 +13,7 @@ public static class PositionSave
 
     public static void Save(Transform t)
     {
-        if (t == null) return;
+        if (!t) return;
         var p = t.position;
         var r = t.eulerAngles;
 
@@ -32,15 +31,19 @@ public static class PositionSave
 
     public static bool TryLoad(out Vector3 pos, out Quaternion rot)
     {
-        pos = default;
-        rot = default;
+        pos = default; rot = default;
         if (!HasSave()) return false;
 
-        float px = PlayerPrefs.GetFloat(K_PX), py = PlayerPrefs.GetFloat(K_PY), pz = PlayerPrefs.GetFloat(K_PZ);
-        float rx = PlayerPrefs.GetFloat(K_RX), ry = PlayerPrefs.GetFloat(K_RY), rz = PlayerPrefs.GetFloat(K_RZ);
-
-        pos = new Vector3(px, py, pz);
-        rot = Quaternion.Euler(rx, ry, rz);
+        pos = new Vector3(
+            PlayerPrefs.GetFloat(K_PX),
+            PlayerPrefs.GetFloat(K_PY),
+            PlayerPrefs.GetFloat(K_PZ)
+        );
+        rot = Quaternion.Euler(
+            PlayerPrefs.GetFloat(K_RX),
+            PlayerPrefs.GetFloat(K_RY),
+            PlayerPrefs.GetFloat(K_RZ)
+        );
         return true;
     }
 
@@ -54,4 +57,4 @@ public static class PositionSave
         PlayerPrefs.DeleteKey(K_RY);
         PlayerPrefs.DeleteKey(K_RZ);
     }
-}   
+}

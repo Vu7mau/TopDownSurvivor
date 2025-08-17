@@ -14,12 +14,12 @@ public class Map0_Controller : Map_Controller
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            gameController.SwitchMap(mapIndex);
-            CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
-            FadeOutLight(2f);
-        }
+        //if (other.CompareTag("Player"))
+        //{
+        //    gameController.SwitchMap(mapIndex);
+        //    CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
+        //    FadeOutLight(2f);
+        //}
     }
 
     private void Update()

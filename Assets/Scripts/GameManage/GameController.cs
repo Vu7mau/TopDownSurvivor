@@ -3,20 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
 {
+    [Header("Maps")]
     [SerializeField] private List<Map_Controller> maps;
     [SerializeField] private Map_Controller currentMap;
     [SerializeField] private Map_Controller lastMap;
 
     public Action OnMapSwitched;
-    public Action OnWaveStarted;
 
+    [Header("Character")]
     [SerializeField] private Transform character;
     public Transform Character => character;
     public Map_Controller CurrentMap => currentMap;
@@ -27,53 +27,63 @@ public class GameController : Singleton<GameController>
     public float FadeDuration => fadeDuration;
 
     [Header("Options")]
-    [Tooltip("Tự động thêm checkpoint tại spawn của map mới sau khi SwitchMap xong")]
     [SerializeField] private bool autosaveCheckpointAtSpawn = true;
+    [SerializeField] private bool ignoreSavedPositionOnStart = false;
+    [SerializeField] private bool allowRespawnWhenSameMap = false;
 
-    protected override void Start()
+    public int CurrentMapIndex => currentMap ? currentMap.MapIndex : 0;
+    public int MapsCount
     {
-        base.Start();
+        get
+        {
+            if (maps != null && maps.Count > 0) return maps.Count;
+            return this.transform.GetComponentsInChildren<Map_Controller>(true).Length;
+        }
     }
 
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        LoadCharacter();
-        LoadAllMap();
-    }
-
-    private void LoadAllMap()
-    {
-        if (maps != null && maps.Count > 0) return;
-        maps = this.transform.GetComponentsInChildren<Map_Controller>(true).ToList();
-        // đảm bảo mapIndex hợp lệ theo thứ tự
-        for (int i = 0; i < maps.Count; i++) maps[i].EditorSetMapIndex(i);
-    }
-
-    private void LoadCharacter()
-    {
-        if (!character)
-            character = GameObject.FindObjectOfType<CharacterCtrl>()?.transform;
+        if (!character) character = GameObject.FindObjectOfType<CharacterCtrl>()?.transform;
+        if (maps == null || maps.Count == 0)
+        {
+            maps = this.transform.GetComponentsInChildren<Map_Controller>(true).ToList();
+            for (int i = 0; i < maps.Count; i++) maps[i].EditorSetMapIndex(i);
+        }
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        if (maps == null || maps.Count == 0) LoadAllMap();
         if (!currentMap) currentMap = maps.FirstOrDefault();
+        InitializeMapsAtStartup();
 
-        // Nếu có vị trí đơn lẻ cũ thì khôi phục, không thì về spawn map đầu
-        if (character)
+        if (!character) return;
+
+        if (ignoreSavedPositionOnStart || !PositionSave.TryLoad(out var pos, out var rot))
         {
-            if (!(PositionSave.TryLoad(out var pos, out var rot)))
-            {
-                if (currentMap) MoveCharacterPos(currentMap.currentMapSpawnPoint);
-            }
-            else TeleportSafe(pos, rot);
+            if (currentMap) MoveCharacterPos(currentMap.currentMapSpawnPoint);
+        }
+        else
+        {
+            TeleportSafe(pos, rot);
         }
     }
 
-    // ===== Teleport an toàn (CC/RB/NavMeshAgent) =====
+    private void InitializeMapsAtStartup()
+    {
+        if (maps == null) return;
+        for (int i = 0; i < maps.Count; i++)
+        {
+            bool isCurrent = (currentMap != null && maps[i] == currentMap) || (currentMap == null && i == 0);
+            if (maps[i].map) maps[i].map.gameObject.SetActive(isCurrent);
+            if (isCurrent) maps[i].EnableProcessing(); else maps[i].DisableProcessing();
+        }
+        if (currentMap == null && maps.Count > 0) currentMap = maps[0];
+        var enterHooks = HooksOf(currentMap);
+        enterHooks?.InvokeEnter();
+    }
+
     public void TeleportSafe(Vector3 pos, Quaternion rot)
     {
         if (!character) { Debug.LogError("[GameController] Character is null!"); return; }
@@ -85,7 +95,7 @@ public class GameController : Singleton<GameController>
         if (agent && agent.enabled)
         {
             agent.Warp(pos);
-            character.rotation = rot; // Warp không set rotation
+            character.rotation = rot;
             agent.ResetPath();
             return;
         }
@@ -109,7 +119,6 @@ public class GameController : Singleton<GameController>
         TeleportSafe(pos.position, pos.rotation);
     }
 
-    // ===== Fade =====
     public void ScreenFadeIn() { if (fadeImage && fadeDuration > 0f) StartCoroutine(FadeIn()); }
     public void ScreenFadeOut() { if (fadeImage && fadeDuration > 0f) StartCoroutine(FadeOut()); }
 
@@ -143,68 +152,76 @@ public class GameController : Singleton<GameController>
     {
         if (fadeImage && fadeDuration > 0f) yield return StartCoroutine(FadeOut());
         afterBlack?.Invoke();
-        yield return null; // ổn định 1 frame
+        yield return null;
         if (fadeImage && fadeDuration > 0f) yield return StartCoroutine(FadeIn());
     }
 
-    // ===== Map Switch (trong 1 scene) =====
     public void SwitchMap(int mapIndex)
     {
-        if (maps == null || maps.Count == 0)
-        {
-            Debug.LogError("[GameController] No maps configured.");
+        if (maps == null || maps.Count == 0) { Debug.LogError("[GameController] No maps configured."); return; }
+        if (mapIndex < 0 || mapIndex >= maps.Count) { Debug.LogError($"Map index {mapIndex} không hợp lệ!"); return; }
+
+        if (!allowRespawnWhenSameMap && currentMap != null && currentMap.MapIndex == mapIndex)
             return;
-        }
-        if (mapIndex < 0 || mapIndex >= maps.Count)
-        {
-            Debug.LogError($"Map index {mapIndex} không hợp lệ!");
-            return;
-        }
 
         lastMap = currentMap;
         var next = maps[mapIndex];
 
-        // lưu vị trí đơn lẻ trước khi chuyển (tùy chọn của bạn)
         if (character) PositionSave.Save(character);
 
         StartCoroutine(FadeOutThen(() =>
         {
-            // bật map mới
-            currentMap = next;
-            if (currentMap.map) currentMap.map.gameObject.SetActive(true);
-            currentMap.EnableProcessing();
+            var exitHooks = HooksOf(lastMap);
+            exitHooks?.InvokeExit();
 
-            // teleport về spawn map mới
+            currentMap = next;
+            ActivateOnly(currentMap);
+
             MoveCharacterPos(currentMap.currentMapSpawnPoint);
 
-            // tắt map cũ
-            if (lastMap != null)
-            {
-                if (lastMap.map) lastMap.map.gameObject.SetActive(false);
-                lastMap.DisableProcessing();
-            }
+            var enterHooks = HooksOf(currentMap);
+            enterHooks?.InvokeEnter();
 
-            // thông báo & autosave CP tại spawn
             OnMapSwitched?.Invoke();
-            CharacterUIManager.OnScreenFadeIn?.Invoke();
 
             if (autosaveCheckpointAtSpawn && character != null)
             {
-                var idx = CurrentMap ? CurrentMap.MapIndex : mapIndex;
-                CheckpointStore.Add(character, idx, $"Spawn Map {idx}");
+                var idx = CurrentMapIndex;
+                CheckpointStore.Add(character, idx, $"Spawn Map {idx}", isAuto: true);
             }
+
+            var idxNow = CurrentMapIndex;
+            string mapName = currentMap && currentMap.map ? currentMap.map.name
+                             : currentMap ? currentMap.gameObject.name
+                             : $"Map {idxNow}";
+            ChatNotify.Instance?.MapSwitched(idxNow, mapName);
         }));
     }
 
-    // ===== tiện ích Editor =====
-#if UNITY_EDITOR
-    [ContextMenu("Rebuild Maps From Children")]
-    private void EditorRebuildMaps()
+    public void GoToMapSpawn(int mapIndex) => SwitchMap(mapIndex);
+
+    public void ReturnToCurrentMapSpawn()
     {
-        maps = this.transform.GetComponentsInChildren<Map_Controller>(true).ToList();
-        for (int i = 0; i < maps.Count; i++) maps[i].EditorSetMapIndex(i);
-        UnityEditor.EditorUtility.SetDirty(this);
-        Debug.Log($"[GameController] Rebuilt maps list: {maps.Count} entries.");
+        if (!currentMap || !currentMap.currentMapSpawnPoint) return;
+        StartCoroutine(FadeOutThen(() => { MoveCharacterPos(currentMap.currentMapSpawnPoint); }));
     }
-#endif
+
+    private void ActivateOnly(Map_Controller toEnable)
+    {
+        if (maps == null) return;
+
+        foreach (var m in maps)
+        {
+            bool active = (m == toEnable);
+            if (m.map) m.map.gameObject.SetActive(active);
+            if (active) m.EnableProcessing(); else m.DisableProcessing();
+        }
+    }
+
+    private MapHooks HooksOf(Map_Controller mapCtrl)
+    {
+        if (mapCtrl == null) return null;
+        var root = mapCtrl.map ? mapCtrl.map : mapCtrl.transform;
+        return root.GetComponentInChildren<MapHooks>(true);
+    }
 }
