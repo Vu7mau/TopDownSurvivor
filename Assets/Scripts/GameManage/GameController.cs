@@ -180,6 +180,7 @@ public class GameController : Singleton<GameController>
             MoveCharacterPos(currentMap.currentMapSpawnPoint);
 
             var enterHooks = HooksOf(currentMap);
+            Debug.Log("-----------------------------------------------------");
             enterHooks?.InvokeEnter();
 
             OnMapSwitched?.Invoke();

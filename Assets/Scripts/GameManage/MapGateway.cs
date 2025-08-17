@@ -34,6 +34,7 @@ public class MapGateway : MonoBehaviour
         ChatNotify.Instance?.MapSelected(dest, name);
         ChatNotify.Instance?.MapJumping(dest, name);
         GC.SwitchMap(dest);
+     
     }
 
     private static int Wrap(int v, int min, int max)

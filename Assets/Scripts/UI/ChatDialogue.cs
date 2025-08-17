@@ -9,7 +9,6 @@ using Image = UnityEngine.UI.Image;
 
 public class ChatDialogue : VuMonoBehaviour
 {
-
     [Header("UI Refs")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TMP_Text content;
@@ -26,11 +25,17 @@ public class ChatDialogue : VuMonoBehaviour
 
     [Space]
     [Header("Dialogue effect")]
+    [Tooltip("Thời gian scale popup")]
     [SerializeField] private float popupDuration = 0.3f;
-    [SerializeField] private float typingSpeed = 0.3f;
+
+    [Tooltip("Giây / mỗi ký tự. <= 0 để hiện ngay.")]
+    [SerializeField] private float typingSpeed = 0.03f;
 
     private Coroutine typingCoroutine;
     private Coroutine autoHideCoroutine;
+
+    // Giữ state cho SkipTyping()
+    private string lastFullText = null;
 
     protected override void LoadComponents()
     {
@@ -81,6 +86,7 @@ public class ChatDialogue : VuMonoBehaviour
 
     /// <summary>
     /// Hiện hội thoại tại vị trí mong muốn (mặc định Footer nếu không truyền).
+    /// typingSpeed = GIÂY / KÝ TỰ (giữ nguyên semantics cũ). <= 0 => hiện ngay.
     /// </summary>
     public void ShowDialogue(
         string content,
@@ -97,8 +103,14 @@ public class ChatDialogue : VuMonoBehaviour
             return;
         }
 
+        // Lưu nội dung để có thể SkipTyping
+        lastFullText = content;
+
         // Định vị trước khi popup
         ApplyAnchor(anchor);
+
+        // Hủy tween cũ (nếu có) để tránh xung đột khi gọi liên tục
+        dialoguePanel.transform.DOKill(true);
 
         dialoguePanel.SetActive(true);
         dialoguePanel.transform.localScale = Vector3.zero;
@@ -110,21 +122,32 @@ public class ChatDialogue : VuMonoBehaviour
             SoundFXManager.Instance.PlaySoundFXClip(audioClip, this.transform);
 
         // Ngắt coroutine cũ nếu có
-        if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-        if (autoHideCoroutine != null) StopCoroutine(autoHideCoroutine);
+        if (typingCoroutine != null) { StopCoroutine(typingCoroutine); typingCoroutine = null; }
+        if (autoHideCoroutine != null) { StopCoroutine(autoHideCoroutine); autoHideCoroutine = null; }
 
-        dialoguePanel.transform.DOScale(Vector3.one, popupDuration)
+        // Reset trạng thái text trước khi scale-in (tránh nháy)
+        if (this.content != null)
+        {
+            this.content.maxVisibleCharacters = 0;
+            this.content.text = string.Empty;
+        }
+
+        dialoguePanel.transform
+            .DOScale(Vector3.one, popupDuration)
             .SetEase(Ease.OutBack)
             .OnComplete(() =>
             {
                 if (this.content != null)
-                    typingCoroutine = StartCoroutine(TypeText(content));
+                    typingCoroutine = StartCoroutine(TypeText(lastFullText));
 
                 if (time > 0)
                     autoHideCoroutine = StartCoroutine(AutoHideAfter(time));
             });
     }
 
+    /// <summary>
+    /// Neo panel đến vị trí chỉ định. Nếu thiếu, dùng defaultAnchor. Nếu vẫn thiếu -> giữ nguyên.
+    /// </summary>
     private void ApplyAnchor(DialogueAnchor anchor)
     {
         // Nếu caller không truyền, dùng default
@@ -138,15 +161,10 @@ public class ChatDialogue : VuMonoBehaviour
         var panelRt = dialoguePanel.transform as RectTransform;
         var targetRt = chosen;
 
-        // Đặt panel về cùng Canvas với target (nếu khác cha, vẫn OK)
         if (panelRt != null && targetRt != null)
         {
-            // Không đổi parent để tránh phá layout của bạn; chỉ đặt theo toạ độ thế giới
-            // (Nếu muốn bám layout, bạn có thể đổi parent panelRt.SetParent(targetRt, false);)
+            // Không đổi parent để tránh phá layout của bạn; đặt theo toạ độ thế giới
             panelRt.position = targetRt.position;
-
-            // Tuỳ chọn: khớp kích thước theo target (bỏ nếu không cần)
-            // panelRt.sizeDelta = targetRt.rect.size;
         }
     }
 
@@ -167,30 +185,90 @@ public class ChatDialogue : VuMonoBehaviour
         HideDialogue();
     }
 
+    /// <summary>
+    /// Typewriter dùng TMP_Text.maxVisibleCharacters để luôn gõ theo ký tự (không nhảy theo từ / không lỗi rich text).
+    /// </summary>
     private IEnumerator TypeText(string fullText)
     {
         if (this.content == null) yield break;
 
-        this.content.text = "";
-        foreach (char c in fullText)
+        // Trường hợp tốc độ <= 0: hiện ngay
+        if (typingSpeed <= 0f)
         {
-            this.content.text += c;
-            yield return new WaitForSeconds(typingSpeed);
+            this.content.text = fullText;
+            this.content.ForceMeshUpdate();
+            this.content.maxVisibleCharacters = int.MaxValue;
+            yield break;
+        }
+
+        // Gán toàn bộ text trước, rồi "lộ dần" ký tự
+        this.content.text = fullText;
+        this.content.ForceMeshUpdate();
+
+        int total = this.content.textInfo.characterCount;
+        if (total == 0)
+        {
+            // Cho TMP 1 frame để cập nhật textInfo khi cần
+            yield return null;
+            this.content.ForceMeshUpdate();
+            total = this.content.textInfo.characterCount;
+        }
+
+        this.content.maxVisibleCharacters = 0;
+
+        // typingSpeed là GIÂY / KÝ TỰ -> delay = typingSpeed
+        float delay = typingSpeed;
+
+        for (int i = 0; i < total; i++)
+        {
+            this.content.maxVisibleCharacters = i + 1;
+            yield return new WaitForSeconds(delay);
+        }
+    }
+
+    /// <summary>
+    /// Cho phép bỏ qua hiệu ứng gõ và hiện ngay toàn bộ câu hiện tại.
+    /// </summary>
+    public void SkipTyping()
+    {
+        if (this.content == null) return;
+
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+        }
+
+        if (!string.IsNullOrEmpty(lastFullText))
+        {
+            this.content.text = lastFullText;
+            this.content.ForceMeshUpdate();
+            this.content.maxVisibleCharacters = int.MaxValue;
         }
     }
 
     public void HideDialogue()
     {
-        if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-        if (autoHideCoroutine != null) StopCoroutine(autoHideCoroutine);
+        // Ngắt typing/auto-hide đang chạy
+        if (typingCoroutine != null) { StopCoroutine(typingCoroutine); typingCoroutine = null; }
+        if (autoHideCoroutine != null) { StopCoroutine(autoHideCoroutine); autoHideCoroutine = null; }
 
-        dialoguePanel.transform.DOScale(Vector3.zero, popupDuration)
+        // Hủy tween cũ để bảo đảm tween đóng hoạt động mượt
+        dialoguePanel.transform.DOKill(true);
+
+        dialoguePanel.transform
+            .DOScale(Vector3.zero, popupDuration)
             .SetEase(Ease.InBack)
             .OnComplete(() =>
             {
-                if (content != null) content.text = string.Empty;
+                if (content != null)
+                {
+                    content.text = string.Empty;
+                    content.maxVisibleCharacters = 0;
+                }
                 dialoguePanel.SetActive(false);
             });
     }
 }
+
 public enum DialogueAnchor { Header, Bottom, Footer }

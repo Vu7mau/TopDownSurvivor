@@ -21,7 +21,7 @@ public class MapHooks : MonoBehaviour
 
     public void InvokeEnter()
     {
-        Debug.Log("-----------------------------------------------------");
+    
         if (turnOnCharacterLightOnEnter && CharacterCtrl.Instance && CharacterCtrl.Instance.CharacterEffect)
             CharacterCtrl.Instance.CharacterEffect.TurnOnLight();
         if (lightToFade) StartCoroutine(FadeOutLightCoroutine(fadeDuration));
@@ -32,6 +32,7 @@ public class MapHooks : MonoBehaviour
 
     public void InvokeExit()
     {
+       
         OnExit?.Invoke();
     }
 
