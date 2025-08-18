@@ -17,13 +17,13 @@ public class LookAtPlayer : VuMonoBehaviour
     {
         if (this.playerCamera != null) return;
         this.playerCamera = GameObject.Find("Main Camera").transform;
-        Debug.Log(transform.name + "Load Camera", gameObject);
+        //Debug.Log(transform.name + "Load Camera", gameObject);
     }
     protected virtual void LoadTargetPosition()
     {
         if (this.targetPosition != null) return;
         this.targetPosition = transform.parent;
-        Debug.Log(transform.name + "Load Target", gameObject);
+        //Debug.Log(transform.name + "Load Target", gameObject);
     }
     private void Update()
     {

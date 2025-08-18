@@ -183,7 +183,7 @@ public class EnemyHealth : DamageReceiver
         CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
 
 
-        Debug.Log("Máu quái còn " + this._hp);
+        //Debug.Log("Máu quái còn " + this._hp);
         //if (this.enemyAI.Animator != null)
         //{
         //    if (HasHurtState() && !this._isDead)
@@ -198,7 +198,7 @@ public class EnemyHealth : DamageReceiver
         {
             int random = Random.Range(0, this.beastHurtSFXs.Count);
             SoundFXManager.Instance.PlaySoundFXClip(this.beastHurtSFXs[random], this.transform);
-            Debug.Log("Hurt Scifi");
+            //Debug.Log("Hurt Scifi");
         }
         this.HurtFXRoutine();
     }

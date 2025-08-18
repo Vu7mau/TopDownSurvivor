@@ -49,7 +49,7 @@ public class CreateHitEnemy : DamageSender
         {
             this.Send(other.transform);
             dem++;
-            Debug.Log($"Đã va chạm với CharacterDamageReceiver {dem} lần");
+            //Debug.Log($"Đã va chạm với CharacterDamageReceiver {dem} lần");
             canTakeDamage = true;
         }
     }

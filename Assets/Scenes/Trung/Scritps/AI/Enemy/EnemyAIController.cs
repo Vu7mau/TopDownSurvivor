@@ -30,6 +30,8 @@ public class EnemyAIController : EnemyBase
     [Header("Properties")]
     [SerializeField] protected float distanceNearest = 1f;
     [SerializeField] protected bool isBoss = false;
+    protected float chaseRange;
+    public float ChaseRange { get => this.chaseRange; set => this.chaseRange = value;}
 
 
 
@@ -150,7 +152,7 @@ public class EnemyAIController : EnemyBase
         {
             transform.position = hit.position;
             this.enemyReferences.NavMeshAgent.Warp(hit.position);
-            Debug.Log("Snapped enemy to NavMesh at: " + hit.position);
+            //Debug.Log("Snapped enemy to NavMesh at: " + hit.position);
         }
     }
 
@@ -165,22 +167,24 @@ public class EnemyAIController : EnemyBase
 
     protected IEnumerator RoarRoutine()
     {
+        float rateRoar = 100f;
         while (true)
         {
-            int isPlayingRoar = Random.Range(0, 5);
+            int isPlayingRoar = Random.Range(0, 100);
             yield return new WaitUntil(() => this.isRoar);
-            if(isPlayingRoar == 1)
+            if(isPlayingRoar <= rateRoar)
             {
                 if (this.snd_roar.Count != 0)
                 {
                     int random = Random.Range(0, this.snd_roar.Count);
                     SoundFXManager.Instance.PlaySoundFXClip(this.snd_roar[random], this.transform);
-                    Debug.Log("Đã phát roar rồi nha!");
+                    if(rateRoar > 30) rateRoar -= 10f;
+                    //Debug.Log("Đã phát roar rồi nha!");
                 }
             }
             else
             {
-                Debug.Log("Không phát roar đâu nha!");
+                //Debug.Log("Không phát roar đâu nha!");
             }
                 this.isRoar = false;
         }
@@ -195,6 +199,7 @@ public class EnemyAIController : EnemyBase
     {
         if (this.targetPosition != null)
         {
+            this.chaseRange = this.enemyReferences.EnemySO.ChaseRange;
             if (this.enemyHealth != null)
             {
                 if (this.EnemyIsDead())
@@ -242,7 +247,7 @@ public class EnemyAIController : EnemyBase
     {
         if (!HasState("Idle"))
         {
-            Debug.LogWarning("Chưa có trạng thái Idle, vui lòng thêm!");
+            //Debug.LogWarning("Chưa có trạng thái Idle, vui lòng thêm!");
             return;
         }
         this.enemyReferences.Animator.SetFloat("IdleState", this.RandomAnimationBlend(this.enemyReferences.EnemySO.IdleAnimations));
@@ -263,7 +268,7 @@ public class EnemyAIController : EnemyBase
         //Check Player is in chase range!
         if (!HasState("Movement"))
         {
-            Debug.LogWarning("Chưa có trạng thái Movement, vui lòng thêm!");
+            //Debug.LogWarning("Chưa có trạng thái Movement, vui lòng thêm!");
             return;
         }
 
@@ -271,7 +276,7 @@ public class EnemyAIController : EnemyBase
         {
             this.distanceToTarget = Vector3.Distance(this.transform.position, this.targetPosition.position);
             this.isNearTarget = this.distanceToTarget <= this.distanceNearest;
-            bool canChasePlayer = Vector3.Distance(transform.position, targetPosition.position) <= this.enemyReferences.EnemySO.ChaseRange;
+            bool canChasePlayer = this.distanceToTarget <= this.chaseRange;
             if (canChasePlayer)
             {
                 this.UpdateEnemyPath();

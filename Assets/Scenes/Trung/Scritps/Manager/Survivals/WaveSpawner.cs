@@ -156,6 +156,7 @@ public class WaveSpawner :VuMonoBehaviour
                         {
                             this.AddEnemyToUI();
                             newEnemy.GetComponentInChildren<EnemyResponse>().IsReward = true;
+                            newEnemy.GetComponent<EnemyAIController>().ChaseRange = 100000f;
                         }
                     }
                     yield return new WaitForSeconds(this.timeDelayEachSpawn);

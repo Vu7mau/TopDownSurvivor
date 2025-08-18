@@ -1274,7 +1274,7 @@ MonoBehaviour:
   amountAttackNear: 1
   amountAttackFar: 1
   snd_roar: []
-  timeRoar: 10
+  timeRoar: 7
   snd_attack_1: []
 --- !u!114 &1839239339941553881
 MonoBehaviour:
@@ -1335,8 +1335,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 184486387661950844}
   enemyHealth: {fileID: 1839239339941553881}
-  enemyCtrlDespawn: {fileID: 5751218916542239875}
   textDisplayParentHolder: {fileID: 1684868753238102171}
+  characterLeveUp: {fileID: 0}
+  characterCurrencies: {fileID: 0}
+  waveSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 5751218916542239875}
+  enemiesSpawner: {fileID: 0}
+  pickUpSpawner: {fileID: 0}
+  isReward: 0
 --- !u!82 &1352888080379546676
 AudioSource:
   m_ObjectHideFlags: 0

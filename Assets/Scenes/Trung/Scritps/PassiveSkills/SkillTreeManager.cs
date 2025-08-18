@@ -23,12 +23,12 @@ public class SkillTreeManager : MonoBehaviour
 
     private void Start()
     {
-        // Mặc định skill đầu tiên
-        if (tiers.Count > 0 && tiers[0].availableSkills.Length > 0)
-        {
-            var firstSkill = tiers[0].availableSkills[0];
-            AddSkill(firstSkill);
-        }
+        //// Mặc định skill đầu tiên
+        //if (tiers.Count > 0 && tiers[0].availableSkills.Length > 0)
+        //{
+        //    var firstSkill = tiers[0].availableSkills[0];
+        //    AddSkill(firstSkill);
+        //}
     }
 
     public bool CanUnlockTier(int tierIndex)
