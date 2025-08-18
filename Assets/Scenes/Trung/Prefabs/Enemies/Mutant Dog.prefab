@@ -166,7 +166,7 @@ MonoBehaviour:
   amountAttackNear: 1
   amountAttackFar: 1
   snd_roar: []
-  timeRoar: 10
+  timeRoar: 7
   snd_attack_1:
   - {fileID: 8300000, guid: cf67135275402d84caa7f0b362e60095, type: 3}
   - {fileID: 0}
@@ -208,8 +208,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAI: {fileID: 8545315262332792066}
   enemyHealth: {fileID: 8271801894833053410}
-  enemyCtrlDespawn: {fileID: 8148708458041764003}
   textDisplayParentHolder: {fileID: 1411438241005518263}
+  characterLeveUp: {fileID: 0}
+  characterCurrencies: {fileID: 0}
+  waveSpawner: {fileID: 0}
+  enemyCtrlDespawn: {fileID: 8148708458041764003}
+  enemiesSpawner: {fileID: 0}
+  pickUpSpawner: {fileID: 0}
+  isReward: 0
 --- !u!1 &752536297193990415
 GameObject:
   m_ObjectHideFlags: 0

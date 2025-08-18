@@ -71,7 +71,7 @@ public class EnemyResponse : VuMonoBehaviour
         if (this.characterCurrencies != null)
         {
             this.characterCurrencies.AddKills(1);
-            this.characterCurrencies.AddScore(1);
+            this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
         }
         this.DespawnEnemy();
     }

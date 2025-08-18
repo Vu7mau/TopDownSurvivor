@@ -33,7 +33,7 @@ public class LevelUpUI : MonoBehaviour
     [Header("Color Cards Skill Header")]
     [SerializeField] protected List<Image> headerImageSkill;
     [SerializeField] protected List<Image> bodyImageSkill;
-    [SerializeField] protected RectTransform notice;
+    //[SerializeField] protected RectTransform notice;
 
     [Space]
     [Header("Cursors!")]
@@ -99,7 +99,11 @@ public class LevelUpUI : MonoBehaviour
 
 
         CharacterStats.Instance.UpdateCharacterStats();
-        Notification();
+
+
+        Transform noti = GameObject.Find("NotificationSystemPanelCanvas").transform;
+        RectTransform notiRect = noti.GetChild(0).GetComponent<RectTransform>();
+        if(notiRect != null) this.Notification(notiRect);
 
         if (this.skillButtons.Length > 0)
         {
@@ -146,15 +150,22 @@ public class LevelUpUI : MonoBehaviour
         }
     }
 
-    protected virtual void Notification()
+    protected virtual void Notification(RectTransform notice)
     {
-        // Đảm bảo bắt đầu từ vị trí ẩn
-        this.notice.anchoredPosition = new Vector2(this.notice.anchoredPosition.x, 700);
+        // Kill tất cả tween đang chạy trên notice
+        notice.DOKill();
 
-        // Chuỗi animation
-        Sequence seq = DOTween.Sequence();
-        seq.Append(this.notice.DOAnchorPosY(-327, 0.5f).SetEase(Ease.OutQuad).SetUpdate(true)) // Trượt xuống
-        .AppendInterval(1f).SetUpdate(true) // Giữ yên
-           .Append(this.notice.DOAnchorPosY(700, 0.5f).SetEase(Ease.InQuad).SetUpdate(true)); // Trượt lên lại
+        // Đảm bảo bắt đầu từ vị trí ẩn
+        notice.anchoredPosition = new Vector2(notice.anchoredPosition.x, 700);
+
+        // Tween mới
+        notice.DOAnchorPosY(-327, 0.5f).SetEase(Ease.OutQuad).SetUpdate(true)
+            .OnComplete(() =>
+            {
+                DOVirtual.DelayedCall(1f, () =>
+                {
+                    notice.DOAnchorPosY(700, 0.5f).SetEase(Ease.InQuad).SetUpdate(true);
+                });
+            });
     }
 }
