@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +33,6 @@ public class Singleton<T> : VuMonoBehaviour where T : VuMonoBehaviour
 
         base.Awake();
     }
-    
-
+   
 
 }

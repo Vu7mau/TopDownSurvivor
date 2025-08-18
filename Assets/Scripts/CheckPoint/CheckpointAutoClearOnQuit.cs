@@ -12,7 +12,7 @@ public class CheckpointAutoClearOnQuit : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+      //  DontDestroyOnLoad(gameObject);
     }
 
     private void OnApplicationQuit()
