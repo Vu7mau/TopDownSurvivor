@@ -1,9 +1,9 @@
-﻿// File: ChatNotify.cs
+﻿
 using UnityEngine;
 
-public class ChatNotify : MonoBehaviour
+public class ChatNotify : Singleton<ChatNotify>
 {
-    public static ChatNotify Instance { get; private set; }
+   // public static ChatNotify Instance { get; private set; }
 
     [Header("Refs")]
     [SerializeField] private ChatDialogue dialogue;
@@ -27,9 +27,9 @@ public class ChatNotify : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //if (Instance && Instance != this) { Destroy(gameObject); return; }
+        //Instance = this;
+        //DontDestroyOnLoad(gameObject);
     }
 
     private void Say(string msg, AudioClip sfx = null, float? time = null, DialogueAnchor? anch = null)
