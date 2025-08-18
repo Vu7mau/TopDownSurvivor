@@ -34,14 +34,15 @@ public class PanelDieEffect : MonoBehaviour
         if (parentPanel != null)
         {
             parentPanel.anchoredPosition = panelOriginalPos + Vector2.up * 500f;
-            parentPanel.DOAnchorPos(panelOriginalPos, slideDuration).SetEase(Ease.OutCubic);
+            parentPanel.DOAnchorPos(panelOriginalPos, slideDuration).SetEase(Ease.OutCubic).SetUpdate(true);
         }
 
         if (crownIcon != null)
         {
             crownIcon.anchoredPosition = crownOriginalPos + Vector2.up * crownJumpHeight;
             crownIcon.DOAnchorPos(crownOriginalPos, crownJumpDuration)
-                     .SetEase(Ease.OutBounce);
+                     .SetEase(Ease.OutBounce)
+                     .SetUpdate(true);
         }
     }
 
@@ -51,6 +52,7 @@ public class PanelDieEffect : MonoBehaviour
         {
             parentPanel.DOAnchorPos(panelOriginalPos + Vector2.up * 500f, slideDuration)
                        .SetEase(Ease.InCubic)
+                       .SetUpdate(true)
                        .OnComplete(() => gameObject.SetActive(false));
         }
         else

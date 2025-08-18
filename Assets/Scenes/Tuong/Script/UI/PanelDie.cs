@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using PlayFab;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,11 +7,7 @@ public class PanelDie : Singleton<VuMonoBehaviour>
 {
     public GameObject pnlDie;
     public TextMeshProUGUI score;
-
-    //private void Start()
-    //{
-    //    panelDie.SetActive(false);
-    //}
+    public TextMeshProUGUI time;
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.T))
@@ -19,43 +16,50 @@ public class PanelDie : Singleton<VuMonoBehaviour>
             {
                 pnlDie.SetActive(false);
                 Time.timeScale = 1f;
-                CrownEffect.Instance?.Close();
             }
             else
             {
-                pnlDie.SetActive(true);
-                CrownEffect.Instance?.Close();
-                Time.timeScale = 0f;
+                OpenPanelDie(); 
+                Time.timeScale = 0f; 
             }
         }
+    }
+    public void OpenPanelDie()
+    {
+        pnlDie.SetActive(true);
+        if (PlayFabClientAPI.IsClientLoggedIn())
+        {
+            PlayerScoreManager.Instance.SendFinalScore();
+        }
+        else
+        {
+            Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
+        }
+        CountDownTimer.Instance.GetSessionDurationInSeconds();
+        LastScore();
+        PlayTime();
+    }
+    public async void Restart()
+    {
+        Time.timeScale = 1f;
+        DOTween.Kill(gameObject);
+        pnlDie.SetActive(false);
+        PlayerScoreManager.Instance.ResetScore();
+        CountDownTimer.Instance.ResetTimer();
+        await LevelManager.Instance.LoadLevelAsync(SceneManager.GetActiveScene().buildIndex);
     }
     protected override void Start()
     {
         pnlDie.SetActive(false);
     }
-    protected override void OnEnable()
-    {
-        PanelDieEffect.Instance?.Show();
-    }
-    protected override void OnDisable()
-    {
-        PanelDieEffect.Instance?.Close();
-    }
-    //private void OnEnable()
-    //{
-    //    Time.timeScale = 0f;
-    //}
-    public async void Restart()
+    public async void BackToMainMenu(int index)
     {
         Time.timeScale = 1f;
+        DOTween.Kill(gameObject);
         pnlDie.SetActive(false);
-        await LevelManager.Instance.LoadLevelAsync(SceneManager.GetActiveScene().buildIndex);
-    }
-    public async void MainMenu()
-    {
-        Time.timeScale = 1f;
-        pnlDie.SetActive(false);
-        await LevelManager.Instance.LoadLevelAsync(0);
+        PlayerScoreManager.Instance?.ResetScore();
+        CountDownTimer.Instance?.ResetTimer();
+        await LevelManager.Instance?.LoadLevelAsync(index);
     }
     public void LastScore()
     {
@@ -63,11 +67,18 @@ public class PanelDie : Singleton<VuMonoBehaviour>
 
         int currentScore = 0;
 
-        DOTween.Kill("ScoreTween");
-
-        DOTween.To(() => currentScore, x => {
+        DOTween.To(() => currentScore, x =>
+        {
             currentScore = x;
             score.text = currentScore.ToString();
-        }, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetId("ScoreTween");
+        }, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
+    }
+    public void PlayTime()
+    {
+        int totalSeconds = CountDownTimer.Instance.GetSessionDurationInSeconds();
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+
+        time.text = $"{minutes:D2}:{seconds:D2}";
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Linq;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 public class LeaderBoardSurvive : LeaderBoardManager
 {
     [SerializeField] private GameObject entryPrefabSurvive;
@@ -186,39 +187,63 @@ public class LeaderBoardSurvive : LeaderBoardManager
     }
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
-        foreach (Transform child in contentSurvive)
+        if(contentSurvive != null)
         {
-            if (child != null)
+            foreach (Transform child in contentSurvive)
             {
-                child.DOKill();
-                Destroy(child.gameObject);
+                if (child != null)
+                {
+                    child.DOKill();
+                    Destroy(child.gameObject);
+                }
             }
         }
         string currentId = PlayFabSettings.staticPlayer.PlayFabId;
         if (entries.Count > 0)
         {
-            top1SurviveNameText.text = entries[0].DisplayName ?? "No name";
-            top1SurviveScoreText.text = entries[0].StatValue.ToString();
+            if(top1SurviveNameText != null)
+            {
+                top1SurviveNameText.text = entries[0].DisplayName ?? "No name";
+            }
+            if (top1SurviveScoreText != null)
+            {
+                top1SurviveScoreText.text = entries[0].StatValue.ToString();
+            }
         }
         if (entries.Count > 1)
         {
-            top2SurviveNameText.text = entries[1].DisplayName ?? "No name";
-            top2SurviveScoreText.text = entries[1].StatValue.ToString();
+            if (top2SurviveNameText != null)
+            {
+                top2SurviveNameText.text = entries[1].DisplayName ?? "No name";
+            }
+            if (top2SurviveScoreText != null)
+            {
+                top2SurviveScoreText.text = entries[1].StatValue.ToString();
+            }
         }
         if (entries.Count > 2)
         {
-            top3SurviveNameText.text = entries[2].DisplayName ?? "No name";
-            top3SurviveScoreText.text = entries[2].StatValue.ToString();
+            if (top3SurviveNameText != null)
+            {
+                top3SurviveNameText.text = entries[2].DisplayName ?? "No name";
+            }
+            if (top3SurviveScoreText != null)
+            {
+                top3SurviveScoreText.text = entries[2].StatValue.ToString();
+            }
         }
         for (int i = 3; i < entries.Count; i++)
         {
             var e = entries[i];
+            if (SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                GameObject go = Instantiate(entryPrefabSurvive, contentSurvive);
+                var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
+                texts[0].text = (i + 1).ToString();
+                texts[1].text = e.DisplayName ?? "No name";
+                texts[2].text = e.StatValue.ToString();
+            }
 
-            GameObject go = Instantiate(entryPrefabSurvive, contentSurvive);
-            var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
-            texts[0].text = (i + 1).ToString();
-            texts[1].text = e.DisplayName ?? "No name";
-            texts[2].text = e.StatValue.ToString();
         }
     }
     //private string FormatTime(int totalSeconds)

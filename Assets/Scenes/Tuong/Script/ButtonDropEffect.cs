@@ -36,7 +36,7 @@ public class ButtonDropEffect : MonoBehaviour
                    {
                        verticalLayoutGroup.enabled = true;
                    }
-               }); 
+               }).SetUpdate(true); 
         }
     }
 }

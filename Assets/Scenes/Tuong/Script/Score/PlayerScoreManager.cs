@@ -45,21 +45,20 @@ public class PlayerScoreManager : MonoBehaviour
         string mode = PlayerPrefs.GetString("LastMode", "Campaign"); 
         if(mode == "Campaign")
         {
-            LeaderBoardCampaign.Instance.SendScoreCampaign(score);
+            LeaderBoardCampaign.Instance?.SendScoreCampaign(score);
             Debug.Log("Gửi điểm lên bxh Campign: "+score);
         }
         else if(mode == "Survive")
         {
-            LeaderBoardSurvive.Instance.SendScoreSurvive(score);
+            LeaderBoardSurvive.Instance?.SendScoreSurvive(score);
             Debug.Log("Gửi điểm lên bxh Survive: " + score);
         }
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             SendFinalScore();
-            ResetScore();
         }
     }
 }

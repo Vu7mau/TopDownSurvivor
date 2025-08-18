@@ -27,15 +27,7 @@ public class SplashScreenController : MonoBehaviour
 
     private void Start()
     {
-        if (LoadMarker.Instance.HasLoaded)
-        {
-            panel?.SetActive(false);
-            StartCoroutine(ShowMenuNextFrame());
-            return;
-        }
-
         panel.SetActive(true);
-        LoadMarker.Instance.HasLoaded = true;
 
         InitIntroObjects();
         StartCoroutine(StartPlaySequence());
@@ -64,7 +56,7 @@ public class SplashScreenController : MonoBehaviour
         titleImage.transform.localPosition = textTargetPos + Vector3.up * textFallDistance;
     }
 
-    private void Update()
+    private async void Update()
     {
         if (canSkip && !hasSkipped && Input.GetMouseButtonDown(0))
         {
@@ -74,13 +66,7 @@ public class SplashScreenController : MonoBehaviour
             DOTween.Kill(pressText?.transform);
 
             panel.SetActive(false);
-
-            MainMenuTwo.Instance.PlayMenu.SetActive(true);
-            MainMenuTwo.Instance.PlayMenuTwo.SetActive(true);
-            bool hasLoggedIn = PlayerPrefs.GetInt("HasLoggedIn", 0) == 1;
-            MainMenuTwo.Instance.IconLeaderBoard.SetActive(hasLoggedIn);
-            MainMenuTwo.Instance.LogoutButton.SetActive(hasLoggedIn);
-            MainMenuTwo.Instance.IconGame.SetActive(true);
+            await LevelManager.Instance.LoadLevelAsync(1);
         }
     }
     private IEnumerator StartPlaySequence()

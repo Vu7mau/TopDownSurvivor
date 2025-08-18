@@ -48,13 +48,6 @@ public class AutoLogin : MonoBehaviour
         Debug.Log("Auto Login PlayFab thành công. PlayFabId = " + result.PlayFabId);
         Debug.Log("IsClientLoggedIn SAU khi login = " + PlayFabClientAPI.IsClientLoggedIn());
         PlayerPrefs.SetInt("HasLoggedIn", 1);
-        CharacterInformation.Instance.ShowCharacters();
-
-        //if (MainMenuTwo.Instance != null)
-        //{
-        //    MainMenuTwo.Instance.LogoutButton.SetActive(true);
-        //    MainMenuTwo.Instance.PlayMenu.SetActive(true);
-        //}
 
         StartCoroutine(DeleyAndLoadLeaderBoard());
     }

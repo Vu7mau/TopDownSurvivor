@@ -24,7 +24,7 @@ public class CountDownTimer : MonoBehaviour
     private void Update()
     {
         if (!isRunning) return;
-        if (SceneManager.GetActiveScene().buildIndex == 0) return;
+        if (SceneManager.GetActiveScene().buildIndex == 1) return;
         elapsedTime += Time.deltaTime;
         UpdateTimerUI();
     }
@@ -32,15 +32,29 @@ public class CountDownTimer : MonoBehaviour
     private void UpdateTimerUI()
     {
         int totalSeconds = Mathf.FloorToInt(elapsedTime);
-        int h = totalSeconds / 3600;
-        int m = (totalSeconds % 3600) / 60;
-        int s = totalSeconds % 60;
-        //Debug.Log(string.Format("{0:D2}:{1:D2}:{2:D2}", h, m, s));
+
+        int days = totalSeconds / 86400;           
+        int hours = (totalSeconds % 86400) / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        string display;
+
+        if (days > 0)
+        {
+            display = $"{days}d {hours:D2}:{minutes:D2}:{seconds:D2}";
+        }
+        else
+        {
+            display = $"{hours:D2}:{minutes:D2}:{seconds:D2}";
+        }
+
+        Debug.Log(display);
     }
+
     public void StartTimer()
     {
         isRunning = true;
-        sessionStartTime = DateTime.UtcNow;
     }
     public void PauseTimer()
     {
@@ -50,11 +64,10 @@ public class CountDownTimer : MonoBehaviour
     {
         elapsedTime = 0f;
         isRunning = false;
-        sessionStartTime = DateTime.UtcNow;
         UpdateTimerUI();
     }
     public int GetSessionDurationInSeconds()
     {
-        return (int)(DateTime.UtcNow - sessionStartTime).TotalSeconds;
+        return Mathf.FloorToInt(elapsedTime);
     }
 }
