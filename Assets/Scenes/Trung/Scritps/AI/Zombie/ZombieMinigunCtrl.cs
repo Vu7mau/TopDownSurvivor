@@ -10,7 +10,7 @@ public class ZombieMinigunCtrl : EShooting
 
     [SerializeField] protected List<Transform> listPositions;
     [SerializeField] protected AudioClip snd_shoot;
-    [SerializeField] protected MinigunBulletZombie minigunBullet;
+    [SerializeField] protected Projectitle minigunBullet;
     [SerializeField] protected int shootTime = 10;
     [SerializeField] protected float delayTime = 0.7f;
     
@@ -40,15 +40,15 @@ public class ZombieMinigunCtrl : EShooting
             this.Shooting(this.minigunBullet, this.listPositions[dem]);
             if (this.newProjectitle == null) yield break;
             float defaultSpeed = this.newProjectitle.Speed;
-            this.newProjectitle.gameObject.GetComponent<MinigunBulletZombie>().SetVelocity(0f);
-            this.newProjectitle.gameObject.GetComponent<MinigunBulletZombie>().SetDirection(Vector3.zero);
+            this.newProjectitle.gameObject.GetComponent<Projectitle>().SetVelocity(0f);
+            this.newProjectitle.gameObject.GetComponent<Projectitle>().SetDirection(Vector3.zero);
             this.newProjectitle.gameObject.GetComponentInChildren<TrailRenderer>().enabled = false;
             yield return new WaitForSeconds(0.1f);
+            SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot, this.transform);
             this.newProjectitle.gameObject.GetComponentInChildren<TrailRenderer>().enabled = true;
-            this.newProjectitle.gameObject.GetComponent<MinigunBulletZombie>().SetVelocity(defaultSpeed);
-            this.newProjectitle.gameObject.GetComponent<MinigunBulletZombie>().ShootAt(this.targetPosition.position);
+            this.newProjectitle.gameObject.GetComponent<Projectitle>().SetVelocity(defaultSpeed);
+            this.newProjectitle.gameObject.GetComponent<Projectitle>().ShootAt(this.targetPosition.position);
         }
         this.enemyAIController.EndAttack();
-        //SoundEnemyManager.Instance.StopEnemySoundFXClip(this.snd_shoot, this.transform);
     }
 }

@@ -29,7 +29,7 @@ public class ObjectLeveUp : VuMonoBehaviour
     }
     protected virtual bool ReachMaxLevel()
     {
-        return this._level == this._maxLevel && this._currentExp >= this._expToNextLevel;
+        return this._level >= this._maxLevel /*&& this._currentExp >= this._expToNextLevel*/;
     }
     protected virtual void LevelUp()
     {
@@ -41,6 +41,7 @@ public class ObjectLeveUp : VuMonoBehaviour
         // Nếu sau khi tăng level mà đạt maxLevel, thì set exp đúng giới hạn
         if (this.ReachMaxLevel())
         {
+            this._expToNextLevel *= 2f;
             this._currentExp = this._expToNextLevel; // Giữ thanh đầy 100%
         }
         else

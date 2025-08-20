@@ -36,10 +36,11 @@ public class ZombiePoliceCtrl : EShooting
         {
             yield return new WaitForSeconds(this.timeDelay);
             this.Shooting(this.bulletInvisible, this.positionSpawn);
-            if (this.newProjectitle == null) yield break;
-            if (this.gunFlash != null) this.gunFlash.gameObject.SetActive(true);
-            this.newProjectitle.GetComponent<BulletInvisible>().ShootAt(this.targetPosition.position);
 
+            if (this.newProjectitle == null) yield break;
+            this.newProjectitle.transform.position = this.positionSpawn.position;
+            this.newProjectitle.GetComponent<BulletInvisible>().ShootAt(this.targetPosition.position);
+            this.newProjectitle.GetComponent<BulletInvisible>().TrailBullet();
 
             AudioClip audi = null;
             if (this.snd_shoot.Count != 0)
@@ -49,11 +50,15 @@ public class ZombiePoliceCtrl : EShooting
             }
             else audi = SoundFXManager.Instance.rifleShoot;
             if(audi != null) SoundFXManager.Instance.PlaySoundFXClip(audi, this.transform);
-
+            if (this.gunFlash != null)
+            {
+                this.gunFlash.gameObject.SetActive(true);
+                yield return new WaitForSeconds(0.1f);
+                this.gunFlash.gameObject.SetActive(false);
+            }
 
         }
         yield return new WaitForSeconds(this.timeToNextShoot);
         this.enemyAIController.EndAttack();
-        if (this.gunFlash != null) this.gunFlash.gameObject.SetActive(false);
     }
 }

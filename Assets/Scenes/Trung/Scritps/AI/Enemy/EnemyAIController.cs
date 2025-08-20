@@ -103,6 +103,7 @@ public class EnemyAIController : EnemyBase
     protected virtual void LoadAllProperties()
     {
         //this.attackDistance = this.enemyReferences.EnemySO.AttackRange;
+        if(this.chaseRange == 0) this.chaseRange = this.enemyReferences.EnemySO.ChaseRange;
         this.enemyReferences.NavMeshAgent.speed = this.enemyReferences.EnemySO.ChaseSpeed;
         this.enemyReferences.NavMeshAgent.stoppingDistance = this.enemyReferences.EnemySO.AttackRange;
         this.enemyReferences.NavMeshAgent.acceleration = this.enemyReferences.EnemySO.ChaseSpeed;
@@ -199,7 +200,6 @@ public class EnemyAIController : EnemyBase
     {
         if (this.targetPosition != null)
         {
-            this.chaseRange = this.enemyReferences.EnemySO.ChaseRange;
             if (this.enemyHealth != null)
             {
                 if (this.EnemyIsDead())
@@ -257,7 +257,7 @@ public class EnemyAIController : EnemyBase
 
         this.enemyReferences.Animator.SetBool("attack", false);
         this.isAttacking = false;
-        if (this.distanceToTarget <= this.enemyReferences.EnemySO.ChaseRange) this.Chase();
+        if (this.distanceToTarget <= this.chaseRange) this.Chase();
     }
 
 
@@ -282,7 +282,7 @@ public class EnemyAIController : EnemyBase
                 this.UpdateEnemyPath();
             }
             this.enemyReferences.NavMeshAgent.enabled = true;
-            if (this.distanceToTarget > this.enemyReferences.EnemySO.ChaseRange) this.Idle();
+            if (this.distanceToTarget > this.chaseRange) this.Idle();
         }
     }
 

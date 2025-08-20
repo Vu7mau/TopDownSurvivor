@@ -54,6 +54,7 @@ public class SciFiController : BossController
     [SerializeField] protected List<Projectitle> rocketLightObj;
     [SerializeField] protected float timeDelayAttack2 = 0.1f;
     [SerializeField] protected float defaultSpeed = 50f;
+    [SerializeField] protected List<AudioClip> snd_shoot2_start;
 
     [SerializeField] protected List<AudioClip> snd_shoot6_start;
     [SerializeField] protected List<AudioClip> snd_shoot6_end;
@@ -99,10 +100,10 @@ public class SciFiController : BossController
             newRocket.GetComponentInChildren<Collider>().enabled = false;
             yield return null;
         }
-        if (this.snd_shoot6_start.Count > 0)
+        if (this.snd_shoot2_start.Count > 0)
         {
-            int random = Random.Range(0, this.snd_shoot6_start.Count);
-            SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot6_start[random], this.transform);
+            int random = Random.Range(0, this.snd_shoot2_start.Count);
+            SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot2_start[random], this.transform);
         }
 
         if (this.rocketLightObj.Count == 0) yield break;
@@ -155,6 +156,11 @@ public class SciFiController : BossController
     }
     private IEnumerator ShootingRoutine()
     {
+        if (this.snd_shoot6_start.Count > 0)
+        {
+            int random = Random.Range(0, this.snd_shoot6_start.Count);
+            SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot6_start[random], this.transform);
+        }
         for (int i = 0; i < this.shootingTime; i++)
         {
             this.LookAtTartgetPlease();

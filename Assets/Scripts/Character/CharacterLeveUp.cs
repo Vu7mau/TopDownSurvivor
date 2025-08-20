@@ -14,7 +14,12 @@ public class CharacterLeveUp : ObjectLeveUp
     [SerializeField] protected TMP_Text levelText;
     [SerializeField] protected TMP_Text progressText;
 
-
+    [Space]
+    [Header("UI EXP Bar")]
+    [SerializeField] protected Color levelColorNormal;
+    [SerializeField] protected Color levelColorMax;
+    [SerializeField] protected Image imageIconLevel;
+    [SerializeField] protected Image imageFill;
 
     protected Coroutine expCoroutine;
     protected float expToAdd = 0f;
@@ -79,14 +84,23 @@ public class CharacterLeveUp : ObjectLeveUp
     {
         if (this.levelText != null)
         {
-            this.levelText.text = "Level: " + this._level.ToString();
+            this.levelText.text = this._level.ToString();
         }
     }
     protected virtual void SetProgressUI(float currentExp, float maxCurrentLevelExp)
     {
         if (this.progressText != null)
         {
-            this.progressText.text = currentExp.ToString() + " / " + maxCurrentLevelExp.ToString();
+            if (this._currentExp >= this._maxLevel)
+            {
+                this.progressText.text = "MAX";
+                if (this.imageFill != null && this.imageIconLevel) this.SetUIEXPBar(this.levelColorMax);
+            }
+            else
+            {
+                if (this.imageFill != null && this.imageIconLevel) this.SetUIEXPBar(this.levelColorNormal);
+                this.progressText.text = currentExp.ToString() + " / " + maxCurrentLevelExp.ToString();
+            }
         }
         this.SetEXPBarUI(this._currentExp, this._expToNextLevel);
     }
@@ -114,5 +128,11 @@ public class CharacterLeveUp : ObjectLeveUp
             Time.timeScale = 0;
         }
 
+    }
+
+    protected virtual void SetUIEXPBar(Color color)
+    {
+        this.imageIconLevel.color = color;
+        this.imageFill.color = color;
     }
 }

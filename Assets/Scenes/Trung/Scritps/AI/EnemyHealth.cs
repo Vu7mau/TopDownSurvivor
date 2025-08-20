@@ -170,7 +170,7 @@ public class EnemyHealth : DamageReceiver
         if(this._isDead) 
         {
             OnDead();
-            killProgressSlider.AddKill();
+            if(this.killProgressSlider != null) killProgressSlider.AddKill();
             return;
         }
         if (!this._canGetDamage) return;
