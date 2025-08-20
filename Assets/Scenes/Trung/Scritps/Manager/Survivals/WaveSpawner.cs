@@ -118,7 +118,12 @@ public class WaveSpawner :VuMonoBehaviour
         if (this.e_winPanel != null && this.e_losePanel != null)
         {
             Transform objEndGame = isWin ? this.e_winPanel : this.e_losePanel;
-            if (objEndGame != null) objEndGame.gameObject.SetActive(true);
+            if (objEndGame != null)
+            {
+                Time.timeScale = 0f;
+                objEndGame.gameObject.SetActive(true);
+            }
+
         }
     }
 

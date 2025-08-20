@@ -154,7 +154,7 @@ public class EnemyResponse : VuMonoBehaviour
        //if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
 
 
-        //PlayerScoreManager.Instance.AddScore(this.enemyAI.EnemySO.Score);
+        PlayerScoreManager.Instance.AddScore(this.gameObject,this.enemyAI.EnemySO.Score);
 
         this.coroutine = null;
     }

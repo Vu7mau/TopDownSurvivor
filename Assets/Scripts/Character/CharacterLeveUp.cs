@@ -91,7 +91,7 @@ public class CharacterLeveUp : ObjectLeveUp
     {
         if (this.progressText != null)
         {
-            if (this._currentExp >= this._maxLevel)
+            if (this._level >= this._maxLevel)
             {
                 this.progressText.text = "MAX";
                 if (this.imageFill != null && this.imageIconLevel) this.SetUIEXPBar(this.levelColorMax);

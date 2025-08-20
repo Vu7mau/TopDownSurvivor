@@ -13,6 +13,7 @@ public class CharacterDamageReceiver : DamageReceiver
     {
        // base.Start();
         this.SetMaxHealth();
+        CharacterUIManager.OnUpdateHealth?.Invoke(this._hpMax, this._hpMax);
         //  HpBar.Instance.SetHealthMaxBarVolume(this._hpMax);
 
     }
@@ -37,8 +38,8 @@ public class CharacterDamageReceiver : DamageReceiver
         characterCtrl.InputManager.DetachInputEvents();
         characterCtrl.DisableAllComponet();
         CharacterUIManager.OnUpdateHealth?.Invoke(0, 0);
-
-        //  _pnl.pnlDie.gameObject.SetActive(true);
+        //Time.timeScale = 0f;
+        _pnl.pnlDie.gameObject.SetActive(true);
 
     }
     protected virtual void SetMaxHealth()
