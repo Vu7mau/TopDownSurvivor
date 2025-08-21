@@ -106,6 +106,11 @@ public class LeaderBoardCampaign : LeaderBoardManager
         var foundEntry = topEntries.Find(e => e.PlayFabId == myEntry.PlayFabId);
         int score = foundEntry != null ? foundEntry.StatValue : 0;
         scoreCampaign.text = $"{myEntry.StatValue}";
+
+        if (timeMap.TryGetValue(myEntry.PlayFabId, out int playTime))
+            timeCampignTwo.text = FormatTime(playTime);
+        else
+            timeCampignTwo.text = "??:??";
     }
     public void GetLeaderBoardCampaign()
     {
@@ -185,29 +190,50 @@ public class LeaderBoardCampaign : LeaderBoardManager
     }
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
-        foreach (Transform child in contentCampign)
+        if (contentCampign != null)
         {
-            if (child != null)
+            foreach (Transform child in contentCampign)
             {
-                child.DOKill();
-                Destroy(child.gameObject);
+                if (child != null)
+                {
+                    child.DOKill();
+                    Destroy(child.gameObject);
+                }
             }
         }
         string currentId = PlayFabSettings.staticPlayer.PlayFabId;
         if (entries.Count > 0)
         {
-            top1CampaignNameText.text = entries[0].DisplayName ?? "No name";
-            top1CampaignScoreText.text = entries[0].StatValue.ToString();
+            if(top1CampaignNameText != null)
+            {
+                top1CampaignNameText.text = entries[0].DisplayName ?? "No name";
+            }
+            if (top1CampaignScoreText != null)
+            {
+                top1CampaignScoreText.text = entries[0].StatValue.ToString();
+            }
         }
         if (entries.Count > 1)
         {
-            top2CampaignNameText.text = entries[1].DisplayName ?? "No name";
-            top2CampaignScoreText.text = entries[1].StatValue.ToString();
+            if (top2CampaignNameText != null)
+            {
+                top2CampaignNameText.text = entries[1].DisplayName ?? "No name";
+            }
+            if (top2CampaignScoreText != null)
+            {
+                top2CampaignScoreText.text = entries[1].StatValue.ToString();
+            }
         }
         if (entries.Count > 2)
         {
-            top3CampaignNameText.text = entries[2].DisplayName ?? "No name";
-            top3CampaignScoreText.text = entries[2].StatValue.ToString();
+            if (top3CampaignNameText != null)
+            {
+                top3CampaignNameText.text = entries[2].DisplayName ?? "No name";
+            }
+            if (top3CampaignScoreText != null)
+            {
+                top3CampaignScoreText.text = entries[2].StatValue.ToString();
+            }
         }
         for (int i = 3; i < entries.Count; i++)
         {
@@ -217,63 +243,56 @@ public class LeaderBoardCampaign : LeaderBoardManager
             var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
             texts[0].text = (i + 1).ToString();
             texts[1].text = e.DisplayName ?? "No name";
-            texts[2].text = e.StatValue.ToString();
-
-            //string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
+            string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
+            texts[2].text = time;
+            texts[3].text = e.StatValue.ToString();
 
         }
     }
-    //private string FormatTime(int totalSeconds)
-    //{
-    //    int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
-    //    return $"{m:D2}:{s:D2}";
-    //}
-    public void SendScoreCampaign(int value)
+    private string FormatTime(int totalSeconds)
     {
+        if (totalSeconds <= 0)
+            return "0s";
+
+        int days = totalSeconds / 86400;
+        int hours = (totalSeconds % 86400) / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        if (days > 0)
+            return $"{days}d {hours}h {minutes}m {seconds}s";
+        else if (hours > 0)
+            return $"{hours}h {minutes}m {seconds}s";
+        else if (minutes > 0)
+            return $"{minutes}m {seconds}s";
+        else
+            return $"{seconds}s";
+    }
+    public void SendScoreCampign(int deltaScore)
+    {
+        if (!PlayFabClientAPI.IsClientLoggedIn())
+        {
+            Debug.LogWarning("Chưa đăng nhập PlayFab.");
+            return;
+        }
+
         int sessionTime = CountDownTimer.Instance?.GetSessionDurationInSeconds() ?? 0;
-        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest
+
+        var stats = new List<StatisticUpdate>
         {
-            StatisticNames = new List<string> { leaderboardCampign, timeCampign }
-        },
-        result =>
-        {
-            int? currentScore = null;
-            int? currentTime = null;
-            foreach (var stat in result.Statistics)
+            new StatisticUpdate { StatisticName = leaderboardCampign, Value = deltaScore },
+            new StatisticUpdate { StatisticName = timeCampign, Value = sessionTime }
+        };
+
+        PlayFabClientAPI.UpdatePlayerStatistics(
+            new UpdatePlayerStatisticsRequest { Statistics = stats },
+            _ =>
             {
-                if (stat.StatisticName == leaderboardCampign)
-                    currentScore = stat.Value;
-                else if (stat.StatisticName == timeCampign)
-                    currentTime = stat.Value;
-            }
-            bool shouldUpdateScore = currentScore == null || value > currentScore;
-            bool shouldUpdateTime = false;
-            if (value == currentScore && (currentTime == null || sessionTime < currentTime))
-                shouldUpdateTime = true;
-            var stats = new List<StatisticUpdate>();
-            if (shouldUpdateScore)
-            {
-                stats.Add(new StatisticUpdate { StatisticName = leaderboardCampign, Value = value });
-                stats.Add(new StatisticUpdate { StatisticName = timeCampign, Value = sessionTime });
-            }
-            else if (shouldUpdateTime)
-            {
-                stats.Add(new StatisticUpdate { StatisticName = timeCampign, Value = sessionTime });
-            }
-            else
-            {
-                Debug.Log("Không cập nhật vì không có thông tin nào tốt hơn.");
-                return;
-            }
-            PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest { Statistics = stats },
-                result =>
-                {
-                    Debug.Log("Cập nhật điểm/thời gian thành công");
-                    GetLeaderBoardCampaign();
-                },
-                error => Debug.LogError("Lỗi gửi điểm: " + error.GenerateErrorReport()));
-        },
-        error => Debug.LogError("Lỗi khi lấy thống kê: " + error.GenerateErrorReport()));
+                Debug.Log($"[PlayFab] +{deltaScore} điểm, +{sessionTime}s (Aggregation=Sum)");
+                GetLeaderBoardCampaign();
+            },
+            err => Debug.LogError("Lỗi gửi điểm: " + err.GenerateErrorReport())
+        );
     }
     public void EnsureDefaultScore()
     {

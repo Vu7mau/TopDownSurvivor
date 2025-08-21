@@ -1,5 +1,7 @@
 ﻿using DG.Tweening;
 using PlayFab;
+using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,24 +10,11 @@ public class PanelDie : Singleton<VuMonoBehaviour>
     public GameObject pnlDie;
     public TextMeshProUGUI score;
     public TextMeshProUGUI time;
-    private void Update()
+    public async void OpenPanelDie()
     {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            if (pnlDie.activeSelf)
-            {
-                pnlDie.SetActive(false);
-                Time.timeScale = 1f;
-            }
-            else
-            {
-                OpenPanelDie(); 
-                Time.timeScale = 0f; 
-            }
-        }
-    }
-    public void OpenPanelDie()
-    {
+        Debug.Log("Open Panel Die");
+        await Task.Delay(3000);
+        Time.timeScale = 0f;
         pnlDie.SetActive(true);
         if (PlayFabClientAPI.IsClientLoggedIn())
         {
@@ -35,7 +24,6 @@ public class PanelDie : Singleton<VuMonoBehaviour>
         {
             Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
         }
-        CountDownTimer.Instance.GetSessionDurationInSeconds();
         LastScore();
         PlayTime();
     }
@@ -63,22 +51,23 @@ public class PanelDie : Singleton<VuMonoBehaviour>
     }
     public void LastScore()
     {
-        int targetScore = PlayerScoreManager.Instance.totalScore;
-
-        int currentScore = 0;
-
-        DOTween.To(() => currentScore, x =>
+        if (PlayerScoreManager.Instance != null)
         {
-            currentScore = x;
-            score.text = currentScore.ToString();
-        }, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
+            int targetScore = PlayerScoreManager.Instance.totalScore;
+
+            int currentScore = 0;
+
+            DOTween.To(() => currentScore, x =>
+            {
+                currentScore = x;
+                score.text = currentScore.ToString();
+            }, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
+        }
     }
     public void PlayTime()
     {
-        int totalSeconds = CountDownTimer.Instance.GetSessionDurationInSeconds();
-        int minutes = totalSeconds / 60;
-        int seconds = totalSeconds % 60;
+        string totalSeconds = CountDownTimer.Instance?.GetFormattedTime();
 
-        time.text = $"{minutes:D2}:{seconds:D2}";
+        time.text = totalSeconds;
     }
 }

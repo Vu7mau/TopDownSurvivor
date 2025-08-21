@@ -25,7 +25,7 @@ public class LeaderboardVFX : MonoBehaviour
         {
             originalPositions[i] = panelTransforms[i].anchoredPosition;
         }
-    }
+    }f
     public void PrepareHide()
     {
         for (int i = 0; i < panelTransforms.Length; i++)

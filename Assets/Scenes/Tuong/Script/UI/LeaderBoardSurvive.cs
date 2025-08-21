@@ -50,6 +50,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         var timeMap = new Dictionary<string, int>();
         var createdMap = new Dictionary<string, DateTime>();
         bool doneScores = false;
+
         PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
         {
             StatisticName = leaderboardSurvive,
@@ -59,17 +60,21 @@ public class LeaderBoardSurvive : LeaderBoardManager
         res => { topEntries = res.Leaderboard.ToList(); doneScores = true; },
         err => { Debug.LogError(err.GenerateErrorReport()); doneScores = true; });
         yield return new WaitUntil(() => doneScores);
+
         if (!topEntries.Any(e => e.PlayFabId == myEntry.PlayFabId))
             topEntries.Add(myEntry);
+
         bool doneTimes = false;
         PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest
         {
             StatisticName = timeSurvive,
             StartPosition = 0,
             MaxResultsCount = 100
-        }, res => { foreach (var e in res.Leaderboard) timeMap[e.PlayFabId] = e.StatValue; doneTimes = true; },
+        },
+        res => { foreach (var e in res.Leaderboard) timeMap[e.PlayFabId] = e.StatValue; doneTimes = true; },
         err => { Debug.LogWarning(err.GenerateErrorReport()); doneTimes = true; });
         yield return new WaitUntil(() => doneTimes);
+
         if (!timeMap.ContainsKey(myEntry.PlayFabId))
         {
             bool doneSelfTime = false;
@@ -79,10 +84,12 @@ public class LeaderBoardSurvive : LeaderBoardManager
             }, res =>
             {
                 var stat = res.Statistics.FirstOrDefault(s => s.StatisticName == timeSurvive);
-                timeMap[myEntry.PlayFabId] = stat?.Value ?? int.MaxValue; doneSelfTime = true;
+                timeMap[myEntry.PlayFabId] = stat?.Value ?? int.MaxValue;
+                doneSelfTime = true;
             }, err => { timeMap[myEntry.PlayFabId] = int.MaxValue; doneSelfTime = true; });
             yield return new WaitUntil(() => doneSelfTime);
         }
+
         int pending = topEntries.Count;
         bool doneAccounts = false;
         foreach (var entry in topEntries)
@@ -100,15 +107,25 @@ public class LeaderBoardSurvive : LeaderBoardManager
             });
         }
         yield return new WaitUntil(() => doneAccounts);
+
         topEntries.Sort((a, b) => CompareRank(a, b, timeMap, createdMap));
+
         int myIndex = topEntries.FindIndex(e => e.PlayFabId == myEntry.PlayFabId);
+
         string name = string.IsNullOrEmpty(myEntry.DisplayName) ? "Bạn" : myEntry.DisplayName;
         nameSurvive.text = $"{name}";
         rankSurvive.text = $"{myIndex + 1}";
+
         var foundEntry = topEntries.Find(e => e.PlayFabId == myEntry.PlayFabId);
         int score = foundEntry != null ? foundEntry.StatValue : 0;
-        scoreSurvive.text = $"{myEntry.StatValue}";
+        scoreSurvive.text = $"{score}";
+
+        if (timeMap.TryGetValue(myEntry.PlayFabId, out int playTime))
+            timeSurviveTwo.text = FormatTime(playTime);
+        else
+            timeSurviveTwo.text = "??:??";
     }
+
     public void GetLeaderBoardSurvive()
     {
         if (!PlayFabClientAPI.IsClientLoggedIn())
@@ -187,7 +204,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
     }
     private void DisplayLeaderboard(List<PlayerLeaderboardEntry> entries, Dictionary<string, int> timeMap)
     {
-        if(contentSurvive != null)
+        if (contentSurvive != null)
         {
             foreach (Transform child in contentSurvive)
             {
@@ -201,7 +218,7 @@ public class LeaderBoardSurvive : LeaderBoardManager
         string currentId = PlayFabSettings.staticPlayer.PlayFabId;
         if (entries.Count > 0)
         {
-            if(top1SurviveNameText != null)
+            if (top1SurviveNameText != null)
             {
                 top1SurviveNameText.text = entries[0].DisplayName ?? "No name";
             }
@@ -241,63 +258,59 @@ public class LeaderBoardSurvive : LeaderBoardManager
                 var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
                 texts[0].text = (i + 1).ToString();
                 texts[1].text = e.DisplayName ?? "No name";
-                texts[2].text = e.StatValue.ToString();
+                string time = timeMap.TryGetValue(e.PlayFabId, out int t) ? FormatTime(t) : "??:??";
+                texts[2].text = time;
+                texts[3].text = e.StatValue.ToString();
             }
 
         }
     }
-    //private string FormatTime(int totalSeconds)
-    //{
-    //    int h = totalSeconds / 3600, m = (totalSeconds % 3600) / 60, s = totalSeconds % 60;
-    //    return $"{m:D2}:{s:D2}";
-    //}
-    public void SendScoreSurvive(int value)
+    private string FormatTime(int totalSeconds)
     {
-        int sessionTime = CountDownTimer.Instance?.GetSessionDurationInSeconds() ?? 0;
-        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest
-        {
-            StatisticNames = new List<string> { leaderboardSurvive, timeSurvive }
-        },
-        result =>
-        {
-            int? currentScore = null;
-            int? currentTime = null;
-            foreach (var stat in result.Statistics)
-            {
-                if (stat.StatisticName == leaderboardSurvive)
-                    currentScore = stat.Value;
-                else if (stat.StatisticName == timeSurvive)
-                    currentTime = stat.Value;
-            }
-            bool shouldUpdateScore = currentScore == null || value > currentScore;
-            bool shouldUpdateTime = false;
-            if (value == currentScore && (currentTime == null || sessionTime > currentTime))
-                shouldUpdateTime = true;
-            var stats = new List<StatisticUpdate>();
-            if (shouldUpdateScore)
-            {
-                stats.Add(new StatisticUpdate { StatisticName = leaderboardSurvive, Value = value });
-                stats.Add(new StatisticUpdate { StatisticName = timeSurvive, Value = sessionTime });
-            }
-            else if (shouldUpdateTime)
-            {
-                stats.Add(new StatisticUpdate { StatisticName = timeSurvive, Value = sessionTime });
-            }
-            else
-            {
-                Debug.Log("Không cập nhật vì không có thông tin nào tốt hơn.");
-                return;
-            }
-            PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest { Statistics = stats },
-                result =>
-                {
-                    Debug.Log("Cập nhật điểm/thời gian thành công");
-                    GetLeaderBoardSurvive();
-                },
-                error => Debug.LogError("Lỗi gửi điểm: " + error.GenerateErrorReport()));
-        },
-        error => Debug.LogError("Lỗi khi lấy thống kê: " + error.GenerateErrorReport()));
+        if (totalSeconds <= 0)
+            return "0s";
+
+        int days = totalSeconds / 86400;
+        int hours = (totalSeconds % 86400) / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        if (days > 0)
+            return $"{days}d {hours}h {minutes}m {seconds}s";
+        else if (hours > 0)
+            return $"{hours}h {minutes}m {seconds}s";
+        else if (minutes > 0)
+            return $"{minutes}m {seconds}s";
+        else
+            return $"{seconds}s";
     }
+    public void SendScoreSurvive(int deltaScore)
+    {
+        if (!PlayFabClientAPI.IsClientLoggedIn())
+        {
+            Debug.LogWarning("Chưa đăng nhập PlayFab.");
+            return;
+        }
+
+        int sessionTime = CountDownTimer.Instance?.GetSessionDurationInSeconds() ?? 0;
+
+        var stats = new List<StatisticUpdate>
+        {
+            new StatisticUpdate { StatisticName = leaderboardSurvive, Value = deltaScore },
+            new StatisticUpdate { StatisticName = timeSurvive, Value = sessionTime }
+        };
+
+        PlayFabClientAPI.UpdatePlayerStatistics(
+            new UpdatePlayerStatisticsRequest { Statistics = stats },
+            _ =>
+            {
+                Debug.Log($"[PlayFab] +{deltaScore} điểm, +{sessionTime}s (Aggregation=Sum)");
+                GetLeaderBoardSurvive();
+            },
+            err => Debug.LogError("Lỗi gửi điểm: " + err.GenerateErrorReport())
+        );
+    }
+
     public void EnsureDefaultScore()
     {
         var stats = new List<StatisticUpdate>

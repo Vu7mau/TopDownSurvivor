@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class AudioManagerTwo : MonoBehaviour
 {
     public static AudioManagerTwo Instance;
+    public AudioSource backgroundMusic;
     [System.Serializable]
     public struct ButtonSFXEntry
     {
@@ -27,6 +29,7 @@ public class AudioManagerTwo : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        backgroundMusic = transform.Find("Music")?.GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -60,6 +63,18 @@ public class AudioManagerTwo : MonoBehaviour
         if (buttonSFXDict.TryGetValue(type, out var clip) && clip != null)
         {
             buttonSource?.PlayOneShot(clip);
+        }
+    }
+    private void Update()
+    {
+        if(backgroundMusic != null && SceneManager.GetActiveScene().buildIndex == 0)
+        {
+           backgroundMusic.Stop();
+        }
+        else
+        {
+            if (backgroundMusic != null)
+                backgroundMusic.Play();
         }
     }
 }

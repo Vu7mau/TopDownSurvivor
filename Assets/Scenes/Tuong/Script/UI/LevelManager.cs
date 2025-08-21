@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
-
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;

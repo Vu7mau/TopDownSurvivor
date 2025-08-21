@@ -87,3 +87,4 @@ public class ImageEffect : MonoBehaviour
         DoRandomEffect();
     }
 }
+f

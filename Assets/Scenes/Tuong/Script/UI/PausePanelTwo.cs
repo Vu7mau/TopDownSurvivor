@@ -1,9 +1,9 @@
 ﻿using DG.Tweening;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 public class PausePanelTwo : MonoBehaviour
 {
+    public static PausePanelTwo Instance;
     public GameObject pausePanel;
     public GameObject backGround;
     public GameObject settingsPanel;
@@ -14,6 +14,17 @@ public class PausePanelTwo : MonoBehaviour
     private bool isTransitioning = false;
     private const float transitionDelay = 1f;
     private bool isInSettingPanel = false;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Start()
     {
         if (CountDownTimer.Instance == null)
@@ -70,6 +81,8 @@ public class PausePanelTwo : MonoBehaviour
     public async void Restart(int sceneIndex)
     {
         Time.timeScale = 1f;
+        PlayerScoreManager.Instance?.SendFinalScore();
+        PlayerScoreManager.Instance?.ResetScore();
         pausePanel.SetActive(false);
         DOTween.KillAll();
         await LevelManager.Instance.LoadLevelAsync(sceneIndex);
@@ -77,6 +90,8 @@ public class PausePanelTwo : MonoBehaviour
     public async void BackToMainMenu(int sceneIndex)
     {
         Time.timeScale = 1f;
+        PlayerScoreManager.Instance?.SendFinalScore();
+        PlayerScoreManager.Instance?.ResetScore();
         CountDownTimer.Instance?.ResetTimer();
         CountDownTimer.Instance?.PauseTimer();
         pausePanel?.SetActive(false);
@@ -111,6 +126,17 @@ public class PausePanelTwo : MonoBehaviour
             settingsPanel.SetActive(false);
             pausePanel.SetActive(true);
             effectPausePanel.ShowPanel();
+            isTransitioning = false;
+        });
+    }
+    public void ClosePause()
+    {
+        isTransitioning = true;
+        isInSettingPanel = false;
+        effectPausePanel.HidePanel(() =>
+        {
+            pausePanel.SetActive(false);
+            backGround.SetActive(false);
             isTransitioning = false;
         });
     }

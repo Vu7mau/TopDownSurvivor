@@ -19,6 +19,7 @@ public class LeaderBoardManager : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI top3CampaignNameText;
     [SerializeField] protected TextMeshProUGUI top3CampaignScoreText;
     [SerializeField] protected TextMeshProUGUI rankCampaign;
+    [SerializeField] protected TextMeshProUGUI timeCampignTwo;f
     [SerializeField] protected TextMeshProUGUI nameCampaign;
     [SerializeField] protected TextMeshProUGUI scoreCampaign;
     [SerializeField] protected TextMeshProUGUI top1SurviveNameText;
@@ -28,6 +29,7 @@ public class LeaderBoardManager : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI top3SurviveNameText;
     [SerializeField] protected TextMeshProUGUI top3SurviveScoreText;
     [SerializeField] protected TextMeshProUGUI rankSurvive;
+    [SerializeField] protected TextMeshProUGUI timeSurviveTwo;
     [SerializeField] protected TextMeshProUGUI nameSurvive;
     [SerializeField] protected TextMeshProUGUI scoreSurvive;
 
@@ -76,6 +78,8 @@ public class LeaderBoardManager : MonoBehaviour
         rankSurvive = allTexts.FirstOrDefault(t => t.name == "RankSurvive");
         nameSurvive = allTexts.FirstOrDefault(t => t.name == "NameSurvive");
         scoreSurvive = allTexts.FirstOrDefault(t => t.name == "ScoreSurvive");
+        timeSurviveTwo = allTexts.FirstOrDefault(t => t.name == "TimeSurvive");
+        timeCampignTwo = allTexts.FirstOrDefault(t => t.name == "TimeCampign");
         var allRects = Resources.FindObjectsOfTypeAll<RectTransform>();
         var allCanvases = Resources.FindObjectsOfTypeAll<Canvas>();
         canvas = allCanvases.FirstOrDefault(t => t.name == "Canvas");

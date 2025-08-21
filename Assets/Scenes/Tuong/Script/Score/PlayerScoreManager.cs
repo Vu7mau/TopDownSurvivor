@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PlayFab;
+using System.Collections.Generic;
 using UnityEngine;
 public class PlayerScoreManager : MonoBehaviour
 {
@@ -45,20 +46,19 @@ public class PlayerScoreManager : MonoBehaviour
         string mode = PlayerPrefs.GetString("LastMode", "Campaign"); 
         if(mode == "Campaign")
         {
-            LeaderBoardCampaign.Instance?.SendScoreCampaign(score);
-            Debug.Log("Gửi điểm lên bxh Campign: "+score);
+            if (PlayFabClientAPI.IsClientLoggedIn())
+            {
+                LeaderBoardCampaign.Instance?.SendScoreCampign(score);
+                Debug.Log("Gửi điểm lên bxh Campign: " + score);
+            }
         }
         else if(mode == "Survive")
         {
-            LeaderBoardSurvive.Instance?.SendScoreSurvive(score);
-            Debug.Log("Gửi điểm lên bxh Survive: " + score);
-        }
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            SendFinalScore();
+            if (PlayFabClientAPI.IsClientLoggedIn())
+            {
+                LeaderBoardSurvive.Instance?.SendScoreSurvive(score);
+                Debug.Log("Gửi điểm lên bxh Survive: " + score);
+            }
         }
     }
 }

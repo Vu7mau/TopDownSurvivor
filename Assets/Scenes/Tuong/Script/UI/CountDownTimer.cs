@@ -5,8 +5,7 @@ public class CountDownTimer : MonoBehaviour
 {
     public static CountDownTimer Instance;
     public float elapsedTime = 0f;
-    private bool isRunning = false;
-    private DateTime sessionStartTime;
+    public bool isRunning = false;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -14,42 +13,38 @@ public class CountDownTimer : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-        sessionStartTime = DateTime.UtcNow;
+    }
+    private void OnEnable()
+    {
         StartTimer();
     }
-
     private void Update()
     {
         if (!isRunning) return;
         if (SceneManager.GetActiveScene().buildIndex == 1) return;
         elapsedTime += Time.deltaTime;
-        UpdateTimerUI();
+        GetFormattedTime();
     }
 
-    private void UpdateTimerUI()
+    public string GetFormattedTime()
     {
         int totalSeconds = Mathf.FloorToInt(elapsedTime);
 
-        int days = totalSeconds / 86400;           
+        if (totalSeconds <= 0) return "0s";
+
+        int days = totalSeconds / 86400;
         int hours = (totalSeconds % 86400) / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
 
-        string display;
+        string result = "";
+        if (days > 0) result += $"{days}d ";
+        if (hours > 0) result += $"{hours}h ";
+        if (minutes > 0) result += $"{minutes}m ";
+        if (seconds > 0) result += $"{seconds}s";
 
-        if (days > 0)
-        {
-            display = $"{days}d {hours:D2}:{minutes:D2}:{seconds:D2}";
-        }
-        else
-        {
-            display = $"{hours:D2}:{minutes:D2}:{seconds:D2}";
-        }
-
-        Debug.Log(display);
+        return result.Trim();
     }
 
     public void StartTimer()
@@ -63,8 +58,8 @@ public class CountDownTimer : MonoBehaviour
     public void ResetTimer()
     {
         elapsedTime = 0f;
-        isRunning = false;
-        UpdateTimerUI();
+        isRunning = true;
+        GetFormattedTime();
     }
     public int GetSessionDurationInSeconds()
     {
