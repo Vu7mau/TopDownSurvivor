@@ -17,6 +17,11 @@ public class Localization:ScriptableObject
     public string TITLE_ENEMY_WAVES;
     public string TITLE_TIME_TO_NEXT_WAVE;
 
+    public string TITLE_ATK;
+    public string TITLE_DEFENSE;
+    public string TITLE_CRITRATE;
+    public string TITLE_CRITDAMAGE;
+
     [Header("Victory Bosss")]
     public string DLG_WHEN_KILL_BOSS = "BOSS IS DEAD!";
 

@@ -62,7 +62,20 @@ public class WaveSpawner :VuMonoBehaviour
         this.waveHolder = GameObject.Find("WaveHolder").transform;
     }
 
+    private Coroutine checkFinishWavesRoutine;
 
+    public void StartCheckFinishWaves()
+    {
+        // Nếu đã chạy trước đó thì stop lại
+        if (checkFinishWavesRoutine != null)
+        {
+            StopCoroutine(checkFinishWavesRoutine);
+            checkFinishWavesRoutine = null;
+        }
+
+        // Start lại coroutine mới
+        checkFinishWavesRoutine = StartCoroutine(CheckFinishWaves());
+    }
 
 
 
@@ -71,6 +84,17 @@ public class WaveSpawner :VuMonoBehaviour
         Time.timeScale = 1.0f;
         if (!isSpawning)
             StartCoroutine(HandleWaves());
+    }
+
+    private IEnumerator CheckFinishWaves()
+    {
+        yield return new WaitUntil(() =>
+            this.currentWaveIndex >= this.waveConfig.waves.Count
+            && this.enemyLefts == 0
+        );
+
+        StartCoroutine(this.EndGamePlayRoutine(true));
+        checkFinishWavesRoutine = null; // reset khi xong
     }
 
     private IEnumerator HandleWaves()

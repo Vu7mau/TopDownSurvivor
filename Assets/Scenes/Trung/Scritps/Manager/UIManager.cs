@@ -70,18 +70,22 @@ public class UIManager : Singleton<UIManager>
     {
         if(this.txt_ATK != null)
         {
+            this.title_ATK.text = localization.TITLE_ATK;
             this.txt_ATK.text = _atk.ToString();
         }
         if (this.txt_Defense != null)
         {
+            this.title_Defense.text = localization.TITLE_DEFENSE;
             this.txt_Defense.text = _defense.ToString();
         }
         if (this.txt_CritRate != null)
         {
+            this.title_CritRate.text = localization.TITLE_CRITRATE;
             this.txt_CritRate.text = _critRate.ToString();
         }
         if (this.txt_CritDamage != null)
         {
+            this.title_CritDamage.text = localization.TITLE_CRITDAMAGE;
             this.txt_CritDamage.text = _critDamage.ToString();
         }
         if (this.txt_BonusDamage != null)
