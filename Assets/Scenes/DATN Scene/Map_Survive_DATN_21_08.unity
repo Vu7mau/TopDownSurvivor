@@ -3960,7 +3960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1599274804
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4700,6 +4700,10 @@ PrefabInstance:
     - target: {fileID: 3383131824663295399, guid: 4bb80609272e5714e87fcb6a3e58533a, type: 3}
       propertyPath: m_Name
       value: Pickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 4987380807711741137, guid: 4bb80609272e5714e87fcb6a3e58533a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -29577,6 +29581,7 @@ GameObject:
   - component: {fileID: 545801411966497083}
   - component: {fileID: 545801411967464443}
   - component: {fileID: 4695601823557796927}
+  - component: {fileID: 4695601823557796928}
   m_Layer: 0
   m_Name: Building_Stadium
   m_TagString: Untagged
@@ -56349,6 +56354,7 @@ GameObject:
   - component: {fileID: 824732889750598498}
   - component: {fileID: 824732889749795650}
   - component: {fileID: 824732889748828546}
+  - component: {fileID: 824732889750826819}
   m_Layer: 0
   m_Name: Building_Bakery
   m_TagString: Untagged
@@ -56356,6 +56362,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &824732889750826819
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824732889750826818}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.7950006, y: 4.2400002, z: 5.6380005}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.001, y: 4.2400002, z: 0.27800003}
+  m_TimeToStationary: 0.5
 --- !u!114 &824823390913193105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81768,7 +81790,7 @@ Transform:
   m_GameObject: {fileID: 1282126893906421216}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -86.09073, y: 50.055897, z: 94.35073}
+  m_LocalPosition: {x: -64.586395, y: 16.386772, z: 61.313156}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -81817,7 +81839,7 @@ Transform:
   - {fileID: 2189728436754455139}
   - {fileID: 2368705745326431042}
   - {fileID: 9183083067154261587}
-  m_Father: {fileID: 3265667774803906008}
+  m_Father: {fileID: 9151426504135290926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1562917080860356290
 GameObject:
@@ -83171,6 +83193,7 @@ GameObject:
   - component: {fileID: 1607231357668345731}
   - component: {fileID: 1607231357665445795}
   - component: {fileID: 1607231357666575715}
+  - component: {fileID: 1607231357668776868}
   m_Layer: 0
   m_Name: Building_Gas Station
   m_TagString: Untagged
@@ -83178,6 +83201,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &1607231357668776868
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607231357668776867}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.5000005, y: 3.9970002, z: 12.801001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.066, y: 3.9970002, z: 2.4290001}
+  m_TimeToStationary: 0.5
 --- !u!4 &1607775831347385950
 Transform:
   m_ObjectHideFlags: 0
@@ -88871,6 +88910,7 @@ GameObject:
   - component: {fileID: 1707765300838725625}
   - component: {fileID: 1707765300835825625}
   - component: {fileID: 1707765300836955417}
+  - component: {fileID: 1707765300838886362}
   m_Layer: 0
   m_Name: Building Sky_small_color01
   m_TagString: Untagged
@@ -88878,6 +88918,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &1707765300838886362
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707765300838886361}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.5000005, y: 8.464001, z: 6.5330005}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 8.464001, z: 0.476}
+  m_TimeToStationary: 0.5
 --- !u!4 &1709202246399420072
 Transform:
   m_ObjectHideFlags: 0
@@ -105859,6 +105915,7 @@ GameObject:
   - component: {fileID: 1935665252662393819}
   - component: {fileID: 1935665252663523611}
   - component: {fileID: 1935665252672771099}
+  - component: {fileID: 1935665252672771100}
   m_Layer: 0
   m_Name: Building_Bar (1)
   m_TagString: Untagged
@@ -105902,6 +105959,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!208 &1935665252672771100
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935665252665518043}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.6790001, y: 5.2060003, z: 3.7040002}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.023000002, y: 5.2050004, z: 0.284}
+  m_TimeToStationary: 0.5
 --- !u!4 &1938098272940695403
 Transform:
   m_ObjectHideFlags: 0
@@ -189328,6 +189401,7 @@ GameObject:
   - component: {fileID: 3169862235003586435}
   - component: {fileID: 3169862235004913571}
   - component: {fileID: 3169862235006010723}
+  - component: {fileID: 3169862235006010724}
   m_Layer: 0
   m_Name: Building_Fruits  Shop (1)
   m_TagString: Untagged
@@ -189385,6 +189459,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!208 &3169862235006010724
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3169862235004017571}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.063, y: 5.8030005, z: 6.078}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.135, y: 5.8030005, z: 0.089}
+  m_TimeToStationary: 0.5
 --- !u!4 &3170611973577215221
 Transform:
   m_ObjectHideFlags: 0
@@ -197144,9 +197234,6 @@ Transform:
   - {fileID: 8026523515517055405}
   - {fileID: 6650348163243006775}
   - {fileID: 9151426504135290926}
-  - {fileID: 5593886725168690787}
-  - {fileID: 6622890981002393264}
-  - {fileID: 1561484209076723233}
   - {fileID: 3641234129548991226}
   - {fileID: 411462408889434169}
   - {fileID: 5151904116806091258}
@@ -208336,6 +208423,7 @@ GameObject:
   - component: {fileID: 3392572819228294240}
   - component: {fileID: 3392572819227164320}
   - component: {fileID: 2244267277464193334}
+  - component: {fileID: 3392572819228294241}
   m_Layer: 0
   m_Name: Building_House_02_color03
   m_TagString: Untagged
@@ -208393,6 +208481,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3392572819224961120}
   m_Mesh: {fileID: 4300000, guid: 8cb6d953267a0884288df6a274f09c40, type: 3}
+--- !u!208 &3392572819228294241
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3392572819224961120}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.791, y: 4.5220003, z: 6.504}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.423, y: 4.5220003, z: -0.106000006}
+  m_TimeToStationary: 0.5
 --- !u!65 &3394219564879471357
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -208646,6 +208750,7 @@ GameObject:
   - component: {fileID: 3418361179197347783}
   - component: {fileID: 3418361179198346503}
   - component: {fileID: 9145625505970416888}
+  - component: {fileID: 9145625505970416889}
   m_Layer: 0
   m_Name: Building_Residential_color01
   m_TagString: Untagged
@@ -231058,7 +231163,7 @@ Transform:
   m_GameObject: {fileID: 5627993958693508246}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.08695031, z: -0, w: 0.9962127}
-  m_LocalPosition: {x: 161.5, y: 12.06, z: 104.4}
+  m_LocalPosition: {x: 145.9, y: -1, z: 87.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -243639,6 +243744,7 @@ GameObject:
   - component: {fileID: 3936298583170326381}
   - component: {fileID: 3936298583166934861}
   - component: {fileID: 3936298583167901069}
+  - component: {fileID: 3936298583170326382}
   m_Layer: 0
   m_Name: Building_Pizza
   m_TagString: Untagged
@@ -243661,6 +243767,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6622890981002393264}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!208 &3936298583170326382
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3936298583170089805}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 7.4860005, y: 3.8980002, z: 6.7840004}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.69100004, y: 3.8980002, z: 0.079}
+  m_TimeToStationary: 0.5
 --- !u!23 &3936875172052604203
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -243846,6 +243968,7 @@ GameObject:
   - component: {fileID: 3943382289961006956}
   - component: {fileID: 3943382289958139724}
   - component: {fileID: 3943382289959105932}
+  - component: {fileID: 3943382289961364301}
   m_Layer: 0
   m_Name: Building_House_04_color02
   m_TagString: Untagged
@@ -243853,6 +243976,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &3943382289961364301
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943382289961364300}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 12.386001, y: 3.9350002, z: 7.6610003}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.799, y: 3.7150002, z: 0.115}
+  m_TimeToStationary: 0.5
 --- !u!224 &3944240550150266539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -257079,6 +257218,7 @@ GameObject:
   - component: {fileID: 4303282395598445012}
   - component: {fileID: 4303282395597445908}
   - component: {fileID: 767244398930775098}
+  - component: {fileID: 4303282395599439317}
   m_Layer: 0
   m_Name: Building_Clothing
   m_TagString: Untagged
@@ -257086,6 +257226,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &4303282395599439317
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4303282395599439316}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.063, y: 5.8030005, z: 6.078}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.083000004, y: 5.8030005, z: 0.035}
+  m_TimeToStationary: 0.5
 --- !u!4 &4305200731822079375
 Transform:
   m_ObjectHideFlags: 0
@@ -263362,6 +263518,7 @@ GameObject:
   - component: {fileID: 4506478619780357690}
   - component: {fileID: 4506478619781487866}
   - component: {fileID: 5457105156114894284}
+  - component: {fileID: 5457105156114894285}
   m_Layer: 0
   m_Name: Building_House_02_color01
   m_TagString: Untagged
@@ -293575,6 +293732,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 8d799610519b6274c8bb35a7fd95f5f5, type: 3}
+--- !u!208 &4695601823557796928
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545801411965267259}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 17.730001, y: 5.8650002, z: 22.378}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.32200003, y: 5.8230004, z: -0.002}
+  m_TimeToStationary: 0.5
 --- !u!1 &4698092512699257399
 GameObject:
   m_ObjectHideFlags: 0
@@ -313154,6 +313327,7 @@ GameObject:
   - component: {fileID: 5190860052091404390}
   - component: {fileID: 5190860052090110022}
   - component: {fileID: 5190860052089111174}
+  - component: {fileID: 5190860052091404391}
   m_Layer: 0
   m_Name: Building_House_03_color02
   m_TagString: Untagged
@@ -313176,6 +313350,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6622890981002393264}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!208 &5190860052091404391
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5190860052091313222}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.628, y: 4.8050003, z: 7.2040005}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.07700001, y: 4.743, z: -0.18}
+  m_TimeToStationary: 0.5
 --- !u!1 &5193288494437774378
 GameObject:
   m_ObjectHideFlags: 0
@@ -318182,6 +318372,7 @@ GameObject:
   - component: {fileID: 5234557109878379858}
   - component: {fileID: 5234557109881771378}
   - component: {fileID: 5234557109880674226}
+  - component: {fileID: 5234557109881771379}
   m_Layer: 0
   m_Name: Building Sky_big_color01
   m_TagString: Untagged
@@ -318239,6 +318430,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5234557109878409586}
   m_Mesh: {fileID: 4300000, guid: 152095147e5492c41a9718b9b09863a4, type: 3}
+--- !u!208 &5234557109881771379
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5234557109878409586}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.8300004, y: 12.401001, z: 6.1480002}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 12.401001, z: 0.124000005}
+  m_TimeToStationary: 0.5
 --- !u!4 &5237375345822493428
 Transform:
   m_ObjectHideFlags: 0
@@ -325081,6 +325288,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 8cb6d953267a0884288df6a274f09c40, type: 3}
+--- !u!208 &5457105156114894285
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4506478619779220026}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.791, y: 4.5220003, z: 6.504}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.423, y: 4.5220003, z: -0.106000006}
+  m_TimeToStationary: 0.5
 --- !u!222 &5458501119581247996
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -326925,7 +327148,7 @@ Transform:
   m_GameObject: {fileID: 8151136826429269928}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -52.396317, y: 50.002254, z: 40.728127}
+  m_LocalPosition: {x: -30.891983, y: 16.33313, z: 7.6905518}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -327012,7 +327235,7 @@ Transform:
   - {fileID: 4979002298070312901}
   - {fileID: 4565890628814785300}
   - {fileID: 4778127130678643367}
-  m_Father: {fileID: 3265667774803906008}
+  m_Father: {fileID: 9151426504135290926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &5594651058753178544
 Transform:
@@ -402957,6 +403180,7 @@ GameObject:
   - component: {fileID: 6355383643201365869}
   - component: {fileID: 6355383643200365997}
   - component: {fileID: 6777969498990702539}
+  - component: {fileID: 6777969498990702540}
   m_Layer: 0
   m_Name: Building_Factory
   m_TagString: Untagged
@@ -403200,6 +403424,7 @@ GameObject:
   - component: {fileID: 6374603608974392871}
   - component: {fileID: 6374603608966861607}
   - component: {fileID: 6147764238557421396}
+  - component: {fileID: 6374603608976384232}
   m_Layer: 0
   m_Name: Building_Bar
   m_TagString: Untagged
@@ -403207,6 +403432,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &6374603608976384232
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6374603608976384231}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.6790001, y: 5.2060003, z: 3.7040002}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.023000002, y: 5.2050004, z: 0.284}
+  m_TimeToStationary: 0.5
 --- !u!1 &6375679815810609728
 GameObject:
   m_ObjectHideFlags: 0
@@ -405794,7 +406035,7 @@ Transform:
   m_GameObject: {fileID: 2687022520789170490}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.555786, y: 54.142876, z: 57.984947}
+  m_LocalPosition: {x: 39.06012, y: 20.473751, z: 24.947372}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -405820,7 +406061,7 @@ Transform:
   - {fileID: 9107332230659238490}
   - {fileID: 545801411965694235}
   - {fileID: 6355383643202660173}
-  m_Father: {fileID: 3265667774803906008}
+  m_Father: {fileID: 9151426504135290926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!222 &6625579408080062171
 CanvasRenderer:
@@ -407229,6 +407470,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 932be02d2912c394786d8ec1d2007f18, type: 3}
+--- !u!208 &6777969498990702540
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6355383643202632557}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.200001, y: 9.485001, z: 13.750001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 9.485001, z: -0.527}
+  m_TimeToStationary: 0.5
 --- !u!114 &6786188832671797326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409125,6 +409382,7 @@ GameObject:
   - component: {fileID: 7042852447559088238}
   - component: {fileID: 7042852447555663950}
   - component: {fileID: 7042852447556663950}
+  - component: {fileID: 7042852447559088239}
   m_Layer: 0
   m_Name: Building_Residential_color03
   m_TagString: Untagged
@@ -409147,6 +409405,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6622890981002393264}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!208 &7042852447559088239
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7042852447558591566}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.115001, y: 9.620001, z: 6.3320003}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 9.620001, z: 0.058000002}
+  m_TimeToStationary: 0.5
 --- !u!1 &7044993174015141269
 GameObject:
   m_ObjectHideFlags: 0
@@ -417173,6 +417447,7 @@ GameObject:
   - component: {fileID: 7226920413220436249}
   - component: {fileID: 7226920413221403609}
   - component: {fileID: 2981807865238167957}
+  - component: {fileID: 7226920413223593242}
   m_Layer: 0
   m_Name: Building_House_04_color03
   m_TagString: Untagged
@@ -417180,6 +417455,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &7226920413223593242
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7226920413223593241}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 12.386001, y: 3.9350002, z: 7.6610003}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.799, y: 3.7150002, z: 0.115}
+  m_TimeToStationary: 0.5
 --- !u!114 &7227508080702636275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438961,6 +439252,7 @@ GameObject:
   - component: {fileID: 7484474868229831964}
   - component: {fileID: 7484474868230799324}
   - component: {fileID: 448112621437442364}
+  - component: {fileID: 7484474868230799325}
   m_Layer: 0
   m_Name: Building_Auto Service
   m_TagString: Untagged
@@ -439018,6 +439310,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!208 &7484474868230799325
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7484474868228858140}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 9.136001, y: 3.5000002, z: 4.132}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.22100002, y: 3.5000002, z: 0.049000002}
+  m_TimeToStationary: 0.5
 --- !u!1 &7484976262348479306
 GameObject:
   m_ObjectHideFlags: 0
@@ -475771,6 +476079,7 @@ GameObject:
   - component: {fileID: 8178081566616521571}
   - component: {fileID: 8178081566615423395}
   - component: {fileID: 7604381944574580971}
+  - component: {fileID: 8178081566617848644}
   m_Layer: 0
   m_Name: Building_Fruits  Shop
   m_TagString: Untagged
@@ -475793,6 +476102,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6622890981002393264}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!208 &8178081566617848644
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8178081566617687907}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.063, y: 5.8030005, z: 6.078}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.135, y: 5.8030005, z: 0.089}
+  m_TimeToStationary: 0.5
 --- !u!1 &8178329894733612241
 GameObject:
   m_ObjectHideFlags: 0
@@ -488023,6 +488348,7 @@ GameObject:
   - component: {fileID: 8463364758789879416}
   - component: {fileID: 8463364758786979416}
   - component: {fileID: 8463364758788109464}
+  - component: {fileID: 8463364758790040153}
   m_Layer: 0
   m_Name: Building_House_01_color02
   m_TagString: Untagged
@@ -488030,6 +488356,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &8463364758790040153
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8463364758790040152}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.946, y: 4.5270004, z: 6.301}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.56100005, y: 4.526, z: -0.133}
+  m_TimeToStationary: 0.5
 --- !u!1 &8465085028400891527
 GameObject:
   m_ObjectHideFlags: 0
@@ -519668,6 +520010,7 @@ GameObject:
   - component: {fileID: 9107332230658435706}
   - component: {fileID: 9107332230657468602}
   - component: {fileID: 654950017894700923}
+  - component: {fileID: 9107332230659667579}
   m_Layer: 0
   m_Name: Building_House_03_color02 (1)
   m_TagString: Untagged
@@ -519675,6 +520018,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!208 &9107332230659667579
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9107332230659667578}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.628, y: 4.8050003, z: 7.2040005}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.07700001, y: 4.743, z: -0.18}
+  m_TimeToStationary: 0.5
 --- !u!114 &9107740860277693336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520081,6 +520440,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 42f28010e67310c4c9ea88fbc4084fc6, type: 3}
+--- !u!208 &9145625505970416889
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3418361179200342983}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 8.115001, y: 9.620001, z: 6.3320003}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 9.620001, z: 0.058000002}
+  m_TimeToStationary: 0.5
 --- !u!23 &9146868424004303700
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -520238,6 +520613,9 @@ Transform:
   - {fileID: 637138188054699876}
   - {fileID: 5759850644868437938}
   - {fileID: 6422042447771737914}
+  - {fileID: 1561484209076723233}
+  - {fileID: 6622890981002393264}
+  - {fileID: 5593886725168690787}
   m_Father: {fileID: 3265667774803906008}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9151426504135290927
