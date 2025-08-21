@@ -23,14 +23,18 @@ public class PowerUpItem : PoolObj
     }
     private void OnTriggerEnter(Collider other)
     {
-        // Kiểm tra xem object va chạm có nằm trong LayerMask groundLayer hay không
+        // Kiểm tra xem object va chạm có nằm trong groundLayer không
         if ((groundLayer.value & (1 << other.gameObject.layer)) != 0)
         {
+            // Reset vận tốc
             rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            // Dừng physics
             rb.useGravity = false;
             rb.isKinematic = true;
 
-            // Snap lên đúng bề mặt (nếu cần)
+            // Snap vị trí đứng yên trên mặt đất
             Vector3 pos = transform.position;
             pos.y = other.ClosestPoint(transform.position).y;
             transform.position = pos;
