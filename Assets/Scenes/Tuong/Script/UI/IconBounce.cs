@@ -2,7 +2,7 @@
 using UnityEngine;
 public class IconBounce : MonoBehaviour
 {
-    [SerializeField] private float scaleAmount = 1.1f;  f
+    [SerializeField] private float scaleAmount = 1.1f;  
     [SerializeField] private float duration = 1.5f;     
     private Vector3 originalScale;
     private Tween scaleTween;

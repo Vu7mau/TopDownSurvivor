@@ -32,4 +32,3 @@ public class FlagHoverSizeDelta : MonoBehaviour, IPointerEnterHandler, IPointerE
         flag.DOSizeDelta(originalSize, duration).SetEase(Ease.OutBack);
     }
 }
-f

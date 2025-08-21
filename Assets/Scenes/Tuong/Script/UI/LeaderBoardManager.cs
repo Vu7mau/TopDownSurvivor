@@ -19,7 +19,7 @@ public class LeaderBoardManager : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI top3CampaignNameText;
     [SerializeField] protected TextMeshProUGUI top3CampaignScoreText;
     [SerializeField] protected TextMeshProUGUI rankCampaign;
-    [SerializeField] protected TextMeshProUGUI timeCampignTwo;f
+    [SerializeField] protected TextMeshProUGUI timeCampignTwo;
     [SerializeField] protected TextMeshProUGUI nameCampaign;
     [SerializeField] protected TextMeshProUGUI scoreCampaign;
     [SerializeField] protected TextMeshProUGUI top1SurviveNameText;
