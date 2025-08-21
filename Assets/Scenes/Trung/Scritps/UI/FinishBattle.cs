@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -21,6 +21,7 @@ public class FinishBattle : Panel
     [SerializeField] protected TMP_Text txt_coin;
     [SerializeField] protected TMP_Text txt_kills;
     [SerializeField] protected TMP_Text txt_scores;
+    [SerializeField] protected TMP_Text txt_time;
 
     protected override void OnEnable()
     {
@@ -55,7 +56,7 @@ public class FinishBattle : Panel
 
     public virtual void DisplayPanelWhenFinishTheBattle(bool isVictory, int level, int scores, int kills, int coins)
     {
-        if (this.txt_level != null)
+        if (this.txt_title != null)
         {
             string title = isVictory ? "VICTORY!" : "DEFEAT!";
             this.txt_title.text = title.ToString();
@@ -64,5 +65,39 @@ public class FinishBattle : Panel
         if (this.txt_scores != null) this.txt_scores.text = scores.ToString();
         if (this.txt_kills != null) this.txt_kills.text = kills.ToString();
         if (this.txt_coin != null) this.txt_coin.text = coins.ToString();
+        if (this.txt_time != null) this.txt_time.text = this.GetFinishTime().ToString();
+    }
+
+    public string GetFinishTime()
+    {
+        CountDownTimer time = FindAnyObjectByType<CountDownTimer>();
+        int totalSeconds = Mathf.FloorToInt(time.elapsedTime);
+
+        if (totalSeconds <= 0) return "0:00";
+
+        int days = totalSeconds / 86400;
+        int hours = (totalSeconds % 86400) / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        string result;
+
+        if (days > 0)
+        {
+            // Có ngày → hiển thị: ngày:giờ:phút:giây
+            result = $"{days}:{hours:D2}:{minutes:D2}:{seconds:D2}";
+        }
+        else if (hours > 0)
+        {
+            // Có giờ nhưng không có ngày → hiển thị: giờ:phút:giây
+            result = $"{hours}:{minutes:D2}:{seconds:D2}";
+        }
+        else
+        {
+            // Chỉ còn phút và giây → hiển thị: phút:giây
+            result = $"{minutes}:{seconds:D2}";
+        }
+
+        return result;
     }
 }

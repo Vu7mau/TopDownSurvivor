@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class PausePanelTwo : MonoBehaviour
 {
     public static PausePanelTwo Instance;
@@ -10,6 +11,9 @@ public class PausePanelTwo : MonoBehaviour
     public EffectSignIn effectPausePanel;
     public EffectPanelSetting effectPanelSetting;
     public GameObject timerPrefab;
+
+    [SerializeField] protected Transform winPanel;
+    [SerializeField] protected Transform losePanel;
 
     private bool isTransitioning = false;
     private const float transitionDelay = 1f;
@@ -78,6 +82,18 @@ public class PausePanelTwo : MonoBehaviour
             isTransitioning = false;
         });
     }
+
+    public async void RestartTheGame()
+    {
+        Time.timeScale = 1f;
+        DOTween.Kill(gameObject);
+        
+        winPanel.gameObject.SetActive(false);
+        losePanel.gameObject.SetActive(false);
+        PlayerScoreManager.Instance?.ResetScore();
+        CountDownTimer.Instance.ResetTimer();
+        await LevelManager.Instance.LoadLevelAsync(SceneManager.GetActiveScene().buildIndex);
+    }
     public async void Restart(int sceneIndex)
     {
         Time.timeScale = 1f;
@@ -86,6 +102,13 @@ public class PausePanelTwo : MonoBehaviour
         pausePanel.SetActive(false);
         DOTween.KillAll();
         await LevelManager.Instance.LoadLevelAsync(sceneIndex);
+    }
+
+    public virtual void BackToMainMenuGame()
+    {
+        winPanel.gameObject.SetActive(false);
+        losePanel.gameObject.SetActive(false);
+        this.BackToMainMenu(1);
     }
     public async void BackToMainMenu(int sceneIndex)
     {

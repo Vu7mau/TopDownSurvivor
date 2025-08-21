@@ -138,7 +138,7 @@ public class CharacterStats : Singleton<CharacterStats>
     public int AttackEnemy()
     {
         int damage = DamageCalculator.CalculateDamage(currentAtk, currentCritRate, currentCritDamage);
-        Debug.Log($"Gây {damage} sát thương lên quái!");
+        //Debug.Log($"Gây {damage} sát thương lên quái!");
         return damage;
     }
 

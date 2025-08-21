@@ -57,17 +57,22 @@ public class PanelWin : MonoBehaviour
     public void LastScore()
     {
         Debug.Log("Cập nhật điểm cuối cùng");
-        if (PlayerScoreManager.Instance != null)
-        {
-            int targetScore = PlayerScoreManager.Instance.totalScore;
-            int currentScore = 0;
+        int targetScore = PlayerPrefs.GetInt("currentScores", 0);
+        score.text = targetScore.ToString();
+        Debug.Log("Last Score");
+        //if (PlayerScoreManager.Instance != null)
+        //{
+        //    //int targetScore = PlayerScoreManager.Instance.totalScore;
+        //    //int currentScore = 0;
 
-            DOTween.To(() => currentScore, x =>
-            {
-                currentScore = x;
-                score.text = currentScore.ToString();
-            }, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
-        }
+           
+
+        //    //DOTween.To(() => currentScore, x =>
+        //    //{
+        //    //    currentScore = x;
+        //    //    score.text = currentScore.ToString();
+        //    //}, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
+        //}
     }
     public void PlayTime()
     {

@@ -51,18 +51,24 @@ public class PanelDie : Singleton<VuMonoBehaviour>
     }
     public void LastScore()
     {
-        if (PlayerScoreManager.Instance != null)
-        {
-            int targetScore = PlayerScoreManager.Instance.totalScore;
+        //if (PlayerScoreManager.Instance != null)
+        //{
 
-            int currentScore = 0;
+        //}
 
-            DOTween.To(() => currentScore, x =>
-            {
-                currentScore = x;
-                score.text = currentScore.ToString();
-            }, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
-        }
+
+        int targetScore = PlayerPrefs.GetInt("currentScores", 0);
+        Debug.Log("Last Score");
+
+        score.text = targetScore.ToString();
+        int currentScore = 0;
+
+        //DOTween.To(() => currentScore, x =>
+        //{
+        //    currentScore = x;
+        //    score.text = currentScore.ToString();
+        //}, targetScore, 1.5f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(gameObject);
+
     }
     public void PlayTime()
     {

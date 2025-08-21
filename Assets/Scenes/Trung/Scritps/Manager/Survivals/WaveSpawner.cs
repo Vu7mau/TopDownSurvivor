@@ -84,12 +84,14 @@ public class WaveSpawner :VuMonoBehaviour
         Time.timeScale = 1.0f;
         if (!isSpawning)
             StartCoroutine(HandleWaves());
+
+        StartCheckFinishWaves();
     }
 
     private IEnumerator CheckFinishWaves()
     {
         yield return new WaitUntil(() =>
-            this.currentWaveIndex >= this.waveConfig.waves.Count
+            this.currentWaveIndex == (this.waveConfig.waves.Count - 1)
             && this.enemyLefts == 0
         );
 
