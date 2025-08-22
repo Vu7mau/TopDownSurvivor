@@ -18,7 +18,6 @@ public class WeaponPickup : VuMonoBehaviour
         var activeWeapon = FindObjectOfType<ActiveWeapon>();
         if (activeWeapon != null && activeWeapon.HasPicked(uniqueId.Id))
         {
-<<<<<<< HEAD
            RayCastWeapon newWeapon=Instantiate(_weaponFab);
             activeWeapon.Equip(newWeapon);
              
@@ -37,9 +36,7 @@ public class WeaponPickup : VuMonoBehaviour
             }
 
             this.gameObject.SetActive(false);
-=======
             gameObject.SetActive(false);
->>>>>>> Vu
         }
     }
 
