@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -7,11 +7,9 @@ using UnityEngine.UI;
 
 public class RayCastWeapon : ObjectShooting
 {
-
-
     [SerializeField] protected bool _isFiring => CharacterCtrl.Instance.CharacterShooting.IsPressShooting();
     [SerializeField] protected Vector3 _mousePoint => CharacterCtrl.Instance.CharacterAim.GetAim().position;
-    [Space]
+
     [Header("RayCastWeapon")]
     [SerializeField] protected ParticleSystem _muzzelFlash;
     [SerializeField] protected LineRenderer lineRenderer;
@@ -19,13 +17,10 @@ public class RayCastWeapon : ObjectShooting
     [SerializeField] protected Transform _shellSpawnPos;
     [SerializeField] protected bool _isWeaponActivate = false;
 
-
     protected RaycastHit _targetEnemy;
-
 
     [SerializeField] public Transform model;
 
-   // [SerializeField] public Transform flash;
     public WeaponSlot weaponSlot => weaponInfo.weaponSlot;
     public Transform GunPoint => _gunPoint;
     public Vector3 MousePoint => _mousePoint;
@@ -35,22 +30,15 @@ public class RayCastWeapon : ObjectShooting
 
     public float ReloadAmmorTime => weaponInfo.reloadAmmoTime;
 
+    protected override void OnDisable() { }
+    protected override void OnEnable() { base.OnEnable(); }
 
-    protected override void OnDisable()
-    {
-
-    }
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-          
-    }
     protected override void Awake()
     {
         base.Awake();
         this._muzzelFlash = GetComponentInChildren<ParticleSystem>();
-
     }
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -61,7 +49,6 @@ public class RayCastWeapon : ObjectShooting
     {
         base.Update();
         this.ActivateZoom();
-
     }
 
     protected virtual void ShooterEffect()
@@ -73,36 +60,21 @@ public class RayCastWeapon : ObjectShooting
     protected override void Shoot()
     {
         if (string.IsNullOrEmpty(this.SetBulletType())) return;
+
         Transform newBullet = BulletSpawner.Instance.Spawn(this.SetBulletType(), this.GunPoint.position, Quaternion.LookRotation(this.GunPoint.forward));
         CharacterUIManager.OnWeaponReload?.Invoke(_bulletsCount, weaponInfo.maxBulletCount);
         this.ShooterEffect();
         this.SpawnShell();
-
-        //if (flash != null)
-        //{
-        //    if (!flash.gameObject.activeSelf)
-        //    {
-        //        flash.gameObject.SetActive(true);
-        //    }
-        //}
-
     }
-    protected override void HoldFire()
-    {
 
-        //if (flash != null)
-        //{
-        //    if (flash.gameObject.activeSelf)
-        //    {
-        //        flash.gameObject.SetActive(false);
-        //    }
-        //}
-    }
+    protected override void HoldFire() { }
+
     protected virtual void SpawnShell()
     {
         if (string.IsNullOrEmpty(this.SetShellType())) return;
         Transform newBullet = ShellSpawner.Instance.Spawn(this.SetShellType(), this._shellSpawnPos.position, Quaternion.LookRotation(this._shellSpawnPos.forward));
     }
+
     protected override bool IsFireInputPresse()
     {
         if (this._isWeaponActivate)
@@ -113,6 +85,7 @@ public class RayCastWeapon : ObjectShooting
         else
             return _isShooting = false;
     }
+
     protected virtual void ShootLaser()
     {
         if (!_isWeaponActivate) return;
@@ -136,8 +109,8 @@ public class RayCastWeapon : ObjectShooting
         }
         lineRenderer.SetPosition(0, _gunPoint.position);
         lineRenderer.SetPosition(1, endPosition);
-
     }
+
     protected virtual void ActivateZoom()
     {
         CinemachineCtrl.Instance.CinemachineZoom.ToggleZoom(IsShooting, weaponInfo.zoomSpeed);
@@ -146,53 +119,28 @@ public class RayCastWeapon : ObjectShooting
     private void LoadModel()
     {
         if (model != null) return;
-
         this.model = this.transform.Find("Model").GetComponent<Transform>();
         if (this.model != null) Debug.Log("Load model success");
     }
+
     public virtual void SetIsWeaponActivate(bool isWeaponActivate)
     {
         _isWeaponActivate = isWeaponActivate;
-       
-        //if (flash != null)
-        //{
-        //    this.flash.gameObject.SetActive(isWeaponActivate);
-        //}
-
     }
 
-    protected virtual string SetBulletType()
-    {
-        return string.Empty;
-    }
-    protected virtual string SetShellType()
-    {
-        return string.Empty;
-    }
-    public virtual bool GetIsReloadingAmmo()
-    {
-        return _isReloadAmmour;
-    }
-    public virtual int GetCurrentAmmour()
-    {
-        return this._bulletsCount;
-    }
-    public virtual int GetMaxAmmour()
-    {
-        return weaponInfo.maxBulletCount;
-    }
-    public virtual bool GetBurstLocked()
-    {
-        return _isBursting;
-    }
-    public virtual Sprite GunSprite()
-    {
-        if (weaponInfo.gunImage == null) return null;
-        return weaponInfo.gunImage;
-    }
-    public virtual void UpdateTotalBullet(int bulletCount)
-    {
-        weaponInfo.totalAmmo += bulletCount;
-    }
+    protected virtual string SetBulletType() { return string.Empty; }
+    protected virtual string SetShellType() { return string.Empty; }
 
+    public virtual bool GetIsReloadingAmmo() { return _isReloadAmmour; }
+    public virtual int GetCurrentAmmour() { return this._bulletsCount; }
+    public virtual int GetMaxAmmour() { return weaponInfo.maxBulletCount; }
+    public virtual bool GetBurstLocked() { return _isBursting; }
+    public virtual Sprite GunSprite() { return weaponInfo.gunImage == null ? null : weaponInfo.gunImage; }
+    public virtual void UpdateTotalBullet(int bulletCount) { weaponInfo.totalAmmo += bulletCount; }
+
+    public void SetCurrentAmmo(int value)
+    {
+        _bulletsCount = Mathf.Clamp(value, 0, weaponInfo.maxBulletCount);
+        CharacterUIManager.OnWeaponReload?.Invoke(_bulletsCount, weaponInfo.maxBulletCount);
+    }
 }

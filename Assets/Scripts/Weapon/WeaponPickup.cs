@@ -1,27 +1,24 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
 
 public class WeaponPickup : VuMonoBehaviour
 {
     [SerializeField] protected RayCastWeapon _weaponFab;
-
+    [SerializeField] private UniqueId uniqueId;
 
     protected override void Start()
     {
         base.Start();
-        transform.DORotate(new Vector3(0, 360, 0), 2f, RotateMode.FastBeyond360)
-    .SetLoops(-1, LoopType.Restart)
-    .SetEase(Ease.Linear);
+        if (uniqueId == null) uniqueId = gameObject.GetComponent<UniqueId>() ?? gameObject.AddComponent<UniqueId>();
 
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject.name);
-        ActiveWeapon activeWeapon =other.GetComponent<ActiveWeapon>();
-        if (activeWeapon != null )
+        transform.DORotate(new Vector3(0, 360, 0), 2f, RotateMode.FastBeyond360)
+                 .SetLoops(-1, LoopType.Restart)
+                 .SetEase(Ease.Linear);
+
+        var activeWeapon = FindObjectOfType<ActiveWeapon>();
+        if (activeWeapon != null && activeWeapon.HasPicked(uniqueId.Id))
         {
+<<<<<<< HEAD
            RayCastWeapon newWeapon=Instantiate(_weaponFab);
             activeWeapon.Equip(newWeapon);
              
@@ -40,6 +37,32 @@ public class WeaponPickup : VuMonoBehaviour
             }
 
             this.gameObject.SetActive(false);
+=======
+            gameObject.SetActive(false);
+>>>>>>> Vu
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        ActiveWeapon activeWeapon = other.GetComponent<ActiveWeapon>();
+        if (activeWeapon == null) return;
+
+        RayCastWeapon newWeapon = Instantiate(_weaponFab);
+        activeWeapon.Equip(newWeapon);
+
+        if (uniqueId == null) uniqueId = gameObject.GetComponent<UniqueId>() ?? gameObject.AddComponent<UniqueId>();
+        activeWeapon.MarkPicked(uniqueId.Id);
+
+        // === TỰ LƯU sau khi nhặt ===
+        if (activeWeapon.autoSaveOnPickup)
+            activeWeapon.SaveWeapons(activeWeapon.saveId);
+
+        gameObject.SetActive(false);
+    }
+
+    // Cho ActiveWeapon truy cập
+    public string GetWeaponName() => _weaponFab != null ? _weaponFab.WeaponName : string.Empty;
+    public string GetId() => (uniqueId != null) ? uniqueId.Id : string.Empty;
+    public RayCastWeapon GetPrefab() => _weaponFab;
 }
