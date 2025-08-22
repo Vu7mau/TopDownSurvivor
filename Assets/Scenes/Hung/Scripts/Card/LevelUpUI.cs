@@ -99,7 +99,7 @@ public class LevelUpUI : MonoBehaviour
 
 
         CharacterStats.Instance.UpdateCharacterStats();
-
+        CharacterEvents.OnCharacterPropertiesChanged?.Invoke();
 
         Transform noti = GameObject.Find("NotificationSystemPanelCanvas").transform;
         RectTransform notiRect = noti.GetChild(0).GetComponent<RectTransform>();

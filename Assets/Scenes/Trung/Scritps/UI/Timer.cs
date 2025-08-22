@@ -8,6 +8,7 @@ public class Timer : MonoBehaviour
 
     public static Timer Instance;
     [SerializeField] private TextMeshProUGUI txtTime;
+    [SerializeField] private Transform infinityTime;
     [SerializeField] private float time;
 
     [SerializeField] private bool startCountTime = true;
@@ -31,8 +32,17 @@ public class Timer : MonoBehaviour
     public void StartCountDown(bool _isStartCountTime, bool _isCountDown,float _time)
     {
         this.timeIsUp = false;
-        this.time = _time;
-        this.CountDown(_isStartCountTime,_isCountDown);
+        if(_time < 100000)
+        {
+            this.time = _time;
+            this.CountDown(_isStartCountTime, _isCountDown);
+            if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(false);
+        }
+        else
+        {
+            if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(true);
+            this.txtTime.text = string.Empty;
+        }
     }
     public void StartCountUp(bool _isStartCountTime, bool _isCountUp, float _time)
     {
@@ -65,7 +75,7 @@ public class Timer : MonoBehaviour
     {
         this.startCountTime = _isStartCountTime;
         this.isCountDown = _isCountDown;
-        this.UpdateTimeCount();
+        this.UpdateTimeCount(this.time);
         if(!this.startCountTime)  return;
         if (!this.isCountDown) return;
         if(this.time > 0)
@@ -81,7 +91,7 @@ public class Timer : MonoBehaviour
     {
         this.startCountTime = _isStartCountTime;
         this.isCountUp = _isCountUp;
-        this.UpdateTimeCount();
+        this.UpdateTimeCount(this.time);
         if (!this.startCountTime) return;
         if (!this.isCountUp) return;
         if (this.time > 0)
@@ -89,7 +99,7 @@ public class Timer : MonoBehaviour
         else
             this.time = 0;
     }
-    private void UpdateTimeCount()
+    private void UpdateTimeCount(float time)
     {
         int miniutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);

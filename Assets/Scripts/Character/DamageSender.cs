@@ -42,6 +42,15 @@ public class DamageSender : VuMonoBehaviour
       //  this.CreateImpactVFX();
         //this.DestroyObject();
     }
+
+    public virtual void SendDamageSourceToDamageTarGet(DamageSender damageSender, Transform target)
+    {
+        DamageReceiver damageReceiver = target.gameObject.GetComponent<DamageReceiver>();
+        if (damageReceiver != null)
+        {
+            damageReceiver.GetDamageSource(damageSender);
+        }
+    }
     protected virtual void DestroyObject()
     {
         Destroy(transform.parent.gameObject);
@@ -50,5 +59,5 @@ public class DamageSender : VuMonoBehaviour
     {
       return _basedDamage;
     }
-   
+    public virtual int GetFinalDamage() => this.SetDamage();
 }

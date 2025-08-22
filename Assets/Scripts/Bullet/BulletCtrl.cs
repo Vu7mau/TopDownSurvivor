@@ -65,6 +65,7 @@ public class BulletCtrl : VuMonoBehaviour
         _bulletImpact.CreateParticleFX(collision);
         rb.velocity=Vector3.zero;
         _damageSender.Send(collision.transform);
+        _damageSender.SendDamageSourceToDamageTarGet(this._damageSender, collision.transform);
 
     }
 

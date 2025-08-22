@@ -118,16 +118,16 @@ public class WaveSpawner :VuMonoBehaviour
     protected virtual void FinishBattle()
     {
         if (this.bg != null) bg.gameObject.SetActive(false);
-        if (this.timer.TimeIsUp && this.enemyLefts > 0)
-        {
-            StartCoroutine(this.EndGamePlayRoutine(false));
-            return;
-        }
-        else
-        {
-            StartCoroutine(this.EndGamePlayRoutine(true));
-            return;
-        }
+        //if (this.timer.TimeIsUp && this.enemyLefts > 0)
+        //{
+        //    StartCoroutine(this.EndGamePlayRoutine(false));
+        //    return;
+        //}
+        //else
+        //{
+        //    StartCoroutine(this.EndGamePlayRoutine(true));
+        //    return;
+        //}
     }
     protected IEnumerator EndGamePlayRoutine(bool isWin)
     {
@@ -157,7 +157,7 @@ public class WaveSpawner :VuMonoBehaviour
     {
         int waveCount = wave.timeSpawnEachWave;
         float spawnInterval = (float) wave.waveDuration / waveCount;
-        UIManager.Instance.UpdateTimeToNextWave(wave.waveDuration);
+        if(this.currentWaveIndex < this.waveConfig.waves.Count - 1) UIManager.Instance.UpdateTimeToNextWave(wave.waveDuration);
 
         //Tạo dictionary để theo dõi mỗi loại quái đã spawn được bao nhiêu.
         Dictionary<GameObject, int> spawnedSoFar = new Dictionary<GameObject, int>();

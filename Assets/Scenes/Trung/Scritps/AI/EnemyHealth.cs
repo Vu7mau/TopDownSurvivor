@@ -182,7 +182,6 @@ public class EnemyHealth : DamageReceiver
 
         CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
 
-
         //Debug.Log("Máu quái còn " + this._hp);
         //if (this.enemyAI.Animator != null)
         //{
@@ -190,6 +189,11 @@ public class EnemyHealth : DamageReceiver
         //        this.enemyAI.Animator.SetTrigger("damage");
 
         //}
+    }
+
+    public override void GetDamageSource(DamageSender damageSender)
+    {
+        CharacterEvents.OnDamageSourceChanged?.Invoke(damageSender);
     }
     //public virtual bool HasHurtState() => this.enemyAI.Animator.HasState(0, Animator.StringToHash("getHit"));
     protected override void HurtEffect()

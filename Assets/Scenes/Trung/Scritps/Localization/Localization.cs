@@ -21,6 +21,7 @@ public class Localization:ScriptableObject
     public string TITLE_DEFENSE;
     public string TITLE_CRITRATE;
     public string TITLE_CRITDAMAGE;
+    public string TITLE_BONUSDAMAGE;
 
     [Header("Victory Bosss")]
     public string DLG_WHEN_KILL_BOSS = "BOSS IS DEAD!";

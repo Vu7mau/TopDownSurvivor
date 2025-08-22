@@ -24,6 +24,21 @@ public class WeaponPickup : VuMonoBehaviour
         {
            RayCastWeapon newWeapon=Instantiate(_weaponFab);
             activeWeapon.Equip(newWeapon);
+             
+            if(newWeapon != null)
+            {
+                DamageSender damageSender = GameObjectCustom.FindFirstComponentInChildren<DamageSender>(newWeapon.transform);
+                //DamageSourceCtrl damageSource = GameObjectCustom.FindFirstComponentInChildren<DamageSourceCtrl>(newWeapon.transform);
+                if (damageSender != null)
+                {
+                    CharacterEvents.OnDamageSourceListChanged?.Invoke(damageSender);
+                }
+                //if(damageSource != null)
+                //{
+                //    BulletSpawner.Instance.AddDamageSourceToPool(damageSource);
+                //}
+            }
+
             this.gameObject.SetActive(false);
         }
     }

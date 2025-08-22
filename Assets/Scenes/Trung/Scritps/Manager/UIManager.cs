@@ -66,7 +66,7 @@ public class UIManager : Singleton<UIManager>
         timer.StartCountDown(true, true, _time);
     }
 
-    public void UpdateCharacterStatsUI(float _atk, float _defense, float _critRate, float _critDamage, float _bonusDamage)
+    public void UpdateCharacterStatsUI(float _atk, float _defense, float _critRate, float _critDamage/*, float _bonusDamage*/)
     {
         if(this.txt_ATK != null)
         {
@@ -88,11 +88,22 @@ public class UIManager : Singleton<UIManager>
             this.title_CritDamage.text = localization.TITLE_CRITDAMAGE;
             this.txt_CritDamage.text = _critDamage.ToString();
         }
-        if (this.txt_BonusDamage != null)
+        //if (this.txt_BonusDamage != null)
+        //{
+        //    this.title_BonusDamage.text = localization.TITLE_BONUSDAMAGE;
+        //    this.txt_BonusDamage.text = (_bonusDamage + _atk).ToString();
+        //}
+    }
+
+    public void UpdateATKUI(float _atk)
+    {
+        if (this.txt_ATK != null)
         {
-            this.txt_BonusDamage.text = _bonusDamage.ToString();
+            this.title_ATK.text = localization.TITLE_ATK;
+            this.txt_ATK.text = _atk.ToString();
         }
     }
+
 
     public void DisplayPanelWhenPlayerKillBoss()
     {

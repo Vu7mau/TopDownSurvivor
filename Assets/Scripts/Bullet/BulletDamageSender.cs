@@ -18,9 +18,9 @@ public class BulletDamageSender : DamageSender
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadBulletCtrl();  
+        this.LoadBulletCtrl();
        // this.UpdateDamage();
-       
+
     }
     
     protected virtual void LoadBulletCtrl()
@@ -31,7 +31,6 @@ public class BulletDamageSender : DamageSender
         this._bulletCtrl=transform.parent.GetComponent<BulletCtrl>();
         Debug.Log("LoadBulletCtrl success " + this._bulletCtrl.transform.name);
     }
-
     //protected virtual void UpdateDamage()
     //{
     //   int damage=this._basedDamage+this.DamageBonus;

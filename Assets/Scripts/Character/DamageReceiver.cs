@@ -80,4 +80,8 @@ public abstract class DamageReceiver : VuMonoBehaviour
     protected virtual void HurtEffect()
     {
     }
+
+    public virtual void GetDamageSource(DamageSender damageSender)
+    {
+    }
 }
