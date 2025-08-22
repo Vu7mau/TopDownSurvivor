@@ -153,8 +153,7 @@ public class EnemyResponse : VuMonoBehaviour
         //Update UI (only apply to survivals)
        //if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
 
-
-        this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
+        if(this.characterCurrencies != null) this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
 
         this.coroutine = null;
     }

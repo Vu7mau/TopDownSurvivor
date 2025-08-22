@@ -368,6 +368,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64665174}
   m_CullTransparentMesh: 0
+--- !u!1001 &69451465
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 56.359043
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -35.003124
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 108.493286
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901744274286792566, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9216288763900932773, guid: cc46613afd27c2248b65af68d4149052, type: 3}
+      propertyPath: m_Name
+      value: Post Processing
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cc46613afd27c2248b65af68d4149052, type: 3}
 --- !u!1 &71959530
 GameObject:
   m_ObjectHideFlags: 0
@@ -113652,6 +113709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponFab: {fileID: 463085887804840060, guid: 10db05ee8f844d74b93727ed6555c7b3, type: 3}
+  uniqueId: {fileID: 0}
 --- !u!1 &818953197394959409
 GameObject:
   m_ObjectHideFlags: 0
@@ -136890,6 +136948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponFab: {fileID: 3105111132969240628, guid: c8602d2c77305b84da69091993a1b89b, type: 3}
+  uniqueId: {fileID: 0}
 --- !u!114 &1241012655393904820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137085,7 +137144,7 @@ Camera:
   far clip plane: 40.1
   field of view: 60
   orthographic: 1
-  orthographic size: 7.999999
+  orthographic size: 7.999998
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -217282,7 +217341,7 @@ MonoBehaviour:
   m_Follow: {fileID: 8560161812671400982}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 7.999999
+    OrthographicSize: 7.999998
     NearClipPlane: 0
     FarClipPlane: 40.1
     Dutch: 0
@@ -356697,6 +356756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponFab: {fileID: 3667156588737939457, guid: e2c534314ac508644b27453fc9c95715, type: 3}
+  uniqueId: {fileID: 0}
 --- !u!224 &3876533632632338048
 RectTransform:
   m_ObjectHideFlags: 0
@@ -417340,6 +417400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponFab: {fileID: 307436718776174449, guid: fc601ed0acadaba46a1938fd504370c9, type: 3}
+  uniqueId: {fileID: 0}
 --- !u!114 &5032810841124273723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518884,6 +518945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponFab: {fileID: 4860522148304146134, guid: 92d13fa768c5d174caf7fec149a1235c, type: 3}
+  uniqueId: {fileID: 0}
 --- !u!1 &6266415133843406026
 GameObject:
   m_ObjectHideFlags: 0
@@ -663889,6 +663951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponFab: {fileID: 8566618161041076194, guid: fbd903994f025e842ac704ef0081821f, type: 3}
+  uniqueId: {fileID: 0}
 --- !u!114 &8812076893916475719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669106,10 +669169,12 @@ MonoBehaviour:
   - {fileID: 3134723845797698694}
   - {fileID: 1682883895500884625}
   _rigController: {fileID: 2310997967093104645}
+  saveId: slot1
+  autoSaveOnPickup: 1
+  autoPickupRange: 2
   equipped_Weapons: []
   activateWeaponIndex: 0
   isHolstered: 0
-  isSwitchingWeapon: 0
   activeGun: {fileID: 0}
 --- !u!4 &8855863438270975294
 Transform:
@@ -681954,6 +682019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponFab: {fileID: 6894403464563891153, guid: 41c75f33259cb39418a9d90242b8d9a5, type: 3}
+  uniqueId: {fileID: 0}
 --- !u!224 &9078764429196636920
 RectTransform:
   m_ObjectHideFlags: 0
@@ -683956,6 +684022,7 @@ SceneRoots:
   - {fileID: 1170222281}
   - {fileID: 862275393}
   - {fileID: 855324081044034602}
+  - {fileID: 69451465}
   - {fileID: 378400306}
   - {fileID: 7224206068093609853}
   - {fileID: 808107616}
