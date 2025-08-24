@@ -31,10 +31,7 @@ public class PlayTimelineController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Cho phép chạy lại nếu đang bật chế độ play one time.
-    /// Gọi hàm này từ code hoặc gắn vào nút/trigger khi muốn reset quyền chạy.
-    /// </summary>
+
     public void ResetOneTimeLock()
     {
         _hasPlayed = false;
