@@ -34,17 +34,18 @@ public class Timer : MonoBehaviour
     public void StartCountDown(bool _isStartCountTime, bool _isCountDown,float _time)
     {
         this.timeIsUp = false;
-        if(_time < 100000)
+        this.time = _time;
+        this.CountDown(_isStartCountTime, _isCountDown);
+        if (_time < 100000)
         {
-            this.time = _time;
-            this.CountDown(_isStartCountTime, _isCountDown);
-            if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(false);
+            
+            //if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(false);
         }
-        else
-        {
-            if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(true);
-            this.txtTime.text = string.Empty;
-        }
+        //else
+        //{
+        //    if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(true);
+        //    this.txtTime.text = string.Empty;
+        //}
     }
     public void StartCountUp(bool _isStartCountTime, bool _isCountUp, float _time)
     {
@@ -105,12 +106,12 @@ public class Timer : MonoBehaviour
     }
     private void UpdateTimeCount(float time)
     {
-        if(time > 100000)
-        {
-            this.txtTime.text = string.Empty;
-            if(this.infinityTime != null && this.startCountTime) this.infinityTime.gameObject.SetActive(true);
-            return;
-        }
+        //if(time > 100000)
+        //{
+        //    this.txtTime.text = string.Empty;
+        //    if(this.infinityTime != null && this.startCountTime) this.infinityTime.gameObject.SetActive(true);
+        //    return;
+        //}
         if (this.infinityTime != null) this.infinityTime.gameObject.SetActive(false);
         int miniutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);

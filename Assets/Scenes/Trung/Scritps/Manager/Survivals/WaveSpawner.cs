@@ -87,8 +87,6 @@ public class WaveSpawner :VuMonoBehaviour
     {
         Time.timeScale = 1.0f;
         //this.ReadyToFight();
-
-        StartCheckFinishWaves();
     }
 
     private IEnumerator CheckFinishWaves()
@@ -115,7 +113,8 @@ public class WaveSpawner :VuMonoBehaviour
                 yield return StartCoroutine(SpawnWave(waveConfig.waves[currentWaveIndex]));
                 currentWaveIndex++;
             }
-            this.FinishBattle();
+            StartCheckFinishWaves();
+            //this.FinishBattle();
 
 
             isSpawning = false;
