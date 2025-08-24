@@ -58,15 +58,9 @@ public class ActiveWeapon : VuMonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q)) PrevWeapon();
         if (Input.GetKeyDown(KeyCode.E)) NextWeapon();
 
-        // Scroll
-        float scroll = Input.mouseScrollDelta.y;
-        if (Mathf.Abs(scroll) > 0.01f)
-        {
-            if (scroll > 0) NextWeapon();
-            else PrevWeapon();
-        }
+        // (ĐÃ BỎ LĂN CHUỘT ĐỂ ĐỔI SÚNG)
 
-        // Alt + số: nếu có -> chọn; nếu chưa có -> thử nhặt ngay (nếu gần); xa thì chỉ hướng
+        // Alt + số
         if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
         {
             if (Input.GetKeyUp(KeyCode.Alpha1)) WishOrGrabByIndex(0);
@@ -116,7 +110,7 @@ public class ActiveWeapon : VuMonoBehaviour
         int ownedIdx = -1;
         if (!string.IsNullOrEmpty(targetName))
         {
-            ownedIdx = equipped_Weapons.FindIndex(w => w != null && w.WeaponName == targetName);
+            ownedIdx = FindOwnedIndexByName(targetName);
         }
         else
         {
@@ -133,22 +127,21 @@ public class ActiveWeapon : VuMonoBehaviour
         // 3) Chưa có -> thử LẤY LUÔN nếu đang ở gần pickup đúng loại
         if (!string.IsNullOrEmpty(targetName))
         {
-            // Tìm pickup gần nhất loại đó
             WeaponPickup closest = FindClosestPickupByName(targetName, out float dist);
             if (closest != null && dist <= autoPickupRange)
             {
-                ForceCollectPickup(closest);
+                ForceCollectPickup(closest); // sẽ không nhặt trùng
                 if (autoSaveOnPickup) SaveWeapons(saveId);
                 return;
             }
         }
 
-        // 4) Xa quá/không có -> đặt mong muốn + chỉ đường (và nếu tới gần, AimNearestNotOwnedPickup sẽ tự nhặt)
+        // 4) Xa quá/không có -> đặt mong muốn + chỉ đường
         _wishedWeaponName = targetName;
         AimNearestNotOwnedPickup(_wishedWeaponName);
     }
 
-    // ==== chọn/holster/activate như cũ ====
+    // ==== chọn/holster/activate ====
     protected virtual void ToggelActivateWeapon()
     {
         bool isHolster = this._rigController.GetBool("holster_weapon");
@@ -162,8 +155,48 @@ public class ActiveWeapon : VuMonoBehaviour
         return this.equipped_Weapons[index];
     }
 
+    // ===== Helpers =====
+    private int FindOwnedIndexByName(string weaponName)
+    {
+        if (string.IsNullOrEmpty(weaponName)) return -1;
+        return equipped_Weapons.FindIndex(w => w != null && w.WeaponName == weaponName);
+    }
+
+    /// <summary>
+    /// Equip an toàn: không tạo trùng theo WeaponName.
+    /// instance != null chỉ khi thật sự sinh mới.
+    /// </summary>
+    public bool TryEquipPrefab(RayCastWeapon prefab, out RayCastWeapon instance, bool selectIfOwned = true)
+    {
+        instance = null;
+        if (prefab == null) return false;
+
+        int ownedIdx = FindOwnedIndexByName(prefab.WeaponName);
+        if (ownedIdx >= 0)
+        {
+            if (selectIfOwned) SetActivateWeapon(ownedIdx);
+            return true; // đã có -> coi như thành công, không tạo thêm
+        }
+
+        instance = Instantiate(prefab);
+        Equip(instance);
+        return true;
+    }
+
+    // ====== Equip (đã chặn trùng theo tên) ======
     public virtual void Equip(RayCastWeapon newWeapon)
     {
+        if (newWeapon == null) return;
+
+        // CHẶN TRÙNG THEO TÊN
+        int dup = FindOwnedIndexByName(newWeapon.WeaponName);
+        if (dup >= 0)
+        {
+            Destroy(newWeapon.gameObject); // bỏ instance vừa tạo
+            SetActivateWeapon(dup);        // chọn khẩu cũ
+            return;
+        }
+
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
         if (equipped_Weapons.Contains(newWeapon)) return;
 
@@ -171,8 +204,22 @@ public class ActiveWeapon : VuMonoBehaviour
         equipped_Weapons.Add(newWeapon);
 
         int newSlotIndex = equipped_Weapons.IndexOf(newWeapon);
+
+        // UI: chọn slot
         CharacterUIManager.OnWeaponSelected?.Invoke(newSlotIndex);
+
+        // Chọn luôn khẩu mới
         SetActivateWeapon(newSlotIndex);
+
+        // UI: cập nhật thông tin súng NGAY lúc Equip
+        CharacterUIManager.OnWeaponChange?.Invoke(
+            newWeapon.GunSprite(),
+            newWeapon.GetCurrentAmmour(),
+            newWeapon.GetMaxAmmour()
+        );
+
+        // Áp cờ bắn: chỉ khẩu vừa chọn được phép bắn
+        ApplyActivationFlags();
 
         if (!string.IsNullOrEmpty(_wishedWeaponName) && _wishedWeaponName == newWeapon.WeaponName)
             _wishedWeaponName = null;
@@ -197,17 +244,23 @@ public class ActiveWeapon : VuMonoBehaviour
             if (wepon != null)
             {
                 if (wepon.GetIsReloadingAmmo()) yield break;
+                // tắt bắn tạm trước khi chuyển
                 wepon.SetIsWeaponActivate(false);
             }
         }
+
         yield return StartCoroutine(HolsterWeapon(holsterIndex));
         yield return StartCoroutine(ActivateWeapon(activateIndex));
 
+        // UI: cập nhật sau khi đã kích hoạt xong
         CharacterUIManager.OnWeaponChange?.Invoke(
             this.activeGun?.GunSprite(),
             this.activeGun?.GetCurrentAmmour() ?? 0,
             this.activeGun?.GetMaxAmmour() ?? 0
         );
+
+        // Áp cờ bắn nhất quán sau khi đã activate
+        ApplyActivationFlags();
     }
 
     IEnumerator HolsterWeapon(int index)
@@ -249,12 +302,30 @@ public class ActiveWeapon : VuMonoBehaviour
 
             _rigController.Play("equip_" + weapon.WeaponName);
             this.isHolstered = false;
-            weapon.SetIsWeaponActivate(!this.isHolstered);
+            // chỉ set true cho active, còn lại ApplyActivationFlags sẽ set false
+            weapon.SetIsWeaponActivate(true);
             this.activeGun = weapon;
         }
         else
         {
             this.activeGun = null;
+        }
+    }
+
+    /// <summary>
+    /// Áp trạng thái cho phép bắn: 
+    /// - Nếu đang holster -> tất cả false
+    /// - Nếu không holster -> chỉ khẩu activeIndex = true, còn lại false
+    /// </summary>
+    private void ApplyActivationFlags()
+    {
+        for (int i = 0; i < equipped_Weapons.Count; i++)
+        {
+            var w = equipped_Weapons[i];
+            if (w == null) continue;
+
+            bool canShoot = !isHolstered && (i == activateWeaponIndex);
+            w.SetIsWeaponActivate(canShoot);
         }
     }
 
@@ -279,7 +350,7 @@ public class ActiveWeapon : VuMonoBehaviour
                 weaponName = w.WeaponName,
                 slotIndex = i,
                 currentAmmo = w.GetCurrentAmmour(),
-                totalAmmo = w.GetMaxAmmour(), // hoặc weaponInfo.totalAmmo nếu bạn có biến riêng
+                totalAmmo = w.GetMaxAmmour(),
                 isActive = (i == activateWeaponIndex && !isHolstered)
             });
         }
@@ -311,22 +382,31 @@ public class ActiveWeapon : VuMonoBehaviour
                 continue;
             }
 
-            var newWeapon = Object.Instantiate(prefab);
-            Equip(newWeapon);
-
-            newWeapon.UpdateTotalBullet(ws.totalAmmo - newWeapon.GetMaxAmmour());
-            newWeapon.SetCurrentAmmo(ws.currentAmmo);
+            if (TryEquipPrefab(prefab, out var newWeapon, selectIfOwned: false) && newWeapon != null)
+            {
+                newWeapon.UpdateTotalBullet(ws.totalAmmo - newWeapon.GetMaxAmmour());
+                newWeapon.SetCurrentAmmo(ws.currentAmmo);
+                newWeapon.SetIsWeaponActivate(false); // tạm tắt bắn
+            }
         }
 
         isHolstered = state.isHolstered;
-        if (state.activeIndex >= 0 && state.activeIndex < equipped_Weapons.Count)
-            SetActivateWeapon(state.activeIndex);
-        else if (equipped_Weapons.Count > 0)
-            SetActivateWeapon(0);
 
+        int idxToActivate = -1;
+        if (state.activeIndex >= 0 && state.activeIndex < equipped_Weapons.Count)
+            idxToActivate = state.activeIndex;
+        else if (equipped_Weapons.Count > 0)
+            idxToActivate = 0;
+
+        if (idxToActivate >= 0)
+        {
+            SetActivateWeapon(idxToActivate);   
+            CharacterUIManager.OnWeaponSelected?.Invoke(idxToActivate);
+        }
+
+        ApplyActivationFlags();
         RefreshPickupsVisibility();
     }
-
     // ======= “LƯU & XOÁ SẠCH” =======
     public void SaveAndWipe(string saveId)
     {
@@ -366,6 +446,9 @@ public class ActiveWeapon : VuMonoBehaviour
         activeGun = null;
         isHolstered = true;
         activateWeaponIndex = 0;
+
+        // Bảo đảm tất cả đều không bắn
+        ApplyActivationFlags();
 
         if (alsoClearPicked)
         {
@@ -412,13 +495,21 @@ public class ActiveWeapon : VuMonoBehaviour
         var prefab = p.GetPrefab();
         if (prefab == null) return;
 
-        RayCastWeapon newWeapon = Instantiate(prefab);
-        Equip(newWeapon);
+        // ĐÃ CÓ -> chỉ chọn, KHÔNG nhặt, KHÔNG tắt pickup
+        int ownedIdx = FindOwnedIndexByName(prefab.WeaponName);
+        if (ownedIdx >= 0)
+        {
+            SetActivateWeapon(ownedIdx);
+            return;
+        }
 
-        MarkPicked(p.GetId());
-        p.gameObject.SetActive(false);
-
-        if (autoSaveOnPickup) SaveWeapons(saveId);
+        // CHƯA CÓ -> nhặt thật sự
+        if (TryEquipPrefab(prefab, out var instance, selectIfOwned: true) && instance != null)
+        {
+            MarkPicked(p.GetId());
+            p.gameObject.SetActive(false); // chỉ tắt khi đã thêm mới
+            if (autoSaveOnPickup) SaveWeapons(saveId);
+        }
     }
 
     // ===== Tìm & trỏ pickup chưa nhặt (ưu tiên mong muốn); nếu đủ gần thì NHẶT LUÔN =====
@@ -444,9 +535,6 @@ public class ActiveWeapon : VuMonoBehaviour
             }
         }
 
-        // Log an toàn
-        Debug.Log($"Press Alt prefer={preferWeaponName}, found={(best != null ? best.GetWeaponName() : "none")}");
-
         // Nếu chưa có theo “mong muốn” -> bất kỳ loại chưa sở hữu
         if (best == null)
         {
@@ -465,7 +553,7 @@ public class ActiveWeapon : VuMonoBehaviour
         {
             float dist = Mathf.Sqrt(bestDistSqr);
 
-            // Nếu đã đứng đủ gần -> NHẶT LUÔN
+            // Nếu đã đứng đủ gần -> NHẶT (đã chặn trùng)
             if (dist <= autoPickupRange)
             {
                 ForceCollectPickup(best);
@@ -477,8 +565,6 @@ public class ActiveWeapon : VuMonoBehaviour
             Vector3 dir = (best.transform.position - myPos);
             dir.y = 0;
             if (dir.sqrMagnitude > 0.01f) transform.forward = dir.normalized;
-
-            // CharacterUIManager.OnWishWeapon?.Invoke(best.GetWeaponName(), best.transform.position);
         }
         else
         {

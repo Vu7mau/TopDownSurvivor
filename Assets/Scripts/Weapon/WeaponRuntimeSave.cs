@@ -9,118 +9,80 @@ public class SavedWeapon
 {
     public string weaponName;
     public int currentAmmo;
-    public int maxAmmo;
-    public int index;        // thứ tự trong list
-    public bool isActive;
+    public int index;
 }
 
 [Serializable]
 public class SavedLoadout
 {
     public List<SavedWeapon> weapons = new();
-    public int activeIndex = -1;
+    public int activeIndex = -1; // index khẩu đang cầm tại thời điểm lưu
 }
 
 public static class WeaponRuntimeSave
 {
     private const string FileName = "session_loadout.json";
-
-    private static string PathFull =>
-        System.IO.Path.Combine(Application.persistentDataPath, FileName);
+    private static string PathFull => Path.Combine(Application.persistentDataPath, FileName);
 
     public static void Clear()
     {
-        try
-        {
-            if (File.Exists(PathFull)) File.Delete(PathFull);
-#if UNITY_EDITOR
-            Debug.Log($"[WeaponRuntimeSave] Cleared: {PathFull}");
-#endif
-        }
-        catch (Exception e) { Debug.LogWarning(e); }
+        if (File.Exists(PathFull)) File.Delete(PathFull);
     }
 
     public static void SaveSnapshot(ActiveWeapon aw)
     {
-        if (aw == null) return;
-
+        if (!aw) return;
         var data = new SavedLoadout();
+
         for (int i = 0; i < aw.Equipped_Weapons.Count; i++)
         {
             var w = aw.Equipped_Weapons[i];
-            if (w == null) continue;
-
+            if (!w) continue;
             data.weapons.Add(new SavedWeapon
             {
                 weaponName = w.WeaponName,
                 currentAmmo = w.GetCurrentAmmour(),
-                maxAmmo = w.GetMaxAmmour(),
-                index = i,
-                isActive = (aw.activeGun == w)
+                index = i
             });
         }
+        data.activeIndex = Mathf.Clamp(aw.Equipped_Weapons.IndexOf(aw.activeGun), -1, aw.Equipped_Weapons.Count - 1);
 
-        data.activeIndex = Mathf.Clamp(
-            aw.Equipped_Weapons.IndexOf(aw.activeGun), -1, aw.Equipped_Weapons.Count - 1);
-
-        try
-        {
-            var json = JsonUtility.ToJson(data, true);
-            File.WriteAllText(PathFull, json);
-#if UNITY_EDITOR
-            // Debug.Log($"[WeaponRuntimeSave] Saved:\n{json}");
-#endif
-        }
-        catch (Exception e) { Debug.LogWarning(e); }
+        File.WriteAllText(PathFull, JsonUtility.ToJson(data, true));
     }
 
     public static bool TryLoad(out SavedLoadout data)
     {
         data = null;
-        try
-        {
-            if (!File.Exists(PathFull)) return false;
-            var json = File.ReadAllText(PathFull);
-            data = JsonUtility.FromJson<SavedLoadout>(json);
-            return data != null;
-        }
-        catch (Exception e) { Debug.LogWarning(e); return false; }
+        if (!File.Exists(PathFull)) return false;
+        data = JsonUtility.FromJson<SavedLoadout>(File.ReadAllText(PathFull));
+        return data != null;
     }
 
-    /// <summary>
-    /// Dùng WeaponRegistry để dựng lại vũ khí y như lần trước.
-    /// Không yêu cầu ActiveWeapon sửa code.
-    /// </summary>
+    /// Re‑equip: dựng lại loadout và chọn đúng khẩu active theo save.
     public static void ApplyTo(ActiveWeapon aw, WeaponRegistry reg, SavedLoadout data)
     {
-        if (aw == null || reg == null || data == null) return;
+        if (!aw || !reg || data == null) return;
 
-        // Dọn inventory hiện tại
-        var copy = aw.Equipped_Weapons.ToList();
-        foreach (var w in copy) if (w) UnityEngine.Object.Destroy(w.gameObject);
+        // dọn inventory
+        foreach (var w in aw.Equipped_Weapons) if (w) UnityEngine.Object.Destroy(w.gameObject);
         aw.Equipped_Weapons.Clear();
 
-        // Khôi phục theo thứ tự index tăng dần
+        // dựng lại theo thứ tự
         foreach (var sw in data.weapons.OrderBy(x => x.index))
         {
             var pf = reg.GetPrefab(sw.weaponName);
-            if (pf == null) { Debug.LogWarning($"[WeaponRuntimeSave] Missing prefab: {sw.weaponName}"); continue; }
+            if (!pf) { Debug.LogWarning($"[Loadout] Missing prefab: {sw.weaponName}"); continue; }
 
             var newW = UnityEngine.Object.Instantiate(pf);
             aw.Equip(newW);
-            // Khôi phục ammo hiện tại (nếu class bạn có API này)
-            newW.SetCurrentAmmo(Mathf.Clamp(sw.currentAmmo, 0, newW.GetMaxAmmour()));
+            // khôi phục băng đạn hiện tại (hàm này bạn đã có trong RayCastWeapon)
+            newW.SetCurrentAmmo(sw.currentAmmo);
         }
 
-        // Chọn active
+        // chọn đúng khẩu active
         if (data.activeIndex >= 0 && data.activeIndex < aw.Equipped_Weapons.Count)
-        {
-            // gọi SetActivateWeapon bằng SendMessage để không đổi access modifier
             aw.gameObject.SendMessage("SetActivateWeapon", data.activeIndex, SendMessageOptions.DontRequireReceiver);
-        }
         else if (aw.Equipped_Weapons.Count > 0)
-        {
             aw.gameObject.SendMessage("SetActivateWeapon", 0, SendMessageOptions.DontRequireReceiver);
-        }
     }
 }

@@ -76,7 +76,6 @@ public class HealthDisplay : VuMonoBehaviour
 
             yield return null;
         }
-        Debug.Log($"SmoothHealth called with targetHp={targetHp}, maxHp={maxHp}");
         // Đảm bảo kết thúc chính xác
         healthBarFill.fillAmount = targetFill;
         textValue.text = Mathf.RoundToInt(targetHp).ToString();

@@ -14,30 +14,24 @@ public class WeaponPickup : VuMonoBehaviour
         transform.DORotate(new Vector3(0, 360, 0), 2f, RotateMode.FastBeyond360)
                  .SetLoops(-1, LoopType.Restart)
                  .SetEase(Ease.Linear);
-
-        var activeWeapon = FindObjectOfType<ActiveWeapon>();
-        if (activeWeapon != null && activeWeapon.HasPicked(uniqueId.Id))
-        {
-            gameObject.SetActive(false);
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         ActiveWeapon activeWeapon = other.GetComponent<ActiveWeapon>();
-        if (activeWeapon == null) return;
+        if (activeWeapon == null || _weaponFab == null) return;
 
-        RayCastWeapon newWeapon = Instantiate(_weaponFab);
-        activeWeapon.Equip(newWeapon);
-
-        if (uniqueId == null) uniqueId = gameObject.GetComponent<UniqueId>() ?? gameObject.AddComponent<UniqueId>();
-        activeWeapon.MarkPicked(uniqueId.Id);
-
-        // === TỰ LƯU sau khi nhặt ===
-        if (activeWeapon.autoSaveOnPickup)
-            activeWeapon.SaveWeapons(activeWeapon.saveId);
-
-        gameObject.SetActive(false);
+        // NHẶT AN TOÀN: không trùng -> cấp mới & tắt pickup; trùng -> chỉ chọn, pickup vẫn còn
+        if (activeWeapon.TryEquipPrefab(_weaponFab, out var instance, selectIfOwned: true))
+        {
+            if (instance != null)
+            {
+                // thật sự thêm mới
+                activeWeapon.MarkPicked(GetId());
+                gameObject.SetActive(false);
+                if (activeWeapon.autoSaveOnPickup) activeWeapon.SaveWeapons(activeWeapon.saveId);
+            }
+        }
     }
 
     // Cho ActiveWeapon truy cập

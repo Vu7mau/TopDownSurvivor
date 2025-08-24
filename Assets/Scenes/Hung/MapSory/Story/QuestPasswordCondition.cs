@@ -73,6 +73,7 @@ public class QuestPasswordCondition : VuMonoBehaviour
                 if (correctAudio != null)
                     SoundFXManager.Instance.PlaySoundFXClip(correctAudio, this.transform);
                 isSuccess = true;
+                SlidingDoor.SetConditionMet(true);
                 SlidingDoor.OpenDoor();
                 passwordInputPanel.gameObject.SetActive(false);
             }
