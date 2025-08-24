@@ -290,5 +290,6 @@ public static class ActiveWeaponExtensions
         if (aw == null) return;
         // Gọi SetActivateWeapon(int) bằng SendMessage
         aw.gameObject.SendMessage("SetActivateWeapon", idx, SendMessageOptions.DontRequireReceiver);
+        CharacterUIManager.OnWeaponSelected?.Invoke(idx);
     }
 }

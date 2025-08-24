@@ -27,10 +27,10 @@ public class BossRise : VuMonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.transform.GetComponentInChildren<CharacterAnimHandle>() != null)
+        if (other.transform.GetComponentInChildren<CharacterAnimHandle>() != null)
         {
-            this.enemyAI.Animator.SetBool("isStartFightBoss",true);
-            bossRoom.Play();
+            this.enemyAI.Animator.SetBool("isStartFightBoss", true);
+         //   bossRoom.Play();
             this.transform.gameObject.SetActive(false);
 
         }

@@ -36,7 +36,7 @@ public class WeaponAutoPersist : MonoBehaviour
             if (activeWeapon && registry)
             {
                 WeaponRuntimeSave.ApplyTo(activeWeapon, registry, data);
-                _signature = BuildSignature(); // cập nhật chữ ký sau khi load
+               _signature = BuildSignature(); // cập nhật chữ ký sau khi load
                 ChatNotifyOrLog("Đã khôi phục vũ khí phiên gần nhất.");
             }
         }
