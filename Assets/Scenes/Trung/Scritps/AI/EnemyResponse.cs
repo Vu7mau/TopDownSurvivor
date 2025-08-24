@@ -80,11 +80,17 @@ public class EnemyResponse : VuMonoBehaviour
         if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
         {
             this.enemyCtrlDespawn.DoDespawn();
-            //Update UI (only apply to survivals)
-            if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
+
+            this.SubstractEnemy();
             return;
         }
         this.transform.gameObject.SetActive(false);
+    }
+
+    protected virtual void SubstractEnemy()
+    {
+        //Update UI (only apply to survivals)
+        if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
     }
 
     protected virtual void LoadEnemyHealth()

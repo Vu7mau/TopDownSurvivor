@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,8 +15,13 @@ public class SoundEnemyManager : Singleton<SoundEnemyManager>
 
         this.LoadHolder();
     }
-    public virtual void PlayEnemySoundFXClip(AudioClip clip, Transform transformSpawn, bool isMusic, float volume)
+    public virtual void PlayEnemySoundFXClip(AudioClip clip, Transform transformSpawn, bool isMusic,bool isOnce, float volume)
     {
+        // Nếu clip này đã được phát thì bỏ qua
+        if (IsClipAlreadyPlaying(clip) && isOnce)
+            return;
+
+
         AudioSource objSpawn = (isMusic) ? backgroundMusic : soundFXObject;
         AudioSource audi = GetObjectFromPool(objSpawn, transformSpawn);
 
@@ -33,13 +38,59 @@ public class SoundEnemyManager : Singleton<SoundEnemyManager>
 
     public virtual void PlayEnemySoundFXClip(AudioClip clip, Transform transformSpawn, float volume = 1)
     {
-        this.PlayEnemySoundFXClip(clip, transformSpawn, false, volume);
+        this.PlayEnemySoundFXClip(clip, transformSpawn, false,false, volume);
+    }
+
+    public virtual void PlayEnemySoundFXClipOnce(AudioClip clip, Transform transformSpawn, float volume = 1)
+    {
+        this.PlayEnemySoundFXClip(clip, transformSpawn, false,true, volume);
+    }
+    public virtual void PlayBGMusic(AudioClip clip, Transform transformSpawn, float volume = 1)
+    {
+        this.PlayEnemySoundFXClip(clip, transformSpawn, true, true, volume);
     }
 
     public virtual void StopEnemySoundFXClip(AudioClip clip, bool isMusic)
     {
         AudioSource objSpawn = (isMusic) ? backgroundMusic : soundFXObject;
         StartCoroutine(Despawn(objSpawn.transform, 0f));
+    }
+    public void StopBackgroundMusic()
+    {
+        if (backgroundMusic != null && backgroundMusic.isPlaying)
+        {
+            backgroundMusic.Stop();
+            backgroundMusic.clip = null; // optional: clear clip
+        }
+    }
+
+    public void StopSoundFX()
+    {
+        if (soundFXObject != null && soundFXObject.isPlaying)
+        {
+            soundFXObject.Stop();
+            soundFXObject.clip = null; // optional: clear clip
+        }
+    }
+
+    public void StopAllAudio()
+    {
+        StopBackgroundMusic();
+        StopSoundFX();
+    }
+    public void StopAllPooledSounds()
+    {
+        foreach (Transform obj in holder)
+        {
+            AudioSource audioSource = obj.GetComponent<AudioSource>();
+            if (audioSource != null && audioSource.isPlaying)
+            {
+                audioSource.Stop();
+                audioSource.clip = null;
+                obj.gameObject.SetActive(false);
+                AddObjToPool(obj);
+            }
+        }
     }
 
 
@@ -71,8 +122,26 @@ public class SoundEnemyManager : Singleton<SoundEnemyManager>
     }
     protected virtual IEnumerator Despawn(Transform obj, float duration)
     {
-        yield return new WaitForSeconds(duration);
-        this.poolSoundFX.Add(obj);
+        yield return new WaitForSecondsRealtime(duration);
+        this.AddObjToPool(obj);
         obj.gameObject.SetActive(false);
+    }
+
+    protected virtual void AddObjToPool(Transform obj)
+    {
+        this.poolSoundFX.Add(obj);
+    }
+
+    private bool IsClipAlreadyPlaying(AudioClip clip)
+    {
+        foreach (Transform obj in holder) // duyệt trong tất cả object đang giữ
+        {
+            AudioSource audioSource = obj.GetComponent<AudioSource>();
+            if (audioSource != null && audioSource.isPlaying && audioSource.clip == clip)
+            {
+                return true; // đã có clip này đang phát
+            }
+        }
+        return false;
     }
 }

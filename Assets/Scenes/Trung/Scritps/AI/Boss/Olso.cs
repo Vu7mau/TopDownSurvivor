@@ -63,6 +63,7 @@ public class Olso : BossController
         }
         yield return new WaitForSeconds(this.timeDelay_1);
         this.e_Shooting.Shooting(this.minigunBullet, this.spawnPosition);
+        if (this.isDead) yield break;
         if (this.e_Shooting.NewProjectitle == null) yield break;
         if(this.snd_Shoot1s.Count > 0)
         {
@@ -90,7 +91,8 @@ public class Olso : BossController
         Vector3 tar = new Vector3(this.targetPosition.position.x, this.spawnPosition2.position.y, this.targetPosition.position.z);
         this.e_Shooting.Shooting(this.rocketLight, this.spawnPosition2);
         if (this.e_Shooting.NewProjectitle == null) yield break;
-        if(this.snd_shoot2_start != null) SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot2_start, this.transform);
+        if (this.isDead) yield break;
+        if (this.snd_shoot2_start != null) SoundFXManager.Instance.PlaySoundFXClip(this.snd_shoot2_start, this.transform);
         float defaultSpeed = this.e_Shooting.NewProjectitle.Speed;
         this.e_Shooting.NewProjectitle.GetComponent<Projectitle>().SetVelocity(0);
         this.e_Shooting.NewProjectitle.GetComponentInChildren<Collider>().enabled = false;
@@ -106,6 +108,7 @@ public class Olso : BossController
         EffectFX newCir;
         this.isMoving = false;
         this.enemyReferences.NavMeshAgent.enabled = false;
+        if (this.isDead) return;
         transform.DOJump(this.targetPosition.position, 8f, 1, 1.2f)
         .OnStart(() =>
         {

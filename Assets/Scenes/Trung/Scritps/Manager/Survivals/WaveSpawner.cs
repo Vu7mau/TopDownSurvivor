@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -47,7 +48,7 @@ public class WaveSpawner :VuMonoBehaviour
     protected override void Start()
     {
         base.Start();
-        this.StartWaves();
+        //this.StartWaves();
     }
 
     protected override void LoadComponents()
@@ -78,12 +79,14 @@ public class WaveSpawner :VuMonoBehaviour
     }
 
 
+    
+    
 
-    public void StartWaves()
+
+    public virtual void StartWaves()
     {
         Time.timeScale = 1.0f;
-        if (!isSpawning)
-            StartCoroutine(HandleWaves());
+        //this.ReadyToFight();
 
         StartCheckFinishWaves();
     }
@@ -99,20 +102,24 @@ public class WaveSpawner :VuMonoBehaviour
         checkFinishWavesRoutine = null; // reset khi xong
     }
 
-    private IEnumerator HandleWaves()
+    public IEnumerator HandleWaves()
     {
         isSpawning = true;
         this.isFinish = false;
-        while (currentWaveIndex < waveConfig.waves.Count)
+
+        if(waveConfig != null)
         {
-            this.canSpawnContinue = true;
-            yield return StartCoroutine(SpawnWave(waveConfig.waves[currentWaveIndex]));
-            currentWaveIndex++;
+            while (currentWaveIndex < waveConfig.waves.Count)
+            {
+                this.canSpawnContinue = true;
+                yield return StartCoroutine(SpawnWave(waveConfig.waves[currentWaveIndex]));
+                currentWaveIndex++;
+            }
+            this.FinishBattle();
+
+
+            isSpawning = false;
         }
-        this.FinishBattle();
-
-
-        isSpawning = false;
     }
 
     protected virtual void FinishBattle()

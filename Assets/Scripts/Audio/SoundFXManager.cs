@@ -40,7 +40,10 @@ public class SoundFXManager : AudioManager
     [SerializeField] public  AudioClip handlingGun;
     [SerializeField] public  AudioSource bgMusic;
     [SerializeField] public AudioClip clickAudio;
-  
+
+    [Space]
+    [Header("Background Musics")]
+    [SerializeField] public AudioClip bg_Survival;
 
     protected override void Awake()
     {

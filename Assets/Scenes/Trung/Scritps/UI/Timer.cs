@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Timer : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private bool timeIsUp = false;
     public bool TimeIsUp { get => this.timeIsUp; }
     [SerializeField] private bool isCountUp;
+
 
     private void Awake()
     {
@@ -83,7 +85,9 @@ public class Timer : MonoBehaviour
         else
         {
             this.time = 0;
-            this.timeIsUp = true;
+            this.timeIsUp = !this.timeIsUp;
+            this.startCountTime = !this.startCountTime;
+            this.isCountDown= !this.isCountDown;
             return;
         }
     }
@@ -101,6 +105,13 @@ public class Timer : MonoBehaviour
     }
     private void UpdateTimeCount(float time)
     {
+        if(time > 100000)
+        {
+            this.txtTime.text = string.Empty;
+            if(this.infinityTime != null && this.startCountTime) this.infinityTime.gameObject.SetActive(true);
+            return;
+        }
+        if (this.infinityTime != null) this.infinityTime.gameObject.SetActive(false);
         int miniutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);
         this.txtTime.text = string.Format("{0:00}:{1:00}", miniutes, seconds);

@@ -67,6 +67,7 @@ public class EnemyAIController : EnemyBase
     [Space]
     [Header("Roar")]
     [SerializeField] protected List<AudioClip> snd_roar;
+    [SerializeField] protected List<AudioClip> snd_StepFoot;
     [SerializeField] protected float timeRoar = 10f;
     protected float roarEclapse = 0f;
     protected bool isRoar = false;
@@ -132,7 +133,7 @@ public class EnemyAIController : EnemyBase
     {
 
         this.SnapToNavMesh();
-        //this.enemyReferences.NavMeshAgent.enabled = true;
+        this.enemyReferences.NavMeshAgent.enabled = false;
         this.isAttacking = false;
         this.isLookAtTarGet = false;
         this.isNearTarget = false;
@@ -178,7 +179,7 @@ public class EnemyAIController : EnemyBase
                 if (this.snd_roar.Count != 0)
                 {
                     int random = Random.Range(0, this.snd_roar.Count);
-                    SoundFXManager.Instance.PlaySoundFXClip(this.snd_roar[random], this.transform);
+                    SoundEnemyManager.Instance.PlayEnemySoundFXClipOnce(this.snd_roar[random], this.transform);
                     if(rateRoar > 30) rateRoar -= 10f;
                     //Debug.Log("Đã phát roar rồi nha!");
                 }
@@ -280,6 +281,7 @@ public class EnemyAIController : EnemyBase
             if (canChasePlayer)
             {
                 this.UpdateEnemyPath();
+                this.enemyReferences.Animator.SetBool("isMoving", true);
             }
             this.enemyReferences.NavMeshAgent.enabled = true;
             if (this.distanceToTarget > this.chaseRange) this.Idle();
@@ -420,6 +422,14 @@ public class EnemyAIController : EnemyBase
         int random = Random.Range(0, snd_attack_1.Count);
         if (this.snd_attack_1[random] == null) return;
         SoundFXManager.Instance.PlaySoundFXClip(this.snd_attack_1[random], this.transform);
+    }
+
+    protected virtual void StepFootSFX()
+    {
+        if (snd_StepFoot.Count == 0) return;
+        int random = Random.Range(0, snd_StepFoot.Count);
+        if (this.snd_StepFoot[random] == null) return;
+        SoundEnemyManager.Instance.PlayEnemySoundFXClipOnce(this.snd_StepFoot[random], this.transform);
     }
 
 }

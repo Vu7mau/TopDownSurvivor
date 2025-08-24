@@ -42,7 +42,7 @@ public class HoverScale3D : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         int random = Random.Range(0,this.snd_hovers.Count);
         if(snd_hovers[random] != null)
         {
-            SoundFXManager.Instance.PlaySoundFXClip(snd_hovers[random], this.transform);
+            SoundEnemyManager.Instance.PlayEnemySoundFXClip(snd_hovers[random], this.transform);
         }
     }
 }

@@ -119,7 +119,7 @@ public class LevelUpUI : MonoBehaviour
         if(this.snd_click.Count > 0)
         {
             int random = Random.Range(0,this.snd_click.Count);
-            if (this.snd_click[random] != null) SoundFXManager.Instance.PlaySoundFXClip(this.snd_click[random], this.transform);
+            if (this.snd_click[random] != null) SoundEnemyManager.Instance.PlayEnemySoundFXClip(this.snd_click[random], this.transform);
         }
         Vector3 btnDefaultScale = btn.transform.localScale;
         RectTransform rectObj = this.levelUpPanel.GetComponent<RectTransform>();

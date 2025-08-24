@@ -1,10 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SurvivalCtrl : VuMonoBehaviour
 {
+    [Space]
+    [Header("Ready To Fight!")]
+
+    [SerializeField] protected int timeToReadyFight = 10;
+    [SerializeField] protected Transform panelReady;
+    [SerializeField] protected Transform panelTopLeft;
+    [SerializeField] protected WaveSpawner waveSpawner;
+    protected bool isSpawning = false;
+
+
     [SerializeField] protected RectTransform panelWave;
     [SerializeField] protected RectTransform panelStats;
     [SerializeField] protected float moveOffsetX = 500f; // khoảng cách PosX
@@ -25,6 +37,12 @@ public class SurvivalCtrl : VuMonoBehaviour
 
         // Đặt panelStats ở bên trái ngoài viewport
         panelStats.anchoredPosition = statsDefaultPos + Vector2.left * moveOffsetX;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        this.ReadyToFight();
     }
 
     protected virtual void Update()
@@ -53,5 +71,40 @@ public class SurvivalCtrl : VuMonoBehaviour
 
             isPanelWave = !isPanelWave;
         }
+    }
+
+    protected virtual void ReadyToFight()
+    {
+        StartCoroutine(StartCountdown());
+    }
+
+    IEnumerator StartCountdown()
+    {
+        int currentTime = timeToReadyFight;
+
+        if(this.panelTopLeft != null) this.panelTopLeft.gameObject.SetActive(false);
+        if (this.panelReady != null) this.panelReady.transform.gameObject.SetActive(true);
+        TMP_Text countdownText = this.panelReady.transform.Find("Ready_Time").GetComponent<TMP_Text>();
+
+
+        while (currentTime >= 0)
+        {
+            Debug.Log("Time: " + currentTime); // In ra console
+            if (countdownText != null)
+             countdownText.text = currentTime.ToString(); // Cập nhật UI Text
+
+            yield return new WaitForSeconds(1f);
+            currentTime--;
+        }
+
+        if(SoundFXManager.Instance.bg_Survival != null) SoundEnemyManager.Instance.PlayBGMusic(SoundFXManager.Instance.bg_Survival, this.transform);
+        if (this.panelTopLeft != null) this.panelTopLeft.gameObject.SetActive(true);
+        if (this.panelReady != null) this.panelReady.transform.gameObject.SetActive(false);
+        if (!isSpawning)
+            StartCoroutine(this.waveSpawner.HandleWaves());
+
+        Debug.Log("Time's up!");
+        //if (countdownText != null)
+        //    countdownText.text = "0";
     }
 }
