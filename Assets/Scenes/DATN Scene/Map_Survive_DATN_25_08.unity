@@ -6193,6 +6193,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1717539505029483886, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1987342782510090676, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.458256
@@ -6321,6 +6325,10 @@ PrefabInstance:
       propertyPath: e_winPanel
       value: 
       objectReference: {fileID: 5632775809063457048}
+    - target: {fileID: 6758517482905921667, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: waveConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b25665bbdadb1540acaa7e0a5a4c33d, type: 2}
     - target: {fileID: 6758517482905921667, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: e_losePanel
       value: 
@@ -73864,7 +73872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level: 1
   _maxLevel: 10
-  _expToNextLevel: 10
+  _expToNextLevel: 100
   _currentExp: 0
   _expFillImage: {fileID: 677743226011384420}
   levelText: {fileID: 7645409095570627589}
@@ -616025,7 +616033,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 8331094014727803747}
         m_TargetAssemblyTypeName: PanelDie, Assembly-CSharp
         m_MethodName: BackToMainMenu
         m_Mode: 3
