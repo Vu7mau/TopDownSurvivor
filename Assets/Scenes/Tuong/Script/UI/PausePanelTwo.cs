@@ -42,9 +42,11 @@ public class PausePanelTwo : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !isTransitioning
+        if (Input.GetKeyDown(KeyCode.Escape)
+            && !isTransitioning
             && !isInSettingPanel
-            && !DOTween.IsTweening(effectPausePanel.transform))
+            && !DOTween.IsTweening(effectPausePanel.transform)
+            && !IsWinOrLosePanelActive()) 
         {
             if (!pausePanel.activeSelf)
             {
@@ -73,6 +75,13 @@ public class PausePanelTwo : MonoBehaviour
             }
         }
     }
+
+    private bool IsWinOrLosePanelActive()
+    {
+        return (winPanel != null && winPanel.gameObject.activeSelf)
+            || (losePanel != null && losePanel.gameObject.activeSelf);
+    }
+
     public void ResumeGame()
     {
         Time.timeScale = 1f;
