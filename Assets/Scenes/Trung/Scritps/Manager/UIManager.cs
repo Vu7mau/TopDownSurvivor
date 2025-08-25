@@ -63,7 +63,7 @@ public class UIManager : Singleton<UIManager>
     public void UpdateTimeToNextWave(float _time)
     {
         titleTimeToNextWave.text = localization.TITLE_TIME_TO_NEXT_WAVE;
-        timer.StartCountDown(true, true, _time);
+        timer.StartCount(true,_time);
     }
 
     public void UpdateCharacterStatsUI(float _atk, float _defense, float _critRate, float _critDamage/*, float _bonusDamage*/)

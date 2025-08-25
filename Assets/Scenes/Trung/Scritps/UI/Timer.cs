@@ -6,117 +6,73 @@ using UnityEngine.UIElements;
 
 public class Timer : MonoBehaviour
 {
+    [SerializeField] protected TMP_Text timerText;   // Text hiển thị thời gian
+    [SerializeField] protected bool isCountdown = false; // true = đếm ngược, false = đếm tiến
+    [SerializeField] protected float startTime = 60f;    // Thời gian bắt đầu (chỉ dùng cho đếm ngược)
 
-    public static Timer Instance;
-    [SerializeField] private TextMeshProUGUI txtTime;
-    [SerializeField] private Transform infinityTime;
-    [SerializeField] private float time;
+    private float currentTime;
+    private bool isRunning = false;
 
-    [SerializeField] private bool startCountTime = true;
-    [SerializeField] private bool isCountDown;
-    [SerializeField] private bool timeIsUp = false;
+    private bool timeIsUp = false;
     public bool TimeIsUp { get => this.timeIsUp; }
-    [SerializeField] private bool isCountUp;
 
-
-    private void Awake()
+    void Start()
     {
-        Instance = this;
-    }
-    private void Update()
-    {
-        this.SwitchStateCount();
-        this.CountDown(startCountTime,isCountDown);
-        this.CountUp(startCountTime, isCountUp);
+        
     }
 
-    //Bắt đầu tính giờ
-    public void StartCountDown(bool _isStartCountTime, bool _isCountDown,float _time)
+    protected virtual void Update()
     {
-        this.timeIsUp = false;
-        this.time = _time;
-        this.CountDown(_isStartCountTime, _isCountDown);
-        if (_time < 100000)
+        if (!isRunning) return;
+
+        if (isCountdown)
         {
-            
-            //if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(false);
+            currentTime -= Time.deltaTime;
+            if (currentTime <= 0f)
+            {
+                currentTime = 0f;
+                this.timeIsUp = true;
+                StopTimer(); // Dừng khi hết giờ
+            }
         }
-        //else
-        //{
-        //    if(this.infinityTime != null) this.infinityTime.gameObject.SetActive(true);
-        //    this.txtTime.text = string.Empty;
-        //}
-    }
-    public void StartCountUp(bool _isStartCountTime, bool _isCountUp, float _time)
-    {
-        this.timeIsUp = false;
-        this.time = _time;
-        this.CountUp(_isStartCountTime, _isCountUp);
-    }
-
-    //Dừng tính giờ
-    public void StopCountDown(bool _isStopCountTime, bool _isCountDown)
-    {
-        this.CountDown(_isStopCountTime, _isCountDown);
-    }
-    public void StopCountUp(bool _isStopCountTime, bool _isCountUp)
-    {
-        this.CountUp(_isStopCountTime, _isCountUp);
-    }
-
-    //Tiếp tục tính giờ
-    public void ContinueCountDown(bool _isContinueCountTime, bool _isCountDown)
-    {
-        this.CountDown(_isContinueCountTime, _isCountDown);
-    }
-    public void ContinueCountUp(bool _isContinueCountTime, bool _isCountUp)
-    {
-        this.CountUp(_isContinueCountTime, _isCountUp);
-    }
-
-    public void CountDown(bool _isStartCountTime,bool _isCountDown)
-    {
-        this.startCountTime = _isStartCountTime;
-        this.isCountDown = _isCountDown;
-        this.UpdateTimeCount(this.time);
-        if(!this.startCountTime)  return;
-        if (!this.isCountDown) return;
-        if(this.time > 0)
-            this.time -= Time.deltaTime;
         else
         {
-            this.time = 0;
-            this.timeIsUp = !this.timeIsUp;
-            this.startCountTime = !this.startCountTime;
-            this.isCountDown= !this.isCountDown;
-            return;
+            currentTime += Time.deltaTime;
         }
+
+        this.UpdateTimerUI();
     }
-    public void CountUp(bool _isStartCountTime, bool _isCountUp)
+
+    public virtual void SetCurrentTime()
     {
-        this.startCountTime = _isStartCountTime;
-        this.isCountUp = _isCountUp;
-        this.UpdateTimeCount(this.time);
-        if (!this.startCountTime) return;
-        if (!this.isCountUp) return;
-        if (this.time > 0)
-            this.time += Time.deltaTime;
-        else
-            this.time = 0;
+        
     }
-    private void UpdateTimeCount(float time)
+
+    public virtual void StartCount(bool isCountdown , float time)
     {
-        //if(time > 100000)
-        //{
-        //    this.txtTime.text = string.Empty;
-        //    if(this.infinityTime != null && this.startCountTime) this.infinityTime.gameObject.SetActive(true);
-        //    return;
-        //}
-        if (this.infinityTime != null) this.infinityTime.gameObject.SetActive(false);
-        int miniutes = Mathf.FloorToInt(time / 60);
-        int seconds = Mathf.FloorToInt(time % 60);
-        this.txtTime.text = string.Format("{0:00}:{1:00}", miniutes, seconds);
+        this.timeIsUp = !isCountdown;
+        this.startTime = time;
+        this.isRunning = isCountdown;
+        this.isCountdown = isCountdown;
+        this.ResetTimer();
     }
+
+    void UpdateTimerUI()
+    {
+        int minutes = Mathf.FloorToInt(currentTime / 60f);
+        int seconds = Mathf.FloorToInt(currentTime % 60f);
+        this.timerText.text = $"{minutes:00}:{seconds:00}";
+    }
+
+    public void StartTimer() => isRunning = true;
+    public void StopTimer() => isRunning = false;
+    public void ResetTimer()
+    {
+        currentTime = isCountdown ? startTime : 0f;
+        this.UpdateTimerUI();
+    }
+
+    public void ToggleTimer() => isRunning = !isRunning;
     private void SwitchStateCount()
     {
         

@@ -13,8 +13,15 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   waves:
-  - waveDuration: 10
+  - waveDuration: 30
     timeSpawnEachWave: 1
     enemies:
-    - enemyPrefab: {fileID: 6888495746247662378, guid: 9fc64df9b110f4245acd37c76cd77f44, type: 3}
-      totalAmount: 1
+    - enemyPrefab: {fileID: 8419531420300366817, guid: b4a92275a1245254f90b5ec80d3d0cbc, type: 3}
+      totalAmount: 10
+  - waveDuration: 30
+    timeSpawnEachWave: 4
+    enemies:
+    - enemyPrefab: {fileID: 6179133440481359335, guid: 38d14cb0c12f6ed42aa03b730ee9d924, type: 3}
+      totalAmount: 15
+    - enemyPrefab: {fileID: 9012152331269360993, guid: 9b51a95d519b37643ada6949b2bc89dc, type: 3}
+      totalAmount: 15

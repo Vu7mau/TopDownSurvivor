@@ -103,7 +103,7 @@ public class SurvivalCtrl : VuMonoBehaviour
         if (!isSpawning)
             StartCoroutine(this.waveSpawner.HandleWaves());
 
-        Debug.Log("Time's up!");
+        //Debug.Log("Time's up!");
         //if (countdownText != null)
         //    countdownText.text = "0";
     }

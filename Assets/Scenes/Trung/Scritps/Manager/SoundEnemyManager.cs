@@ -47,7 +47,7 @@ public class SoundEnemyManager : Singleton<SoundEnemyManager>
     }
     public virtual void PlayBGMusic(AudioClip clip, Transform transformSpawn, float volume = 1)
     {
-        this.PlayEnemySoundFXClip(clip, transformSpawn, true, true, volume);
+        this.PlayEnemySoundFXClip(clip, transformSpawn, true, false, volume);
     }
 
     public virtual void StopEnemySoundFXClip(AudioClip clip, bool isMusic)

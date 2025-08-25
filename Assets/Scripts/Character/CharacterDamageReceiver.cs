@@ -39,7 +39,7 @@ public class CharacterDamageReceiver : DamageReceiver
         characterCtrl.DisableAllComponet();
         CharacterUIManager.OnUpdateHealth?.Invoke(0, 0);
         //Time.timeScale = 0f;
-        _pnl.pnlDie.gameObject.SetActive(true);
+        if(this._pnl != null) _pnl.gameObject.SetActive(true);
 
     }
     protected virtual void SetMaxHealth()

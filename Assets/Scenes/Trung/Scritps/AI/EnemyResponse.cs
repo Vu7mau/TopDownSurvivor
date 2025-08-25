@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class EnemyResponse : VuMonoBehaviour
     [SerializeField] protected CharacterLeveUp characterLeveUp;
     [SerializeField] protected CharacterCurrencies characterCurrencies;
     [SerializeField] protected WaveSpawner waveSpawner;
+
+
 
     [Space]
     [Space]
@@ -55,7 +58,16 @@ public class EnemyResponse : VuMonoBehaviour
     {
         base.OnEnable();
         this.DespawnAllText();
-        this.OnPlayerKillEnemy();
+        this.LoadEnemyHealth();
+
+        //this.OnPlayerKillEnemy();
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        this.LoadEnemyHealth();
+
     }
 
     private void Update()
@@ -68,20 +80,21 @@ public class EnemyResponse : VuMonoBehaviour
         {
             this.DropItem(this.transform, this.pickUpSpawner);
         }
-        if (this.characterCurrencies != null)
-        {
-            this.characterCurrencies.AddKills(1);
-            this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
-        }
+        this.HandleEnemyDeath();
+        //if (this.characterCurrencies != null)
+        //{
+        //    this.characterCurrencies.AddKills(1);
+        //    this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
+        //}
         this.DespawnEnemy();
     }
     protected virtual void DespawnEnemy()
     {
+        this.SubstractEnemy();
         if (this.enemyCtrlDespawn != null && this.enemiesSpawner != null)
         {
             this.enemyCtrlDespawn.DoDespawn();
 
-            this.SubstractEnemy();
             return;
         }
         this.transform.gameObject.SetActive(false);
@@ -136,32 +149,29 @@ public class EnemyResponse : VuMonoBehaviour
     }
 
     //Add any rewards when player kill enemy
-    public virtual void OnPlayerKillEnemy()
+    //public virtual void OnPlayerKillEnemy()
+    //{
+    //    if(this.coroutine == null)
+    //    {
+    //        this.coroutine = StartCoroutine(this.RewardToPlayerWhenKillEnemy());
+    //    }
+    //    else
+    //    {
+    //        StopCoroutine(this.coroutine);
+    //        this.coroutine = StartCoroutine(this.RewardToPlayerWhenKillEnemy());
+    //    }
+    //}
+    public virtual void HandleEnemyDeath()
     {
-        if(this.coroutine == null)
-        {
-            StartCoroutine(this.RewardToPlayerWhenKillEnemy());
-        }
-        else
-        {
-            StopCoroutine(this.coroutine);
-            StartCoroutine(this.RewardToPlayerWhenKillEnemy());
-        }
-    }
-    private IEnumerator RewardToPlayerWhenKillEnemy()
-    {
-        yield return new WaitUntil(() => this.enemyHealth.IsDead());
+        //yield return new WaitUntil(() => this.enemyHealth.IsDead());
 
         //Rewards to Players
         if (this.characterLeveUp != null) this.characterLeveUp.AddExp(this.enemyAI.EnemySO.Exp);
 
 
-        //Update UI (only apply to survivals)
-       //if (this.waveSpawner != null) this.waveSpawner.SubstractEnemyToUI();
-
         if(this.characterCurrencies != null) this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
 
-        this.coroutine = null;
+       // this.coroutine = null;
     }
 
     protected virtual void DespawnAllText()
@@ -181,12 +191,12 @@ public class EnemyResponse : VuMonoBehaviour
     {
         foreach (ItemDrop drop in this.enemyAI.ItemDropSO.ItemDrops)
         {
-            float rollItem = Random.Range(0f, 100f);
+            float rollItem = UnityEngine.Random.Range(0f, 100f);
             if (rollItem <= drop.dropChance)
             {
-                float positionX = Random.Range(position.position.x - 2f, position.position.x + 2f);
+                float positionX = UnityEngine.Random.Range(position.position.x - 2f, position.position.x + 2f);
                 float positionY = position.position.y + 5f;
-                float positionZ = Random.Range(position.position.z - 2f, position.position.z + 2f);
+                float positionZ = UnityEngine.Random.Range(position.position.z - 2f, position.position.z + 2f);
                 Vector3 positionSpawnItem = new Vector3(positionX, positionY, positionZ);
                 spawner.Spawn(drop.itemPrefab, positionSpawnItem);
                 if (drop.itemPrefab != null)

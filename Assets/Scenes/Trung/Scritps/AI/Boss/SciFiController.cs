@@ -56,8 +56,6 @@ public class SciFiController : BossController
     [SerializeField] protected float defaultSpeed = 50f;
     [SerializeField] protected List<AudioClip> snd_shoot2_start;
 
-    [SerializeField] protected List<AudioClip> snd_shoot6_start;
-    [SerializeField] protected List<AudioClip> snd_shoot6_end;
     [SerializeField] protected Vector3 rocketLightScale;
 
 
@@ -144,6 +142,10 @@ public class SciFiController : BossController
     [SerializeField] protected EffectFXSpawner effectFXSpawner;
 
     [SerializeField] protected AudioClip snd_attack6;
+    [SerializeField] protected List<AudioClip> snd_shoot6_start;
+    [SerializeField] protected List<AudioClip> snd_shoot6_end;
+
+    [SerializeField] protected Transform gunFlash;
     protected virtual void LoadEffectFXSpawner()
     {
         if (this.effectFXSpawner != null) return;
@@ -165,7 +167,7 @@ public class SciFiController : BossController
         {
             this.LookAtTartgetPlease();
             Vector3 target = this.targetPosition.position;
-
+            if(this.gunFlash != null) this.gunFlash.gameObject.SetActive(false);
 
             yield return new WaitForSeconds(0.1f);
 
@@ -188,7 +190,7 @@ public class SciFiController : BossController
             if (this.e_Shooting.NewProjectitle == null) yield break;
             this.PlayerSFXAttack6();
 
-
+            if (this.gunFlash != null) this.gunFlash.gameObject.SetActive(true);
             this.e_Shooting.NewProjectitle.GetComponent<Projectitle>().ShootAt(target);
 
             yield return new WaitForSeconds(this.timeDelay);
@@ -243,6 +245,7 @@ public class SciFiController : BossController
     [SerializeField] protected Explosion explosion;
     [SerializeField] protected List<Transform> explosionPoss;
     [SerializeField] protected Transform fire;
+    [SerializeField] protected Transform modelPosition;
     [SerializeField] protected AudioClip snd_shutdownRobot;
 
     private void Distribution()
@@ -262,7 +265,11 @@ public class SciFiController : BossController
         yield return new WaitForSeconds(0);
         EffectFX nbig = this.effectFXSpawner.Spawn(this.explosion, transform.position);
         nbig.transform.localScale = new Vector3(3, 3, 3);
-        fire.transform.gameObject.SetActive(true);
+        if(this.fire != null && this.modelPosition != null)
+        {
+            fire.transform.gameObject.SetActive(true);
+            this.fire.transform.position = this.modelPosition.position;
+        }
     }
     private void Shutdown()
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Unity.VisualScripting;
@@ -23,6 +24,7 @@ public class EnemyHealth : DamageReceiver
 
     protected float _amountIncrease = 0;
 
+    //public event Action OnDeathEnemy;
 
     private KillProgressSlider killProgressSlider;
     public float Health
@@ -46,6 +48,8 @@ public class EnemyHealth : DamageReceiver
         base.OnEnable();
         this.RebornEnemy();
         killProgressSlider = GameObject.FindAnyObjectByType<KillProgressSlider>();
+
+
     }
     protected override void OnDisable()
     {
@@ -118,6 +122,7 @@ public class EnemyHealth : DamageReceiver
     protected virtual void ResetStateCollision()
     {
         this._canGetDamage = true;
+        //this.gameObject.GetComponent<Collider>().enabled = true;
     }
     protected virtual void ResetValues()
     {
@@ -155,13 +160,11 @@ public class EnemyHealth : DamageReceiver
     }
     protected override void OnDead()
     {
-        //this.gameObject.GetComponent<Collider>().enabled = false;
 
+        //this.gameObject.GetComponent<Collider>().enabled = false;
         this._canGetDamage = false;
         if (!this._isDead)
         {
-     
-
             this._isDead = true;
         }
     }
@@ -200,7 +203,7 @@ public class EnemyHealth : DamageReceiver
     {
         if(this.beastHurtSFXs.Count > 0)
         {
-            int random = Random.Range(0, this.beastHurtSFXs.Count);
+            int random = UnityEngine.Random.Range(0, this.beastHurtSFXs.Count);
             SoundFXManager.Instance.PlaySoundFXClip(this.beastHurtSFXs[random], this.transform);
             //Debug.Log("Hurt Scifi");
         }

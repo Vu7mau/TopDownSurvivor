@@ -42,6 +42,11 @@ public abstract class BossController : EnemyAIController
         StartCoroutine(CooldownAttackStartRoutine());
     }
 
+    protected override void Roar()
+    {
+        if (!this.isStartToFight) return;
+        base.Roar();
+    }
 
     protected IEnumerator CooldownAttackStartRoutine()
     {

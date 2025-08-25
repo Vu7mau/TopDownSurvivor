@@ -40,7 +40,7 @@ public class WaveSpawner :VuMonoBehaviour
 
     private bool isSpawning = false;
     private bool isFinish = false;
-
+    private bool lastWaves = false;
 
     private enum Mode { TimedWave, Adventure }
     private Mode mode = Mode.TimedWave;
@@ -93,9 +93,9 @@ public class WaveSpawner :VuMonoBehaviour
     {
         yield return new WaitUntil(() =>
             this.currentWaveIndex == (this.waveConfig.waves.Count - 1)
-            && this.enemyLefts == 0
+            && this.enemyLefts == 0 && this.lastWaves
         );
-
+        yield return new WaitForSeconds(this.timeWaitToEndGame);
         StartCoroutine(this.EndGamePlayRoutine(true));
         checkFinishWavesRoutine = null; // reset khi xong
     }
@@ -104,16 +104,15 @@ public class WaveSpawner :VuMonoBehaviour
     {
         isSpawning = true;
         this.isFinish = false;
-
-        if(waveConfig != null)
+        if (waveConfig != null)
         {
+            this.StartCheckFinishWaves();
             while (currentWaveIndex < waveConfig.waves.Count)
             {
                 this.canSpawnContinue = true;
                 yield return StartCoroutine(SpawnWave(waveConfig.waves[currentWaveIndex]));
                 currentWaveIndex++;
             }
-            StartCheckFinishWaves();
             //this.FinishBattle();
 
 
@@ -163,8 +162,7 @@ public class WaveSpawner :VuMonoBehaviour
     {
         int waveCount = wave.timeSpawnEachWave;
         float spawnInterval = (float) wave.waveDuration / waveCount;
-        if(this.currentWaveIndex < this.waveConfig.waves.Count - 1) UIManager.Instance.UpdateTimeToNextWave(wave.waveDuration);
-
+        if(this.currentWaveIndex <= this.waveConfig.waves.Count - 1) UIManager.Instance.UpdateTimeToNextWave(wave.waveDuration);
         //Tạo dictionary để theo dõi mỗi loại quái đã spawn được bao nhiêu.
         Dictionary<GameObject, int> spawnedSoFar = new Dictionary<GameObject, int>();
 
@@ -202,8 +200,14 @@ public class WaveSpawner :VuMonoBehaviour
                 spawnedSoFar[enemy.enemyPrefab] += spawnThisRound;
             }
             if (!this.canSpawnContinue) break;
-            yield return new WaitForSeconds(spawnInterval);
+            if (i < waveCount - 1) yield return new WaitForSeconds(spawnInterval);
+            else
+            {
+                if (this.currentWaveIndex == this.waveConfig.waves.Count - 1
+                && !this.lastWaves) this.lastWaves = true;
+            }
         }
+        yield return new WaitUntil(() => this.timer.TimeIsUp);
         if (!this.canSpawnContinue) yield break;
     }
 
@@ -211,7 +215,8 @@ public class WaveSpawner :VuMonoBehaviour
     {
         --this.enemyLefts;
         //--this.currentWaveEnemiesAlive;
-        if (this.currentWaveIndex < this.waveConfig.waves.Count) UIManager.Instance.UpdateWaveUI(this.currentWaveIndex + 1, this.enemyLefts);
+        if (this.currentWaveIndex >= this.waveConfig.waves.Count) this.currentWaveIndex = this.waveConfig.waves.Count - 1;
+        UIManager.Instance.UpdateWaveUI(this.currentWaveIndex + 1, this.enemyLefts);
 
         //// Kiểm tra nếu đã giết hết enemy
         //if (this.currentWaveEnemiesAlive <= 0 && !this.timer.TimeIsUp)
