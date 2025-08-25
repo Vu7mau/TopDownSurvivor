@@ -25,20 +25,22 @@ public class PlayerScoreManager : MonoBehaviour
     }
     public void ResetScore()
     {
-        totalScore = 0;
+        PlayerPrefs.SetInt("currentScores", 0);
+        PlayerPrefs.Save();
         Debug.Log("Điểm đã được đặt lại.");
     }
-    public void SendFinalScore()
+    public void SendFinalScore(int score)
     {
-        SendScoreToLeaderboard(totalScore);
+        SendScoreToLeaderboard(score);
         Debug.Log("Gửi điểm cuối cùng: " + totalScore);
     }
     private void ApplicationQuit()
     {
         if(totalScore > 0)
         {
-            Debug.Log("Thoát game, gửi điểm lên hệ thống");
-            SendFinalScore();
+            Debug.Log("Đã thoát game, gửi điểm lên hệ thống");
+            int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+            SendFinalScore(finalScore);
         }
     }
     public void SendScoreToLeaderboard(int score)

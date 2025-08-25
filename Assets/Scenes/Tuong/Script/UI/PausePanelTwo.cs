@@ -97,7 +97,8 @@ public class PausePanelTwo : MonoBehaviour
     public async void Restart(int sceneIndex)
     {
         Time.timeScale = 1f;
-        PlayerScoreManager.Instance?.SendFinalScore();
+        int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+        PlayerScoreManager.Instance?.SendFinalScore(finalScore);
         PlayerScoreManager.Instance?.ResetScore();
         pausePanel.SetActive(false);
         DOTween.KillAll();
@@ -113,7 +114,8 @@ public class PausePanelTwo : MonoBehaviour
     public async void BackToMainMenu(int sceneIndex)
     {
         Time.timeScale = 1f;
-        PlayerScoreManager.Instance?.SendFinalScore();
+        int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+        PlayerScoreManager.Instance?.SendFinalScore(finalScore);
         PlayerScoreManager.Instance?.ResetScore();
         CountDownTimer.Instance?.ResetTimer();
         CountDownTimer.Instance?.PauseTimer();

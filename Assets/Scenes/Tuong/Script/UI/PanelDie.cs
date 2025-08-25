@@ -16,14 +16,14 @@ public class PanelDie : Singleton<VuMonoBehaviour>
         await Task.Delay(3000);
         Time.timeScale = 0f;
         pnlDie.SetActive(true);
-        if (PlayFabClientAPI.IsClientLoggedIn())
-        {
-            PlayerScoreManager.Instance.SendFinalScore();
-        }
-        else
-        {
-            Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
-        }
+        //if (PlayFabClientAPI.IsClientLoggedIn())
+        //{
+        //    PlayerScoreManager.Instance.SendFinalScore();
+        //}
+        //else
+        //{
+        //    Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
+        //}
         LastScore();
         PlayTime();
     }

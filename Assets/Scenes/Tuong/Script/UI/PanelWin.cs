@@ -25,14 +25,14 @@ public class PanelWin : MonoBehaviour
         Time.timeScale = 0f;
         Debug.Log("Mở Panel Win thành công");
         panelWin.SetActive(true);
-        if (PlayFabClientAPI.IsClientLoggedIn())
-        {
-            PlayerScoreManager.Instance.SendFinalScore();
-        }
-        else
-        {
-            Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
-        }
+        //if (PlayFabClientAPI.IsClientLoggedIn())
+        //{
+        //    PlayerScoreManager.Instance.SendFinalScore();
+        //}
+        //else
+        //{
+        //    Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
+        //}
         LastScore();
         PlayTime();
     }

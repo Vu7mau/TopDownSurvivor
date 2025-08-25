@@ -40,7 +40,8 @@ public class PanelExitGame : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex != 0 &&
             SceneManager.GetActiveScene().buildIndex != 1)
         {
-            PlayerScoreManager.Instance?.SendFinalScore();
+            int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+            PlayerScoreManager.Instance?.SendFinalScore(finalScore);
         } 
         UnityEditor.EditorApplication.isPlaying = false;
 #else

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using PlayFab;
 using TMPro;
 using UnityEngine;
 
@@ -38,6 +39,17 @@ public class FinishBattle : Panel
         int scores = PlayerPrefs.GetInt("currentScores", 0);
         bool isWin = stateFinishBattle == StateFinishBattle.Victory? true: false;
         this.DisplayPanelWhenFinishTheBattle(isWin,level, scores,kills, coins);
+
+
+        if (PlayFabClientAPI.IsClientLoggedIn())
+        {
+            PlayerScoreManager.Instance.SendFinalScore(scores);
+        }
+        else
+        {
+            Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
+        }
+
     }
 
 
