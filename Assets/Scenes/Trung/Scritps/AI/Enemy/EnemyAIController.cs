@@ -374,6 +374,10 @@ public class EnemyAIController : EnemyBase
                 this.enemyReferences.NavMeshAgent.SetDestination(this.targetPosition.position);
                 //Debug.Log("SetDestination: " + this.targetPosition.position);
             }
+            else
+            {
+
+            }
             this.enemyReferences.Animator.SetBool("isMoving", true);
         }
     }

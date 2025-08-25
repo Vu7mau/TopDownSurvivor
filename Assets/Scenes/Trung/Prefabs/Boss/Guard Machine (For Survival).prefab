@@ -20485,12 +20485,6 @@ MonoBehaviour:
   defaultSpeed: 50
   snd_shoot2_start:
   - {fileID: 8300000, guid: 37728c782ca207e4c980cd55b371dd98, type: 3}
-  snd_shoot6_start:
-  - {fileID: 8300000, guid: d09bcd60f6e9cc4479cbe1a3ba60c40d, type: 3}
-  snd_shoot6_end:
-  - {fileID: 8300000, guid: 07d1d2de017ad6b4eb9b446588df65f5, type: 3}
-  - {fileID: 8300000, guid: c5c2356c02a9ffe45895a94610baf153, type: 3}
-  - {fileID: 8300000, guid: 81d7c4f80e23c4b4ea6f5a08aaeb905b, type: 3}
   rocketLightScale: {x: 2, y: 2, z: 2}
   minigunBullet: {fileID: 4533113652296387554}
   minigunBulletSpawnPosition: {fileID: 7293120891509129417}
@@ -20499,6 +20493,13 @@ MonoBehaviour:
   circleWarning6: {fileID: 701393419439009985}
   effectFXSpawner: {fileID: 6569536057720600300}
   snd_attack6: {fileID: 8300000, guid: 4b17fc3af2dca7147b72a3c8aa465bd5, type: 3}
+  snd_shoot6_start:
+  - {fileID: 8300000, guid: d09bcd60f6e9cc4479cbe1a3ba60c40d, type: 3}
+  snd_shoot6_end:
+  - {fileID: 8300000, guid: 07d1d2de017ad6b4eb9b446588df65f5, type: 3}
+  - {fileID: 8300000, guid: c5c2356c02a9ffe45895a94610baf153, type: 3}
+  - {fileID: 8300000, guid: 81d7c4f80e23c4b4ea6f5a08aaeb905b, type: 3}
+  gunFlash: {fileID: 0}
   explosion: {fileID: 373182930772968861}
   explosionPoss:
   - {fileID: 401657023585415754}
@@ -20509,6 +20510,7 @@ MonoBehaviour:
   - {fileID: 3549914378983247095}
   - {fileID: 3074392953078114870}
   fire: {fileID: 7718982683740652229}
+  modelPosition: {fileID: 0}
   snd_shutdownRobot: {fileID: 8300000, guid: 84b036255e2df9344b485cc43619418d, type: 3}
 --- !u!114 &3289389880929443539
 MonoBehaviour:
@@ -38885,15 +38887,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9103884708049311397, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.0640266
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9103884708049311397, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7026732
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9103884708049311397, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.5475166
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9103884708049311397, guid: d2072a73d5ac0994f9a076fc21d21c4e, type: 3}
       propertyPath: m_LocalRotation.w
