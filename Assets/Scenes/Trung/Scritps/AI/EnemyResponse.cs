@@ -41,6 +41,7 @@ public class EnemyResponse : VuMonoBehaviour
 
     //[SerializeField] protected bool isCountLevel = false;
 
+    private KillProgressSlider killProgressSlider;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -52,6 +53,7 @@ public class EnemyResponse : VuMonoBehaviour
         this.LoadWaveSpawner();
         this.LoadPickUpSpawner();
         this.LoadCharacterCurrencies();
+        this.LoadKillerProgress();
     }
 
     protected override void OnEnable()
@@ -76,7 +78,7 @@ public class EnemyResponse : VuMonoBehaviour
     }
     protected virtual void OnEnemyDeath()
     {
-        if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null && this.isReward)
+        if (this.enemyAI.ItemDropSO != null && this.pickUpSpawner != null/* && this.isReward*/)
         {
             this.DropItem(this.transform, this.pickUpSpawner);
         }
@@ -148,6 +150,12 @@ public class EnemyResponse : VuMonoBehaviour
         this.characterCurrencies = FindAnyObjectByType<CharacterCurrencies>();
     }
 
+    protected virtual void LoadKillerProgress()
+    {
+        if(this.killProgressSlider != null) return;
+        killProgressSlider = GameObject.FindAnyObjectByType<KillProgressSlider>();
+    }
+
     //Add any rewards when player kill enemy
     //public virtual void OnPlayerKillEnemy()
     //{
@@ -168,8 +176,12 @@ public class EnemyResponse : VuMonoBehaviour
         //Rewards to Players
         if (this.characterLeveUp != null) this.characterLeveUp.AddExp(this.enemyAI.EnemySO.Exp);
 
+        if (this.killProgressSlider != null)
+        {
+            killProgressSlider.AddKill();
+        }
 
-        if(this.characterCurrencies != null) this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
+        if (this.characterCurrencies != null) this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
 
        // this.coroutine = null;
     }
@@ -192,16 +204,31 @@ public class EnemyResponse : VuMonoBehaviour
         foreach (ItemDrop drop in this.enemyAI.ItemDropSO.ItemDrops)
         {
             float rollItem = UnityEngine.Random.Range(0f, 100f);
+           
             if (rollItem <= drop.dropChance)
             {
                 float positionX = UnityEngine.Random.Range(position.position.x - 2f, position.position.x + 2f);
                 float positionY = position.position.y + 5f;
                 float positionZ = UnityEngine.Random.Range(position.position.z - 2f, position.position.z + 2f);
                 Vector3 positionSpawnItem = new Vector3(positionX, positionY, positionZ);
-                spawner.Spawn(drop.itemPrefab, positionSpawnItem);
-                if (drop.itemPrefab != null)
+                if (drop.itemPrefab.GetComponent<ItemPickUp>().Type == PickUpType.coin)
                 {
+                    if (this.isReward)
+                    {
+                        spawner.Spawn(drop.itemPrefab, positionSpawnItem);
+                        if (drop.itemPrefab != null)
+                        {
 
+                        }
+                    }
+                }
+                else
+                {
+                    spawner.Spawn(drop.itemPrefab, positionSpawnItem);
+                    if (drop.itemPrefab != null)
+                    {
+
+                    }
                 }
             }
         }

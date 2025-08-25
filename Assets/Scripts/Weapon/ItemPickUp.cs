@@ -6,6 +6,7 @@ using UnityEngine;
 public class ItemPickUp : PowerUpItem
 {
     [SerializeField] private PickUpType _type;
+    public PickUpType Type { get => this._type; }
     [SerializeField] private int _healingAmount;
     [SerializeField] private int _coinAmount;
     [SerializeField] private int _bulletAmount;
