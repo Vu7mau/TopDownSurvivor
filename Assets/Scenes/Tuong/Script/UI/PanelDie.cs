@@ -44,7 +44,7 @@ public class PanelDie : Singleton<VuMonoBehaviour>
     {
         Time.timeScale = 1f;
         DOTween.Kill(gameObject);
-        pnlDie.SetActive(false);
+        pnlDie?.SetActive(false);
         PlayerScoreManager.Instance?.ResetScore();
         CountDownTimer.Instance?.ResetTimer();
         await LevelManager.Instance?.LoadLevelAsync(index);

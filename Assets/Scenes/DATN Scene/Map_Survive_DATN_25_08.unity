@@ -33104,6 +33104,10 @@ PrefabInstance:
       propertyPath: m_NavMeshData
       value: 
       objectReference: {fileID: 23800000, guid: 2b29e5628458283479882b477a8d14fb, type: 2}
+    - target: {fileID: 8194352167510171697, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -415795,7 +415799,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 10
-  _hpMax: 10000
+  _hpMax: 10
   _isDead: 0
   characterCtrl: {fileID: 6520209013124536290}
   _pnl: {fileID: 8331094014727803747}
@@ -616025,8 +616029,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PanelDie, Assembly-CSharp
+      - m_Target: {fileID: 6307360949530904937}
+        m_TargetAssemblyTypeName: PausePanelTwo, Assembly-CSharp
         m_MethodName: BackToMainMenu
         m_Mode: 3
         m_Arguments:

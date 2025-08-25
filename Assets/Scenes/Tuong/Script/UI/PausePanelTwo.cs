@@ -120,6 +120,7 @@ public class PausePanelTwo : MonoBehaviour
         CountDownTimer.Instance?.ResetTimer();
         CountDownTimer.Instance?.PauseTimer();
         pausePanel?.SetActive(false);
+        losePanel?.gameObject.SetActive(false);
         DOTween.KillAll();
         await LevelManager.Instance.LoadLevelAsync(sceneIndex);
     }
