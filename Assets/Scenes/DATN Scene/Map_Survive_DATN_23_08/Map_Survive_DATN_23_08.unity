@@ -6182,6 +6182,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5632775809063457048}
     - target: {fileID: 6758517482905921667, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: waveConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b25665bbdadb1540acaa7e0a5a4c33d, type: 2}
+    - target: {fileID: 6758517482905921667, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: e_losePanel
       value: 
       objectReference: {fileID: 1508924025592690210}
@@ -73469,7 +73473,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _level: 1
   _maxLevel: 10
-  _expToNextLevel: 10
+  _expToNextLevel: 100
   _currentExp: 0
   _expFillImage: {fileID: 677743226011384420}
   levelText: {fileID: 7645409095570627589}
@@ -556280,13 +556284,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0994edb67f689e48861f76c42b57569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txtTime: {fileID: 494836040705748570}
-  infinityTime: {fileID: 0}
-  time: 120
-  startCountTime: 1
-  isCountDown: 0
-  timeIsUp: 0
-  isCountUp: 0
+  timerText: {fileID: 0}
+  isCountdown: 0
+  startTime: 60
 --- !u!114 &7229058274087833442
 MonoBehaviour:
   m_ObjectHideFlags: 0
