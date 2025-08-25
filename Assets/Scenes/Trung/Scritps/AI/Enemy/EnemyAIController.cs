@@ -283,7 +283,8 @@ public class EnemyAIController : EnemyBase
                 this.UpdateEnemyPath();
                 this.enemyReferences.Animator.SetBool("isMoving", true);
             }
-            this.enemyReferences.NavMeshAgent.enabled = true;
+
+            if(this.enemyReferences.NavMeshAgent.isOnNavMesh) this.enemyReferences.NavMeshAgent.enabled = true;
             if (this.distanceToTarget > this.chaseRange) this.Idle();
         }
     }
