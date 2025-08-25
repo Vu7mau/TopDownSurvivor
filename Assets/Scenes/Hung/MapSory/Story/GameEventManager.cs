@@ -65,7 +65,7 @@ public class GameEventManager : MonoBehaviour
     public void FinishPowerActivation()
     {
         powerIsOn = true;
-      
+        slidingDoor.SetConditionMet(true);
     }
 
     public void StartMap2()

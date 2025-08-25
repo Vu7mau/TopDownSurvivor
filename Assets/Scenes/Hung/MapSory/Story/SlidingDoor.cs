@@ -7,14 +7,20 @@ public class SlidingDoor : MonoBehaviour
 {
     public enum DoorDirection { LeftRight, FrontBack }
     public enum DoorState { Closed, Opening, Opened, Closing }
-    public enum Side { A, B } // A = phía trước (cùng hướng transform.forward), B = phía sau
+    public enum Side { A, B } // A = cùng hướng transform.forward, B = ngược lại
     public enum AllowedSide { Any, SideA, SideB }
-    public enum FirstOpenLockMode { StayOpenAndLock, CloseAndLock } // ở lại mở, hoặc đóng lại rồi khoá
+    public enum FirstOpenLockMode { StayOpenAndLock, CloseAndLock }
 
     [Header("Direction")]
-    public DoorDirection direction = DoorDirection.LeftRight;  // hướng trượt của cánh
+    public DoorDirection direction = DoorDirection.LeftRight;
     [Tooltip("Chọn mặt nào được auto-open khi Player đi vào trigger")]
     public AllowedSide allowedAutoOpenSide = AllowedSide.Any;
+
+    [Header("Auto Close on Exit")]
+    [Tooltip("Tự đóng khi đối tượng rời trigger?")]
+    public bool autoCloseOnExit = true;
+    [Tooltip("Giới hạn phía được phép auto-close khi rời trigger.")]
+    public AllowedSide allowedAutoCloseSide = AllowedSide.Any;
 
     [Header("Door Parts")]
     public Transform leftDoor;
@@ -28,18 +34,16 @@ public class SlidingDoor : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip doorOpenAudio;
-    [SerializeField] private AudioClip doorLockedAudio; // âm báo khi bị từ chối (lock/điều kiện)
+    [SerializeField] private AudioClip doorLockedAudio;
 
     [Header("Condition")]
-    [SerializeField] private bool requireCondition = false; // cần điều kiện mới mở
+    [SerializeField] private bool requireCondition = false;
     [SerializeField] private bool conditionMet = false;
 
     [Header("One-time Lock")]
     [Tooltip("Nếu bật, cửa chỉ cho mở 1 lần. Sau khi mở lần đầu sẽ bị khoá vĩnh viễn.")]
     public bool lockAfterFirstOpen = false;
-    [Tooltip("Cách khoá sau lần mở đầu: ở lại mở hoặc tự đóng rồi khoá.")]
     public FirstOpenLockMode firstOpenLockMode = FirstOpenLockMode.StayOpenAndLock;
-    [Tooltip("Độ trễ trước khi tự đóng rồi khoá (nếu chọn CloseAndLock).")]
     public float lockCloseDelay = 0.5f;
 
     [Header("Tags/Filter")]
@@ -53,15 +57,19 @@ public class SlidingDoor : MonoBehaviour
     public UnityEvent onClosed;
     public UnityEvent onOpenDenied;
 
-    [Header("Events: Side Detection")]
-    public UnityEvent onEnterSideA; // bước vào trigger từ phía A (trước cửa)
-    public UnityEvent onEnterSideB; // bước vào trigger từ phía B (sau cửa)
+    [Header("Events: Side Enter Detection")]
+    public UnityEvent onEnterSideA; // vào từ phía A
+    public UnityEvent onEnterSideB; // vào từ phía B
+
+    [Header("Events: Side Exit Detection")]
+    public UnityEvent onExitSideA;  // rời trigger ở phía A
+    public UnityEvent onExitSideB;  // rời trigger ở phía B
 
     [Serializable] public class FloatEvent : UnityEvent<float> { } // 0..1 tiến độ
     [Header("Optional: tiến độ di chuyển 0..1")]
     public FloatEvent onMoveProgress;
 
-    // C# events (nếu muốn đăng ký bằng code)
+    // C# events
     public event Action OpenStarted;
     public event Action Opened;
     public event Action CloseStarted;
@@ -70,6 +78,8 @@ public class SlidingDoor : MonoBehaviour
     public event Action<float> MoveProgress; // 0..1
     public event Action EnteredSideA;
     public event Action EnteredSideB;
+    public event Action ExitedSideA;
+    public event Action ExitedSideB;
 
     // --- Internal state ---
     private Vector3 leftClosedPos, rightClosedPos;
@@ -79,13 +89,11 @@ public class SlidingDoor : MonoBehaviour
     private bool isMoving = false;
     private DoorState state = DoorState.Closed;
 
-    private bool isPermanentlyLocked = false; // bị khoá vĩnh viễn (do lockAfterFirstOpen)
-    private bool hasOpenedOnce = false;       // đã từng mở lần đầu
+    private bool isPermanentlyLocked = false;
+    private bool hasOpenedOnce = false;
 
-    // cache: mặt cửa sử dụng transform.forward để phân biệt A/B
     private Transform _tr;
 
-    // -------------------- Unity --------------------
     private void Reset()
     {
         var col = GetComponent<Collider>();
@@ -111,15 +119,13 @@ public class SlidingDoor : MonoBehaviour
         leftClosedPos = leftDoor.position;
         rightClosedPos = rightDoor.position;
 
-        // Tính sẵn vị trí mở theo hướng trượt
         Vector3 offset = (direction == DoorDirection.LeftRight)
             ? new Vector3(openDistance, 0f, 0f)
             : new Vector3(0f, 0f, openDistance);
 
-        leftOpenPos = leftClosedPos - offset;   // cánh trái đi -offset
-        rightOpenPos = rightClosedPos + offset; // cánh phải đi +offset
+        leftOpenPos = leftClosedPos - offset;
+        rightOpenPos = rightClosedPos + offset;
 
-        // mặc định là đóng
         leftTargetPos = leftClosedPos;
         rightTargetPos = rightClosedPos;
         state = DoorState.Closed;
@@ -132,7 +138,6 @@ public class SlidingDoor : MonoBehaviour
         leftDoor.position = Vector3.MoveTowards(leftDoor.position, leftTargetPos, moveSpeed * Time.deltaTime);
         rightDoor.position = Vector3.MoveTowards(rightDoor.position, rightTargetPos, moveSpeed * Time.deltaTime);
 
-        // tiến độ 0..1 theo cánh trái so với vị trí đóng/mở
         float total = Vector3.Distance(leftClosedPos, leftOpenPos);
         if (total > 0.0001f)
         {
@@ -142,7 +147,6 @@ public class SlidingDoor : MonoBehaviour
             MoveProgress?.Invoke(progress);
         }
 
-        // tới đích
         if (Vector3.Distance(leftDoor.position, leftTargetPos) < arriveThreshold &&
             Vector3.Distance(rightDoor.position, rightTargetPos) < arriveThreshold)
         {
@@ -153,7 +157,6 @@ public class SlidingDoor : MonoBehaviour
                 state = DoorState.Opened;
                 onOpened?.Invoke(); Opened?.Invoke();
 
-                // Lần đầu mở -> đánh dấu/khóa theo cấu hình
                 if (!hasOpenedOnce)
                 {
                     hasOpenedOnce = true;
@@ -161,12 +164,10 @@ public class SlidingDoor : MonoBehaviour
                     {
                         if (firstOpenLockMode == FirstOpenLockMode.CloseAndLock)
                         {
-                            // đóng lại rồi khoá
                             Invoke(nameof(CloseAndPermanentLock), lockCloseDelay);
                         }
                         else
                         {
-                            // ở trạng thái mở nhưng khoá vĩnh viễn (không mở lần 2 vì đã mở rồi)
                             isPermanentlyLocked = true;
                         }
                     }
@@ -180,42 +181,24 @@ public class SlidingDoor : MonoBehaviour
         }
     }
 
-    // -------------------- Public API --------------------
+    // -------- Public API ----------
     public bool IsConditionRequired() => requireCondition;
     public bool IsConditionMet() => conditionMet;
     public DoorState CurrentState => state;
     public bool IsLockedPermanently() => isPermanentlyLocked;
 
-    /// <summary>Gọi từ nơi khác để set điều kiện (quest/trigger...)</summary>
     public void SetConditionMet(bool value) => conditionMet = value;
-
-    /// <summary>Khoá vĩnh viễn (không cho mở nữa).</summary>
     public void Lock() => isPermanentlyLocked = true;
-
-    /// <summary>Mở khoá vĩnh viễn.</summary>
     public void Unlock() => isPermanentlyLocked = false;
 
     public void OpenDoor()
     {
-        // từ chối nếu lock vĩnh viễn
-        if (isPermanentlyLocked)
-        {
-            Denied();
-            return;
-        }
-
-        // cần điều kiện mà chưa đạt
-        if (requireCondition && !conditionMet)
-        {
-            Denied();
-            return;
-        }
-
+        if (isPermanentlyLocked) { Denied(); return; }
+        if (requireCondition && !conditionMet) { Denied(); return; }
         if (state == DoorState.Opened || state == DoorState.Opening) return;
 
         SafePlay(doorOpenAudio);
         SetTargetsOpen();
-
         isMoving = true;
         state = DoorState.Opening;
 
@@ -227,31 +210,27 @@ public class SlidingDoor : MonoBehaviour
         if (state == DoorState.Closed || state == DoorState.Closing) return;
 
         SetTargetsClosed();
-
         isMoving = true;
         state = DoorState.Closing;
 
         onCloseStarted?.Invoke(); CloseStarted?.Invoke();
     }
 
-    /// <summary>Đảo trạng thái, tôn trọng lock/điều kiện.</summary>
     public void ToggleDoor()
     {
         if (state == DoorState.Opened) CloseDoor();
         else if (state == DoorState.Closed) OpenDoor();
     }
 
-    // -------------------- Trigger logic + Side detection --------------------
+    // -------- Trigger logic + Side detection ----------
     private void OnTriggerEnter(Collider other)
     {
         if (!IsAllowedActor(other)) return;
 
-        // phát hiện bên
-        Side side = GetSideOf(other.transform);
+        var side = GetSideOf(other.transform);
         if (side == Side.A) { onEnterSideA?.Invoke(); EnteredSideA?.Invoke(); }
         else { onEnterSideB?.Invoke(); EnteredSideB?.Invoke(); }
 
-        // auto-open theo cấu hình side
         if (allowedAutoOpenSide == AllowedSide.Any ||
             (allowedAutoOpenSide == AllowedSide.SideA && side == Side.A) ||
             (allowedAutoOpenSide == AllowedSide.SideB && side == Side.B))
@@ -260,7 +239,6 @@ public class SlidingDoor : MonoBehaviour
         }
         else
         {
-            // không đúng phía cho mở
             Denied();
         }
     }
@@ -269,23 +247,33 @@ public class SlidingDoor : MonoBehaviour
     {
         if (!IsAllowedActor(other)) return;
 
-        // bạn có thể đổi thành chỉ auto-close nếu ra cùng phía đã vào
-        CloseDoor();
+        // Xác định đối tượng rời trigger ở phía nào (A/B) tại thời điểm Exit
+        var side = GetSideOf(other.transform);
+        if (side == Side.A) { onExitSideA?.Invoke(); ExitedSideA?.Invoke(); }
+        else { onExitSideB?.Invoke(); ExitedSideB?.Invoke(); }
+
+        // Tùy chọn auto-close theo phía rời
+        if (!autoCloseOnExit) return;
+        if (allowedAutoCloseSide == AllowedSide.Any ||
+            (allowedAutoCloseSide == AllowedSide.SideA && side == Side.A) ||
+            (allowedAutoCloseSide == AllowedSide.SideB && side == Side.B))
+        {
+            CloseDoor();
+        }
     }
 
-    // -------------------- Helpers --------------------
+    // -------- Helpers ----------
     private bool IsAllowedActor(Collider other)
     {
         if (string.IsNullOrEmpty(playerTag)) return true;
         return other.CompareTag(playerTag);
     }
 
-    /// <summary>Phân biệt bên theo dấu dot(transform.forward, vector tới đối tượng).</summary>
     public Side GetSideOf(Transform t)
     {
         Vector3 to = t.position - _tr.position;
-        to.y = 0f; // bỏ chiều cao
-        float dot = Vector3.Dot(_tr.forward.normalized, to.normalized);
+        to.y = 0f;
+        float dot = Vector3.Dot(_tr.forward.normalized, to.sqrMagnitude > 0.0001f ? to.normalized : Vector3.forward);
         return (dot >= 0f) ? Side.A : Side.B;
     }
 
@@ -312,9 +300,9 @@ public class SlidingDoor : MonoBehaviour
     {
         try
         {
-            if (clip != null) SoundFXManager.Instance?.PlaySoundFXClip(clip, this.transform);
+            if (clip != null) SoundFXManager.Instance?.PlaySoundFXClip(clip, transform);
         }
-        catch { /* ignore nếu SoundFXManager chưa setup */ }
+        catch { }
     }
 
     private void CloseAndPermanentLock()
@@ -324,24 +312,20 @@ public class SlidingDoor : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    // Vẽ gizmo hiển thị Side A/B
     private void OnDrawGizmosSelected()
     {
         Transform t = transform;
         Vector3 p = t.position;
         Vector3 f = t.forward; f.y = 0f; f.Normalize();
 
-        // Mặt phân chia A/B
         Gizmos.color = new Color(0f, 0.7f, 1f, 0.6f);
         Vector3 right = new Vector3(f.z, 0f, -f.x);
         Gizmos.DrawLine(p + right * 2f, p - right * 2f);
 
-        // Hướng A
         Gizmos.color = new Color(0.2f, 1f, 0.2f, 0.8f);
         Gizmos.DrawRay(p, f * 1.5f);
         UnityEditor.Handles.Label(p + f * 1.6f, "Side A (forward)");
 
-        // Hướng B
         Gizmos.color = new Color(1f, 0.3f, 0.3f, 0.8f);
         Gizmos.DrawRay(p, -f * 1.0f);
         UnityEditor.Handles.Label(p - f * 1.2f, "Side B (back)");

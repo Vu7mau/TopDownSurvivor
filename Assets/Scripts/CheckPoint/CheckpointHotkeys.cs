@@ -5,24 +5,53 @@ using UnityEngine;
 public class CheckpointHotkeys : MonoBehaviour
 {
     [Header("Keys")]
-    public KeyCode addKey = KeyCode.F5;
-    public KeyCode nextKey = KeyCode.F6;
-    public KeyCode prevKey = KeyCode.F7;
-    public KeyCode goKey = KeyCode.F9;
-    public KeyCode clearKey = KeyCode.None; // ví dụ F12
+    [SerializeField] private KeyCode addKey = KeyCode.F5;
+    [SerializeField] private KeyCode nextKey = KeyCode.F6;
+    [SerializeField] private KeyCode prevKey = KeyCode.F7;
+    [SerializeField] private KeyCode goKey = KeyCode.F9;
+
+    [Header("Delete/Clear (Global)")]
+    [Tooltip("Phím xoá toàn bộ checkpoint của TẤT CẢ các map + PositionSave.")]
+    [SerializeField] private KeyCode clearKey = KeyCode.None; // ví dụ: KeyCode.F12
 
     [Header("Options")]
-    public bool fadeWhenTeleport = true;
+    [SerializeField] private bool fadeWhenTeleport = true;
 
-    [Header("Clear Behavior")]
-    [Tooltip("Khoảng thời gian nhấn lần 2 để xoá toàn bộ CP của map hiện tại + PositionSave")]
-    public float clearDoublePressWindow = 0.9f;
-
-    private float _lastClearTime = -999f;
-    private bool _primedClear = false;
+    // state
+    private bool _isShuttingDown = false;
 
     private GameController GC => GameController.Instance;
     private ChatNotify N => ChatNotify.Instance;
+
+    private void OnEnable()
+    {
+        // Đảm bảo dọn dẹp khi thoát game (Editor & Build)
+        Application.quitting += OnAppQuitting;
+    }
+
+    private void OnDisable()
+    {
+        Application.quitting -= OnAppQuitting;
+    }
+
+    private void OnApplicationQuit()
+    {
+        // Backup để chắc chắn (một số platform chỉ gọi OnApplicationQuit hoặc chỉ gọi Application.quitting)
+        SafeClearAll("OnApplicationQuit");
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+#if !UNITY_EDITOR
+        // Trên mobile, khi app bị đưa về nền (pause=true) coi như sẽ thoát -> dọn luôn
+        if (pause) SafeClearAll("OnApplicationPause(true)");
+#endif
+    }
+
+    private void OnAppQuitting()
+    {
+        SafeClearAll("Application.quitting");
+    }
 
     private void Update()
     {
@@ -30,9 +59,15 @@ public class CheckpointHotkeys : MonoBehaviour
         if (Input.GetKeyDown(nextKey)) SelectDelta(+1);
         if (Input.GetKeyDown(prevKey)) SelectDelta(-1);
         if (Input.GetKeyDown(goKey)) JumpToCurrent();
-        if (clearKey != KeyCode.None && Input.GetKeyDown(clearKey)) ClearSmart();
+
+        if (clearKey != KeyCode.None && Input.GetKeyDown(clearKey))
+        {
+            // YÊU CẦU: delete phải xoá toàn bộ ở tất cả map
+            SafeClearAll("Hotkey");
+        }
     }
 
+    // ================= Core gameplay =================
     private void AddCheckpointHere()
     {
         if (!GC || !GC.Character || !GC.CurrentMap)
@@ -103,50 +138,36 @@ public class CheckpointHotkeys : MonoBehaviour
         N?.Jumped(meta.mapIndex, meta.name);
     }
 
-    // ====== Clear: lần 1 manual, lần 2 tất cả (map hiện tại) + xoá PositionSave ======
-    private void ClearSmart()
+    // ================= Global clear =================
+    /// <summary>
+    /// Xoá toàn bộ checkpoint của TẤT CẢ các map + xoá PositionSave.
+    /// Dùng nơi khác nhau (hotkey / quitting / pause) và an toàn khi shutdown.
+    /// </summary>
+    private void SafeClearAll(string source)
     {
-        if (!CheckpointStore.HasAny())
+        if (_isShuttingDown) return;
+        _isShuttingDown = true;
+
+        try
         {
-            N?.Error("Không có gì để xoá.");
-            return;
-        }
+            // BẮT BUỘC: cần có CheckpointStore.ClearAll() xóa hết mọi map và reset index.
+            int removed = CheckpointStore.ClearAll();
 
-        int mapIdx = GC && GC.CurrentMap ? GC.CurrentMap.MapIndex : -1;
-        if (mapIdx < 0)
+            // Xoá PositionSave (toàn cục)
+            PositionSave.Clear();
+
+            // Thông báo (nếu còn tồn tại)
+            N?.Cleared();
+
+#if UNITY_EDITOR
+            Debug.Log($"[CheckpointHotkeys] ClearAll from {source}: removed={removed}");
+#endif
+        }
+        catch (System.Exception ex)
         {
-            N?.Error("Không xác định được map hiện tại.");
-            return;
+#if UNITY_EDITOR
+            Debug.LogWarning($"[CheckpointHotkeys] ClearAll failed ({source}): {ex.Message}");
+#endif
         }
-
-        float now = Time.time;
-        if (_primedClear && now - _lastClearTime <= clearDoublePressWindow)
-        {
-            _primedClear = false;
-
-            int removed = CheckpointStore.ClearAllByMap(mapIdx); // xoá manual + spawn của map hiện tại
-            PositionSave.Clear(); // xoá vị trí đơn lẻ
-
-            if (removed > 0) N?.Info($"Đã xoá {removed} checkpoint của Map {mapIdx} và xoá vị trí đã lưu.");
-            else N?.Info($"Map {mapIdx} không còn checkpoint. Đã xoá vị trí đã lưu.");
-        }
-        else
-        {
-            _primedClear = true; _lastClearTime = now;
-
-            int removedManual = CheckpointStore.ClearManualByMap(mapIdx);
-            if (removedManual > 0)
-                N?.Info($"Đã xoá {removedManual} checkpoint (manual) của Map {mapIdx}. Nhấn xoá lần nữa để xoá TẤT CẢ của map + vị trí đã lưu.");
-            else
-                N?.Info($"Map {mapIdx} không có checkpoint (manual). Nhấn xoá lần nữa để xoá TẤT CẢ của map + vị trí đã lưu.");
-
-            StartCoroutine(ClearPrimeTimeout());
-        }
-    }
-
-    private IEnumerator ClearPrimeTimeout()
-    {
-        yield return new WaitForSeconds(clearDoublePressWindow);
-        _primedClear = false;
     }
 }
