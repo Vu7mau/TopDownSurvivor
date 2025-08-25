@@ -94,6 +94,9 @@ public class KillProgressSlider : Singleton<KillProgressSlider>
         // Cộng vào targetValue
         targetValue = Mathf.Clamp(targetValue + delta, slider.minValue, slider.maxValue);
 
+        PlayerPrefs.SetInt("currentScores", (int)this.targetValue);
+        PlayerPrefs.Save();
+
         // Kill tween cũ và tween từ giá trị hiện tại
         KillValueTween();
         float from = slider.value;
