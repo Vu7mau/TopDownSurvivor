@@ -6176,6 +6176,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1717539505029483886, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1987342782510090676, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.458256
@@ -6304,6 +6308,10 @@ PrefabInstance:
       propertyPath: e_winPanel
       value: 
       objectReference: {fileID: 5632775809063457048}
+    - target: {fileID: 6758517482905921667, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: waveConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b25665bbdadb1540acaa7e0a5a4c33d, type: 2}
     - target: {fileID: 6758517482905921667, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: e_losePanel
       value: 
@@ -420930,8 +420938,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _level: 1
-  _maxLevel: 99
-  _expToNextLevel: 10
+  _maxLevel: 10
+  _expToNextLevel: 100
   _currentExp: 0
   _expFillImage: {fileID: 0}
   levelText: {fileID: 0}
@@ -421384,8 +421392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 984c394534d904649a0af5c3d430b0e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hp: 10
-  _hpMax: 10
+  _hp: 2000
+  _hpMax: 2000
   _isDead: 0
   characterCtrl: {fileID: 6520209013124536290}
   _pnl: {fileID: 8331094014727803747}
