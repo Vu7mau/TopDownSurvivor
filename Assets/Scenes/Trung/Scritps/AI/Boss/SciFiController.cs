@@ -247,6 +247,7 @@ public class SciFiController : BossController
     [SerializeField] protected Transform fire;
     [SerializeField] protected Transform modelPosition;
     [SerializeField] protected AudioClip snd_shutdownRobot;
+    [SerializeField] protected SlidingDoor door;
 
     private void Distribution()
     {
@@ -270,6 +271,8 @@ public class SciFiController : BossController
             fire.transform.gameObject.SetActive(true);
             this.fire.transform.position = this.modelPosition.position;
         }
+        if(door!=null)
+            door.SetConditionMet(true);
     }
     private void Shutdown()
     {

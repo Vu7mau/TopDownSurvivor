@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,12 +8,16 @@ public class SlidingDoor : MonoBehaviour
 {
     public enum DoorDirection { LeftRight, FrontBack }
     public enum DoorState { Closed, Opening, Opened, Closing }
-    public enum Side { A, B } // A = cùng hướng transform.forward, B = ngược lại
+    public enum Side { A, B }                         // A = cùng hướng transform.forward, B = ngược lại
     public enum AllowedSide { Any, SideA, SideB }
     public enum FirstOpenLockMode { StayOpenAndLock, CloseAndLock }
+    public enum ExitLockSide { None, SideA, SideB, EitherDifferentFromEnter }
+    // EitherDifferentFromEnter = rời phía khác với phía đã vào (đảm bảo thực sự đi xuyên qua cửa)
 
     [Header("Direction")]
     public DoorDirection direction = DoorDirection.LeftRight;
+
+    [Header("Auto Open")]
     [Tooltip("Chọn mặt nào được auto-open khi Player đi vào trigger")]
     public AllowedSide allowedAutoOpenSide = AllowedSide.Any;
 
@@ -36,14 +41,21 @@ public class SlidingDoor : MonoBehaviour
     [SerializeField] private AudioClip doorOpenAudio;
     [SerializeField] private AudioClip doorLockedAudio;
 
-    [Header("Condition")]
+    [Header("Condition (optional)")]
     [SerializeField] private bool requireCondition = false;
     [SerializeField] private bool conditionMet = false;
 
-    [Header("One-time Lock")]
-    [Tooltip("Nếu bật, cửa chỉ cho mở 1 lần. Sau khi mở lần đầu sẽ bị khoá vĩnh viễn.")]
-    public bool lockAfterFirstOpen = false;
+    [Header("One-time Lock (confirm by EXIT side)")]
+    [Tooltip("Bật để chỉ cho mở 1 lần, và CHỈ khoá khi người chơi rời trigger ở phía chỉ định.")]
+    public bool lockAfterFirstOpen = true;
+
+    [Tooltip("Khoá khi người chơi EXIT ở phía nào?")]
+    public ExitLockSide lockWhenExit = ExitLockSide.EitherDifferentFromEnter;
+
+    [Tooltip("Chế độ khoá sau khi xác nhận: giữ mở và khoá, hoặc đóng rồi khoá.")]
     public FirstOpenLockMode firstOpenLockMode = FirstOpenLockMode.StayOpenAndLock;
+
+    [Tooltip("Độ trễ (giây) trước khi đóng & khoá nếu chọn CloseAndLock.")]
     public float lockCloseDelay = 0.5f;
 
     [Header("Tags/Filter")]
@@ -69,7 +81,7 @@ public class SlidingDoor : MonoBehaviour
     [Header("Optional: tiến độ di chuyển 0..1")]
     public FloatEvent onMoveProgress;
 
-    // C# events
+    // C# events (nếu cần bắt qua code)
     public event Action OpenStarted;
     public event Action Opened;
     public event Action CloseStarted;
@@ -89,10 +101,14 @@ public class SlidingDoor : MonoBehaviour
     private bool isMoving = false;
     private DoorState state = DoorState.Closed;
 
-    private bool isPermanentlyLocked = false;
-    private bool hasOpenedOnce = false;
+    private bool isPermanentlyLocked = false;   // true khi đã khoá vĩnh viễn
+    private bool hasOpenedOnce = false;         // đã mở lần đầu tiên chưa
+    private bool armedForExitLock = false;      // vũ hoá điều kiện khoá: chỉ set true khi đã mở lần đầu
 
     private Transform _tr;
+
+    // Lưu phía đã vào theo collider để phân biệt vào/ra (hữu ích khi dùng EitherDifferentFromEnter)
+    private readonly Dictionary<int, Side> _lastEnterSideById = new Dictionary<int, Side>();
 
     private void Reset()
     {
@@ -157,20 +173,15 @@ public class SlidingDoor : MonoBehaviour
                 state = DoorState.Opened;
                 onOpened?.Invoke(); Opened?.Invoke();
 
+                // Ghi nhận lần mở đầu + vũ hoá điều kiện khoá theo EXIT
                 if (!hasOpenedOnce)
                 {
                     hasOpenedOnce = true;
-                    if (lockAfterFirstOpen)
-                    {
-                        if (firstOpenLockMode == FirstOpenLockMode.CloseAndLock)
-                        {
-                            Invoke(nameof(CloseAndPermanentLock), lockCloseDelay);
-                        }
-                        else
-                        {
-                            isPermanentlyLocked = true;
-                        }
-                    }
+                }
+                // Mỗi lần mở (kể cả sau này), nếu bật mode khoá theo EXIT thì "arming"
+                if (lockAfterFirstOpen && !isPermanentlyLocked)
+                {
+                    armedForExitLock = true;
                 }
             }
             else if (state == DoorState.Closing)
@@ -189,7 +200,13 @@ public class SlidingDoor : MonoBehaviour
 
     public void SetConditionMet(bool value) => conditionMet = value;
     public void Lock() => isPermanentlyLocked = true;
-    public void Unlock() => isPermanentlyLocked = false;
+    public void Unlock()
+    {
+        isPermanentlyLocked = false;
+        // Cho phép mở lại từ đầu nếu được mở khoá thủ công
+        hasOpenedOnce = false;
+        armedForExitLock = false;
+    }
 
     public void OpenDoor()
     {
@@ -207,6 +224,9 @@ public class SlidingDoor : MonoBehaviour
 
     public void CloseDoor()
     {
+        // Nếu đã khoá kiểu "giữ mở" thì chặn mọi cố gắng đóng
+        if (ShouldBlockCloseDueToFirstOpenLock()) return;
+
         if (state == DoorState.Closed || state == DoorState.Closing) return;
 
         SetTargetsClosed();
@@ -218,6 +238,7 @@ public class SlidingDoor : MonoBehaviour
 
     public void ToggleDoor()
     {
+        if (ShouldBlockCloseDueToFirstOpenLock()) return;  // đang mở & khoá vĩnh viễn (giữ mở)
         if (state == DoorState.Opened) CloseDoor();
         else if (state == DoorState.Closed) OpenDoor();
     }
@@ -228,6 +249,8 @@ public class SlidingDoor : MonoBehaviour
         if (!IsAllowedActor(other)) return;
 
         var side = GetSideOf(other.transform);
+        _lastEnterSideById[other.GetInstanceID()] = side;
+
         if (side == Side.A) { onEnterSideA?.Invoke(); EnteredSideA?.Invoke(); }
         else { onEnterSideB?.Invoke(); EnteredSideB?.Invoke(); }
 
@@ -247,16 +270,58 @@ public class SlidingDoor : MonoBehaviour
     {
         if (!IsAllowedActor(other)) return;
 
-        // Xác định đối tượng rời trigger ở phía nào (A/B) tại thời điểm Exit
-        var side = GetSideOf(other.transform);
-        if (side == Side.A) { onExitSideA?.Invoke(); ExitedSideA?.Invoke(); }
+        var exitSide = GetSideOf(other.transform);
+        if (exitSide == Side.A) { onExitSideA?.Invoke(); ExitedSideA?.Invoke(); }
         else { onExitSideB?.Invoke(); ExitedSideB?.Invoke(); }
 
-        // Tùy chọn auto-close theo phía rời
+        // --- XỬ LÝ KHOÁ THEO EXIT ---
+        if (armedForExitLock && lockAfterFirstOpen && !isPermanentlyLocked)
+        {
+            bool shouldLock = false;
+            _lastEnterSideById.TryGetValue(other.GetInstanceID(), out var enteredSide);
+
+            switch (lockWhenExit)
+            {
+                case ExitLockSide.SideA:
+                    shouldLock = (exitSide == Side.A);
+                    break;
+                case ExitLockSide.SideB:
+                    shouldLock = (exitSide == Side.B);
+                    break;
+                case ExitLockSide.EitherDifferentFromEnter:
+                    // Khoá nếu rời khác phía đã vào (đảm bảo đi xuyên qua cửa)
+                    shouldLock = _lastEnterSideById.ContainsKey(other.GetInstanceID()) && exitSide != enteredSide;
+                    break;
+                case ExitLockSide.None:
+                default:
+                    shouldLock = false;
+                    break;
+            }
+
+            if (shouldLock)
+            {
+                armedForExitLock = false; // chỉ khoá 1 lần
+
+                if (firstOpenLockMode == FirstOpenLockMode.CloseAndLock)
+                {
+                    // Có thể đang bật autoCloseOnExit — nhưng ta vẫn chủ động đóng & khoá
+                    Invoke(nameof(CloseAndPermanentLock), lockCloseDelay);
+                }
+                else // StayOpenAndLock
+                {
+                    // Giữ mở và khoá vĩnh viễn -> chặn mọi lệnh đóng sau này
+                    isPermanentlyLocked = true;
+                }
+            }
+        }
+
+        // --- AUTO CLOSE (nếu chưa bị khoá "giữ mở") ---
         if (!autoCloseOnExit) return;
+        if (ShouldBlockCloseDueToFirstOpenLock()) return; // đang giữ mở & khoá
+
         if (allowedAutoCloseSide == AllowedSide.Any ||
-            (allowedAutoCloseSide == AllowedSide.SideA && side == Side.A) ||
-            (allowedAutoCloseSide == AllowedSide.SideB && side == Side.B))
+            (allowedAutoCloseSide == AllowedSide.SideA && exitSide == Side.A) ||
+            (allowedAutoCloseSide == AllowedSide.SideB && exitSide == Side.B))
         {
             CloseDoor();
         }
@@ -303,6 +368,12 @@ public class SlidingDoor : MonoBehaviour
             if (clip != null) SoundFXManager.Instance?.PlaySoundFXClip(clip, transform);
         }
         catch { }
+    }
+
+    private bool ShouldBlockCloseDueToFirstOpenLock()
+    {
+        // chặn đóng nếu đã khoá vĩnh viễn ở trạng thái mở
+        return isPermanentlyLocked && firstOpenLockMode == FirstOpenLockMode.StayOpenAndLock;
     }
 
     private void CloseAndPermanentLock()
