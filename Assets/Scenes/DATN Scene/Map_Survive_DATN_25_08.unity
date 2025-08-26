@@ -6430,6 +6430,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7643146756297867801, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8390150901701467442, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 0
@@ -33484,6 +33488,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 430683122481215179, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 2097142
+      objectReference: {fileID: 0}
     - target: {fileID: 444727816719036184, guid: a8034c4de9268524e8d20155166410c5, type: 3}
       propertyPath: m_Layer
       value: 20
@@ -33543,6 +33551,14 @@ PrefabInstance:
     - target: {fileID: 1394418015706690839, guid: a8034c4de9268524e8d20155166410c5, type: 3}
       propertyPath: m_Layer
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1562358105556526990, guid: a8034c4de9268524e8d20155166410c5, type: 3}
       propertyPath: m_Layer
@@ -33759,6 +33775,10 @@ PrefabInstance:
     - target: {fileID: 4002866123863467168, guid: a8034c4de9268524e8d20155166410c5, type: 3}
       propertyPath: m_Layer
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4118617975240235832, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 2097142
       objectReference: {fileID: 0}
     - target: {fileID: 4119668609999158625, guid: a8034c4de9268524e8d20155166410c5, type: 3}
       propertyPath: m_Layer
@@ -452108,7 +452128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd80349483824ff41800612fc7c2bcd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  replacementShader: {fileID: -6465566751694194690, guid: de447c8419742a545a195b515bdf9669, type: 3}
+  minimapShader: {fileID: 0}
 --- !u!222 &5529246772897196147
 CanvasRenderer:
   m_ObjectHideFlags: 0
