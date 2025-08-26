@@ -10,7 +10,7 @@ public class LimitArea : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Quái đã ra ngoài bản đồ");
+            //Debug.Log("Quái đã ra ngoài bản đồ");
             StartCoroutine(EnemySetRoutine(other));
         }
     }
