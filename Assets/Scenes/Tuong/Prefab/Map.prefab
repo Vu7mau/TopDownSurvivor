@@ -25004,7 +25004,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -9111059874240740210, guid: f0635bd8cfb2c29428bd9f276e8088cc, type: 3}
 --- !u!208 &6274859162030515851
@@ -26201,7 +26201,7 @@ GameObject:
   - component: {fileID: 4039186652131749697}
   - component: {fileID: 3234848510451573758}
   - component: {fileID: 538901598135243372}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Lightning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67215,7 +67215,7 @@ GameObject:
   - component: {fileID: 881903668331957497}
   - component: {fileID: 6348221563212680134}
   - component: {fileID: 552731254513423697}
-  m_Layer: 11
+  m_Layer: 15
   m_Name: power-line-pole-apocalypse-c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67310,7 +67310,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 7368913286600816502, guid: 8eee34ab589978d47b3a5a89a83accc4, type: 3}
 --- !u!208 &552731254513423697
@@ -113916,6 +113916,7 @@ Transform:
   - {fileID: 6013417302676065947}
   - {fileID: 5925843060598920490}
   - {fileID: 795301496619898964}
+  - {fileID: 4081078390835151015}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2987030536263157168
@@ -181317,7 +181318,7 @@ GameObject:
   - component: {fileID: 6631475271377037477}
   - component: {fileID: 649865040879348032}
   - component: {fileID: 8555661407240213031}
-  m_Layer: 11
+  m_Layer: 15
   m_Name: power-line-pole-apocalypse-b (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199411,7 +199412,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -9111059874240740210, guid: f0635bd8cfb2c29428bd9f276e8088cc, type: 3}
 --- !u!1 &6059931202498605197
@@ -273401,7 +273402,7 @@ GameObject:
   - component: {fileID: 5583916907082067662}
   - component: {fileID: 1382428336874969588}
   - component: {fileID: 7108379653064519052}
-  m_Layer: 11
+  m_Layer: 15
   m_Name: power-line-pole-apocalypse-b
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273495,7 +273496,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7883887062371058999, guid: 0362f75e6a084634eb2ba13c16626a69, type: 3}
 --- !u!208 &7108379653064519052
@@ -281901,4 +281902,70 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4469749203399680, guid: be6847dd39ab95f4daa2ed98e4f90564, type: 3}
   m_PrefabInstance: {fileID: 3310346972657254155}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8290309956575575862
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 345766544304429440}
+    m_Modifications:
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -27.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 52
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343796319614818782, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_Name
+      value: Volumetricfog
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343796319614818782, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+--- !u!4 &4081078390835151015 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5453858976105152401, guid: b573bc14156a61e40a1a0002056f5601, type: 3}
+  m_PrefabInstance: {fileID: 8290309956575575862}
   m_PrefabAsset: {fileID: 0}
