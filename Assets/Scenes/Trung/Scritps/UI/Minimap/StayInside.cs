@@ -17,6 +17,8 @@ public class StayInside : VuMonoBehaviour
 
     protected virtual void LoadMinimap()
     {
+        var miniMapObj = FindAnyObjectByType<MiniMap>();
+        if (miniMapObj == null) return;
         this.MinimapCam = FindAnyObjectByType<MiniMap>().transform;
     }
 
@@ -31,6 +33,7 @@ public class StayInside : VuMonoBehaviour
 
     protected void LateUpdate()
     {
+        if(this.MinimapCam == null) return;
         transform.position = new Vector3(
             Mathf.Clamp(transform.position.x, MinimapCam.position.x - MinimapSize, MinimapSize + MinimapCam.position.x),
             transform.position.y,
