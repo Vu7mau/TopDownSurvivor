@@ -106,8 +106,13 @@ public class QTEBarController : VuMonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+
         StopQTE();
-        resultPopup.HidePopup();
+
+        // Trước đây: resultPopup.HidePopup();
+        if (resultPopup != null)
+            resultPopup.PinNow();   // 👉 thu nhỏ + chạy về góc pin, KHÔNG tắt
+
         CharacterCtrl.Instance.CharacterShooting.SetCancel(false);
     }
 

@@ -255,6 +255,8 @@ public class SciFiController : BossController
     }
     IEnumerator DestroyExplosionRoutine()
     {
+        if(door!=null)
+            door.SetConditionMet(true);
         //if (this.explosionPoss.Count == 0) yield break;
         //for (int i = 0; i < this.explosionPoss.Count; i++)
         //{
@@ -271,8 +273,6 @@ public class SciFiController : BossController
             fire.transform.gameObject.SetActive(true);
             this.fire.transform.position = this.modelPosition.position;
         }
-        if(door!=null)
-            door.SetConditionMet(true);
     }
     private void Shutdown()
     {
