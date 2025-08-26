@@ -99,20 +99,24 @@ public class PausePanelTwo : MonoBehaviour
         
         winPanel.gameObject.SetActive(false);
         losePanel.gameObject.SetActive(false);
+        int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+        int coins = PlayerPrefs.GetInt("currentCoins", 0);
+        PlayerScoreManager.Instance?.SendFinalScore(finalScore + coins);
         PlayerScoreManager.Instance?.ResetScore();
         CountDownTimer.Instance.ResetTimer();
         await LevelManager.Instance.LoadLevelAsync(SceneManager.GetActiveScene().buildIndex);
     }
-    public async void Restart(int sceneIndex)
-    {
-        Time.timeScale = 1f;
-        int finalScore = PlayerPrefs.GetInt("currentScores", 0);
-        //PlayerScoreManager.Instance?.SendFinalScore(finalScore);
-        PlayerScoreManager.Instance?.ResetScore();
-        pausePanel.SetActive(false);
-        DOTween.KillAll();
-        await LevelManager.Instance.LoadLevelAsync(sceneIndex);
-    }
+    //public async void Restart(int sceneIndex)
+    //{
+    //    Time.timeScale = 1f;
+    //    int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+    //    int coins = PlayerPrefs.GetInt("currentCoins", 0);
+    //    PlayerScoreManager.Instance?.SendFinalScore(finalScore + coins);
+    //    PlayerScoreManager.Instance?.ResetScore();
+    //    pausePanel.SetActive(false);
+    //    DOTween.KillAll();
+    //    await LevelManager.Instance.LoadLevelAsync(sceneIndex);
+    //}
 
     public virtual void BackToMainMenuGame()
     {
@@ -124,8 +128,10 @@ public class PausePanelTwo : MonoBehaviour
     {
         Time.timeScale = 1f;
         int finalScore = PlayerPrefs.GetInt("currentScores", 0);
-        //PlayerScoreManager.Instance?.SendFinalScore(finalScore);
+        int coins = PlayerPrefs.GetInt("currentCoins", 0);
+        PlayerScoreManager.Instance?.SendFinalScore(finalScore + coins);
         PlayerScoreManager.Instance?.ResetScore();
+        Debug.Log(finalScore + coins);
         CountDownTimer.Instance?.ResetTimer();
         CountDownTimer.Instance?.PauseTimer();
         pausePanel?.SetActive(false);

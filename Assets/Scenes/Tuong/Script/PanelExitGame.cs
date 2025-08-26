@@ -41,14 +41,17 @@ public class PanelExitGame : MonoBehaviour
             SceneManager.GetActiveScene().buildIndex != 1)
         {
             int finalScore = PlayerPrefs.GetInt("currentScores", 0);
-            PlayerScoreManager.Instance?.SendFinalScore(finalScore);
+            int coins = PlayerPrefs.GetInt("currentCoins", 0);
+            PlayerScoreManager.Instance?.SendFinalScore(finalScore + coins);
         } 
         UnityEditor.EditorApplication.isPlaying = false;
 #else
         if (SceneManager.GetActiveScene().buildIndex != 0 &&
             SceneManager.GetActiveScene().buildIndex != 1)
             {
-                PlayerScoreManager.Instance?.SendFinalScore();
+            int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+            int coins = PlayerPrefs.GetInt("currentCoins", 0);
+            PlayerScoreManager.Instance?.SendFinalScore(finalScore + coins);
             } 
         Application.Quit();
 #endif

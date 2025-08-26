@@ -57,7 +57,10 @@ public class PlayerScoreManager : MonoBehaviour
         if (totalScore > 0)
         {
             Debug.Log("Đã thoát game, gửi điểm lên hệ thống");
-            SendFinalScore(totalScore);
+            int finalScore = PlayerPrefs.GetInt("currentScores", 0);
+            int coins = PlayerPrefs.GetInt("currentCoins", 0);
+            PlayerScoreManager.Instance?.SendFinalScore(finalScore + coins);
+            PlayerScoreManager.Instance?.ResetScore();
         }
     }
 

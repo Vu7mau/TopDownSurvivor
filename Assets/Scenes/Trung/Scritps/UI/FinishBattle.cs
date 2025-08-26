@@ -41,14 +41,15 @@ public class FinishBattle : Panel
         this.DisplayPanelWhenFinishTheBattle(isWin,level, scores,kills, coins);
 
 
-        if (PlayFabClientAPI.IsClientLoggedIn())
-        {
-            PlayerScoreManager.Instance.SendFinalScore(scores);
-        }
-        else
-        {
-            Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
-        }
+        //if (PlayFabClientAPI.IsClientLoggedIn())
+        //{
+        //    PlayerScoreManager.Instance.SendFinalScore(scores + coins);
+        //    Debug.Log(scores + coins);
+        //}
+        //else
+        //{
+        //    Debug.Log("Chưa đăng nhập PlayFab, không gửi điểm lên hệ thống.");
+        //}
 
     }
 

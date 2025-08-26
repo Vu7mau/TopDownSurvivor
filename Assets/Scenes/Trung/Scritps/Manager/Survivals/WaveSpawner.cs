@@ -220,7 +220,7 @@ public class WaveSpawner :VuMonoBehaviour
     {
         Collider[] hits = Physics.OverlapSphere(position, checkRadius);
         foreach (var hit in hits)
-            if (hit.GetComponent<NavMeshObstacle>() != null)
+            if (hit.GetComponentInParent<NavMeshObstacle>() != null)
                 return true;
         return false;
     }
