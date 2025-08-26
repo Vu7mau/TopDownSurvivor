@@ -58,6 +58,7 @@ public class AuthEmailSignIn : AuthManager
         {
             LinkDeviceAndProceed();
             MainMenuTwo.Instance.ExitPanelLogin();
+            SurviveModeTracker.Instance.LoadModeProgress();
             StartCoroutine(ClearInput(0.5f));
         });
         ;

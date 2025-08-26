@@ -26,9 +26,13 @@ public class BossHealthBar : SliderHp
         this.LoadHpBarObj();
     }
 
+
+    
+
     protected override void OnEnable()
     {
         base.OnEnable();
+
         StartCoroutine(ResetHealthSliderRoutine());
     }
     protected override void OnDisable()

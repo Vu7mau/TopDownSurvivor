@@ -92,6 +92,7 @@ public class AuthEmailSignUp : AuthManager
         {
             LinkDeviceAndProceed();
             MainMenuTwo.Instance.ExitPanelRegister();
+            SurviveModeTracker.Instance.LoadModeProgress();
             LeaderBoardCampaign.Instance?.GetLeaderBoardCampaign();
             LeaderBoardSurvive.Instance?.GetLeaderBoardSurvive();
             StartCoroutine(ClearInput(0.5f));
