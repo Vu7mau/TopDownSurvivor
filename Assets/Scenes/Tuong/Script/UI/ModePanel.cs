@@ -140,7 +140,8 @@ public class ModePanel : MonoBehaviour
     {
         if (isSceneLoading) return;
         bool surviveLocked = (currentMode == Mode.Survive && !IsSurviveUnlocked());
-        lockOverlay.SetActive(surviveLocked);
+        if(lockOverlay != null)
+            lockOverlay.SetActive(surviveLocked);
     }
 
     public void UnlockSurviveMode()

@@ -1,22 +1,29 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class MiniMapShaderOverride : MonoBehaviour
+public class MiniMapOverride : MonoBehaviour
 {
-    public Shader replacementShader; // gán shader này trong Inspector
+    public Shader minimapShader;
 
-    void OnEnable()
+    private Camera cam;
+
+    void Start()
     {
-        if (replacementShader != null)
+        cam = GetComponent<Camera>();
+
+        if (minimapShader != null)
         {
-            // Ép camera này render toàn bộ scene bằng replacementShader
-            GetComponent<Camera>().SetReplacementShader(replacementShader, "RenderType");
+            // ép tất cả object render bằng shader này, không quan tâm material gốc
+            cam.SetReplacementShader(minimapShader, "");
         }
     }
 
     void OnDisable()
     {
-        // Trả camera về trạng thái bình thường
-        GetComponent<Camera>().ResetReplacementShader();
+        if (cam != null)
+        {
+            // khôi phục lại như cũ
+            cam.ResetReplacementShader();
+        }
     }
 }
