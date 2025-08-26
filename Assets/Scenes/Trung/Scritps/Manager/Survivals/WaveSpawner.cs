@@ -161,11 +161,12 @@ public class WaveSpawner :VuMonoBehaviour
     private IEnumerator SpawnWave(WaveData wave)
     {
         int waveCount = wave.timeSpawnEachWave;
-        float spawnInterval = (float) wave.waveDuration / waveCount;
-        if(this.currentWaveIndex <= this.waveConfig.waves.Count - 1) UIManager.Instance.UpdateTimeToNextWave(wave.waveDuration);
-        //Tạo dictionary để theo dõi mỗi loại quái đã spawn được bao nhiêu.
-        Dictionary<GameObject, int> spawnedSoFar = new Dictionary<GameObject, int>();
+        float spawnInterval = (float)wave.waveDuration / waveCount;
+        if (this.currentWaveIndex <= this.waveConfig.waves.Count - 1)
+            UIManager.Instance.UpdateTimeToNextWave(wave.waveDuration);
 
+        // Tạo dictionary để theo dõi mỗi loại quái đã spawn được bao nhiêu.
+        Dictionary<GameObject, int> spawnedSoFar = new Dictionary<GameObject, int>();
         foreach (var enemy in wave.enemies)
             spawnedSoFar[enemy.enemyPrefab] = 0;
 
@@ -173,43 +174,80 @@ public class WaveSpawner :VuMonoBehaviour
         {
             foreach (var enemy in wave.enemies)
             {
-                int remaining = enemy.totalAmount - spawnedSoFar[enemy.enemyPrefab]; 
-
-                int spawnThisRound = Mathf.CeilToInt(enemy.totalAmount / (float)waveCount); //Tính số lượng cần spawn trong đợt hiện tại
-
-                if (spawnThisRound > remaining) spawnThisRound = remaining;// Đảm bảo không spawn quá tổng số
+                int remaining = enemy.totalAmount - spawnedSoFar[enemy.enemyPrefab];
+                int spawnThisRound = Mathf.CeilToInt(enemy.totalAmount / (float)waveCount);
+                if (spawnThisRound > remaining) spawnThisRound = remaining;
 
                 for (int j = 0; j < spawnThisRound; j++)
                 {
-                    var point = spawnPoints[Random.Range(0, spawnPoints.Length)];
-                    if(this.enemiesSpawner != null)
+                    Vector3 pointPos = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+                    Vector3 safePoint = GetSafeSpawnPoint(pointPos);
+                    if (this.enemiesSpawner != null)
                     {
                         EnemyCtrl enemyPrefab = enemy.enemyPrefab.GetComponentInChildren<EnemyCtrl>();
-                        EnemyCtrl newEnemy = this.enemiesSpawner.Spawn(enemyPrefab, point.position);
+                        EnemyCtrl newEnemy = this.enemiesSpawner.Spawn(enemyPrefab, safePoint);
                         if (!this.canSpawnContinue) break;
-                        if(newEnemy != null)
+                        if (newEnemy != null)
                         {
                             this.AddEnemyToUI();
+                            ++spawnedSoFar[enemy.enemyPrefab];
                             newEnemy.GetComponentInChildren<EnemyResponse>().IsReward = true;
                             newEnemy.GetComponent<EnemyAIController>().ChaseRange = 100000f;
                         }
                     }
+
                     yield return new WaitForSeconds(this.timeDelayEachSpawn);
                 }
+
                 if (!this.canSpawnContinue) break;
-                spawnedSoFar[enemy.enemyPrefab] += spawnThisRound;
             }
+
             if (!this.canSpawnContinue) break;
             if (i < waveCount - 1) yield return new WaitForSeconds(spawnInterval);
             else
             {
-                if (this.currentWaveIndex == this.waveConfig.waves.Count - 1
-                && !this.lastWaves) this.lastWaves = true;
+                if (this.currentWaveIndex == this.waveConfig.waves.Count - 1 && !this.lastWaves)
+                    this.lastWaves = true;
             }
         }
+
         yield return new WaitUntil(() => this.timer.TimeIsUp);
         if (!this.canSpawnContinue) yield break;
     }
+
+    // Hàm helper kiểm tra obstacle
+    bool IsBlockedByObstacle(Vector3 position, float checkRadius = 0.5f)
+    {
+        Collider[] hits = Physics.OverlapSphere(position, checkRadius);
+        foreach (var hit in hits)
+            if (hit.GetComponent<NavMeshObstacle>() != null)
+                return true;
+        return false;
+    }
+
+    // Tìm điểm spawn an toàn (retry tối đa X lần)
+    Vector3 GetSafeSpawnPoint(Vector3 spawnPos, float maxDistance = 5f, int maxRetries = 10)
+    {
+        for (int attempt = 0; attempt < maxRetries; attempt++)
+        {
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(spawnPos, out hit, maxDistance, NavMesh.AllAreas))
+            {
+                if (!IsBlockedByObstacle(hit.position))
+                {
+                    return hit.position; // điểm hợp lệ
+                }
+            }
+
+            // Nếu fail → thử điểm khác (random trong spawnPoints)
+            spawnPos = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+        }
+
+        Debug.LogWarning("⚠ Không tìm thấy vị trí spawn hợp lệ sau nhiều lần thử!");
+        return Vector3.zero; // bỏ qua nếu không tìm thấy
+    }
+
+
 
     public virtual void SubstractEnemyToUI()
     {

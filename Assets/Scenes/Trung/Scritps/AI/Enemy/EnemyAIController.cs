@@ -283,6 +283,7 @@ public class EnemyAIController : EnemyBase
                 this.UpdateEnemyPath();
                 this.enemyReferences.Animator.SetBool("isMoving", true);
             }
+
             this.enemyReferences.NavMeshAgent.enabled = true;
             if (this.distanceToTarget > this.chaseRange) this.Idle();
         }
@@ -290,6 +291,7 @@ public class EnemyAIController : EnemyBase
 
     protected override void Attack()
     {
+        if (!this.enemyReferences.NavMeshAgent.isOnNavMesh) return;
         this.enemyReferences.Animator.SetFloat("distance",this.distanceToTarget);
         this.AttackWhenNearPlayer();
     }
