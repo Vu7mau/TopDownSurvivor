@@ -88,7 +88,7 @@ public class MonsterSpawnerTrigger : MonoBehaviour
             // Tính vị trí spawn theo world space
             Vector3 spawnPos = colliders.transform.TransformPoint(colliders.center + randomOffset);
 
-            // Random prefab
+            // Random prefab    
             GameObject prefab = monsterPrefabs[Random.Range(0, monsterPrefabs.Count)];
             Quaternion randomRot = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
