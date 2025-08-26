@@ -181,27 +181,19 @@ public class WaveSpawner :VuMonoBehaviour
                 for (int j = 0; j < spawnThisRound; j++)
                 {
                     Vector3 pointPos = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
-                    Vector3 validPos = GetValidSpawnPoint(pointPos);
-
-                    if (validPos != Vector3.zero && !IsBlockedByObstacle(validPos))
+                    Vector3 safePoint = GetSafeSpawnPoint(pointPos);
+                    if (this.enemiesSpawner != null)
                     {
-                        if (this.enemiesSpawner != null)
+                        EnemyCtrl enemyPrefab = enemy.enemyPrefab.GetComponentInChildren<EnemyCtrl>();
+                        EnemyCtrl newEnemy = this.enemiesSpawner.Spawn(enemyPrefab, safePoint);
+                        if (!this.canSpawnContinue) break;
+                        if (newEnemy != null)
                         {
-                            EnemyCtrl enemyPrefab = enemy.enemyPrefab.GetComponentInChildren<EnemyCtrl>();
-                            EnemyCtrl newEnemy = this.enemiesSpawner.Spawn(enemyPrefab, validPos);
-                            if (!this.canSpawnContinue) break;
-                            if (newEnemy != null)
-                            {
-                                this.AddEnemyToUI();
-                                ++spawnedSoFar[enemy.enemyPrefab];
-                                newEnemy.GetComponentInChildren<EnemyResponse>().IsReward = true;
-                                newEnemy.GetComponent<EnemyAIController>().ChaseRange = 100000f;
-                            }
+                            this.AddEnemyToUI();
+                            ++spawnedSoFar[enemy.enemyPrefab];
+                            newEnemy.GetComponentInChildren<EnemyResponse>().IsReward = true;
+                            newEnemy.GetComponent<EnemyAIController>().ChaseRange = 100000f;
                         }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("Không tìm thấy vị trí spawn hợp lệ hoặc bị obstacle!");
                     }
 
                     yield return new WaitForSeconds(this.timeDelayEachSpawn);
@@ -223,15 +215,6 @@ public class WaveSpawner :VuMonoBehaviour
         if (!this.canSpawnContinue) yield break;
     }
 
-    // Hàm helper kiểm tra vị trí spawn hợp lệ
-    Vector3 GetValidSpawnPoint(Vector3 spawnPos, float maxDistance = 5f)
-    {
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(spawnPos, out hit, maxDistance, NavMesh.AllAreas))
-            return hit.position;
-        return Vector3.zero;
-    }
-
     // Hàm helper kiểm tra obstacle
     bool IsBlockedByObstacle(Vector3 position, float checkRadius = 0.5f)
     {
@@ -242,7 +225,27 @@ public class WaveSpawner :VuMonoBehaviour
         return false;
     }
 
+    // Tìm điểm spawn an toàn (retry tối đa X lần)
+    Vector3 GetSafeSpawnPoint(Vector3 spawnPos, float maxDistance = 5f, int maxRetries = 10)
+    {
+        for (int attempt = 0; attempt < maxRetries; attempt++)
+        {
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(spawnPos, out hit, maxDistance, NavMesh.AllAreas))
+            {
+                if (!IsBlockedByObstacle(hit.position))
+                {
+                    return hit.position; // điểm hợp lệ
+                }
+            }
 
+            // Nếu fail → thử điểm khác (random trong spawnPoints)
+            spawnPos = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+        }
+
+        Debug.LogWarning("⚠ Không tìm thấy vị trí spawn hợp lệ sau nhiều lần thử!");
+        return Vector3.zero; // bỏ qua nếu không tìm thấy
+    }
 
 
 

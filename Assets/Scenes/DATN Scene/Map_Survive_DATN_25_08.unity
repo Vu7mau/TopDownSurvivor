@@ -6172,10 +6172,30 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6307360949530904937}
+    - target: {fileID: 3590801499593261424, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4511876655534225008, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6307360949530904937}
+    - target: {fileID: 4939143756828346944, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4939143756828346944, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761498684786238825, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761498684786238825, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6758517482905921667, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: bg
       value: 
@@ -6204,10 +6224,6 @@ PrefabInstance:
       propertyPath: spawnPoints.Array.data[3]
       value: 
       objectReference: {fileID: 46387824}
-    - target: {fileID: 7643146756297867801, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -90690,7 +90706,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!222 &584242406966732831
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -135822,7 +135838,7 @@ Camera:
   far clip plane: 40.1
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 7.999998
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -215932,7 +215948,7 @@ MonoBehaviour:
   m_Follow: {fileID: 8560161812671400982}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 8
+    OrthographicSize: 7.999998
     NearClipPlane: 0
     FarClipPlane: 40.1
     Dutch: 0
@@ -343447,7 +343463,7 @@ Transform:
   m_GameObject: {fileID: 5627993958693508246}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.08695031, z: -0, w: 0.9962127}
-  m_LocalPosition: {x: 145.9, y: 0.06, z: 87.94}
+  m_LocalPosition: {x: 146.5, y: 0.06, z: 78.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -421193,7 +421209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 10
-  _hpMax: 10
+  _hpMax: 10000
   _isDead: 0
   characterCtrl: {fileID: 6520209013124536290}
   _pnl: {fileID: 8331094014727803747}

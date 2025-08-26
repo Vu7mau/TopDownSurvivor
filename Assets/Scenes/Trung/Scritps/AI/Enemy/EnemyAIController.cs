@@ -284,13 +284,14 @@ public class EnemyAIController : EnemyBase
                 this.enemyReferences.Animator.SetBool("isMoving", true);
             }
 
-            if(this.enemyReferences.NavMeshAgent.isOnNavMesh) this.enemyReferences.NavMeshAgent.enabled = true;
+            this.enemyReferences.NavMeshAgent.enabled = true;
             if (this.distanceToTarget > this.chaseRange) this.Idle();
         }
     }
 
     protected override void Attack()
     {
+        if (!this.enemyReferences.NavMeshAgent.isOnNavMesh) return;
         this.enemyReferences.Animator.SetFloat("distance",this.distanceToTarget);
         this.AttackWhenNearPlayer();
     }
