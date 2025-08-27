@@ -6382,6 +6382,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5482394069381303144, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
+      propertyPath: m_IsGlobal
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5761498684786238825, guid: 57c6e82272c4dfa4793a81a47af04017, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -33484,42 +33488,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 3629406200275037306}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: poolSize
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: spawnRadius
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: spawnBoxSize.x
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: spawnBoxSize.z
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: maxSpawnInterval
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: minSpawnInterval
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: canPrefabs.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: canPrefabs.Array.data[0]
-      value: 
-      objectReference: {fileID: 12881368926039000, guid: c00278814efe4624f905780fe21eca60, type: 3}
-    - target: {fileID: 4768740782806398244, guid: a8034c4de9268524e8d20155166410c5, type: 3}
-      propertyPath: canPrefabs.Array.data[1]
-      value: 
-      objectReference: {fileID: 6125522649103623187, guid: 868eecabdac1a3748a55203b5110686d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -120379,7 +120347,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!1 &1067528257927959974
 GameObject:
   m_ObjectHideFlags: 0
@@ -688750,7 +688718,6 @@ SceneRoots:
   - {fileID: 590038726}
   - {fileID: 1148332693}
   - {fileID: 3265667774803906008}
-  - {fileID: 1292011801}
   - {fileID: 2102887519}
   - {fileID: 1917038160}
   - {fileID: 85944726217156135}
@@ -688774,3 +688741,4 @@ SceneRoots:
   - {fileID: 885636561}
   - {fileID: 149511002}
   - {fileID: 1702606179}
+  - {fileID: 1292011801}
