@@ -9,6 +9,9 @@ public abstract class BossController : EnemyAIController
     [SerializeField] protected float timeToReturnSwitch = 5f;
 
     [SerializeField] protected bool CanAttackTargetLongDistance = false;
+
+
+
     protected enum FarState { Attack, Chase }
 
     protected FarState farState = FarState.Chase;
@@ -28,6 +31,8 @@ public abstract class BossController : EnemyAIController
         base.Start();
         this.AttackFromLongDistance();
     }
+
+
 
     protected virtual void AttackFromLongDistance()
     {

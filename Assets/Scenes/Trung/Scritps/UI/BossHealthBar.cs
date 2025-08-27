@@ -93,7 +93,7 @@ public class BossHealthBar : SliderHp
         if(this.txtHealthProgress != null)
         {
             float pro = GetValue() * 100;
-            this.txtHealthProgress.text = pro.ToString() + "%";
+            this.txtHealthProgress.text = Mathf.FloorToInt(pro).ToString() + "%";
         }
     }
     protected override float GetValue()
