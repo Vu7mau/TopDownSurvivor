@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using PlayFab;
+using System.Threading.Tasks;
 public class MainMenuTwo : MonoBehaviour
 {
     public static MainMenuTwo Instance;
@@ -266,5 +267,13 @@ public class MainMenuTwo : MonoBehaviour
     {
         instructPanel.SetActive(false);
         playMenu.SetActive(true);
+    }
+    public void OpenCredits(int sceneIndex)
+    {
+        BackMainMenu(sceneIndex);
+    }
+    public async void BackMainMenu(int sceneIndex)
+    {
+        await LevelManager.Instance.LoadLevelAsync(sceneIndex);
     }
 }
