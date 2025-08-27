@@ -44,6 +44,33 @@ public class ChatNotify : Singleton<ChatNotify>
             anchor: anch ?? anchor
         );
     }
+    public void SayCustom(
+    string msg,
+    AudioClip sfx = null,
+    float? time = null,
+    DialogueAnchor? anch = null,
+    string speakerOverride = null,
+    Sprite avatarOverride = null,
+    float? typingSpeed = null
+)
+    {
+        if (!dialogue) { Debug.Log($"[Notify] {msg}"); return; }
+
+        // speaker/avatar: nếu không override thì dùng mặc định đang serialized trong ChatNotify
+        string spName = string.IsNullOrEmpty(speakerOverride) ? speaker : speakerOverride;
+        Sprite av = avatarOverride != null ? avatarOverride : speakerAvatar;
+
+        dialogue.ShowDialogue(
+            content: msg,
+            time: time ?? duration,
+            audioClip: sfx,
+            speakerName: spName,
+            avatar: av,
+            anchor: anch ?? anchor,
+            typingSpeedOverride: typingSpeed // <<— quan trọng: truyền xuống ChatDialogue
+        );
+    }
+
 
     // Checkpoint notifications
     public void Added(int idx, int total, int mapIndex, string name)

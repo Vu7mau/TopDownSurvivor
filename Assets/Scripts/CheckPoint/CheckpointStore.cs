@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+#region Data Models
 [Serializable]
 public class CPItem
 {
@@ -14,29 +15,105 @@ public class CPItem
 
     public Vector3 Pos => new Vector3(p[0], p[1], p[2]);
     public Quaternion Rot => Quaternion.Euler(r[0], r[1], r[2]);
+
+    public static CPItem From(Transform t, int mapIndex, string name, bool isAuto)
+    {
+        var e = t.eulerAngles;
+        var p3 = t.position;
+        return new CPItem
+        {
+            name = string.IsNullOrEmpty(name) ? DateTime.Now.ToString("HH:mm:ss dd/MM") : name,
+            mapIndex = mapIndex,
+            p = new[] { p3.x, p3.y, p3.z },
+            r = new[] { e.x, e.y, e.z },
+            isAuto = isAuto
+        };
+    }
 }
 
 [Serializable]
 class CPList
 {
+    public int version = 3; // để dành cho migration nếu cần
     public List<CPItem> items = new List<CPItem>();
     public int index = -1;
 }
+#endregion
 
 public static class CheckpointStore
 {
-    private const string KEY = "cp_list_v2_single_scene";
-    private static CPList _cache;
+    // Đổi key để tách biệt với bản cũ, chứa tất cả map.
+    private const string KEY = "checkpoint_store_v3_all_maps";
 
+    private static CPList _cache;
     public static event Action OnChanged;
 
+    #region Runtime auto-clear hook
+    // Gắn hook tự clear khi thoát game / app bị đưa nền (Editor & Build).
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InstallQuitHook()
+    {
+        var go = new GameObject("CheckpointStoreQuitHook");
+        go.hideFlags = HideFlags.HideAndDontSave;
+        UnityEngine.Object.DontDestroyOnLoad(go);
+        go.AddComponent<_QuitHook>();
+    }
+
+    private class _QuitHook : MonoBehaviour
+    {
+        private bool _cleared = false;
+
+        private void OnApplicationQuit()
+        {
+            TryClearOnce("OnApplicationQuit");
+        }
+
+#if !UNITY_EDITOR
+        private void OnApplicationPause(bool pause)
+        {
+            if (pause) TryClearOnce("OnApplicationPause(true)");
+        }
+#endif
+
+        private void TryClearOnce(string src)
+        {
+            if (_cleared) return;
+            _cleared = true;
+            try { CheckpointStore.ClearAll(); }
+            catch (Exception ex)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning($"[CheckpointStore] Auto clear failed ({src}): {ex.Message}");
+#endif
+            }
+        }
+    }
+    #endregion
+
+    #region Core persistence
     private static CPList Data
     {
         get
         {
             if (_cache != null) return _cache;
-            if (!PlayerPrefs.HasKey(KEY)) { _cache = new CPList(); return _cache; }
-            _cache = JsonUtility.FromJson<CPList>(PlayerPrefs.GetString(KEY)) ?? new CPList();
+
+            if (!PlayerPrefs.HasKey(KEY))
+            {
+                _cache = new CPList();
+                return _cache;
+            }
+
+            try
+            {
+                var json = PlayerPrefs.GetString(KEY);
+                _cache = JsonUtility.FromJson<CPList>(json) ?? new CPList();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[CheckpointStore] JSON parse error, reset store. {e.Message}");
+                _cache = new CPList();
+            }
+
             Reindex();
             return _cache;
         }
@@ -44,52 +121,98 @@ public static class CheckpointStore
 
     private static void Flush()
     {
-        PlayerPrefs.SetString(KEY, JsonUtility.ToJson(Data));
-        PlayerPrefs.Save();
+        try
+        {
+            var json = JsonUtility.ToJson(Data);
+            PlayerPrefs.SetString(KEY, json);
+            PlayerPrefs.Save();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[CheckpointStore] Flush failed: {e.Message}");
+        }
+
         OnChanged?.Invoke();
     }
 
     private static void Reindex()
     {
-        _cache.index = (_cache.items.Count > 0) ? Mathf.Clamp(_cache.index, 0, _cache.items.Count - 1) : -1;
+        _cache.index = (_cache.items.Count > 0)
+            ? Mathf.Clamp(_cache.index, 0, _cache.items.Count - 1)
+            : -1;
     }
+    #endregion
 
+    #region Public API (queries/state)
     public static int Count => Data.items.Count;
     public static int CurrentIndex => Data.index;
     public static bool HasAny() => Count > 0;
-
-    public static void Add(Transform t, int mapIndex, string name = null, bool isAuto = false)
-    {
-        if (!t) return;
-        var cp = new CPItem
-        {
-            name = string.IsNullOrEmpty(name) ? DateTime.Now.ToString("HH:mm:ss dd/MM") : name,
-            mapIndex = mapIndex,
-            p = new[] { t.position.x, t.position.y, t.position.z },
-            r = new[] { t.eulerAngles.x, t.eulerAngles.y, t.eulerAngles.z },
-            isAuto = isAuto
-        };
-        Data.items.Add(cp);
-        Data.index = Data.items.Count - 1;
-        Flush();
-        Debug.Log($"[CheckpointStore] Added #{Data.index} @map {mapIndex}: {cp.name} (auto={isAuto})");
-    }
-
-    public static bool MoveIndex(int delta)
-    {
-        if (!HasAny()) return false;
-        int n = Count;
-        Data.index = (Data.index + delta) % n;
-        if (Data.index < 0) Data.index += n;
-        Flush();
-        return true;
-    }
 
     public static bool TryGetCurrent(out CPItem meta)
     {
         meta = null;
         if (!HasAny() || Data.index < 0 || Data.index >= Count) return false;
         meta = Data.items[Data.index];
+        return true;
+    }
+
+    public static bool SetCurrentIndexSafe(int absoluteIndex)
+    {
+        if (absoluteIndex < 0 || absoluteIndex >= Data.items.Count) return false;
+        Data.index = absoluteIndex;
+        Flush();
+        return true;
+    }
+
+    public static int GetCountByMap(int mapIndex, bool? autoFlag = null)
+    {
+        int c = 0;
+        var list = Data.items;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var cp = list[i];
+            if (cp.mapIndex == mapIndex && (!autoFlag.HasValue || cp.isAuto == autoFlag.Value))
+                c++;
+        }
+        return c;
+    }
+
+    public static List<int> GetAbsoluteIndexesOfMap(int mapIndex, bool? autoFlag = null)
+    {
+        var res = new List<int>();
+        var list = Data.items;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var cp = list[i];
+            if (cp.mapIndex == mapIndex && (!autoFlag.HasValue || cp.isAuto == autoFlag.Value))
+                res.Add(i);
+        }
+        return res;
+    }
+    #endregion
+
+    #region Public API (mutations)
+    public static void Add(Transform t, int mapIndex, string name = null, bool isAuto = false)
+    {
+        if (!t) return;
+        var cp = CPItem.From(t, mapIndex, name, isAuto);
+        Data.items.Add(cp);
+        Data.index = Data.items.Count - 1;
+        Flush();
+
+#if UNITY_EDITOR
+        Debug.Log($"[CheckpointStore] Added #{Data.index} @map {mapIndex}: {cp.name} (auto={isAuto})");
+#endif
+    }
+
+    public static bool MoveIndex(int delta)
+    {
+        if (!HasAny()) return false;
+        int n = Count;
+        int next = (Data.index + delta) % n;
+        if (next < 0) next += n;
+        Data.index = next;
+        Flush();
         return true;
     }
 
@@ -100,49 +223,72 @@ public static class CheckpointStore
     public static int ClearAllSpawn() => ClearByFilter(cp => cp.isAuto);
     public static int ClearManual() => ClearByFilter(cp => !cp.isAuto);
 
-    public static void ClearAll()
+    /// <summary>
+    /// Xoá toàn bộ checkpoint của TẤT CẢ các map + reset index. Trả về số lượng CP đã xoá.
+    /// </summary>
+    public static int ClearAll()
     {
-        Data.items.Clear();
-        Reindex();
-        Flush();
-        Debug.Log("[CheckpointStore] Cleared all.");
+        int removed = Count;
+
+        // Reset bộ nhớ
+        _cache = new CPList();
+
+        // Xoá luôn key để chắc chắn không “hồi sinh” ở lần chạy sau
+        try
+        {
+            PlayerPrefs.DeleteKey(KEY);
+            PlayerPrefs.Save();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[CheckpointStore] DeleteKey failed: {e.Message}. Fallback to Flush().");
+            Flush(); // fallback
+        }
+
+        OnChanged?.Invoke();
+
+#if UNITY_EDITOR
+        Debug.Log($"[CheckpointStore] Cleared ALL. removed={removed}");
+#endif
+        return removed;
     }
 
     public static int ClearByFilter(Predicate<CPItem> pred)
     {
         int before = Count;
+        if (before == 0) return 0;
+
         Data.items.RemoveAll(pred);
         Reindex();
+
         if (before != Count) Flush();
         return before - Count;
     }
+    #endregion
 
-    // ===== Per-map queries for slider/checkpoint UI =====
-    public static int GetCountByMap(int mapIndex, bool? autoFlag = null)
+    #region Optional: export/import (hữu ích khi debug)
+    public static string ExportJson()
     {
-        int c = 0;
-        foreach (var cp in Data.items)
-            if (cp.mapIndex == mapIndex && (!autoFlag.HasValue || cp.isAuto == autoFlag.Value)) c++;
-        return c;
+        return JsonUtility.ToJson(Data);
     }
 
-    public static List<int> GetAbsoluteIndexesOfMap(int mapIndex, bool? autoFlag = null)
+    public static bool ImportJsonReplaceAll(string json)
     {
-        var list = new List<int>();
-        for (int i = 0; i < Data.items.Count; i++)
+        if (string.IsNullOrEmpty(json)) return false;
+        try
         {
-            var cp = Data.items[i];
-            if (cp.mapIndex == mapIndex && (!autoFlag.HasValue || cp.isAuto == autoFlag.Value))
-                list.Add(i);
+            var obj = JsonUtility.FromJson<CPList>(json);
+            if (obj == null) return false;
+            _cache = obj;
+            Reindex();
+            Flush();
+            return true;
         }
-        return list;
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[CheckpointStore] Import failed: {e.Message}");
+            return false;
+        }
     }
-
-    public static bool SetCurrentIndexSafe(int absoluteIndex)
-    {
-        if (absoluteIndex < 0 || absoluteIndex >= Data.items.Count) return false;
-        Data.index = absoluteIndex;
-        Flush();
-        return true;
-    }
+    #endregion
 }

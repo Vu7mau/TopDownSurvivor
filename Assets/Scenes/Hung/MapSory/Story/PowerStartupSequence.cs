@@ -41,7 +41,6 @@ public class PowerStartupSequence : MonoBehaviour
         // Hiện lời thoại bắt đầu
         string content = "Hệ thống đang khởi động, vui lòng chờ 1 phút...";
         ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content, 10, notificationAudi, "Hệ thống");
-     var audi=   SoundFXManager.Instance.PlaySoundFXClip(warningAudio, this.transform);
         if (countdownSlider != null)
         {
             countdownSlider.gameObject.SetActive(true);
@@ -49,6 +48,7 @@ public class PowerStartupSequence : MonoBehaviour
             countdownSlider.value = 0;
             UpdateFillColor(0f);
         }
+        var audi = SoundFXManager.Instance.PlaySoundFXClip(warningAudio, this.transform);
 
         var wait = new WaitForSeconds(delaySpawn);
 

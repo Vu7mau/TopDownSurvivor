@@ -247,6 +247,7 @@ public class SciFiController : BossController
     [SerializeField] protected Transform fire;
     [SerializeField] protected Transform modelPosition;
     [SerializeField] protected AudioClip snd_shutdownRobot;
+    [SerializeField] protected SlidingDoor door;
 
     private void Distribution()
     {
@@ -254,6 +255,8 @@ public class SciFiController : BossController
     }
     IEnumerator DestroyExplosionRoutine()
     {
+        if(door!=null)
+            door.SetConditionMet(true);
         //if (this.explosionPoss.Count == 0) yield break;
         //for (int i = 0; i < this.explosionPoss.Count; i++)
         //{

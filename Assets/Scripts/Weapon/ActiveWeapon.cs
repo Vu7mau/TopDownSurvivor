@@ -220,7 +220,7 @@ public class ActiveWeapon : VuMonoBehaviour
 
         // Áp cờ bắn: chỉ khẩu vừa chọn được phép bắn
         ApplyActivationFlags();
-
+        WeaponRuntimeSave.SaveSnapshot(this);
         if (!string.IsNullOrEmpty(_wishedWeaponName) && _wishedWeaponName == newWeapon.WeaponName)
             _wishedWeaponName = null;
     }

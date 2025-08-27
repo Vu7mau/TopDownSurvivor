@@ -85,15 +85,40 @@ public class MonsterSpawnerTrigger : MonoBehaviour
                 Random.Range(-colliders.size.z / 2f, colliders.size.z / 2f)
             );
 
-            // Chuyển từ local space sang world space đúng cách
+            // Tính vị trí spawn theo world space
             Vector3 spawnPos = colliders.transform.TransformPoint(colliders.center + randomOffset);
 
+            // Random prefab    
             GameObject prefab = monsterPrefabs[Random.Range(0, monsterPrefabs.Count)];
             Quaternion randomRot = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
-            Instantiate(prefab, spawnPos, randomRot, transform);
+            GameObject monster = null;
+            try
+            {
+                if (prefab == null)
+                    throw new System.Exception("Prefab null");
+
+                monster = Instantiate(prefab, spawnPos, randomRot, transform);
+
+                // Có thể thêm check tuỳ ý, ví dụ prefab có component MonsterAI
+                // if (monster.GetComponent<MonsterAI>() == null) throw new System.Exception("Thiếu MonsterAI");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"❌ Spawn lỗi: {ex.Message}");
+
+                // Nếu có object nhưng lỗi thì huỷ nó ngay
+                if (monster != null)
+                {
+                    Destroy(monster);
+                }
+
+                // Giảm i để lặp lại lượt spawn này => đảm bảo tổng số spawnAmount không bị hụt
+                i--;
+            }
         }
     }
+
 
     private IEnumerator ResetSpawnStateAfterDelay(float delay)
     {
