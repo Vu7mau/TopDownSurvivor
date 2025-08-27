@@ -176,8 +176,15 @@ public class EnemyHealth : DamageReceiver
     }
     protected override void OnDead()
     {
-
         //this.gameObject.GetComponent<Collider>().enabled = false;
+
+        if (this.bossManager != null)
+        {
+            BossController enemyHealth = this.GetComponent<BossController>();
+            if (enemyHealth != null) this.bossManager.DeleteBosses(enemyHealth);
+
+        }
+
         this._canGetDamage = false;
         if (!this._isDead)
         {
@@ -203,6 +210,7 @@ public class EnemyHealth : DamageReceiver
         {
             EnemyHealth enemyHealth = this.GetComponent<EnemyHealth>();
             this.bossManager.DisplayMySliderHP(enemyHealth);
+
         }
 
         //Debug.Log("Máu quái còn " + this._hp);
@@ -247,8 +255,6 @@ public class EnemyHealth : DamageReceiver
             newBloodSplash.gameObject.SetActive(true);
         }
     }
-
-
 
     ////Others
     //public void RewardPlayerAfterEnemyDead()

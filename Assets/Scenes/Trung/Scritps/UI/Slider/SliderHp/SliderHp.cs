@@ -10,7 +10,15 @@ public abstract class SliderHp : SliderAbstract
     }
     protected virtual void UpdateSlider()
     {
-        this.slider.value = this.GetValue();
+        if (this.slider != null)
+        {
+            this.slider.value = this.GetValue();
+        }
+
+        if (this.sliderImageHP != null)
+        {
+            this.sliderImageHP.fillAmount = this.GetValue();
+        }
     }
     protected abstract float GetValue();
 }

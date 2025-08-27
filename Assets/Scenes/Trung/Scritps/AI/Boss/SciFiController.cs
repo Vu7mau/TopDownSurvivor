@@ -126,6 +126,40 @@ public class SciFiController : BossController
         this.rocketLightObj.Clear();
     }
 
+    [Space]
+    [Header("Attack 4: Skill dậm đất")]
+    [SerializeField] protected EffectFX fireEffect;
+    [SerializeField] protected List<Transform> attack4Pos;
+    [SerializeField] protected float timeDelay1;
+
+    protected virtual void Attack3()
+    {
+        StartCoroutine(FistFire());
+    }
+
+    protected IEnumerator FistFire()
+    {
+        this.DontLookAtTarget();
+        Vector3 target = this.targetPosition.position;
+
+
+
+
+        if (this.effectFXSpawner != null && this.circleWarning6 != null)
+        {
+            EffectFX newCirWarning = this.effectFXSpawner.Spawn(this.circleWarning6, target + new Vector3(0, 0.4f, 0));
+            newCirWarning.Rotate(new Vector3(-90, 0, 0));
+            Vector3 scale = this.circleWarning6.transform.localScale;
+            newCirWarning.Scale(scale);
+            yield return new WaitForSeconds(this.timeDelay1);
+
+            if(fireEffect != null)
+            {
+                EffectFX fire = this.effectFXSpawner.Spawn(this.fireEffect, target + new Vector3(0, 0.4f, 0));
+            }
+        }
+    }
+
 
 
     [Space]
