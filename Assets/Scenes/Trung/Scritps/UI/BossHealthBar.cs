@@ -102,9 +102,16 @@ public class BossHealthBar : SliderHp
     }
     protected void UpdateHealthEaseBar()
     {
-        if (this.healthBarEase.value != this.slider.value)
+        if(this.slider != null)
         {
-            this.healthBarEase.value = Mathf.Lerp(this.healthBarEase.value, this.slider.value, ease);
+            if (this.healthBarEase.value != this.slider.value)
+            {
+                this.healthBarEase.value = Mathf.Lerp(this.healthBarEase.value, this.slider.value, ease);
+            }
+        }
+        if(this.sliderImageHP != null)
+        {
+            this.healthBarEase.value = Mathf.Lerp(this.healthBarEase.value, this.sliderImageHP.fillAmount, ease);
         }
     }
     protected virtual void UpdateHealthBar()
@@ -122,7 +129,8 @@ public class BossHealthBar : SliderHp
     }
     protected virtual void ResetHealthSlider()
     {
-        this.slider.value = this.slider.maxValue;
+        if(this.slider != null) this.slider.value = this.slider.maxValue;
+        if(this.sliderImageHP != null) this.sliderImageHP.fillAmount = 1;
         this.healthBarEase.value = this.healthBarEase.maxValue;
     }
 }

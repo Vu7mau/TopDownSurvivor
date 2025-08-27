@@ -7,6 +7,11 @@ public abstract class SliderAbstract : VuMonoBehaviour
 {
     [SerializeField] protected Slider slider;
 
+
+    [SerializeField] protected Image sliderImageHP;
+
+
+
     protected override void LoadComponents()
     {
         base.LoadComponents();

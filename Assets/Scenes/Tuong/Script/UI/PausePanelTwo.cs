@@ -120,6 +120,8 @@ public class PausePanelTwo : MonoBehaviour
 
     public virtual void BackToMainMenuGame()
     {
+        if (winPanel == null) return;
+        if(losePanel == null) return;
         winPanel.gameObject.SetActive(false);
         losePanel.gameObject.SetActive(false);
         this.BackToMainMenu(1);

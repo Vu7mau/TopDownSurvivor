@@ -17,7 +17,10 @@ public class BossManager : VuMonoBehaviour
         BossController[] list = FindObjectsByType<BossController>(FindObjectsSortMode.None);
         foreach (BossController controller in list)
         {
-            this.AddBosses(controller);
+            if (!controller.GetComponent<EnemyHealth>().IsDead())
+            {
+                this.AddBosses(controller);
+            }
         }
         if(this.listBosses.Count > 0)
         {
@@ -25,14 +28,16 @@ public class BossManager : VuMonoBehaviour
             {
                 foreach (BossController boss in listBosses)
                 {
-                    boss.GetComponentInChildren<SliderHPCtrl>().IsArrive = true;
+                    SliderHPCtrl slider = boss.GetComponentInChildren<SliderHPCtrl>();
+                    if(slider != null) slider.IsArrive = true;
                 }
             }
             else
             {
                 foreach (BossController boss in listBosses)
                 {
-                    boss.GetComponentInChildren<SliderHPCtrl>().IsArrive = false;
+                    SliderHPCtrl slider = boss.GetComponentInChildren<SliderHPCtrl>();
+                    if (slider != null) slider.IsArrive = false;
                 }
             }
         }
@@ -58,5 +63,13 @@ public class BossManager : VuMonoBehaviour
     {
         if (this.listBosses.Contains(boss)) return;
         this.listBosses.Add(boss);
+    }
+
+    public virtual void DeleteBosses(BossController bossController)
+    {
+        if (bossController != null)
+        {
+            this.listBosses.Remove(bossController);
+        }
     }
 }
