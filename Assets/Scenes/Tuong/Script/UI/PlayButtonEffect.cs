@@ -86,7 +86,7 @@ public class PlayButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
         scaleTween = rectTransform.DOScale(originalScale * pressedScale, scaleTime);
         if (IsLockedFunc != null && IsLockedFunc()) return;
 
-        AudioManagerTwo.Instance.PlayButtonSFX(buttonSFXType);
+        AudioManagerTwo.Instance?.PlayButtonSFX(buttonSFXType);
     }
     public void OnPointerUp(PointerEventData evt)
     {

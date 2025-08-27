@@ -35,10 +35,10 @@ public class PausePanelTwo : MonoBehaviour
         {
             Instantiate(timerPrefab);
         }
+
         settingsPanel.SetActive(false);
         pausePanel.SetActive(false);
         backGround.SetActive(false);
-
     }
     private void Update()
     {
@@ -120,8 +120,6 @@ public class PausePanelTwo : MonoBehaviour
 
     public virtual void BackToMainMenuGame()
     {
-        if (winPanel == null) return;
-        if(losePanel == null) return;
         winPanel.gameObject.SetActive(false);
         losePanel.gameObject.SetActive(false);
         this.BackToMainMenu(1);
@@ -139,6 +137,10 @@ public class PausePanelTwo : MonoBehaviour
         pausePanel?.SetActive(false);
         losePanel?.gameObject.SetActive(false);
         DOTween.KillAll();
+        await LevelManager.Instance.LoadLevelAsync(sceneIndex);
+    }
+    public async void BackMainMenu(int sceneIndex)
+    {
         await LevelManager.Instance.LoadLevelAsync(sceneIndex);
     }
     public void ExitGame()
@@ -176,6 +178,7 @@ public class PausePanelTwo : MonoBehaviour
     {
         isTransitioning = true;
         isInSettingPanel = false;
+        if(effectPausePanel == null) return;
         effectPausePanel.HidePanel(() =>
         {
             pausePanel.SetActive(false);

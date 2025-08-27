@@ -34,6 +34,10 @@ public class PanelExitGame : MonoBehaviour
             });
 
     }
+    public void Pause()
+    {
+        Time.timeScale = 0f;
+    }
     public void ExitGame()
     {
 #if UNITY_EDITOR
