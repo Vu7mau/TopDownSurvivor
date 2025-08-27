@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Lato-Black SDF
+  m_Name: Lato-Black SDF 1
   m_EditorClassIdentifier: 
-  hashCode: 1310581165
+  hashCode: 1293747516
   material: {fileID: 5831262166238291534}
-  materialHashCode: -1868830611
+  materialHashCode: -554303332
   m_Version: 1.1.0
   m_SourceFontFileGUID: d2f070cd5ff727444b009fe4caa8fe76
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: d2f070cd5ff727444b009fe4caa8fe76, type: 3}
@@ -1093,6 +1093,21 @@ MonoBehaviour:
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
+  - m_Index: 2503
+    m_Metrics:
+      m_Width: 42.296875
+      m_Height: 64.09375
+      m_HorizontalBearingX: 4.28125
+      m_HorizontalBearingY: 46.671875
+      m_HorizontalAdvance: 51.296875
+    m_GlyphRect:
+      m_X: 862
+      m_Y: 395
+      m_Width: 43
+      m_Height: 65
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
   - m_Index: 2504
     m_Metrics:
       m_Width: 42.296875
@@ -1150,21 +1165,6 @@ MonoBehaviour:
       m_Y: 230
       m_Width: 58
       m_Height: 72
-    m_Scale: 1
-    m_AtlasIndex: 0
-    m_ClassDefinitionType: 0
-  - m_Index: 2503
-    m_Metrics:
-      m_Width: 42.296875
-      m_Height: 64.09375
-      m_HorizontalBearingX: 4.28125
-      m_HorizontalBearingY: 46.671875
-      m_HorizontalAdvance: 51.296875
-    m_GlyphRect:
-      m_X: 862
-      m_Y: 395
-      m_Width: 43
-      m_Height: 65
     m_Scale: 1
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
@@ -1450,6 +1450,10 @@ MonoBehaviour:
     m_GlyphIndex: 2808
     m_Scale: 1
   - m_ElementType: 1
+    m_Unicode: 7909
+    m_GlyphIndex: 2503
+    m_Scale: 1
+  - m_ElementType: 1
     m_Unicode: 7911
     m_GlyphIndex: 2504
     m_Scale: 1
@@ -1464,10 +1468,6 @@ MonoBehaviour:
   - m_ElementType: 1
     m_Unicode: 8230
     m_GlyphIndex: 315
-    m_Scale: 1
-  - m_ElementType: 1
-    m_Unicode: 7909
-    m_GlyphIndex: 2503
     m_Scale: 1
   m_AtlasTextures:
   - {fileID: 2753089772401780889}
@@ -2163,10 +2163,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Lato-Black Atlas Material
-  m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
+  m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - OUTLINE_ON
+  - UNDERLAY_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -2211,7 +2213,7 @@ Material:
     - _ColorMask: 15
     - _CullMode: 0
     - _Diffuse: 0.5
-    - _FaceDilate: 0
+    - _FaceDilate: 0.237
     - _FaceUVSpeedX: 0
     - _FaceUVSpeedY: 0
     - _GlowInner: 0.05
@@ -2225,12 +2227,12 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.45
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.9
     - _ScaleRatioB: 0.73125
-    - _ScaleRatioC: 0.73125
+    - _ScaleRatioC: 0.31201804
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -2243,9 +2245,9 @@ Material:
     - _StencilWriteMask: 255
     - _TextureHeight: 1024
     - _TextureWidth: 1024
-    - _UnderlayDilate: 0
+    - _UnderlayDilate: 0.66
     - _UnderlayOffsetX: 0
-    - _UnderlayOffsetY: 0
+    - _UnderlayOffsetY: -1
     - _UnderlaySoftness: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
