@@ -21,6 +21,10 @@ public class EnemyHealth : DamageReceiver
 
     [SerializeField] protected BloodSplash bloodSplash;
 
+    [Space]
+    [Header("SliderHP")]
+    [SerializeField] protected SliderHPCtrl sliderHPCtrl;
+    [SerializeField] protected BossManager bossManager;
 
     protected float _amountIncrease = 0;
 
@@ -63,12 +67,14 @@ public class EnemyHealth : DamageReceiver
         this.LoadHealthBar();
         this.LoadHitDamageSpawner();
         this.LoadBloodSplash();
+        this.LoadSliderHPCtrl();
         //this.LoadEnemyDamageReceiver();
 
         ///Load Enemies
         this.RebornEnemy();
+        this.LoadBossManager();
 
- 
+
 
 
 
@@ -103,6 +109,17 @@ public class EnemyHealth : DamageReceiver
         if (this.bloodSplash != null) return;
         this.bloodSplash = GetComponentInChildren<BloodSplash>();
         if( this.bloodSplash == null) return;
+    }
+    protected virtual void LoadSliderHPCtrl()
+    {
+        if (this.sliderHPCtrl != null) return;
+        this.sliderHPCtrl = GetComponentInChildren<SliderHPCtrl>();
+    }
+
+    protected virtual void LoadBossManager()
+    {
+        if (this.bossManager != null) return;
+        this.bossManager = FindAnyObjectByType<BossManager>();
     }
 
 
@@ -182,6 +199,11 @@ public class EnemyHealth : DamageReceiver
 
 
         CharacterEvents.characterDamaged?.Invoke(this.gameObject, damage);
+        if(this.bossManager != null)
+        {
+            EnemyHealth enemyHealth = this.GetComponent<EnemyHealth>();
+            this.bossManager.DisplayMySliderHP(enemyHealth);
+        }
 
         //Debug.Log("Máu quái còn " + this._hp);
         //if (this.enemyAI.Animator != null)
