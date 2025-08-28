@@ -1,4 +1,4 @@
-﻿// File: GameController.cs
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,6 +32,10 @@ public class GameController : Singleton<GameController>
     [SerializeField] private bool allowRespawnWhenSameMap = false;
     [Tooltip("Ưu tiên khôi phục Checkpoint đã chọn khi vào game. Nếu không có thì mới dùng PositionSave.")]
     [SerializeField] private bool preferCheckpointOnStart = true;
+
+    [Header("Safety")]
+    [Tooltip("Đảm bảo bật/enable nhân vật trước mọi lần đổi vị trí.")]
+    [SerializeField] private bool ensureCharacterOnBeforeMove = true;
 
     public int CurrentMapIndex => currentMap ? currentMap.MapIndex : 0;
     public int MapsCount
@@ -110,29 +114,99 @@ public class GameController : Singleton<GameController>
         enterHooks?.InvokeEnter();
     }
 
-    public void TeleportSafe(Vector3 pos, Quaternion rot)
+    /// <summary>
+    /// BẬT/ENABLE nhân vật & các component quan trọng (an toàn idempotent).
+    /// </summary>
+    public void EnsureCharacterOn()
+    {
+        if (!ensureCharacterOnBeforeMove) return;
+        if (!character) return;
+
+        var go = character.gameObject;
+
+        // Bật GameObject nếu đang tắt
+        if (!go.activeSelf) go.SetActive(true);
+
+        // Enable các component cốt lõi
+        var cc = go.GetComponent<CharacterController>();
+        if (cc && !cc.enabled) cc.enabled = true;
+
+        var agent = go.GetComponent<NavMeshAgent>();
+        if (agent && !agent.enabled) agent.enabled = true;
+
+        var anim = go.GetComponentInChildren<Animator>(true);
+        if (anim && !anim.enabled) anim.enabled = true;
+
+        // Đánh thức physics
+        var rbs = go.GetComponentsInChildren<Rigidbody>(true);
+        foreach (var rb in rbs) if (rb != null) rb.WakeUp();
+
+        // (Tuỳ chọn) Nếu game có logic tắt Collider/Renderer, có thể bật lại:
+        // var cols = go.GetComponentsInChildren<Collider>(true);
+        // foreach (var c in cols) if (c && !c.enabled) c.enabled = true;
+        // var rends = go.GetComponentsInChildren<Renderer>(true);
+        // foreach (var r in rends) if (r) r.enabled = true;
+    }
+
+    /// <summary>
+    /// Teleport an toàn: BẬT nhân vật → khoá tạm CC/Agent/RB → đặt rot/pos (ưu tiên NavMesh.Warp) → khôi phục.
+    /// </summary>
+    public void TeleportSafe(Vector3 pos, Quaternion rot, bool alignToNavmesh = true)
     {
         if (!character) { Debug.LogError("[GameController] Character is null!"); return; }
 
-        var cc = character.GetComponent<CharacterController>();
-        var rb = character.GetComponent<Rigidbody>();
-        var agent = character.GetComponent<NavMeshAgent>();
+        // 1) BẮT BUỘC: bật/enable trước khi đổi vị trí
+        EnsureCharacterOn();
 
-        if (agent && agent.enabled)
+        var go = character.gameObject;
+        var t = character;
+
+        // Thành phần liên quan
+        var cc = go.GetComponent<CharacterController>();
+        var rb = go.GetComponent<Rigidbody>();
+        var agent = go.GetComponent<NavMeshAgent>();
+
+        // Ghi nhớ trạng thái để khôi phục
+        bool ccWasEnabled = cc && cc.enabled;
+        bool agentWasEnabled = agent && agent.enabled;
+        bool rbHadBody = rb != null;
+
+        // 2) Khoá tạm để tránh xung đột khi set pos/rot
+        if (cc && cc.enabled) cc.enabled = false;
+        if (agent && agent.enabled) agent.enabled = false;
+
+        if (rbHadBody)
         {
-            agent.Warp(pos);
-            character.rotation = rot;
-            agent.ResetPath();
-            return;
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
 
-        if (cc) cc.enabled = false;
-        if (rb) { rb.isKinematic = true; rb.velocity = Vector3.zero; rb.angularVelocity = Vector3.zero; }
+        // 3) Đặt rotation trước (tránh giật hướng khi warp)
+        t.rotation = rot;
 
-        character.SetPositionAndRotation(pos, rot);
+        // 4) Đặt position (ưu tiên dùng NavMesh warp nếu có)
+        bool warped = false;
+        if (alignToNavmesh && agent != null)
+        {
+            // Bật tạm agent để warp rồi trả về trạng thái cũ
+            agent.enabled = true;
+            warped = agent.Warp(pos);
+            agent.enabled = false;
+        }
 
-        if (cc) cc.enabled = true;
-        if (rb) rb.isKinematic = false;
+        if (!warped)
+        {
+            t.position = pos;
+        }
+
+        // 5) Khôi phục lại các trạng thái như cũ
+        if (agent) agent.enabled = agentWasEnabled;
+        if (cc) cc.enabled = ccWasEnabled;
+        if (rbHadBody) rb.isKinematic = false;
+
+        // 6) Đảm bảo vẫn bật sau khi khôi phục (nếu có script khác can thiệp)
+        EnsureCharacterOn();
     }
 
     public void MoveCharacterPos(Transform pos)
@@ -203,6 +277,7 @@ public class GameController : Singleton<GameController>
             currentMap = next;
             ActivateOnly(currentMap);
 
+            // Đặt về spawn của map mới (TeleportSafe sẽ tự đảm bảo bật nhân vật)
             MoveCharacterPos(currentMap.currentMapSpawnPoint);
 
             var enterHooks = HooksOf(currentMap);
