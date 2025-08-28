@@ -33749,6 +33749,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220837744}
   m_CullTransparentMesh: 1
+--- !u!1 &1228987702 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 55739127173768936, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+  m_PrefabInstance: {fileID: 1292011801}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1228987704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1228987702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be08ef642d8f6574cb24cb29744eec93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fogParticles: {fileID: 1228987706}
+  player: {fileID: 3629406200275037306}
+  boxSize: {x: 10, y: 15, z: 10}
+  useSoftFade: 1
+  useSoftPush: 1
+  pushStrength: 0.5
+  pushSmooth: 0.1
+--- !u!198 &1228987706 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+  m_PrefabInstance: {fileID: 1292011801}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1285051094
 GameObject:
   m_ObjectHideFlags: 0
@@ -33832,14 +33861,85 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1209490348058604099, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 44c831850cde06a4bbc83e8279fb8f6e, type: 2}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: lengthInSec
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.startSize.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1534539027289362799, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2979809378470138516, guid: a8034c4de9268524e8d20155166410c5, type: 3}
       propertyPath: m_Name
       value: Map (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5807420411386809173, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807420411386809173, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807420411386809173, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807420411386809173, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6711354433922735730, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: a3bd8d04dde68eb4c91dd84e63eaa027, type: 2}
+    - target: {fileID: 7199662612159134187, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 55739127173768936, guid: a8034c4de9268524e8d20155166410c5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1228987704}
   m_SourcePrefab: {fileID: 100100000, guid: a8034c4de9268524e8d20155166410c5, type: 3}
 --- !u!1 &1302600121
 GameObject:
@@ -281799,6 +281899,7 @@ GameObject:
   - component: {fileID: 842461728589261525}
   - component: {fileID: 6307360949530904937}
   - component: {fileID: 7566618735466979931}
+  - component: {fileID: 9176597060147418740}
   m_Layer: 5
   m_Name: Canvas-UI-Survive
   m_TagString: Untagged
@@ -678546,6 +678647,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 10
   m_TargetDisplay: 0
+--- !u!114 &9176597060147418740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3106471429367959669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f1fd1b036cb89438ff117a4fc11a13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelWin: {fileID: 4035844659196221590}
+  panelDie: {fileID: 8178393569832778540}
 --- !u!114 &9177844999432589419
 MonoBehaviour:
   m_ObjectHideFlags: 0
