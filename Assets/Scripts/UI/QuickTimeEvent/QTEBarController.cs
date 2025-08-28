@@ -111,7 +111,7 @@ public class QTEBarController : VuMonoBehaviour
 
         // Trước đây: resultPopup.HidePopup();
         if (resultPopup != null)
-            resultPopup.PinNow();
+            resultPopup.PinToCorner();
 
         CharacterCtrl.Instance.CharacterShooting.SetCancel(false);
     }

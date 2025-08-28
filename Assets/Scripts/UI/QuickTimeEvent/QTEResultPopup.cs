@@ -9,7 +9,7 @@ public class QTEResultPopup : VuMonoBehaviour
     [Header("Refs")]
     [SerializeField] private GameObject popupPanel;
     [SerializeField] private TMP_Text popupMessage;
-    [SerializeField] private TMP_Text title;
+    [SerializeField] public TMP_Text title;
     [SerializeField] private Button popupCloseButton;
 
     [Header("Show Animation")]
@@ -29,15 +29,21 @@ public class QTEResultPopup : VuMonoBehaviour
     [SerializeField] private PinPosition pinPosition = PinPosition.TopRight;
     [Tooltip("Chỉ dùng khi PinPosition = Custom (tọa độ anchored, tính theo RectTransform của chính panel).")]
     [SerializeField] private Vector2 customAnchoredPos = new Vector2(-20, -20);
-
     [Header("Lề khi ghim (theo góc)")]
     [SerializeField] private Vector2 margin = new Vector2(20, 20);
 
     [Header("Text Options")]
     [SerializeField] private float messageCharacterSpacing = 10f;
 
+    // ============ NEW: Nội dung nhập sẵn trong Inspector ============
+    [Header("Preset / Inspector Content")]
+    [SerializeField] private string presetTitle = "Info";
+    [TextArea(2, 6)]
+    [SerializeField] private string presetMessage = "Nội dung thông báo mẫu.";
+    [Tooltip("Khi bật, Show() không tham số sẽ dùng preset này.")]
+    [SerializeField] private bool usePresetByDefault = true;
+
     private RectTransform panelRect;
-    private Canvas rootCanvas;
     private Coroutine pinRoutine;
     private Sequence currentSeq;
 
@@ -49,20 +55,20 @@ public class QTEResultPopup : VuMonoBehaviour
         {
             popupPanel.SetActive(false);
             panelRect = popupPanel.GetComponent<RectTransform>();
-            rootCanvas = popupPanel.GetComponentInParent<Canvas>();
         }
 
         if (popupCloseButton != null)
             popupCloseButton.onClick.AddListener(HidePopup);
     }
 
+    // ================= API HIỂN THỊ =================
+
     /// <summary>
-    /// Hiển thị popup: phóng to vào giữa. Sau autoPinDelay sẽ thu nhỏ & ghim vào góc (nếu autoPinDelay > 0).
+    /// Hiển thị popup dùng nội dung từ tham số.
     /// </summary>
     public void Show(string titleText, string message)
     {
-        Debug.Log($"Title: {titleText} | Message: {message}");
-
+        Debug.Log(titleText);
         if (popupPanel == null || panelRect == null) return;
 
         // hủy tweens / coroutine cũ (nếu còn)
@@ -90,10 +96,24 @@ public class QTEResultPopup : VuMonoBehaviour
 
         // Sau X giây thì tự ghim (nếu bật)
         if (autoPinDelay > 0f)
-        {
             pinRoutine = StartCoroutine(Co_AutoPinAfterDelay(autoPinDelay));
-        }
     }
+
+    /// <summary>
+    /// NEW: Hiển thị popup dùng nội dung preset nhập sẵn trong Inspector.
+    /// </summary>
+    public void Show()
+    {
+        if (usePresetByDefault)
+            Show(presetTitle, presetMessage);
+        else
+            Show(title != null ? title.text : "", popupMessage != null ? popupMessage.text : "");
+    }
+
+    /// <summary>
+    /// NEW: Gọi nhanh hiển thị preset (tương đương Show()).
+    /// </summary>
+    public void ShowPreset() => Show(presetTitle, presetMessage);
 
     /// <summary>
     /// Ẩn popup (kể cả đang ghim).
@@ -105,14 +125,13 @@ public class QTEResultPopup : VuMonoBehaviour
         if (currentSeq != null && currentSeq.IsActive()) currentSeq.Kill();
         if (pinRoutine != null) { StopCoroutine(pinRoutine); pinRoutine = null; }
 
-        // Animate thu nhỏ rồi tắt
         panelRect.DOScale(Vector3.zero, 0.25f)
                  .SetEase(Ease.InBack)
                  .OnComplete(() => popupPanel.SetActive(false));
     }
 
     /// <summary>
-    /// Gọi lại để bỏ ghim và hiện lớn giữa màn hình (ví dụ khi có thông điệp mới).
+    /// Bỏ ghim và phóng to lại giữa màn hình (tùy chọn cập nhật title/message).
     /// </summary>
     public void UnpinAndExpand(string newTitle = null, string newMessage = null)
     {
@@ -131,23 +150,19 @@ public class QTEResultPopup : VuMonoBehaviour
         pinRoutine = null;
     }
 
-    private void PinToCorner()
+    public void PinToCorner()
     {
         if (panelRect == null) return;
 
         if (currentSeq != null && currentSeq.IsActive()) currentSeq.Kill();
 
-        // Tính anchor, pivot và vị trí theo PinPosition
         Vector2 targetAnchorMin, targetAnchorMax, targetPivot, targetPos;
         GetPinLayout(out targetAnchorMin, out targetAnchorMax, out targetPivot, out targetPos);
 
-        // Chuyển anchor/pivot mượt mà: DOTween không tween trực tiếp anchorMin/Max, nên ta đặt ngay anchor/pivot,
-        // còn di chuyển bằng DOAnchorPos cho cảm giác mượt.
         panelRect.anchorMin = targetAnchorMin;
         panelRect.anchorMax = targetAnchorMax;
         panelRect.pivot = targetPivot;
 
-        // Animate move + scale
         currentSeq = DOTween.Sequence()
             .Append(panelRect.DOScale(pinnedScale, pinMoveDuration).SetEase(pinEase))
             .Join(panelRect.DOAnchorPos(targetPos, pinMoveDuration).SetEase(pinEase));
@@ -157,7 +172,6 @@ public class QTEResultPopup : VuMonoBehaviour
     {
         if (panelRect == null) return;
 
-        // Đặt anchor trung tâm, pivot trung tâm, pos = 0
         panelRect.anchorMin = new Vector2(0.5f, 0.5f);
         panelRect.anchorMax = new Vector2(0.5f, 0.5f);
         panelRect.pivot = new Vector2(0.5f, 0.5f);
@@ -167,7 +181,6 @@ public class QTEResultPopup : VuMonoBehaviour
 
     private void GetPinLayout(out Vector2 aMin, out Vector2 aMax, out Vector2 pivot, out Vector2 anchoredPos)
     {
-        // Mặc định
         aMin = aMax = pivot = new Vector2(0.5f, 0.5f);
         anchoredPos = Vector2.zero;
 
@@ -176,30 +189,24 @@ public class QTEResultPopup : VuMonoBehaviour
             case PinPosition.TopRight:
                 aMin = aMax = new Vector2(1f, 1f);
                 pivot = new Vector2(1f, 1f);
-                anchoredPos = new Vector2(-margin.x, -margin.y); // dịch vào trong
+                anchoredPos = new Vector2(-margin.x, -margin.y);
                 break;
-
             case PinPosition.TopLeft:
                 aMin = aMax = new Vector2(0f, 1f);
                 pivot = new Vector2(0f, 1f);
                 anchoredPos = new Vector2(margin.x, -margin.y);
                 break;
-
             case PinPosition.BottomRight:
                 aMin = aMax = new Vector2(1f, 0f);
                 pivot = new Vector2(1f, 0f);
                 anchoredPos = new Vector2(-margin.x, margin.y);
                 break;
-
             case PinPosition.BottomLeft:
                 aMin = aMax = new Vector2(0f, 0f);
                 pivot = new Vector2(0f, 0f);
                 anchoredPos = new Vector2(margin.x, margin.y);
                 break;
-
             case PinPosition.Custom:
-                // Custom: giữ anchor/pivot ở TopRight để dễ hình dung (có thể chỉnh tuỳ ý),
-                // và dùng customAnchoredPos trực tiếp.
                 aMin = aMax = new Vector2(1f, 1f);
                 pivot = new Vector2(1f, 1f);
                 anchoredPos = customAnchoredPos;
@@ -207,23 +214,8 @@ public class QTEResultPopup : VuMonoBehaviour
         }
     }
 
-    // ===== Optional: API công khai để ghim/bỏ ghim theo lệnh bên ngoài =====
-
-    /// <summary>
-    /// Ghim ngay lập tức (bỏ qua delay).
-    /// </summary>
-    public void PinNow()
-    {
-        if (pinRoutine != null) { StopCoroutine(pinRoutine); pinRoutine = null; }
-        PinToCorner();
-    }
-
-    /// <summary>
-    /// Bỏ ghim & đưa về giữa (không đổi scale), dùng trước khi animate mở mới.
-    /// </summary>
-    public void ResetToCenter()
-    {
-        if (currentSeq != null && currentSeq.IsActive()) currentSeq.Kill();
-        CenterInScreen();
-    }
+#if UNITY_EDITOR
+    [ContextMenu("Test/Show Preset")]
+    private void CM_ShowPreset() => Show();
+#endif
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PowerStartupSequence : MonoBehaviour
 {
@@ -17,10 +18,14 @@ public class PowerStartupSequence : MonoBehaviour
     [SerializeField] private Image fillImage; // kéo Fill image của Slider vào đây trong Inspector
     [SerializeField] private float smoothDuration = 0.3f;
 
+    [SerializeField] private Transform wave2;
+
     private bool isRunning = false;
 
+    // NEW: Sự kiện khi bật điện thành công
+    [Header("Events")]
+    public UnityEvent onPowerStartupSuccess;
 
-    [SerializeField] private Transform wave2;
     private void Start()
     {
         if (countdownSlider != null)
@@ -38,9 +43,11 @@ public class PowerStartupSequence : MonoBehaviour
     {
         isRunning = true;
         wave2.gameObject.SetActive(false);
+
         // Hiện lời thoại bắt đầu
         string content = "Hệ thống đang khởi động, vui lòng chờ 1 phút...";
         ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content, 10, notificationAudi, "Hệ thống");
+
         if (countdownSlider != null)
         {
             countdownSlider.gameObject.SetActive(true);
@@ -48,8 +55,8 @@ public class PowerStartupSequence : MonoBehaviour
             countdownSlider.value = 0;
             UpdateFillColor(0f);
         }
-        var audi = SoundFXManager.Instance.PlaySoundFXClip(warningAudio, this.transform);
 
+        var audi = SoundFXManager.Instance.PlaySoundFXClip(warningAudio, this.transform);
         var wait = new WaitForSeconds(delaySpawn);
 
         foreach (var spawner in monsterSpawners)
@@ -73,16 +80,23 @@ public class PowerStartupSequence : MonoBehaviour
             yield return null;
         }
 
+        // --- Thành công ---
         string content2 = "Nguồn điện đã được khởi động lại!";
         ChatDialogueManager.Instance.chatDialogue.ShowDialogue(content2, 10, notificationAudi, "Hệ thống");
+
         CharacterCtrl.Instance.CharacterEffect.TurnOffLight();
+
         if (countdownSlider != null)
             countdownSlider.gameObject.SetActive(false);
+
         audi.volume = 0;
         isRunning = false;
+
         wave2.gameObject.SetActive(true);
         BackgroundMusicManager.Instance.PlayMusic(BackgroundMusicManager.Instance.musicClip_3);
 
+        // GỌI EVENT thành công (Inspector có thể bind thêm hành vi)
+        onPowerStartupSuccess?.Invoke();
     }
 
     private void AnimateSlider(float value)
@@ -100,6 +114,4 @@ public class PowerStartupSequence : MonoBehaviour
             fillImage.color = Color.Lerp(Color.red, Color.green, percent);
         }
     }
-
-
 }
