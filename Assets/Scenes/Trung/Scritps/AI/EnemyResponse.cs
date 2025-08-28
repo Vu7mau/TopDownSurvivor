@@ -82,13 +82,13 @@ public class EnemyResponse : VuMonoBehaviour
         {
             this.DropItem(this.transform, this.pickUpSpawner);
         }
-        this.HandleEnemyDeath();
+        //this.HandleEnemyDeath();
         //if (this.characterCurrencies != null)
         //{
         //    this.characterCurrencies.AddKills(1);
         //    this.characterCurrencies.AddScore(this.enemyAI.EnemySO.Score);
         //}
-        this.DespawnEnemy();
+        //this.DespawnEnemy();
     }
     protected virtual void DespawnEnemy()
     {

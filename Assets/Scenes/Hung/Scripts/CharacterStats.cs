@@ -83,17 +83,17 @@ public class CharacterStats : Singleton<CharacterStats>
 
         switch (skill.skillName)
         {
-            case "Defense Boost":
+            case "Tăng phòng thủ":
                 bonusFromSkillsDef += effectValue;
                 break;
-            case "Power Surge":
+            case "Tăng Sát Thương":
                 bonusFromSkillsAtk += effectValue;
                 break;
-            case "BonusHp":
+            case "Tăng máu":
                 bonusFromSkillsHP += effectValue;
                 CharacterCtrl.Instance.CharacterDamageReceiver.Add(effectValue);
                 break;
-            case "Crit Boost":
+            case "Tăng chí mạng":
                 bonusFromSkillsCritRate += effectValue;
                 break;
         }

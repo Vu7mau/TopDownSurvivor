@@ -57,6 +57,21 @@ public class PassiveSkillDataHandler : MonoBehaviour
                             skill.isUnlocked = save.isUnlocked;
                         }
                     }
+                    foreach (var save in wrapper.skills)
+                    {
+                        PassiveSkill skill = manager.skills.Find(s => s.data.skillName == save.name);
+                        if (skill != null)
+                        {
+                            skill.currentLevel = save.level;
+                            skill.isUnlocked = save.isUnlocked;
+                        }
+                    }
+
+                    // Sau khi load xong → cập nhật toàn bộ UI
+                    //foreach (var ui in FindObjectsO)
+                    //{
+                    //    ui.UpdateUI();
+                    //}
 
                     Debug.Log("Load tiến trình PassiveSkill thành công!");
                 }
