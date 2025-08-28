@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -28,9 +30,14 @@ public class ChatDialogue : VuMonoBehaviour
     [Tooltip("Giây / ký tự. <= 0 để hiện ngay (mặc định).")]
     [SerializeField] private float defaultTypingSpeed = 0.03f;
 
+    [Header("Sequence Options")]
+    [Tooltip("Độ trễ phụ sau khi audio kết thúc trước khi chuyển mục tiếp theo.")]
+    [SerializeField] private float tailDelayAfterAudio = 0.05f;
+
     // State
     private Coroutine typingCoroutine;
     private Coroutine autoHideCoroutine;
+    private Coroutine playingSequenceCoroutine;
     private string lastFullText = null;
 
     #region Lifecycle / Auto Load
@@ -190,6 +197,108 @@ public class ChatDialogue : VuMonoBehaviour
                 }
                 dialoguePanel.SetActive(false);
             });
+    }
+
+    // ======================== SEQUENCE PLAYBACK ========================
+
+    /// <summary>
+    /// Phát lần lượt theo danh sách ChatContentSO.
+    /// - Nếu có audio: tốc độ gõ được tính để HOÀN TẤT nội dung đúng bằng thời lượng audio.
+    /// - Nếu không audio: dùng defaultTypingSpeed và/hoặc chatDelatTimeBeforHide của SO.
+    /// </summary>
+    public void PlaySequence(IList<ChatContentSO> items, DialogueAnchor? anchorOverride = null)
+    {
+        StopSequenceIfAny();
+        playingSequenceCoroutine = StartCoroutine(Co_PlaySequence(items, anchorOverride));
+    }
+
+    public void StopSequenceIfAny()
+    {
+        if (playingSequenceCoroutine != null)
+        {
+            StopCoroutine(playingSequenceCoroutine);
+            playingSequenceCoroutine = null;
+        }
+        HideDialogue();
+    }
+
+    private IEnumerator Co_PlaySequence(IList<ChatContentSO> items, DialogueAnchor? anchorOverride)
+    {
+        if (items == null || items.Count == 0) yield break;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var it = items[i];
+            if (it == null) continue;
+
+            // Tính tốc độ gõ & thời lượng hiển thị mục này
+            ComputeTiming(it, out float typingSpeed, out float showDuration);
+
+            // Chọn anchor
+            var anchor = anchorOverride ?? defaultAnchor;
+
+            // Show
+            ShowDialogue(
+                it.chatLines,
+                showDuration,
+                it.notificationAudio,
+                string.IsNullOrEmpty(it.speakerName) ? "Player" : it.speakerName,
+                it.speakerAvatar,
+                anchor,
+                typingSpeed
+            );
+
+            // Đợi xong mục này: thời lượng hiển thị + chút đệm (để tween đóng hoàn tất)
+            yield return new WaitForSeconds(showDuration + tailDelayAfterAudio + popupDuration * 0.5f);
+        }
+
+        playingSequenceCoroutine = null;
+    }
+
+    /// <summary>
+    /// Tính (typingSpeed giây/ký tự) và thời lượng hiển thị cho một mục.
+    /// - Có audio: gõ xong đúng lúc audio kết thúc (showDuration = audio.length).
+    /// - Không audio: showDuration lấy từ SO (chatDelatTimeBeforHide > 0) hoặc tính theo defaultTypingSpeed.
+    /// </summary>
+    private void ComputeTiming(ChatContentSO item, out float typingSpeed, out float showDuration)
+    {
+        int visibleChars = CountVisibleChars(item.chatLines);
+
+        if (item.notificationAudio != null && item.notificationAudio.length > 0.01f && visibleChars > 0)
+        {
+            showDuration = item.notificationAudio.length;
+
+            // Tránh bị hụt do thời gian bật popup/đóng popup, trừ đi phần nhỏ nếu cần
+            float budgetForTyping = Mathf.Max(0.01f, showDuration - (popupDuration * 0.2f));
+            typingSpeed = Mathf.Max(0.0001f, budgetForTyping / visibleChars);
+        }
+        else
+        {
+            // Không có audio → fallback
+            typingSpeed = (defaultTypingSpeed > 0f) ? defaultTypingSpeed : 0.03f;
+
+            if (item.chatDelatTimeBeforHide > 0)
+            {
+                showDuration = item.chatDelatTimeBeforHide;
+            }
+            else
+            {
+                // Ước lượng thời gian hiển thị tối thiểu = thời gian gõ + một chút đệm
+                showDuration = Mathf.Clamp(visibleChars * typingSpeed + 0.6f, 0.5f, 60f);
+            }
+        }
+    }
+
+    private static readonly Regex _richTagRegex = new Regex("<.*?>", RegexOptions.Singleline);
+
+    /// <summary>
+    /// Đếm ký tự hiển thị: bỏ rich text tags (<b>, <color>, ...).
+    /// </summary>
+    private int CountVisibleChars(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return 0;
+        string stripped = _richTagRegex.Replace(s, "");
+        return stripped.Length;
     }
 
     #region Internals

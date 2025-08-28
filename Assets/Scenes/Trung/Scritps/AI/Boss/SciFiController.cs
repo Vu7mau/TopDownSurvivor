@@ -282,6 +282,7 @@ public class SciFiController : BossController
     [SerializeField] protected Transform modelPosition;
     [SerializeField] protected AudioClip snd_shutdownRobot;
     [SerializeField] protected SlidingDoor door;
+    [SerializeField] public ChatDialogueSequenceRunner chat;
 
     private void Distribution()
     {
@@ -289,8 +290,7 @@ public class SciFiController : BossController
     }
     IEnumerator DestroyExplosionRoutine()
     {
-        if(door!=null)
-            door.SetConditionMet(true);
+
         //if (this.explosionPoss.Count == 0) yield break;
         //for (int i = 0; i < this.explosionPoss.Count; i++)
         //{
@@ -316,7 +316,16 @@ public class SciFiController : BossController
         SoundFXManager.Instance.PlaySoundFXClip(this.snd_shutdownRobot, this.transform);
     }
 
+    protected override void Death()
+    {
+        base.Death();
 
+        if (door != null)
+            door.SetConditionMet(true);
+        if (chat != null)
+            chat.PlayNow();
+        Debug.Log("===========================Call");
+    }
 
 
     private void PlaySoundFX(List<AudioClip> sounds)
