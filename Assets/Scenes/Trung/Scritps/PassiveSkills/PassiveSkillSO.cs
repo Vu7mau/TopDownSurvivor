@@ -21,4 +21,7 @@ public class PassiveSkillSO : ScriptableObject
     [Header("Unlock Next Skill")]
     public PassiveSkillSO nextSkill;   // skill tiếp theo sẽ mở
     public int unlockAtLevel = 1;      // cấp bao nhiêu thì mở (mặc định 1)
+
+    [Header("UI")]
+    public Sprite icon; // icon riêng cho skill
 }

@@ -6,6 +6,7 @@ using PlayFab;
 using UnityEngine;
 using UnityEngine.UI;
 using static PassiveSkillSave;
+using TMPro;
 
 
 
@@ -34,6 +35,16 @@ public class PassiveSkillManager : VuMonoBehaviour
 
     [SerializeField] protected List<Button> listSkillButton;
 
+    //[SerializeField] private Sprite lockedSprite;
+
+
+    [SerializeField] private bool useConfirmPopup = true;  // Bật/tắt confirm
+    [SerializeField] private GameObject confirmPanel;      // Panel popup confirm
+    [SerializeField] private TMP_Text confirmText;             // Text hiển thị info skill
+
+    private PassiveSkill pendingSkill; // skill đang chờ confirm
+
+
     protected override void Start()
     {
         this.LoadPanelSkill();
@@ -44,8 +55,94 @@ public class PassiveSkillManager : VuMonoBehaviour
         for (int i = 0; i < listSkillButton.Count; i++)
         {
             int index = i; // copy giá trị i ra biến cục bộ
-            this.listSkillButton[index].onClick.AddListener(() => UnlockSkill(this.skills[index]));
+            this.listSkillButton[index].onClick.AddListener(() => OnSkillButtonClick(this.skills[index]));
         }
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        this.UpdateUI();
+    }
+
+    // Hàm cập nhật UI theo trạng thái skill
+    public void UpdateUI()
+    {
+        for (int i = 0; i < listSkillButton.Count; i++)
+        {
+            var skill = skills[i];
+            var button = listSkillButton[i];
+            var icon = button; // lấy image trực tiếp từ button
+
+            if (skill.isUnlocked)
+            {
+                Transform IconPassiveSkillObj = button.transform.Find("IconPassiveSkill");
+                IconPassiveSkillObj.gameObject.SetActive(true);
+                IconPassiveSkillObj.transform.Find("img_skill").GetComponent<Image>().sprite = skill.data.icon; // đổi sang icon skill
+                button.transform.Find("LockSkill").transform.gameObject.SetActive(false);
+                //button.interactable = !skill.IsMaxed;
+            }
+            else
+            {
+                Transform IconPassiveSkillObj = button.transform.Find("IconPassiveSkill");
+                IconPassiveSkillObj.gameObject.SetActive(false);
+                IconPassiveSkillObj.transform.Find("img_skill").GetComponent<Image>().sprite = skill.data.icon; // đổi sang icon skill
+                button.transform.Find("LockSkill").transform.gameObject.SetActive(true);
+                //button.GetComponent<Image>().sprite = lockedSprite; // đổi sang icon khóa
+                //button.interactable = false;
+            }
+        }
+    }
+
+
+    private void OnSkillButtonClick(PassiveSkill skill)
+    {
+        if (!skill.isUnlocked)
+        {
+            Debug.Log(skill.data.skillName + " chưa được mở!");
+            return;
+        }
+
+        if (skill.IsMaxed)
+        {
+            Debug.Log(skill.data.skillName + " đã đạt cấp tối đa!");
+            return;
+        }
+        if (this.confirmPanel == null)
+        {
+            UnlockSkill(skill); // Mua luôn nếu confirm off
+            return;
+        }
+        else
+        {
+            if (useConfirmPopup)
+            {
+                // Hiện panel confirm
+                confirmPanel.SetActive(true);
+                confirmText.text = $"Bạn có muốn nâng {skill.data.skillName} (Lv.{skill.currentLevel + 1}) với giá {skill.data.levels[skill.currentLevel].cost} coin không?";
+                pendingSkill = skill; // lưu lại skill để xử lý sau
+            }
+            else
+            {
+                UnlockSkill(skill); // Mua luôn nếu confirm off
+            }
+        }
+    }
+
+
+    public void OnConfirmYes()
+    {
+        if (pendingSkill != null)
+        {
+            UnlockSkill(pendingSkill);
+            pendingSkill = null;
+        }
+        confirmPanel.SetActive(false);
+    }
+
+    public void OnConfirmNo()
+    {
+        pendingSkill = null;
+        confirmPanel.SetActive(false);
     }
 
     public void UnlockSkill(PassiveSkill skill)
@@ -80,6 +177,7 @@ public class PassiveSkillManager : VuMonoBehaviour
 
         // Áp dụng hiệu ứng
         ApplySkillEffect(skill);
+
 
         // Kiểm tra mở skill tiếp theo
         if (skill.data.nextSkill != null && skill.currentLevel >= skill.data.unlockAtLevel)

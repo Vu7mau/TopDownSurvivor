@@ -65,16 +65,4 @@ public class AudioManagerTwo : MonoBehaviour
             buttonSource?.PlayOneShot(clip);
         }
     }
-    private void Update()
-    {
-        if(backgroundMusic != null && SceneManager.GetActiveScene().buildIndex == 0)
-        {
-           backgroundMusic.Stop();
-        }
-        else
-        {
-            if (backgroundMusic != null)
-                backgroundMusic.Play();
-        }
-    }
 }

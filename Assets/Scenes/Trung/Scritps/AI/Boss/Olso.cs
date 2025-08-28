@@ -33,6 +33,9 @@ public class Olso : BossController
     [SerializeField] protected float timeDelay_1 = 0.2f;
     [SerializeField] protected float timeDelay_2 = 1f;
 
+    protected Coroutine coroutine;
+
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -50,7 +53,8 @@ public class Olso : BossController
 
     protected virtual void Shoot1()
     {
-        StartCoroutine(Shoot1Routine());
+        if(coroutine != null) StopCoroutine(coroutine);
+        coroutine = StartCoroutine(Shoot1Routine());
     }
     private IEnumerator Shoot1Routine()
     {
@@ -62,7 +66,7 @@ public class Olso : BossController
             circleWarning.Rotate(new Vector3(-90, 0, 0));
         }
         yield return new WaitForSeconds(this.timeDelay_1);
-        this.e_Shooting.Shooting(this.minigunBullet, this.spawnPosition);
+        this.e_Shooting.Shooting(this.minigunBullet, this.spawnPosition2);
         if (this.isDead) yield break;
         if (this.e_Shooting.NewProjectitle == null) yield break;
         if(this.snd_Shoot1s.Count > 0)
@@ -71,6 +75,7 @@ public class Olso : BossController
             SoundFXManager.Instance.PlaySoundFXClip(this.snd_Shoot1s[random],this.transform);
         }
         this.e_Shooting.NewProjectitle.GetComponent<Projectitle>().ShootAt(tar);
+        coroutine = null;
     }
 
 
