@@ -9,7 +9,7 @@ public class TestPanelWinAndDie : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             if (panelWin != null)
                 panelWin.SetActive(!panelWin.activeSelf);
