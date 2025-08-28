@@ -35,10 +35,18 @@ public class PausePanelTwo : MonoBehaviour
         {
             Instantiate(timerPrefab);
         }
-
-        settingsPanel.SetActive(false);
-        pausePanel.SetActive(false);
-        backGround.SetActive(false);
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(false);
+        }
+        if (pausePanel != null)
+        {
+            pausePanel.SetActive(false);
+        }
+        if (backGround != null)
+        {
+            backGround.SetActive(false);
+        }
     }
     private void Update()
     {
@@ -46,7 +54,7 @@ public class PausePanelTwo : MonoBehaviour
             && !isTransitioning
             && !isInSettingPanel
             && !DOTween.IsTweening(effectPausePanel.transform)
-            && !IsWinOrLosePanelActive()) 
+            && !IsWinOrLosePanelActive())
         {
             if (!pausePanel.activeSelf)
             {
@@ -96,7 +104,7 @@ public class PausePanelTwo : MonoBehaviour
     {
         Time.timeScale = 1f;
         DOTween.Kill(gameObject);
-        
+
         winPanel.gameObject.SetActive(false);
         losePanel.gameObject.SetActive(false);
         int finalScore = PlayerPrefs.GetInt("currentScores", 0);
@@ -178,7 +186,7 @@ public class PausePanelTwo : MonoBehaviour
     {
         isTransitioning = true;
         isInSettingPanel = false;
-        if(effectPausePanel == null) return;
+        if (effectPausePanel == null) return;
         effectPausePanel.HidePanel(() =>
         {
             pausePanel.SetActive(false);

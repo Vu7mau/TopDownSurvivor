@@ -18,6 +18,7 @@ public class MainMenuTwo : MonoBehaviour
     [SerializeField] private GameObject leaderboardPanel;
     [SerializeField] private GameObject iconLeaderboard;
     [SerializeField] private GameObject iconGame;
+    public GameObject iconI;
     [SerializeField] private GameObject instructPanel;
     [SerializeField] private GameObject panelNotification;
     public GameObject PlayMenuTwo;
@@ -71,6 +72,7 @@ public class MainMenuTwo : MonoBehaviour
             playMenu.SetActive(false);
         settingsPanel.SetActive(true);
         iconGame.SetActive(false);
+        iconI.SetActive(false);
         iconLeaderboard.SetActive(false);
         settingEffect.ShowPanel();
     }
@@ -84,6 +86,7 @@ public class MainMenuTwo : MonoBehaviour
                 playMenu.SetActive(true);
                 iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
                 iconGame.SetActive(true);
+                iconI.SetActive(true);
             }
         });
     }
@@ -124,6 +127,7 @@ public class MainMenuTwo : MonoBehaviour
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconGame.SetActive(true);
+            iconI.SetActive(true);
             StartCoroutine(ClearInputLogin(0.5f));
         });
     }
@@ -147,6 +151,7 @@ public class MainMenuTwo : MonoBehaviour
         {
             loginPanel.SetActive(true);
             iconGame.SetActive(false);
+            iconI.SetActive(false);
         }
         playMenu.SetActive(false);
     }
@@ -159,6 +164,7 @@ public class MainMenuTwo : MonoBehaviour
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconGame.SetActive(true);
+            iconI.SetActive(true);
             StartCoroutine(ClearInputRegister(0.5f));
         });
     }
@@ -197,6 +203,7 @@ public class MainMenuTwo : MonoBehaviour
             logoutButton.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconLeaderboard.SetActive(PlayerPrefs.GetInt("HasLoggedIn", 0) == 1);
             iconGame.SetActive(true);
+            iconI.SetActive(true);
         });
     }
     public void OpenPanelLogin()
